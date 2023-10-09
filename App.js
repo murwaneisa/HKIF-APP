@@ -1,21 +1,34 @@
 import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View } from 'react-native'
-import theme from './Styles/them'
+import { StyleSheet, Platform, Text, View } from 'react-native'
+import { ColorTheme, FontLoader } from './Styles/them'
 
-export default function App() {
+function App() {
   return (
     <View style={styles.container}>
-      <Text>HKIF-APP</Text>
+      <Text style={styles.textStyle}>HKIF-APP</Text>
       <StatusBar style='auto' />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  textStyle: {
+    fontFamily: 'Inter-ExtraBold',
+    fontSize: Platform.select({
+      ios: 16,
+      android: 18,
+    }),
+  },
   container: {
     flex: 1,
-    backgroundColor: theme.colors.primary,
+    backgroundColor: ColorTheme.colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
 })
+
+export default () => (
+  <FontLoader>
+    <App />
+  </FontLoader>
+)
