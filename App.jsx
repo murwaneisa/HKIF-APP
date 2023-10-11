@@ -1,16 +1,17 @@
-import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, Text, View } from 'react-native'
 
 import { NavigationContainer } from '@react-navigation/native'
 import StackNav from './Utilities/Navigation/StackNav' // Import your navigator
+import { FontLoader } from './Styles/them'
 
 export default function App() {
   return (
     <>
-      <NavigationContainer>
-        <StackNav />
-      </NavigationContainer>
-      <StatusBar style='auto' />
+      <FontLoader>
+        <NavigationContainer>
+          <StackNav />
+        </NavigationContainer>
+      </FontLoader>
     </>
   )
 }

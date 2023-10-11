@@ -1,10 +1,11 @@
 import React from 'react'
-import { View, Text, Button } from 'react-native'
+import { View, Text, Button, StyleSheet } from 'react-native'
+import { ColorTheme } from '../Styles/them'
 
 function Home({ navigation }) {
   return (
-    <View>
-      <Text>Home Screen</Text>
+    <View style={styles.container}>
+      <Text style={styles.textStyle}>Home Screen</Text>
       <Button
         title='Go to Details'
         onPress={() => navigation.navigate('Details')}
@@ -12,5 +13,20 @@ function Home({ navigation }) {
     </View>
   )
 }
+const styles = StyleSheet.create({
+  textStyle: {
+    fontFamily: 'Inter-Light',
+    fontSize: Platform.select({
+      ios: 20,
+      android: 16,
+    }),
+  },
+  container: {
+    flex: 1,
+    backgroundColor: ColorTheme.colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+})
 
 export default Home
