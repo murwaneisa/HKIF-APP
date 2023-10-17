@@ -21,6 +21,7 @@ const Welcome = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <Image style={styles.logo} dipaly />
       <Text style={styles.welcomeText}>
         Högskolan Kristianstads idrottsförening
       </Text>
@@ -38,15 +39,16 @@ const getStyles = theme =>
       backgroundColor: theme.colors.primary,
     },
     logo: {
-      width: 150,
-      height: 150,
+      maxWidth: '70%',
+      maxHeight: '70%',
     },
     welcomeText: {
-      fontFamily: 'Inter-SemiBold',
+      /*   fontFamily: 'Inter-SemiBold', */
       color: theme.colors.text,
       marginTop: 20,
       fontSize: 24,
       fontWeight: 'bold',
+      textAlign: 'center',
     },
   })
 
