@@ -21,7 +21,10 @@ const Welcome = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Image style={styles.logo} dipaly />
+      <Image
+        style={styles.logo}
+        source={require('../Assets/images/icon.png')}
+      />
       <Text style={styles.welcomeText}>
         Högskolan Kristianstads idrottsförening
       </Text>
