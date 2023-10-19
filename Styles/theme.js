@@ -2,15 +2,6 @@ import { useState, useEffect, createContext, useContext } from 'react'
 import { Appearance } from 'react-native'
 import * as Font from 'expo-font'
 
-export const ColorTheme = {
-  colors: {
-    primary: '#669D58',
-    secondary: '#3B3D3B',
-    accent: '#282525',
-    accentWhite: '#FFFFFF',
-  },
-}
-
 export const FontLoadContext = createContext()
 export const FontLoader = ({ children }) => {
   const [fontsLoaded, setFontsLoaded] = useState(false)
@@ -63,7 +54,7 @@ const darkTheme = {
     secondary: '#3B3D3B',
     accent: '#282525',
     accentWhite: '#FFFFFF',
-    background: '#000000',
+    background: '#282525',
     text: '#FFFFFF',
   },
 }
