@@ -1,6 +1,5 @@
 import { useState, useEffect, createContext, useContext } from 'react'
 import { Appearance } from 'react-native'
-import { Text } from 'react-native'
 import * as Font from 'expo-font'
 
 export const ColorTheme = {
@@ -12,6 +11,7 @@ export const ColorTheme = {
   },
 }
 
+export const FontLoadContext = createContext()
 export const FontLoader = ({ children }) => {
   const [fontsLoaded, setFontsLoaded] = useState(false)
 
@@ -34,11 +34,15 @@ export const FontLoader = ({ children }) => {
     loadFonts()
   }, [])
 
-  if (!fontsLoaded) {
+  /*   if (!fontsLoaded) {
     return <Text>Loading...</Text>
-  }
+  } */
 
-  return children
+  return (
+    <FontLoadContext.Provider value={fontsLoaded}>
+      {children}
+    </FontLoadContext.Provider>
+  )
 }
 
 export const ThemeContext = createContext()
