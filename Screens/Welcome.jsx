@@ -46,7 +46,6 @@ const getStyles = theme =>
       maxHeight: '70%',
     },
     welcomeText: {
-      /*   fontFamily: 'Inter-SemiBold', */
       color: theme.colors.text,
       marginTop: 20,
       fontSize: 24,
