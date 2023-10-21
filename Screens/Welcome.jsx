@@ -10,7 +10,7 @@ const Welcome = ({ navigation }) => {
   useEffect(() => {
     if (fontsLoaded) {
       const timer = setTimeout(() => {
-        navigation.navigate('Home')
+        navigation.navigate('Login')
       }, 3000) // 3 seconds
 
       return () => clearTimeout(timer) // Cleanup the timer
