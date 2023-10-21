@@ -41,7 +41,7 @@ const getStyles = (theme, paddingHorizontal, paddingVertical) => {
     },
     buttonText: {
       fontFamily: 'Inter-SemiBold',
-      color: theme.colors.text,
+      color: theme.colors.accentWhite,
       textAlign: 'center',
     },
     pressed: {

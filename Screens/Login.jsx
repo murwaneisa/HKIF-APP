@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, Platform } from 'react-native'
+import { View, Text, StyleSheet, Platform, Image } from 'react-native'
 import { useTheme } from '../Styles/theme'
 import PrimaryButton from '../Utilities/UI/PrimaryButton'
 
@@ -10,21 +10,30 @@ function Login({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.textStyle}>Login to your account </Text>
-      <PrimaryButton
-        paddingVertical={98}
-        paddingHorizontal={12}
-        onPress={() => navigation.navigate('Details')}
-      >
-        Login
-      </PrimaryButton>
-      <PrimaryButton
-        paddingVertical={88}
-        paddingHorizontal={12}
-        onPress={() => navigation.navigate('Home')}
-      >
-        Register
-      </PrimaryButton>
+      <View style={styles.imageContainer}>
+        <Image
+          style={{ width: '100%', height: '100%' }}
+          source={require('../Assets/images/sports_icon.png')}
+          resizeMode='contain'
+        />
+      </View>
+      <View styles={styles.buttonsContainer}>
+        <PrimaryButton
+          paddingVertical={98}
+          paddingHorizontal={12}
+          onPress={() => navigation.navigate('Details')}
+        >
+          Login
+        </PrimaryButton>
+        <PrimaryButton
+          paddingVertical={88}
+          paddingHorizontal={12}
+          onPress={() => navigation.navigate('Home')}
+        >
+          Register
+        </PrimaryButton>
+        <Text style={styles.textStyle}>Login as Guest </Text>
+      </View>
     </View>
   )
 }
@@ -37,12 +46,24 @@ const getStyles = theme =>
       alignItems: 'center',
       justifyContent: 'center',
     },
+    imageContainer: {
+      height: '60%', // This sets the height to 60% of the parent container
+      width: '100%',
+      padding: '5%',
+    },
+    buttonsContainer: {
+      backgroundColor: theme.colors.background,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
     textStyle: {
       fontFamily: 'Inter-SemiBold',
-      color: theme.colors.text,
+      paddingTop: '6%',
+      color: theme.colors.primary,
+      textAlign: 'center',
       fontSize: Platform.select({
-        ios: 16,
-        android: 18,
+        ios: 15,
+        android: 15,
       }),
     },
   })
