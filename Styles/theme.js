@@ -52,7 +52,7 @@ const darkTheme = {
   colors: {
     primary: '#669D58',
     secondary: '#3B3D3B',
-    accent: '#282525',
+    accent: '#FFFFFF',
     accentWhite: '#FFFFFF',
     background: '#282525',
     text: '#FFFFFF',
