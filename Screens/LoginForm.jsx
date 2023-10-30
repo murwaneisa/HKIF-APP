@@ -6,14 +6,17 @@ import {
   Platform,
   Image,
   TextInput,
+  Dimensions,
 } from 'react-native'
 import { useTheme } from '../Styles/theme'
 import PrimaryButton from '../Utilities/UI/PrimaryButton'
+import GoogleButton from '../Utilities/UI/googleButton'
 
 function LoginForm({ navigation }) {
+  const screenWidth = Dimensions.get('window').width
   const { theme } = useTheme()
 
-  const styles = getStyles(theme)
+  const styles = getStyles(theme, screenWidth)
 
   return (
     <View style={styles.container}>
@@ -49,13 +52,20 @@ function LoginForm({ navigation }) {
         >
           Login
         </PrimaryButton>
+        <GoogleButton
+          paddingVertical={98}
+          paddingHorizontal={12}
+          onPress={() => navigation.navigate('Details')}
+        >
+          login with Google
+        </GoogleButton>
         <Text style={styles.textStyle}>Register </Text>
       </View>
     </View>
   )
 }
 
-const getStyles = theme =>
+const getStyles = (theme, screenWidth) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -70,19 +80,22 @@ const getStyles = theme =>
     },
     formContainer: {
       width: '100%',
+      alignItems: 'center', // This will horizontally center the child elements
+      justifyContent: 'center',
     },
     inputView: {
-      Width: '80%',
+      width: screenWidth > 800 ? '40%' : '80%',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 20,
     },
     inputText: {
-      height: 50,
       width: '100%',
       borderColor: theme.colors.accent,
       borderWidth: 1,
       borderRadius: 25,
-      marginBottom: 20,
       justifyContent: 'center',
-      padding: 20,
+      padding: screenWidth > 800 ? '2%' : screenWidth > 500 ? '3%' : '5%',
     },
     buttonsContainer: {
       backgroundColor: theme.colors.background,
