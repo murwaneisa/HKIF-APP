@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   View,
   Text,
@@ -10,9 +10,10 @@ import {
 } from 'react-native'
 import { useTheme } from '../Styles/theme'
 import PrimaryButton from '../Utilities/UI/PrimaryButton'
-import GoogleButton from '../Utilities/UI/googleButton'
+import GoogleButton from '../Utilities/UI/GoogleButton'
 
 function LoginForm({ navigation }) {
+  const [showAdminButton, setShowAdminButton] = useState(false)
   const screenWidth = Dimensions.get('window').width
   const { theme } = useTheme()
 
@@ -45,20 +46,35 @@ function LoginForm({ navigation }) {
         </View>
       </View>
       <View styles={styles.buttonsContainer}>
-        <PrimaryButton
-          paddingVertical={98}
-          paddingHorizontal={12}
-          onPress={() => navigation.navigate('Details')}
-        >
-          Login
-        </PrimaryButton>
-        <GoogleButton
-          paddingVertical={98}
-          paddingHorizontal={12}
-          onPress={() => navigation.navigate('Details')}
-        >
-          login with Google
-        </GoogleButton>
+        <View style={styles.buttonWrapper}>
+          <PrimaryButton
+            style={{ marginBottom: 10 }}
+            paddingVertical={98}
+            paddingHorizontal={12}
+            onLongPress={() => setShowAdminButton(true)}
+            onPress={() => navigation.navigate('Details')}
+          >
+            Login
+          </PrimaryButton>
+        </View>
+        {showAdminButton && (
+          <View style={styles.buttonWrapper}>
+            <PrimaryButton
+              style={{ marginBottom: 10 }}
+              paddingVertical={40}
+              paddingHorizontal={12}
+              onPress={() => navigation.navigate('Home')}
+              onLongPress={() => setShowAdminButton(true)} // You might want to navigate to a different route for admin
+            >
+              Login as Admin
+            </PrimaryButton>
+          </View>
+        )}
+        <View style={styles.buttonWrapper}>
+          <GoogleButton paddingVertical={98} paddingHorizontal={12}>
+            Login with Google
+          </GoogleButton>
+        </View>
         <Text style={styles.textStyle}>Register </Text>
       </View>
     </View>
@@ -95,12 +111,16 @@ const getStyles = (theme, screenWidth) =>
       borderWidth: 1,
       borderRadius: 25,
       justifyContent: 'center',
-      padding: screenWidth > 800 ? '2%' : screenWidth > 500 ? '3%' : '5%',
+      padding: screenWidth >= 800 ? '2%' : screenWidth >= 500 ? '3%' : '4%',
     },
     buttonsContainer: {
       backgroundColor: theme.colors.background,
+      width: '80%',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'space-between',
+    },
+    buttonWrapper: {
+      marginBottom: 10,
     },
     textStyle: {
       fontFamily: 'Inter-SemiBold',
