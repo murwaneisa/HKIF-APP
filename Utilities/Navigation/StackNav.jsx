@@ -22,7 +22,7 @@ export default function StackNav() {
         component={Login}
         options={{ headerLeft: () => null, headerShown: false }}
       />
-      <Stack.Screen name='LoginForm' component={LoginForm} />
+      <Stack.Screen name='Login Form' component={LoginForm} />
       <Stack.Screen name='Home' component={Home} />
       <Stack.Screen name='Details' component={Details} />
     </Stack.Navigator>
