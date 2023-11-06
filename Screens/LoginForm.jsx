@@ -46,7 +46,7 @@ function LoginForm({ navigation }) {
               <TextInput
                 style={styles.inputText}
                 placeholder='Email'
-                placeholderTextColor={theme.colors.accent}
+                placeholderTextColor={theme.colors.text}
               />
             </View>
             <View style={styles.inputView}>
@@ -54,7 +54,7 @@ function LoginForm({ navigation }) {
                 style={styles.inputText}
                 secureTextEntry
                 placeholder='Password'
-                placeholderTextColor={theme.colors.accent}
+                placeholderTextColor={theme.colors.text}
               />
             </View>
           </View>
@@ -127,7 +127,7 @@ const getStyles = (theme, screenWidth) =>
     },
     inputText: {
       width: '100%',
-      borderColor: theme.colors.accent,
+      borderColor: theme.colors.text,
       borderWidth: 1,
       borderRadius: 25,
       justifyContent: 'center',
