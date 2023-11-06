@@ -38,6 +38,7 @@ const getStyles = (theme, paddingHorizontal, paddingVertical) => {
       backgroundColor: theme.colors.primary,
       paddingVertical: paddingVertical,
       paddingHorizontal: paddingHorizontal,
+      width: 'auto',
       elevation: 2,
     },
     buttonText: {
