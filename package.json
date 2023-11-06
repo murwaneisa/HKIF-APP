@@ -24,7 +24,8 @@
     "react-native-screens": "~3.22.0",
     "react-native-web": "~0.19.6",
     "undefined": "@react-native\\assets-registry\\registry",
-    "webpack-dev-server": "^4.15.1"
+    "webpack-dev-server": "^4.15.1",
+    "react-native-svg": "13.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
