@@ -6,6 +6,7 @@ function PrimaryButton({
   onPress,
   paddingVertical,
   paddingHorizontal,
+  onLongPress,
 }) {
   const { theme } = useTheme()
   const styles = getStyles(theme, paddingVertical, paddingHorizontal)
@@ -18,6 +19,7 @@ function PrimaryButton({
             : styles.buttonInnerContainer
         }
         onPress={onPress}
+        onLongPress={onLongPress}
         android_ripple={{ color: theme.colors.primary }}
       >
         <Text style={styles.buttonText}>{children}</Text>
@@ -30,13 +32,13 @@ const getStyles = (theme, paddingHorizontal, paddingVertical) => {
   return StyleSheet.create({
     buttonOuterContainer: {
       borderRadius: 28,
-      margin: 4,
       overflow: 'hidden',
     },
     buttonInnerContainer: {
       backgroundColor: theme.colors.primary,
       paddingVertical: paddingVertical,
       paddingHorizontal: paddingHorizontal,
+      width: 'auto',
       elevation: 2,
     },
     buttonText: {
