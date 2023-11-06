@@ -26,11 +26,10 @@ function Login({ navigation }) {
           >
             Login
           </PrimaryButton>
-        </View>
         <PrimaryButton
           paddingVertical={88}
           paddingHorizontal={12}
-          onPress={() => navigation.navigate('Home')}
+          onPress={() => navigation.navigate('Register')}
         >
           Register
         </PrimaryButton>
