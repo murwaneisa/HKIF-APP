@@ -9,6 +9,8 @@ import {
   Dimensions,
   ScrollView,
   KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native'
 import { useTheme } from '../Styles/theme'
 import PrimaryButton from '../Utilities/UI/PrimaryButton'
@@ -20,87 +22,82 @@ function LoginForm({ navigation }) {
   const { theme } = useTheme()
 
   const styles = getStyles(theme, screenWidth)
+  const dismissKeyboard = () => {
+    Keyboard.dismiss()
+  }
 
   return (
-    <ScrollView
-      style={styles.scrollView}
-      contentContainerStyle={styles.contentContainer}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.select({ ios: 60, android: 0 })}
     >
-      <View style={styles.container}>
-        <View style={styles.imageContainer}>
-          <Image
-            style={{ width: '100%', height: '100%' }}
-            source={require('../Assets/images/login2.png')}
-            resizeMode='contain'
-          />
-        </View>
-        <View style={styles.formContainer}>
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.inputText}
-              placeholder='Email'
-              placeholderTextColor={theme.colors.accent}
+      <TouchableWithoutFeedback onPress={dismissKeyboard}>
+        <View style={styles.container}>
+          <View style={styles.imageContainer}>
+            <Image
+              style={{ width: '100%', height: '100%' }}
+              source={require('../Assets/images/login2.png')}
+              resizeMode='contain'
             />
           </View>
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.inputText}
-              secureTextEntry
-              placeholder='Password'
-              placeholderTextColor={theme.colors.accent}
-            />
+          <View style={styles.formContainer}>
+            <View style={styles.inputView}>
+              <TextInput
+                style={styles.inputText}
+                placeholder='Email'
+                placeholderTextColor={theme.colors.accent}
+              />
+            </View>
+            <View style={styles.inputView}>
+              <TextInput
+                style={styles.inputText}
+                secureTextEntry
+                placeholder='Password'
+                placeholderTextColor={theme.colors.accent}
+              />
+            </View>
           </View>
-        </View>
-        <View style={styles.buttonsContainer}>
-          <View style={styles.buttonWrapper}>
-            <PrimaryButton
-              style={{ marginBottom: 10 }}
-              paddingVertical={98}
-              paddingHorizontal={12}
-              onLongPress={() => setShowAdminButton(true)}
-              onPress={() => navigation.navigate('Details')}
-            >
-              Login
-            </PrimaryButton>
-          </View>
-          {showAdminButton && (
+          <View style={styles.buttonsContainer}>
             <View style={styles.buttonWrapper}>
               <PrimaryButton
-                style={{ marginBottom: 10 }}
+                style={{ marginBottom: 10, width: '100%' }}
                 paddingVertical={40}
                 paddingHorizontal={12}
-                onPress={() => navigation.navigate('Home')}
-                onLongPress={() => setShowAdminButton(true)} // You might want to navigate to a different route for admin
+                onLongPress={() => setShowAdminButton(true)}
+                onPress={() => navigation.navigate('Details')}
               >
-                Login as Admin
+                Login
               </PrimaryButton>
             </View>
-          )}
-          <View style={styles.buttonWrapper}>
-            <GoogleButton paddingVertical={98} paddingHorizontal={12}>
-              Login with Google
-            </GoogleButton>
+            {showAdminButton && (
+              <View style={styles.buttonWrapper}>
+                <PrimaryButton
+                  style={{ marginBottom: 10, width: '100%' }}
+                  paddingVertical={40}
+                  paddingHorizontal={12}
+                  onPress={() => navigation.navigate('Home')}
+                  onLongPress={() => setShowAdminButton(true)} // You might want to navigate to a different route for admin
+                >
+                  Login as Admin
+                </PrimaryButton>
+              </View>
+            )}
+            <View style={styles.buttonWrapper}>
+              <GoogleButton paddingVertical={98} paddingHorizontal={12}>
+                Login with Google
+              </GoogleButton>
+            </View>
+            <Text style={styles.textStyle}>Register </Text>
           </View>
-          <Text style={styles.textStyle}>Register </Text>
         </View>
-      </View>
-    </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   )
 }
 
 const getStyles = (theme, screenWidth) =>
   StyleSheet.create({
-    scrollView: {
-      flex: 1,
-      padding: '1%',
-      borderWidth: 2, // Set the border width
-      borderColor: 'blue', // Set the border color
-      backgroundColor: theme.colors.background,
-    },
-    contentContainer: {
-      flex: 1,
-      paddingBottom: 50,
-    },
     keyboardAvoiding: {
       padding: '1%',
       borderWidth: 2, // Set the border width
@@ -108,12 +105,12 @@ const getStyles = (theme, screenWidth) =>
     },
     container: {
       flex: 1,
-      padding: '0%',
-      borderWidth: 2, // Set the border width
-      borderColor: 'green', // Set the border color
+      alignItems: 'center', // This will horizontally center the child elements
+      justifyContent: 'center',
+      backgroundColor: theme.colors.background,
     },
     imageContainer: {
-      height: '50%', // This sets the height to 60% of the parent container
+      height: '48%', // This sets the height to 60% of the parent container
       width: '100%',
       padding: '5%',
     },
@@ -137,12 +134,17 @@ const getStyles = (theme, screenWidth) =>
       padding: screenWidth >= 800 ? '2%' : screenWidth >= 500 ? '3%' : '4%',
     },
     buttonsContainer: {
-      maxWidth: '100%',
+      /*   padding: '1%',
+      borderWidth: 2, // Set the border width
+      borderColor: 'blue', // Set the border color */
+      width: screenWidth >= 800 ? '30%' : screenWidth >= 500 ? '50%' : '60%',
       alignItems: 'center',
       justifyContent: 'center',
+      marginBottom: '20%',
     },
     buttonWrapper: {
       marginBottom: 10,
+      width: '100%',
     },
     textStyle: {
       fontFamily: 'Inter-SemiBold',

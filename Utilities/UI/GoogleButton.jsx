@@ -51,6 +51,8 @@ const getStyles = (theme, paddingHorizontal, paddingVertical) => {
       borderColor: theme.colors.primary,
       borderRadius: 28,
       overflow: 'hidden',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
       borderWidth: 2, // Set the thickness of the outline
       // Set the color of the outline
       backgroundColor: 'transparent',
@@ -59,12 +61,12 @@ const getStyles = (theme, paddingHorizontal, paddingVertical) => {
     buttonInnerContainer: {
       flexDirection: 'row', // Align children horizontally
       alignItems: 'center',
+      justifyContent: 'flex-start',
     },
     buttonText: {
       fontFamily: 'Inter-SemiBold',
       color: theme.colors.text,
-      textAlign: 'center',
-      paddingLeft: '2%',
+      paddingLeft: '4%',
     },
     pressed: {
       opacity: 0.75,
