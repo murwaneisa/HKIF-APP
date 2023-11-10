@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import {
+  TextInput,
   Dimensions,
   KeyboardAvoidingView,
   Platform,
@@ -8,11 +9,15 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Pressable,
 } from 'react-native'
 import Input from '../Utilities/UI/Input'
 import { useTheme } from '../Styles/theme'
 import PrimaryButton from '../Utilities/UI/PrimaryButton'
 import GoogleButton from '../Utilities/UI/GoogleButton'
+import DatePicker from '../Utilities/UI/DatePicker'
+import DateTimePicker from '@react-native-community/datetimepicker'
+import { Button } from 'react-native-web'
 
 function Register() {
   const screenWidth = Dimensions.get('window').width
@@ -21,6 +26,37 @@ function Register() {
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
+  const [dateOfBirth, setDateOfBirth] = useState('')
+  const [date, setDate] = useState(new Date())
+  const [showPicker, setShowPicker] = useState(false)
+
+  const onChange = ({ type }, selectedDate) => {
+    if (type == 'set') {
+      const currentDate = selectedDate
+      setDate(currentDate)
+      if (Platform.OS === 'android') {
+        toggleDatePicker()
+        setDateOfBirth(currentDate)
+      }
+    } else {
+      toggleDatePicker()
+    }
+  }
+  const toggleDatePicker = () => {
+    setShowPicker(!showPicker)
+  }
+
+  const confirmIOSDatePicker = () => {
+    setDateOfBirth(
+      ` ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+    )
+    toggleDatePicker()
+  }
+
+  // Format date for display in TextInput
+  const formatDate = date => {
+    return ` ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+  }
 
   const goToNextStep = () => {
     if (currentStep < totalSteps) {
@@ -123,13 +159,73 @@ function Register() {
             <Text style={[styles.headerText, styles.headerSubText]}>
               <Text> Please fill out the requested information </Text>
             </Text>
-            <Input
-              label='First Name'
-              textInputConfig={{
-                autoCorrect: false,
-                autoCapitalize: 'words',
-              }}
-            />
+            {Platform.OS === 'ios' || Platform.OS === 'android' ? (
+              <>
+                {!showPicker && (
+                  <Pressable onPress={toggleDatePicker}>
+                    <Input
+                      label='Birthday Date'
+                      textInputConfig={{
+                        autoCorrect: false,
+                        autoCapitalize: 'words',
+                        placeholder: 'set Aug 21 2002',
+                        editable: false,
+                        onChangeText: setDateOfBirth,
+                        value: dateOfBirth,
+                        onPressIn: toggleDatePicker,
+                      }}
+                    />
+                  </Pressable>
+                )}
+
+                {showPicker && (
+                  <>
+                    <DateTimePicker
+                      testID='dateTimePicker'
+                      value={date}
+                      mode='date'
+                      display='spinner'
+                      onChange={onChange}
+                      style={styles.datePicker}
+                    />
+                    {showPicker && Platform.OS === 'ios' && (
+                      <View style={styles.DatePickerButton}>
+                        <PrimaryButton
+                          style={{ marginBottom: 10, width: '100%' }}
+                          paddingVertical={40}
+                          paddingHorizontal={12}
+                          onLongPress={() => setShowAdminButton(true)}
+                          onPress={toggleDatePicker}
+                        >
+                          Cancel
+                        </PrimaryButton>
+                        <PrimaryButton
+                          style={{ marginBottom: 10, width: '100%' }}
+                          paddingVertical={40}
+                          paddingHorizontal={12}
+                          onLongPress={() => setShowAdminButton(true)}
+                          onPress={confirmIOSDatePicker}
+                        >
+                          Confirm
+                        </PrimaryButton>
+                      </View>
+                    )}
+                  </>
+                )}
+              </>
+            ) : (
+              <Input
+                label='Birthday Date'
+                textInputConfig={{
+                  autoCorrect: false,
+                  autoCapitalize: 'words',
+                  placeholder: '23/10/2002',
+                  onChangeText: setDateOfBirth,
+                  value: dateOfBirth,
+                  onPressIn: toggleDatePicker,
+                }}
+              />
+            )}
             <Input
               label='Last Name'
               textInputConfig={{
@@ -275,6 +371,15 @@ const getStyles = (theme, screenWidth) =>
         ios: 15,
         android: 15,
       }),
+    },
+    datePicker: {
+      height: 120,
+      marginVertical: 20,
+    },
+    DatePickerButton: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      marginBottom: 20,
     },
   })
 
