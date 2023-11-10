@@ -10,14 +10,14 @@ import {
   TouchableOpacity,
   View,
   Pressable,
+  Modal,
 } from 'react-native'
 import Input from '../Utilities/UI/Input'
 import { useTheme } from '../Styles/theme'
 import PrimaryButton from '../Utilities/UI/PrimaryButton'
 import GoogleButton from '../Utilities/UI/GoogleButton'
-import DatePicker from '../Utilities/UI/DatePicker'
-import DateTimePicker from '@react-native-community/datetimepicker'
-import { Button } from 'react-native-web'
+import DatePicker from 'react-native-modern-datepicker'
+import { getFormatedDate } from 'react-native-modern-datepicker'
 
 function Register() {
   const screenWidth = Dimensions.get('window').width
@@ -26,36 +26,24 @@ function Register() {
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
-  const [dateOfBirth, setDateOfBirth] = useState('')
   const [date, setDate] = useState(new Date())
-  const [showPicker, setShowPicker] = useState(false)
+  const [selectedDate, setSelectedDate] = useState('')
 
-  const onChange = ({ type }, selectedDate) => {
-    if (type == 'set') {
-      const currentDate = selectedDate
-      setDate(currentDate)
-      if (Platform.OS === 'android') {
-        toggleDatePicker()
-        setDateOfBirth(currentDate)
-      }
-    } else {
-      toggleDatePicker()
-    }
-  }
-  const toggleDatePicker = () => {
-    setShowPicker(!showPicker)
+  const [openStartDatePicker, setOpenStartDatePicker] = useState(false)
+  const today = new Date()
+  const startDate = getFormatedDate(
+    today.setDate(today.getDate() + 1),
+    'YYYY/MM/DD'
+  )
+  const [selectedStartDate, setSelectedStartDate] = useState('')
+  const [startedDate, setStartedDate] = useState('12/12/2023')
+
+  function handleChangeStartDate(propDate) {
+    setStartedDate(propDate)
   }
 
-  const confirmIOSDatePicker = () => {
-    setDateOfBirth(
-      ` ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
-    )
-    toggleDatePicker()
-  }
-
-  // Format date for display in TextInput
-  const formatDate = date => {
-    return ` ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+  const handleOnPressStartDate = () => {
+    setOpenStartDatePicker(!openStartDatePicker)
   }
 
   const goToNextStep = () => {
@@ -159,87 +147,101 @@ function Register() {
             <Text style={[styles.headerText, styles.headerSubText]}>
               <Text> Please fill out the requested information </Text>
             </Text>
-            {Platform.OS === 'ios' || Platform.OS === 'android' ? (
-              <>
-                {!showPicker && (
-                  <Pressable onPress={toggleDatePicker}>
-                    <Input
-                      label='Birthday Date'
-                      textInputConfig={{
-                        autoCorrect: false,
-                        autoCapitalize: 'words',
-                        placeholder: 'set Aug 21 2002',
-                        editable: false,
-                        onChangeText: setDateOfBirth,
-                        value: dateOfBirth,
-                        onPressIn: toggleDatePicker,
-                      }}
-                    />
-                  </Pressable>
-                )}
-
-                {showPicker && (
-                  <>
-                    <DateTimePicker
-                      testID='dateTimePicker'
-                      value={date}
-                      mode='date'
-                      display='spinner'
-                      onChange={onChange}
-                      style={styles.datePicker}
-                    />
-                    {showPicker && Platform.OS === 'ios' && (
-                      <View style={styles.DatePickerButton}>
-                        <PrimaryButton
-                          style={{ marginBottom: 10, width: '100%' }}
-                          paddingVertical={40}
-                          paddingHorizontal={12}
-                          onLongPress={() => setShowAdminButton(true)}
-                          onPress={toggleDatePicker}
-                        >
-                          Cancel
-                        </PrimaryButton>
-                        <PrimaryButton
-                          style={{ marginBottom: 10, width: '100%' }}
-                          paddingVertical={40}
-                          paddingHorizontal={12}
-                          onLongPress={() => setShowAdminButton(true)}
-                          onPress={confirmIOSDatePicker}
-                        >
-                          Confirm
-                        </PrimaryButton>
-                      </View>
-                    )}
-                  </>
-                )}
-              </>
-            ) : (
+            <Pressable onPress={handleOnPressStartDate}>
               <Input
                 label='Birthday Date'
                 textInputConfig={{
                   autoCorrect: false,
                   autoCapitalize: 'words',
-                  placeholder: '23/10/2002',
-                  onChangeText: setDateOfBirth,
-                  value: dateOfBirth,
-                  onPressIn: toggleDatePicker,
+                  placeholder: 'set Aug 21 2002',
+                  editable: false,
+                  onChangeText: handleChangeStartDate,
+                  value: selectedStartDate,
+                  onPressIn: handleOnPressStartDate,
                 }}
               />
-            )}
+            </Pressable>
+
+            {/* Create modal for date picker */}
+            <Modal
+              animationType='slide'
+              transparent={true}
+              visible={openStartDatePicker}
+            >
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <DatePicker
+                    mode='calendar'
+                    selected={startedDate}
+                    onDateChanged={handleChangeStartDate}
+                    onSelectedChange={date => setSelectedStartDate(date)}
+                    options={{
+                      backgroundColor: '#080516',
+                      textHeaderColor: theme.colors.primary,
+                      textDefaultColor: '#FFFFFF',
+                      selectedTextColor: '#FFF',
+                      mainColor: theme.colors.primary,
+                      textSecondaryColor: '#FFFFFF',
+                      borderColor: 'rgba(122, 146, 165, 0.1)',
+                    }}
+                  />
+
+                  <TouchableOpacity onPress={handleOnPressStartDate}>
+                    <Text style={{ color: theme.colors.primary }}>Close</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
             <Input
-              label='Last Name'
+              label='Gender'
+              type='dropdown'
+              options={[
+                { label: 'Male', value: 'male' },
+                { label: 'Female', value: 'female' },
+                { label: 'Other', value: 'other' },
+              ]}
               textInputConfig={{
                 autoCorrect: false,
                 autoCapitalize: 'words',
               }}
             />
             <Input
-              label='Email Address'
+              label='Nationality'
               textInputConfig={{
                 autoCorrect: false,
               }}
             />
-            <View style={styles.buttonsContainer}>
+            <Input
+              label='Phone Number'
+              textInputConfig={{
+                autoCorrect: false,
+              }}
+            />
+            <Input
+              label='Adress'
+              textInputConfig={{
+                autoCorrect: false,
+              }}
+            />
+            <Input
+              label='City'
+              textInputConfig={{
+                autoCorrect: false,
+              }}
+            />
+            <Input
+              label='Zip Code'
+              textInputConfig={{
+                autoCorrect: false,
+              }}
+            />
+            <Input
+              label='Role'
+              textInputConfig={{
+                autoCorrect: false,
+              }}
+            />
+            <View style={[styles.buttonsContainer]}>
               <View style={styles.buttonWrapper}>
                 <PrimaryButton
                   style={{ marginBottom: 10, width: '100%' }}
@@ -347,6 +349,7 @@ const getStyles = (theme, screenWidth) =>
       width: '100%',
       alignItems: 'center',
       justifyContent: 'center',
+      marginBottom: '6%',
       marginTop: Platform.select({
         ios: '6%',
         android: '6%',
@@ -380,6 +383,33 @@ const getStyles = (theme, screenWidth) =>
       flexDirection: 'row',
       justifyContent: 'space-around',
       marginBottom: 20,
+    },
+
+    centeredView: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    modalView: {
+      margin: 5,
+      backgroundColor: '#080516',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 20,
+      padding: '3%',
+      width: Platform.select({
+        ios: '90%',
+        android: '90%',
+        web: '40%',
+      }),
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
     },
   })
 

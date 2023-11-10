@@ -1,48 +1,31 @@
 import React, { useState } from 'react'
 import { View, TextInput, Platform } from 'react-native'
-import DateTimePicker from '@react-native-community/datetimepicker'
+import DatePicker from 'react-native-modern-datepicker'
 import Input from './Input'
 
-const DatePicker = () => {
+const GetDatePicker = () => {
   const [date, setDate] = useState(new Date())
   const [show, setShow] = useState(false)
-
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date
-    setShow(Platform.OS === 'ios')
-    setDate(currentDate)
-  }
-
-  // Format date for display in TextInput
-  const formatDate = date => {
-    return ` ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
-  }
-
   return (
     <View>
-      <Input
-        label='Birthday Date'
-        textInputConfig={{
-          autoCorrect: false,
-          autoCapitalize: 'words',
+      <DatePicker
+        options={{
+          backgroundColor: '#090C08',
+          textHeaderColor: '#FFA25B',
+          textDefaultColor: '#F6E7C1',
+          selectedTextColor: '#fff',
+          mainColor: '#F4722B',
+          textSecondaryColor: '#D6C7A1',
+          borderColor: 'rgba(122, 146, 165, 0.1)',
         }}
-        placeholder='Select Date'
-        value={formatDate(date)}
-        onFocus={() => setShow(true)} // Show the picker when the input is focused
+        current='2020-07-13'
+        selected='2020-07-23'
+        mode='calendar'
+        minuteInterval={30}
+        style={{ borderRadius: 10 }}
       />
-      {show && (
-        <DateTimePicker
-          testID='dateTimePicker'
-          value={date}
-          mode='date'
-          is24Hour={true}
-          display='default'
-          onChange={onChange}
-          onTouchCancel={() => setShow(false)} // Hide the picker if the user cancels the selection
-        />
-      )}
     </View>
   )
 }
 
-export default DatePicker
+export default GetDatePicker

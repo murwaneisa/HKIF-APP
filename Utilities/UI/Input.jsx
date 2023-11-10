@@ -1,14 +1,31 @@
 import React from 'react'
 import { Platform, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Picker } from '@react-native-picker/picker'
+
 import { useTheme } from '../../Styles/theme'
 
-function Input({ label, textInputConfig }) {
+function Input({ label, textInputConfig, type, options }) {
   const { theme } = useTheme()
   const styles = getStyles(theme)
+
+  let inputElement = null
+
+  if (type === 'dropdown' && options) {
+    inputElement = (
+      <Picker style={styles.input} {...textInputConfig}>
+        {options.map((option, index) => (
+          <Picker.Item key={index} label={option.label} value={option.value} />
+        ))}
+      </Picker>
+    )
+  } else {
+    inputElement = <TextInput style={styles.input} {...textInputConfig} />
+  }
+
   return (
     <View style={styles.inputContainer}>
       <Text style={styles.label}>{label}</Text>
-      <TextInput style={styles.input} {...textInputConfig} />
+      {inputElement}
     </View>
   )
 }
