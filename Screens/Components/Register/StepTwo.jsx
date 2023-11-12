@@ -5,6 +5,7 @@ import DatePicker from 'react-native-modern-datepicker'
 import PrimaryButton from '../../../Utilities/UI/PrimaryButton'
 import { useTheme } from '../../../Styles/theme'
 import DropdownList from '../../../Utilities/UI/DropDownList'
+import Countries from '../../../Assets/Countries'
 
 const StepTwo = ({
   styles,
@@ -16,6 +17,7 @@ const StepTwo = ({
   startedDate,
   date,
   setSelectedStartDate,
+  goToPreviousStep,
 }) => {
   const { theme } = useTheme()
   return (
@@ -77,20 +79,29 @@ const StepTwo = ({
           { label: 'Other', value: '3' },
         ]}
       />
-      <Input
+      <DropdownList
         label='Nationality'
-        textInputConfig={{
-          autoCorrect: false,
-        }}
+        placeholder='Select country'
+        data={Countries}
+      />
+      <DropdownList
+        label='Role'
+        placeholder='Select Role'
+        data={[
+          { label: 'Activity Leader', value: '1' },
+          { label: 'Board Member', value: '2' },
+          { label: 'Non', value: '3' },
+        ]}
       />
       <Input
         label='Phone Number'
         textInputConfig={{
+          keyboardType: 'phone-pad',
           autoCorrect: false,
         }}
       />
       <Input
-        label='Adress'
+        label='Address'
         textInputConfig={{
           autoCorrect: false,
         }}
@@ -104,12 +115,7 @@ const StepTwo = ({
       <Input
         label='Zip Code'
         textInputConfig={{
-          autoCorrect: false,
-        }}
-      />
-      <Input
-        label='Role'
-        textInputConfig={{
+          keyboardType: 'phone-pad',
           autoCorrect: false,
         }}
       />
@@ -119,7 +125,6 @@ const StepTwo = ({
             style={{ marginBottom: 10, width: '100%' }}
             paddingVertical={40}
             paddingHorizontal={12}
-            onLongPress={() => setShowAdminButton(true)}
             onPress={goToNextStep}
           >
             Continue
@@ -130,8 +135,7 @@ const StepTwo = ({
             style={{ marginBottom: 10, width: '100%' }}
             paddingVertical={40}
             paddingHorizontal={12}
-            onLongPress={() => setShowAdminButton(true)}
-            onPress={goToNextStep}
+            onPress={goToPreviousStep}
           >
             Previous
           </PrimaryButton>

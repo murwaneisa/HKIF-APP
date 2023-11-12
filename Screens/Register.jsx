@@ -1,21 +1,14 @@
 import React, { useState } from 'react'
 import {
-  TextInput,
   Dimensions,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
-  TouchableOpacity,
   View,
-  Pressable,
-  Modal,
 } from 'react-native'
-import Input from '../Utilities/UI/Input'
+
 import { useTheme } from '../Styles/theme'
-import PrimaryButton from '../Utilities/UI/PrimaryButton'
-import GoogleButton from '../Utilities/UI/GoogleButton'
 
 import { getFormatedDate } from 'react-native-modern-datepicker'
 import StepOne from './Components/register/StepOne'
@@ -53,8 +46,13 @@ function Register() {
       setCurrentStep(currentStep + 1)
     } else {
       // Handle the final submission
-      console.log('Final Form Data:', formData)
+      console.log('Final Form Data:')
       // navigate to another screen or perform the submission action
+    }
+  }
+  const goToPreviousStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1)
     }
   }
   const totalSteps = 2
@@ -82,6 +80,7 @@ function Register() {
             startedDate={startedDate}
             date={date}
             setSelectedStartDate={setSelectedStartDate}
+            goToPreviousStep={goToPreviousStep}
           />
         )
       default:
@@ -108,7 +107,7 @@ function Register() {
   )
 }
 
-const getStyles = (theme, screenWidth) =>
+const getStyles = theme =>
   StyleSheet.create({
     scrollViewContainer: {
       flex: 1,
