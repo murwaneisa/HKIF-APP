@@ -4,6 +4,7 @@ import Input from '../../../Utilities/UI/Input'
 import DatePicker from 'react-native-modern-datepicker'
 import PrimaryButton from '../../../Utilities/UI/PrimaryButton'
 import { useTheme } from '../../../Styles/theme'
+import DropdownList from '../../../Utilities/UI/DropDownList'
 
 const StepTwo = ({
   styles,
@@ -67,18 +68,14 @@ const StepTwo = ({
           </View>
         </View>
       </Modal>
-      <Input
+      <DropdownList
         label='Gender'
-        type='dropdown'
-        options={[
-          { label: 'Male', value: 'male' },
-          { label: 'Female', value: 'female' },
-          { label: 'Other', value: 'other' },
+        placeholder='Select Gender'
+        data={[
+          { label: 'Male', value: '1' },
+          { label: 'Female', value: '2' },
+          { label: 'Other', value: '3' },
         ]}
-        textInputConfig={{
-          autoCorrect: false,
-          autoCapitalize: 'words',
-        }}
       />
       <Input
         label='Nationality'
