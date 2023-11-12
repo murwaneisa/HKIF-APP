@@ -7,7 +7,7 @@ import { useTheme } from '../../Styles/theme'
 function Input({ label, textInputConfig, type, options }) {
   const { theme } = useTheme()
   const styles = getStyles(theme)
-
+  /* 
   let inputElement = null
 
   if (type === 'dropdown' && options) {
@@ -19,13 +19,13 @@ function Input({ label, textInputConfig, type, options }) {
       </Picker>
     )
   } else {
-    inputElement = <TextInput style={styles.input} {...textInputConfig} />
-  }
+    inputElement = 
+  } */
 
   return (
     <View style={styles.inputContainer}>
       <Text style={styles.label}>{label}</Text>
-      {inputElement}
+      <TextInput style={styles.input} {...textInputConfig} />
     </View>
   )
 }

@@ -16,8 +16,10 @@ import Input from '../Utilities/UI/Input'
 import { useTheme } from '../Styles/theme'
 import PrimaryButton from '../Utilities/UI/PrimaryButton'
 import GoogleButton from '../Utilities/UI/GoogleButton'
-import DatePicker from 'react-native-modern-datepicker'
+
 import { getFormatedDate } from 'react-native-modern-datepicker'
+import StepOne from './Components/register/StepOne'
+import StepTwo from './Components/Register/StepTwo'
 
 function Register() {
   const screenWidth = Dimensions.get('window').width
@@ -61,211 +63,26 @@ function Register() {
     switch (currentStep) {
       case 1:
         return (
-          <>
-            <Text style={styles.headerText}>
-              <Text> Welcome to </Text>
-              <Text style={styles.hkifText}>HKIF</Text>
-            </Text>
-            <Input
-              label='First Name'
-              textInputConfig={{
-                autoCorrect: false,
-                autoCapitalize: 'words',
-              }}
-            />
-            <Input
-              label='Last Name'
-              textInputConfig={{
-                autoCorrect: false,
-                autoCapitalize: 'words',
-              }}
-            />
-            <Input
-              label='Email Address'
-              textInputConfig={{
-                autoCorrect: false,
-              }}
-            />
-            <Input
-              label='Password'
-              textInputConfig={{
-                secureTextEntry: !passwordVisible, // Hide the password by default
-                autoCapitalize: 'none', // Do not auto-capitalize any characters
-                autoCorrect: false, // Disable auto-correct
-                returnKeyType: 'done', // Set the return key to "done"
-              }}
-              // Add a right icon or button to toggle password visibility
-              rightIcon={
-                <TouchableOpacity
-                  onPress={() => setPasswordVisible(prev => !prev)}
-                >
-                  <Text>{passwordVisible ? 'Hide' : 'Show'}</Text>
-                </TouchableOpacity>
-              }
-            />
-            <Input
-              label='Confirm Password'
-              textInputConfig={{
-                secureTextEntry: !confirmPasswordVisible, // Hide the password by default
-                autoCapitalize: 'none', // Do not auto-capitalize any characters
-                autoCorrect: false, // Disable auto-correct
-                returnKeyType: 'done', // Set the return key to "done"
-              }}
-              // Add a right icon or button to toggle password visibility
-              rightIcon={
-                <TouchableOpacity
-                  onPress={() => setConfirmPasswordVisible(prev => !prev)}
-                >
-                  <Text>{confirmPasswordVisible ? 'Hide' : 'Show'}</Text>
-                </TouchableOpacity>
-              }
-            />
-            <View style={styles.buttonsContainer}>
-              <View style={styles.buttonWrapper}>
-                <PrimaryButton
-                  style={{ marginBottom: 10, width: '100%' }}
-                  paddingVertical={40}
-                  paddingHorizontal={12}
-                  onLongPress={() => setShowAdminButton(true)}
-                  onPress={goToNextStep}
-                >
-                  Continue
-                </PrimaryButton>
-              </View>
-              <Text style={styles.textStyle}>OR </Text>
-              <View style={styles.buttonWrapper}>
-                <GoogleButton paddingVertical={98} paddingHorizontal={12}>
-                  Sign Up with Google
-                </GoogleButton>
-              </View>
-            </View>
-          </>
+          <StepOne
+            styles={styles}
+            goToNextStep={goToNextStep}
+            passwordVisible={passwordVisible}
+            confirmPasswordVisible={confirmPasswordVisible}
+          />
         )
       case 2:
         return (
-          <>
-            <Text style={[styles.headerText, styles.headerSubText]}>
-              <Text> Please fill out the requested information </Text>
-            </Text>
-            <Pressable onPress={handleOnPressStartDate}>
-              <Input
-                label='Birthday Date'
-                textInputConfig={{
-                  autoCorrect: false,
-                  autoCapitalize: 'words',
-                  placeholder: 'set Aug 21 2002',
-                  editable: false,
-                  onChangeText: handleChangeStartDate,
-                  value: selectedStartDate,
-                  onPressIn: handleOnPressStartDate,
-                }}
-              />
-            </Pressable>
-
-            {/* Create modal for date picker */}
-            <Modal
-              animationType='slide'
-              transparent={true}
-              visible={openStartDatePicker}
-            >
-              <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                  <DatePicker
-                    mode='calendar'
-                    selected={startedDate}
-                    onDateChanged={handleChangeStartDate}
-                    onSelectedChange={date => setSelectedStartDate(date)}
-                    options={{
-                      backgroundColor: '#080516',
-                      textHeaderColor: theme.colors.primary,
-                      textDefaultColor: '#FFFFFF',
-                      selectedTextColor: '#FFF',
-                      mainColor: theme.colors.primary,
-                      textSecondaryColor: '#FFFFFF',
-                      borderColor: 'rgba(122, 146, 165, 0.1)',
-                    }}
-                  />
-
-                  <TouchableOpacity onPress={handleOnPressStartDate}>
-                    <Text style={{ color: theme.colors.primary }}>Close</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </Modal>
-            <Input
-              label='Gender'
-              type='dropdown'
-              options={[
-                { label: 'Male', value: 'male' },
-                { label: 'Female', value: 'female' },
-                { label: 'Other', value: 'other' },
-              ]}
-              textInputConfig={{
-                autoCorrect: false,
-                autoCapitalize: 'words',
-              }}
-            />
-            <Input
-              label='Nationality'
-              textInputConfig={{
-                autoCorrect: false,
-              }}
-            />
-            <Input
-              label='Phone Number'
-              textInputConfig={{
-                autoCorrect: false,
-              }}
-            />
-            <Input
-              label='Adress'
-              textInputConfig={{
-                autoCorrect: false,
-              }}
-            />
-            <Input
-              label='City'
-              textInputConfig={{
-                autoCorrect: false,
-              }}
-            />
-            <Input
-              label='Zip Code'
-              textInputConfig={{
-                autoCorrect: false,
-              }}
-            />
-            <Input
-              label='Role'
-              textInputConfig={{
-                autoCorrect: false,
-              }}
-            />
-            <View style={[styles.buttonsContainer]}>
-              <View style={styles.buttonWrapper}>
-                <PrimaryButton
-                  style={{ marginBottom: 10, width: '100%' }}
-                  paddingVertical={40}
-                  paddingHorizontal={12}
-                  onLongPress={() => setShowAdminButton(true)}
-                  onPress={goToNextStep}
-                >
-                  Continue
-                </PrimaryButton>
-              </View>
-              <View style={styles.buttonWrapper}>
-                <PrimaryButton
-                  style={{ marginBottom: 10, width: '100%' }}
-                  paddingVertical={40}
-                  paddingHorizontal={12}
-                  onLongPress={() => setShowAdminButton(true)}
-                  onPress={goToNextStep}
-                >
-                  Previous
-                </PrimaryButton>
-              </View>
-            </View>
-          </>
+          <StepTwo
+            styles={styles}
+            goToNextStep={goToNextStep}
+            handleOnPressStartDate={handleOnPressStartDate}
+            handleChangeStartDate={handleChangeStartDate}
+            selectedStartDate={selectedStartDate}
+            openStartDatePicker={openStartDatePicker}
+            startedDate={startedDate}
+            date={date}
+            setSelectedStartDate={setSelectedStartDate}
+          />
         )
       default:
         return null
