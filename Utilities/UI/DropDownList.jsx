@@ -14,9 +14,9 @@ const DropdownList = ({ label, placeholder, data }) => {
   }
 
   return (
-    <View>
+    <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
-      <View style={styles.container}>
+      <View>
         {isSearch ? (
           <Dropdown
             style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
@@ -98,6 +98,7 @@ const getStyles = theme =>
         web: 18,
       }),
       color: theme.colors.text,
+      marginBottom: 5,
     },
     placeholderStyle: {
       fontSize: 16,
