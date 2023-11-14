@@ -40,9 +40,10 @@ export const ThemeContext = createContext()
 const lightTheme = {
   colors: {
     primary: '#669D58',
+    primary100: '#779d58',
     secondary: '#3B3D3B',
-    accent: '#282525',
-    accentWhite: '#FFFFFF',
+    accent: '#F5F5F5',
+    accentWhite: '#F5F5F5',
     background: '#FFFFFF',
     text: '#000000',
   },
@@ -51,10 +52,11 @@ const lightTheme = {
 const darkTheme = {
   colors: {
     primary: '#669D58',
+    primary100: '#779d58',
     secondary: '#3B3D3B',
-    accent: '#282525',
+    accent: '#3B3D3B',
     accentWhite: '#FFFFFF',
-    background: '#282525',
+    background: '#000000',
     text: '#FFFFFF',
   },
 }
