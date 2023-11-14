@@ -11,7 +11,7 @@ import {
 import { useTheme } from '../Styles/theme'
 
 import { getFormatedDate } from 'react-native-modern-datepicker'
-import StepOne from './Components/register/StepOne'
+import StepOne from './Components/Register/StepOne'
 import StepTwo from './Components/Register/StepTwo'
 
 function Register() {
