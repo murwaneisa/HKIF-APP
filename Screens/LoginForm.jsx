@@ -7,14 +7,13 @@ import {
   Image,
   TextInput,
   Dimensions,
-  ScrollView,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
-  Keyboard,
 } from 'react-native'
 import { useTheme } from '../Styles/theme'
 import PrimaryButton from '../Utilities/UI/PrimaryButton'
 import GoogleButton from '../Utilities/UI/GoogleButton'
+import { validateEmail, dismissKeyboard } from '../Utilities/UI/Form'
 
 function LoginForm({ navigation }) {
   const [showAdminButton, setShowAdminButton] = useState(false)
@@ -22,9 +21,19 @@ function LoginForm({ navigation }) {
   const { theme } = useTheme()
 
   const styles = getStyles(theme, screenWidth)
-  const dismissKeyboard = () => {
-    Keyboard.dismiss()
+
+  const [email, setEmail] = useState('')
+  const [isEmailValid, setIsEmailValid] = useState(true)
+  const handleEmailChange = text => {
+    setEmail(text)
+    setIsEmailValid(validateEmail(text))
   }
+  const [password, setPassword] = useState('')
+  const handlePasswordChange = text => {
+    setPassword(text)
+  }
+
+  const isFormValid = isEmailValid && email != '' && password != '' // && other conditions for other fields
 
   return (
     <KeyboardAvoidingView
@@ -32,7 +41,9 @@ function LoginForm({ navigation }) {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.select({ ios: 60, android: 0 })}
     >
-      <TouchableWithoutFeedback onPress={dismissKeyboard}>
+      <TouchableWithoutFeedback
+        onPress={Platform.OS !== 'web' ? dismissKeyboard : undefined}
+      >
         <View style={styles.container}>
           <View style={styles.imageContainer}>
             <Image
@@ -44,14 +55,24 @@ function LoginForm({ navigation }) {
           <View style={styles.formContainer}>
             <View style={styles.inputView}>
               <TextInput
-                style={styles.inputText}
+                style={[styles.inputText, !isEmailValid && styles.invalidInput]}
+                value={email}
+                onChangeText={handleEmailChange}
                 placeholder='Email'
                 placeholderTextColor={theme.colors.accent}
+                keyboardType={
+                  Platform.OS !== 'web' ? 'email-address' : undefined
+                } // Set keyboard type for email input
               />
+              {!isEmailValid && (
+                <Text style={styles.errorText}>Invalid email format</Text>
+              )}
             </View>
             <View style={styles.inputView}>
               <TextInput
                 style={styles.inputText}
+                value={password}
+                onChangeText={handlePasswordChange}
                 secureTextEntry
                 placeholder='Password'
                 placeholderTextColor={theme.colors.accent}
@@ -65,7 +86,12 @@ function LoginForm({ navigation }) {
                 paddingVertical={40}
                 paddingHorizontal={12}
                 onLongPress={() => setShowAdminButton(true)}
-                onPress={() => navigation.navigate('Details')}
+                onPress={() => {
+                  if (isFormValid) {
+                    navigation.navigate('Details')
+                  }
+                }}
+                disabled={!isFormValid}
               >
                 Login
               </PrimaryButton>
@@ -77,7 +103,7 @@ function LoginForm({ navigation }) {
                   paddingVertical={40}
                   paddingHorizontal={12}
                   onPress={() => navigation.navigate('Home')}
-                  onLongPress={() => setShowAdminButton(true)} // You might want to navigate to a different route for admin
+                  disabled={!isFormValid}
                 >
                   Login as Admin
                 </PrimaryButton>
@@ -127,6 +153,7 @@ const getStyles = (theme, screenWidth) =>
     },
     inputText: {
       width: '100%',
+      color: theme.colors.text,
       borderColor: theme.colors.accent,
       borderWidth: 1,
       borderRadius: 25,
@@ -155,6 +182,14 @@ const getStyles = (theme, screenWidth) =>
         ios: 15,
         android: 15,
       }),
+    },
+    invalidInput: {
+      borderColor: 'red', // or any color to indicate error
+    },
+    errorText: {
+      color: 'red', // or any color to indicate error
+      fontSize: 12,
+      marginTop: 5,
     },
   })
 export default LoginForm

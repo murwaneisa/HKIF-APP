@@ -7,6 +7,7 @@ function PrimaryButton({
   paddingVertical,
   paddingHorizontal,
   onLongPress,
+  disabled = false,
 }) {
   const { theme } = useTheme()
   const styles = getStyles(theme, paddingVertical, paddingHorizontal)
@@ -16,13 +17,16 @@ function PrimaryButton({
         style={({ pressed }) =>
           pressed
             ? [styles.buttonInnerContainer, styles.pressed]
-            : styles.buttonInnerContainer
+            : [styles.buttonInnerContainer, disabled && styles.disabled]
         }
         onPress={onPress}
         onLongPress={onLongPress}
         android_ripple={{ color: theme.colors.primary }}
+        disabled={disabled}
       >
-        <Text style={styles.buttonText}>{children}</Text>
+        <Text style={[styles.buttonText, disabled && styles.disabled]}>
+          {children}
+        </Text>
       </Pressable>
     </View>
   )
@@ -48,6 +52,11 @@ const getStyles = (theme, paddingHorizontal, paddingVertical) => {
     },
     pressed: {
       opacity: 0.75,
+    },
+    disabled: {
+      color: theme.colors.background,
+      backgroundColor: theme.colors.accent, // Add a disabled color to your theme or use a hardcoded color
+      opacity: 0.5, // Optional: reduce opacity for disabled state
     },
   })
 }
