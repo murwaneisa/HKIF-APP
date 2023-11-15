@@ -14,6 +14,7 @@ import { useTheme } from '../Styles/theme'
 import PrimaryButton from '../Utilities/UI/PrimaryButton'
 import GoogleButton from '../Utilities/UI/GoogleButton'
 import { validateEmail, dismissKeyboard } from '../Utilities/UI/Form'
+import { loginUser, getFullUserInfoByID } from '../Utilities/Axios/user'
 
 function LoginForm({ navigation }) {
   const [showAdminButton, setShowAdminButton] = useState(false)
@@ -32,6 +33,7 @@ function LoginForm({ navigation }) {
   const handlePasswordChange = text => {
     setPassword(text)
   }
+  const [info, setInfo] = useState('')
 
   const isFormValid = isEmailValid && email != '' && password != '' // && other conditions for other fields
 
@@ -86,9 +88,19 @@ function LoginForm({ navigation }) {
                 paddingVertical={40}
                 paddingHorizontal={12}
                 onLongPress={() => setShowAdminButton(true)}
-                onPress={() => {
+                onPress={async () => {
                   if (isFormValid) {
-                    navigation.navigate('Details')
+                    try {
+                      await loginUser(email, password)
+                      //TODO: Replace displaying with actual re-direciting
+                      setInfo(
+                        JSON.stringify(
+                          await getFullUserInfoByID('652efb3ff1abe4134b95f509')
+                        )
+                      )
+                    } catch (error) {
+                      console.error('Login failed:', error)
+                    }
                   }
                 }}
                 disabled={!isFormValid}
@@ -115,6 +127,8 @@ function LoginForm({ navigation }) {
               </GoogleButton>
             </View>
             <Text style={styles.textStyle}>Register </Text>
+            {/* Next line should be removed after testing */}
+            <Text style={styles.textStyle}>{info} </Text>
           </View>
         </View>
       </TouchableWithoutFeedback>
