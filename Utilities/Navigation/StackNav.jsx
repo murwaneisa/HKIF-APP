@@ -8,16 +8,20 @@ import LoginForm from '../../Screens/LoginForm'
 import Register from '../../Screens/Register'
 import { useState } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
-import { Text, View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { useTheme } from '../../Styles/theme'
 import { createDrawerNavigator } from '@react-navigation/drawer'
+import { useNavigation } from '@react-navigation/native'
+import Profile from '../../Screens/Profile'
+import Users from '../../Screens/Admin/Users'
 
 const AuthStack = createStackNavigator()
 const AppStack = createStackNavigator()
 
-const hamburgerMenu = ({ navigation }) => {
+const hamburgerMenu = () => {
+  const navigation = useNavigation()
   const { theme } = useTheme()
   return (
     <View
@@ -28,12 +32,15 @@ const hamburgerMenu = ({ navigation }) => {
         height: '100%',
       }}
     >
-      <Ionicons name='menu' size={38} color={theme.colors.text} />
+      <TouchableOpacity onPress={() => navigation.openDrawer()}>
+        <Ionicons name='menu' size={38} color={theme.colors.text} />
+      </TouchableOpacity>
     </View>
   )
 }
 
-const profile = ({ navigation }) => {
+const profile = () => {
+  const navigation = useNavigation()
   const { theme } = useTheme()
   return (
     <View
@@ -44,7 +51,9 @@ const profile = ({ navigation }) => {
         height: '100%',
       }}
     >
-      <FontAwesome5 name='user-circle' size={38} color={theme.colors.text} />
+      <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+        <FontAwesome5 name='user-circle' size={38} color={theme.colors.text} />
+      </TouchableOpacity>
     </View>
   )
 }
@@ -68,12 +77,14 @@ const AuthStackScreen = () => (
 
 const Drawer = createDrawerNavigator()
 const AppStackScreen = () => {
-  const { theme } = useTheme() // Use the theme hook here
+  const { theme } = useTheme()
+  const [admin, setAdmin] = useState('object')
 
   return (
     <Drawer.Navigator
       screenOptions={{
-        headerRight: profile,
+        headerRight: () => profile(),
+        headerLeft: () => hamburgerMenu(),
         headerTitleAlign: 'center',
         headerStyle: {
           backgroundColor: theme.colors.accent, // Use the theme for styling
@@ -85,13 +96,14 @@ const AppStackScreen = () => {
     >
       <Drawer.Screen name='Home' component={Home} />
       <Drawer.Screen name='Details' component={Details} />
-      {/* Add other screens as needed */}
+      <Drawer.Screen name='Profile' component={Profile} />
+      {admin ? <Drawer.Screen name='Users' component={Users} /> : null}
     </Drawer.Navigator>
   )
 }
 
 export default function StackNav() {
-  const [isAuthenticated, setIsAuthenticated] = useState('user')
+  const [isAuthenticated, setIsAuthenticated] = useState('object')
   return (
     <NavigationContainer>
       {isAuthenticated ? <AppStackScreen /> : <AuthStackScreen />}
