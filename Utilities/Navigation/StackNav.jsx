@@ -12,6 +12,7 @@ import { Text, View } from 'react-native'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { useTheme } from '../../Styles/theme'
+import { createDrawerNavigator } from '@react-navigation/drawer'
 
 const AuthStack = createStackNavigator()
 const AppStack = createStackNavigator()
@@ -65,13 +66,13 @@ const AuthStackScreen = () => (
   </AuthStack.Navigator>
 )
 
+const Drawer = createDrawerNavigator()
 const AppStackScreen = () => {
   const { theme } = useTheme() // Use the theme hook here
 
   return (
-    <AppStack.Navigator
+    <Drawer.Navigator
       screenOptions={{
-        headerLeft: hamburgerMenu,
         headerRight: profile,
         headerTitleAlign: 'center',
         headerStyle: {
@@ -82,9 +83,10 @@ const AppStackScreen = () => {
         },
       }}
     >
-      <AppStack.Screen name='Home' component={Home} />
-      <AppStack.Screen name='Details' component={Details} />
-    </AppStack.Navigator>
+      <Drawer.Screen name='Home' component={Home} />
+      <Drawer.Screen name='Details' component={Details} />
+      {/* Add other screens as needed */}
+    </Drawer.Navigator>
   )
 }
 
