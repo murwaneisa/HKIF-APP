@@ -8,17 +8,16 @@ import LoginForm from '../../Screens/LoginForm'
 import Register from '../../Screens/Register'
 import { useState } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
-import { Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { useTheme } from '../../Styles/theme'
-import { createDrawerNavigator } from '@react-navigation/drawer'
+
 import { useNavigation } from '@react-navigation/native'
 import Profile from '../../Screens/Profile'
 import Users from '../../Screens/Admin/Users'
-
-const AuthStack = createStackNavigator()
-const AppStack = createStackNavigator()
+import { createDrawerNavigator } from '@react-navigation/drawer'
+import AuthStack from './AuthStack'
 
 const hamburgerMenu = () => {
   const navigation = useNavigation()
@@ -58,27 +57,23 @@ const profile = () => {
   )
 }
 
-const AuthStackScreen = () => (
-  <AuthStack.Navigator initialRouteName='Welcome'>
-    <AuthStack.Screen
-      name='Welcome'
-      component={Welcome}
-      options={{ headerShown: false }}
-    />
-    <AuthStack.Screen
-      name='Login'
-      component={Login}
-      options={{ headerLeft: () => null, headerShown: false }}
-    />
-    <AuthStack.Screen name='Login Form' component={LoginForm} />
-    <AuthStack.Screen name='Register' component={Register} />
-  </AuthStack.Navigator>
-)
-
 const Drawer = createDrawerNavigator()
 const AppStackScreen = () => {
   const { theme } = useTheme()
+  const styles = getStyles(theme)
   const [admin, setAdmin] = useState('object')
+  const HomeIcon = () => (
+    <FontAwesome5 name='home' size={24} color={theme.colors.text} />
+  )
+  const DetailsIcon = () => (
+    <FontAwesome5 name='info' size={24} color={theme.colors.text} />
+  )
+  const ProfileIcon = () => (
+    <FontAwesome5 name='user' size={24} color={theme.colors.text} />
+  )
+  const UsersIcon = () => (
+    <FontAwesome5 name='users' size={24} color={theme.colors.text} />
+  )
 
   return (
     <Drawer.Navigator
@@ -92,21 +87,61 @@ const AppStackScreen = () => {
         headerTitleStyle: {
           color: theme.colors.text,
         },
+        drawerStyle: {
+          backgroundColor: theme.colors.accent,
+        },
+        drawerLabelStyle: {
+          color: theme.colors.text,
+        },
       }}
     >
-      <Drawer.Screen name='Home' component={Home} />
-      <Drawer.Screen name='Details' component={Details} />
-      <Drawer.Screen name='Profile' component={Profile} />
-      {admin ? <Drawer.Screen name='Users' component={Users} /> : null}
+      <Drawer.Screen
+        name='Home'
+        component={Home}
+        options={{
+          drawerIcon: HomeIcon, // Set the custom icon for the Home drawer item
+        }}
+      />
+      <Drawer.Screen
+        name='Details'
+        component={Details}
+        options={{
+          drawerIcon: DetailsIcon, // Set the custom icon for the Details drawer item
+        }}
+      />
+      <Drawer.Screen
+        name='Profile'
+        component={Profile}
+        options={{
+          drawerIcon: ProfileIcon, // Set the custom icon for the Profile drawer item
+        }}
+      />
+      {admin ? (
+        <Drawer.Screen
+          name='Users'
+          component={Users}
+          options={{
+            drawerIcon: UsersIcon, // Set the custom icon for the Users drawer item
+          }}
+        />
+      ) : null}
     </Drawer.Navigator>
   )
 }
 
 export default function StackNav() {
-  const [isAuthenticated, setIsAuthenticated] = useState('object')
+  const [isAuthenticated, setIsAuthenticated] = useState()
   return (
     <NavigationContainer>
-      {isAuthenticated ? <AppStackScreen /> : <AuthStackScreen />}
+      {isAuthenticated ? <AppStackScreen /> : <AuthStack />}
     </NavigationContainer>
   )
 }
+
+const getStyles = theme =>
+  StyleSheet.create({
+    rawerIcons: {
+      size: 24,
+      color: theme.colors.text,
+    },
+  })
