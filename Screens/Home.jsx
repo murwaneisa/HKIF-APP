@@ -1,36 +1,90 @@
 import React from 'react'
-import { View, Text, Button, StyleSheet, Platform } from 'react-native'
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  Platform, 
+  ScrollView } from 'react-native'
 import { useTheme } from '../Styles/theme'
+import EventCard from '../Components/EventCard';
+import Activity from '../Components/Activity';
+import Announcement from '../Components/Announcement';
+
+const data = [
+  { key: '1', title: 'Strength', favorite: true },
+  { key: '2', title: 'Tennis', favorite: true },
+  { key: '3', title: 'Chess', favorite: true },
+  { key: '4', title: 'Football', favorite: false },
+  { key: '5', title: 'Swimming', favorite: false },
+  { key: '6', title: 'Running', favorite: false },
+  { key: '7', title: 'Salsa', favorite: false },
+];
 
 function Home({ navigation }) {
-  const { theme, toggleTheme } = useTheme()
+  const { theme } = useTheme()
+  const styles = getStyles(theme)
 
-  const styles = StyleSheet.create({
-    textStyle: {
-      fontFamily: 'Inter-Light',
-      color: theme.colors.text,
-      fontSize: Platform.select({
-        ios: 20,
-        android: 16,
-      }),
-    },
-    container: {
-      flex: 1,
-      backgroundColor: theme.colors.background,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-  })
   return (
-    <View style={styles.container}>
-      <Text style={styles.textStyle}>Home Screen</Text>
-      <Button
-        title='Go to Details'
-        onPress={() => navigation.navigate('Details')}
-      />
-      <Button title='Toggle Theme' onPress={toggleTheme} />
-    </View>
+    <ScrollView style={styles.container}>
+      <View style={styles.announcementWrapper}>
+        <Announcement message={'Swimming is canceled today'} />
+      </View>
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Upcoming Event</Text>
+        <View style={styles.events}>
+          <EventCard />
+        </View>
+      </View>
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Favorites</Text>
+        <View style={styles.activities}>
+          {
+            data.filter((act) => act.favorite === true).map((item) => (
+              <Activity key={item.key} title={item.title} favorite={item.favorite} />
+            ))
+          }
+        </View>
+      </View>
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Activities</Text>
+        <View style={styles.activities}>
+          {
+            data.filter((act) => act.favorite === false).map((item) => (
+              <Activity key={item.key} title={item.title} favorite={item.favorite} />
+            ))
+          }
+        </View>
+      </View>
+    </ScrollView>
   )
 }
+
+const getStyles = theme =>
+  StyleSheet.create({
+  container: {
+    // backgroundColor
+  },
+  announcementWrapper: {
+    marginHorizontal: 20,
+    marginVertical: 20,
+  },
+  sectionContainer: {
+    marginBottom: 10,
+  },
+  sectionTitle: {
+    fontFamily: 'Inter-SemiBold',
+    fontSize: 20,
+    marginBottom: 15,
+    paddingHorizontal: 20,
+  },
+  events: {
+    paddingHorizontal: 20,
+  },
+  activities: {
+    marginHorizontal: 10,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  }
+})
 
 export default Home
