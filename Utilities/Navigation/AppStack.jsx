@@ -12,6 +12,8 @@ import { useTheme } from '../../Styles/theme'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import Register from '../../Screens/Register'
+import { Octicons } from '@expo/vector-icons'
+import Organization from '../../Screens/Organization'
 
 const hamburgerMenu = () => {
   const navigation = useNavigation()
@@ -59,7 +61,7 @@ const Drawer = createDrawerNavigator()
 
 const AuthStack = () => {
   const { theme } = useTheme()
-  const styles = getStyles(theme)
+
   return (
     <Drawer.Navigator
       drawerContent={props => <CustomDrawer {...props} />}
@@ -73,13 +75,16 @@ const AuthStack = () => {
           color: theme.colors.text,
         },
         headerTitleAlign: 'center',
-        drawerActiveBackgroundColor: '#aa18ea',
-        drawerActiveTintColor: '#fff',
-        drawerInactiveTintColor: '#333',
+        drawerActiveBackgroundColor: theme.colors.primary200,
+        drawerActiveTintColor: theme.colors.primary900,
+        drawerInactiveTintColor: theme.colors.text,
         drawerLabelStyle: {
           marginLeft: -25,
-          fontFamily: 'Roboto-Medium',
+          fontFamily: 'Inter-Medium',
           fontSize: 15,
+        },
+        drawerStyle: {
+          backgroundColor: theme.colors.background, // Set the background color for the drawer
         },
       }}
     >
@@ -120,6 +125,15 @@ const AuthStack = () => {
         }}
       />
       <Drawer.Screen
+        name='About organization'
+        component={Organization}
+        options={{
+          drawerIcon: ({ color }) => (
+            <Octicons name='organization' size={22} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
         name='Settings'
         component={Settings}
         options={{
@@ -133,11 +147,3 @@ const AuthStack = () => {
 }
 
 export default AuthStack
-
-const getStyles = theme =>
-  StyleSheet.create({
-    rawerIcons: {
-      size: 24,
-      color: theme.colors.text,
-    },
-  })

@@ -15,6 +15,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { useNavigation } from '@react-navigation/native'
 import { useTheme } from '../Styles/theme'
+import Badge from '../Utilities/UI/Badge'
 
 const Profile = () => {
   const navigation = useNavigation()
@@ -26,7 +27,7 @@ const Profile = () => {
         width: 86, // Slightly larger than the image
         borderRadius: 43, // Half of the new width and height
         borderWidth: 3, // Width of the border
-        borderColor: theme.colors.primary, // Color of the border
+        borderColor: theme.colors.primary900, // Color of the border
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: theme.colors.primary,
@@ -47,16 +48,14 @@ const Profile = () => {
 }
 
 const CustomDrawer = props => {
+  const { theme } = useTheme()
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView
         {...props}
-        contentContainerStyle={{ backgroundColor: '#8200d6' }}
+        contentContainerStyle={{ backgroundColor: theme.colors.primary }}
       >
-        <ImageBackground
-          source={require('../Assets/images/icon.png')}
-          style={{ padding: 20 }}
-        >
+        <View style={{ padding: 20 }}>
           {Profile()}
           {/*       <Image
             source={require('../Assets/images/sports_icon.png')}
@@ -78,45 +77,48 @@ const CustomDrawer = props => {
             John Doe
           </Text>
           <View style={{ flexDirection: 'row' }}>
-            <Text
-              style={{
-                color: '#fff',
-                fontFamily: 'Roboto-Regular',
-                marginRight: 5,
-              }}
-            >
-              280 Coins
-            </Text>
-            <FontAwesome5 name='coins' size={14} color='#fff' />
+            <Badge>Not Member</Badge>
           </View>
-        </ImageBackground>
-        <View style={{ flex: 1, backgroundColor: '#fff', paddingTop: 10 }}>
+        </View>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: theme.colors.background,
+            paddingTop: 10,
+          }}
+        >
           <DrawerItemList {...props} />
         </View>
       </DrawerContentScrollView>
       <View style={{ padding: 20, borderTopWidth: 1, borderTopColor: '#ccc' }}>
         <TouchableOpacity onPress={() => {}} style={{ paddingVertical: 15 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Ionicons name='share-social-outline' size={22} />
-            <Text
-              style={{
-                fontSize: 15,
-                fontFamily: 'Roboto-Medium',
-                marginLeft: 5,
-              }}
-            >
-              Tell a Friend
-            </Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}} style={{ paddingVertical: 15 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Ionicons name='exit-outline' size={22} />
+            <Ionicons
+              name='share-social-outline'
+              size={22}
+              color={theme.colors.text}
+            />
             <Text
               style={{
                 fontSize: 15,
                 fontFamily: 'Inter-Medium',
                 marginLeft: 5,
+                color: theme.colors.text,
+              }}
+            >
+              Review the app
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {}} style={{ paddingVertical: 15 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Ionicons name='exit-outline' size={22} color={theme.colors.text} />
+            <Text
+              style={{
+                fontSize: 15,
+                fontFamily: 'Inter-Medium',
+                marginLeft: 5,
+                color: theme.colors.text,
               }}
             >
               Sign Out

@@ -40,24 +40,28 @@ export const ThemeContext = createContext()
 const lightTheme = {
   colors: {
     primary: '#669D58',
-    primary100: '#779d58',
+    primary900: '#466C3D',
+    primary500: '#466C3D',
+    primary200: '#A9CAA1',
     secondary: '#3B3D3B',
     accent: '#F5F5F5',
     accentWhite: '#F5F5F5',
     background: '#FFFFFF',
-    text: '#000000',
+    text: '#6B6B6B',
   },
 }
 
 const darkTheme = {
   colors: {
     primary: '#669D58',
-    primary100: '#779d58',
+    primary900: '#466C3D',
+    primary500: '#466C3D',
+    primary200: '#A9CAA1',
     secondary: '#3B3D3B',
     accent: '#3B3D3B',
     accentWhite: '#FFFFFF',
-    background: '#000000',
-    text: '#FFFFFF',
+    background: '#121212',
+    text: '#C4C4C4',
   },
 }
 
