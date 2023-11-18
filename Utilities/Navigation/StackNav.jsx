@@ -18,47 +18,10 @@ import Profile from '../../Screens/Profile'
 import Users from '../../Screens/Admin/Users'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import AuthStack from './AuthStack'
-
-const hamburgerMenu = () => {
-  const navigation = useNavigation()
-  const { theme } = useTheme()
-  return (
-    <View
-      style={{
-        marginLeft: 15,
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100%',
-      }}
-    >
-      <TouchableOpacity onPress={() => navigation.openDrawer()}>
-        <Ionicons name='menu' size={38} color={theme.colors.text} />
-      </TouchableOpacity>
-    </View>
-  )
-}
-
-const profile = () => {
-  const navigation = useNavigation()
-  const { theme } = useTheme()
-  return (
-    <View
-      style={{
-        marginRight: 15,
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100%',
-      }}
-    >
-      <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-        <FontAwesome5 name='user-circle' size={38} color={theme.colors.text} />
-      </TouchableOpacity>
-    </View>
-  )
-}
+import AppStack from './AppStack'
 
 const Drawer = createDrawerNavigator()
-const AppStackScreen = () => {
+/* const AppStackScreen = () => {
   const { theme } = useTheme()
   const styles = getStyles(theme)
   const [admin, setAdmin] = useState('object')
@@ -127,21 +90,13 @@ const AppStackScreen = () => {
       ) : null}
     </Drawer.Navigator>
   )
-}
+} */
 
 export default function StackNav() {
-  const [isAuthenticated, setIsAuthenticated] = useState()
+  const [isAuthenticated, setIsAuthenticated] = useState('sdfsf')
   return (
     <NavigationContainer>
-      {isAuthenticated ? <AppStackScreen /> : <AuthStack />}
+      {isAuthenticated ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   )
 }
-
-const getStyles = theme =>
-  StyleSheet.create({
-    rawerIcons: {
-      size: 24,
-      color: theme.colors.text,
-    },
-  })
