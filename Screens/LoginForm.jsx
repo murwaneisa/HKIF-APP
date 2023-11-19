@@ -30,14 +30,29 @@ function LoginForm({ navigation }) {
   const handleEmailChange = text => {
     setEmail(text)
     setIsEmailValid(validateEmail(text))
+    setTouched({ ...touched, email: true })
   }
   const [password, setPassword] = useState('')
   const handlePasswordChange = text => {
     setPassword(text)
+    setTouched({ ...touched, password: true })
   }
   const dispatch = useDispatch()
 
-  const isFormValid = isEmailValid && email != '' && password != '' // && other conditions for other fields
+  const [touched, setTouched] = useState({
+    email: false,
+    password: false,
+  })
+
+  const isFormValid = () => {
+    return (
+      isEmailValid &&
+      email !== '' &&
+      password !== '' &&
+      touched.email &&
+      touched.password
+    )
+  }
 
   return (
     <KeyboardAvoidingView
@@ -91,7 +106,7 @@ function LoginForm({ navigation }) {
                 paddingHorizontal={12}
                 onLongPress={() => setShowAdminButton(true)}
                 onPress={async () => {
-                  if (isFormValid) {
+                  if (isFormValid()) {
                     try {
                       await dispatch(loginAndSetUser(email, password))
                       navigation.navigate('Home')
@@ -100,7 +115,7 @@ function LoginForm({ navigation }) {
                     }
                   }
                 }}
-                disabled={!isFormValid}
+                disabled={!isFormValid()}
               >
                 Login
               </PrimaryButton>
@@ -112,7 +127,7 @@ function LoginForm({ navigation }) {
                   paddingVertical={40}
                   paddingHorizontal={12}
                   onPress={async () => {
-                    if (isFormValid) {
+                    if (isFormValid()) {
                       try {
                         await dispatch(loginAndSetAdmin(email, password))
                         navigation.navigate('Home')
@@ -121,7 +136,7 @@ function LoginForm({ navigation }) {
                       }
                     }
                   }}
-                  disabled={!isFormValid}
+                  disabled={!isFormValid()}
                 >
                   Login as Admin
                 </PrimaryButton>
