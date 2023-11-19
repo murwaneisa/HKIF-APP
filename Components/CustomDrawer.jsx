@@ -77,7 +77,7 @@ const CustomDrawer = props => {
             John Doe
           </Text>
           <View style={{ flexDirection: 'row' }}>
-            <Badge>Not Member</Badge>
+            <Badge>Full Membership</Badge>
           </View>
         </View>
         <View
