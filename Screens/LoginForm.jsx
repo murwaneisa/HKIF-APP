@@ -16,6 +16,7 @@ import GoogleButton from '../Utilities/UI/GoogleButton'
 import { validateEmail, dismissKeyboard } from '../Utilities/UI/Form'
 import { useDispatch } from 'react-redux'
 import { loginAndSetUser } from '../Utilities/Redux/Actions/userActions'
+import { loginAndSetAdmin } from '../Utilities/Redux/Actions/adminActions'
 
 function LoginForm({ navigation }) {
   const [showAdminButton, setShowAdminButton] = useState(false)
@@ -92,7 +93,8 @@ function LoginForm({ navigation }) {
                 onPress={async () => {
                   if (isFormValid) {
                     try {
-                      dispatch(loginAndSetUser(email, password))
+                      await dispatch(loginAndSetUser(email, password))
+                      navigation.navigate('Home')
                     } catch (error) {
                       console.error('Login failed:', error)
                     }
@@ -109,7 +111,16 @@ function LoginForm({ navigation }) {
                   style={{ marginBottom: 10, width: '100%' }}
                   paddingVertical={40}
                   paddingHorizontal={12}
-                  onPress={() => navigation.navigate('Home')}
+                  onPress={async () => {
+                    if (isFormValid) {
+                      try {
+                        await dispatch(loginAndSetAdmin(email, password))
+                        navigation.navigate('Home')
+                      } catch (error) {
+                        console.error('Login failed:', error)
+                      }
+                    }
+                  }}
                   disabled={!isFormValid}
                 >
                   Login as Admin
@@ -121,7 +132,7 @@ function LoginForm({ navigation }) {
                 Login with Google
               </GoogleButton>
             </View>
-            <Text style={styles.textStyle}>Register </Text>
+            <Text style={styles.textStyle}>Register</Text>
           </View>
         </View>
       </TouchableWithoutFeedback>
