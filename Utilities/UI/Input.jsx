@@ -4,7 +4,7 @@ import { Picker } from '@react-native-picker/picker'
 
 import { useTheme } from '../../Styles/theme'
 
-function Input({ label, textInputConfig, type, options }) {
+function Input({ label, textInputConfig, rightIcon, error, type, options }) {
   const { theme } = useTheme()
   const styles = getStyles(theme)
   /* 
@@ -26,6 +26,8 @@ function Input({ label, textInputConfig, type, options }) {
     <View style={styles.inputContainer}>
       <Text style={styles.label}>{label}</Text>
       <TextInput style={styles.input} {...textInputConfig} />
+      {rightIcon && <View style={styles.iconContainer}>{rightIcon}</View>}
+      {error && <Text style={styles.errorText}>{error}</Text>}
     </View>
   )
 }
@@ -56,6 +58,14 @@ const getStyles = theme =>
       }),
       borderRadius: 6,
       fontSize: 18,
+    },
+    invalidInput: {
+      borderColor: 'red',
+      borderWidth: 1,
+    },
+    errorText: {
+      color: 'red',
+      fontSize: 12,
     },
   })
 

@@ -11,13 +11,18 @@ import {
 import { useTheme } from '../Styles/theme'
 
 import { getFormatedDate } from 'react-native-modern-datepicker'
-import StepOne from './Components/register/StepOne'
+import StepOne from './Components/Register/StepOne'
 import StepTwo from './Components/Register/StepTwo'
 
 function Register() {
   const screenWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, screenWidth)
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
@@ -64,8 +69,20 @@ function Register() {
           <StepOne
             styles={styles}
             goToNextStep={goToNextStep}
+            firstName={firstName}
+            setFirstName={setFirstName}
+            lastName={lastName}
+            setLastName={setLastName}
+            email={email}
+            setEmail={setEmail}
+            password={password}
+            setPassword={setPassword}
+            confirmPassword={confirmPassword}
+            setConfirmPassword={setConfirmPassword}
             passwordVisible={passwordVisible}
+            setPasswordVisible={setPasswordVisible}
             confirmPasswordVisible={confirmPasswordVisible}
+            setConfirmPasswordVisible={setConfirmPasswordVisible}
           />
         )
       case 2:
