@@ -14,6 +14,9 @@ import { useTheme } from '../Styles/theme'
 import PrimaryButton from '../Utilities/UI/PrimaryButton'
 import GoogleButton from '../Utilities/UI/GoogleButton'
 import { validateEmail, dismissKeyboard } from '../Utilities/UI/Form'
+import { useDispatch } from 'react-redux'
+import { loginAndSetUser } from '../Utilities/Redux/Actions/userActions'
+import { loginAndSetAdmin } from '../Utilities/Redux/Actions/adminActions'
 
 function LoginForm({ navigation }) {
   const [showAdminButton, setShowAdminButton] = useState(false)
@@ -27,13 +30,29 @@ function LoginForm({ navigation }) {
   const handleEmailChange = text => {
     setEmail(text)
     setIsEmailValid(validateEmail(text))
+    setTouched({ ...touched, email: true })
   }
   const [password, setPassword] = useState('')
   const handlePasswordChange = text => {
     setPassword(text)
+    setTouched({ ...touched, password: true })
   }
+  const dispatch = useDispatch()
 
-  const isFormValid = isEmailValid && email != '' && password != '' // && other conditions for other fields
+  const [touched, setTouched] = useState({
+    email: false,
+    password: false,
+  })
+
+  const isFormValid = () => {
+    return (
+      isEmailValid &&
+      email !== '' &&
+      password !== '' &&
+      touched.email &&
+      touched.password
+    )
+  }
 
   return (
     <KeyboardAvoidingView
@@ -86,12 +105,17 @@ function LoginForm({ navigation }) {
                 paddingVertical={40}
                 paddingHorizontal={12}
                 onLongPress={() => setShowAdminButton(true)}
-                onPress={() => {
-                  if (isFormValid) {
-                    navigation.navigate('Details')
+                onPress={async () => {
+                  if (isFormValid()) {
+                    try {
+                      await dispatch(loginAndSetUser(email, password))
+                      navigation.navigate('Home')
+                    } catch (error) {
+                      console.error('Login failed:', error)
+                    }
                   }
                 }}
-                disabled={!isFormValid}
+                disabled={!isFormValid()}
               >
                 Login
               </PrimaryButton>
@@ -102,8 +126,17 @@ function LoginForm({ navigation }) {
                   style={{ marginBottom: 10, width: '100%' }}
                   paddingVertical={40}
                   paddingHorizontal={12}
-                  onPress={() => navigation.navigate('Home')}
-                  disabled={!isFormValid}
+                  onPress={async () => {
+                    if (isFormValid()) {
+                      try {
+                        await dispatch(loginAndSetAdmin(email, password))
+                        navigation.navigate('Home')
+                      } catch (error) {
+                        console.error('Login failed:', error)
+                      }
+                    }
+                  }}
+                  disabled={!isFormValid()}
                 >
                   Login as Admin
                 </PrimaryButton>
@@ -114,7 +147,7 @@ function LoginForm({ navigation }) {
                 Login with Google
               </GoogleButton>
             </View>
-            <Text style={styles.textStyle}>Register </Text>
+            <Text style={styles.textStyle}>Register</Text>
           </View>
         </View>
       </TouchableWithoutFeedback>
