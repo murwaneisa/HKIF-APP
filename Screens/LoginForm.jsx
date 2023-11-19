@@ -14,7 +14,8 @@ import { useTheme } from '../Styles/theme'
 import PrimaryButton from '../Utilities/UI/PrimaryButton'
 import GoogleButton from '../Utilities/UI/GoogleButton'
 import { validateEmail, dismissKeyboard } from '../Utilities/UI/Form'
-import { loginUser, getFullUserInfoByID } from '../Utilities/Axios/user'
+import { useDispatch } from 'react-redux'
+import { loginAndSetUser } from '../Utilities/Redux/Actions/userActions'
 
 function LoginForm({ navigation }) {
   const [showAdminButton, setShowAdminButton] = useState(false)
@@ -33,7 +34,7 @@ function LoginForm({ navigation }) {
   const handlePasswordChange = text => {
     setPassword(text)
   }
-  const [info, setInfo] = useState('')
+  const dispatch = useDispatch()
 
   const isFormValid = isEmailValid && email != '' && password != '' // && other conditions for other fields
 
@@ -91,13 +92,7 @@ function LoginForm({ navigation }) {
                 onPress={async () => {
                   if (isFormValid) {
                     try {
-                      await loginUser(email, password)
-                      //TODO: Replace displaying with actual re-direciting
-                      setInfo(
-                        JSON.stringify(
-                          await getFullUserInfoByID('652efb3ff1abe4134b95f509')
-                        )
-                      )
+                      dispatch(loginAndSetUser(email, password))
                     } catch (error) {
                       console.error('Login failed:', error)
                     }
@@ -127,8 +122,6 @@ function LoginForm({ navigation }) {
               </GoogleButton>
             </View>
             <Text style={styles.textStyle}>Register </Text>
-            {/* Next line should be removed after testing */}
-            <Text style={styles.textStyle}>{info} </Text>
           </View>
         </View>
       </TouchableWithoutFeedback>
