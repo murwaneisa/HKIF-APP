@@ -18,13 +18,15 @@ function Login({ navigation }) {
         />
       </View>
       <View styles={styles.buttonsContainer}>
-        <PrimaryButton
-          paddingVertical={98}
-          paddingHorizontal={12}
-          onPress={() => navigation.navigate('Details')}
-        >
-          Login
-        </PrimaryButton>
+        <View style={styles.buttonWrapper}>
+          <PrimaryButton
+            paddingVertical={98}
+            paddingHorizontal={12}
+            onPress={() => navigation.navigate('Login Form')}
+          >
+            Login
+          </PrimaryButton>
+        </View>
         <PrimaryButton
           paddingVertical={88}
           paddingHorizontal={12}
@@ -55,6 +57,9 @@ const getStyles = theme =>
       backgroundColor: theme.colors.background,
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    buttonWrapper: {
+      marginBottom: 10,
     },
     textStyle: {
       fontFamily: 'Inter-SemiBold',
