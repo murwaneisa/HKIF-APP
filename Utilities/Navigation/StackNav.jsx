@@ -23,7 +23,7 @@ import AppStack from './AppStack'
 const Drawer = createDrawerNavigator()
 
 export default function StackNav() {
-  const [isAuthenticated, setIsAuthenticated] = useState('fhfhj')
+  const [isAuthenticated, setIsAuthenticated] = useState('kjfslkdf')
   return (
     <NavigationContainer>
       {isAuthenticated ? <AppStack /> : <AuthStack />}

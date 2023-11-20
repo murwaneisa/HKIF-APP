@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Platform, StyleSheet, Text, View } from 'react-native'
-import { Dropdown } from 'react-native-element-dropdown'
 import { useTheme } from '../../Styles/theme'
+import { Dropdown } from 'react-native-element-dropdown'
 
 const DropdownList = ({ label, placeholder, data }) => {
   const [value, setValue] = useState(null)

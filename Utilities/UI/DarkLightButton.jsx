@@ -1,13 +1,15 @@
-import { View, Text } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons'
+import { useTheme } from '../../Styles/theme'
 
 const DarkLightButton = () => {
-  const IconComponent = theme === darkTheme ? AntDesign : MaterialCommunityIcons
+  const { theme, toggleTheme } = useTheme()
   // Styles for the dark and light mode buttons
   const buttonStyle = theme === 'light' ? styles.lightButton : styles.darkButton
-  const textStyle = theme === darkTheme ? styles.darkTextText : styles.lightText
-  const iconName = theme === darkTheme ? 'moon' : 'sun'
-  const iconComponent = theme === darkTheme ? AntDesign : MaterialCommunityIcons
+  const textStyle = theme === 'light' ? styles.lightText : styles.darkText
+  const iconName = theme === 'light' ? 'sun' : 'moon'
+  const iconComponent = theme === 'light' ? MaterialCommunityIcons : AntDesign
   const iconColor = theme === 'light' ? 'black' : 'white'
 
   return (

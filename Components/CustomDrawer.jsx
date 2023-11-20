@@ -16,6 +16,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { useNavigation } from '@react-navigation/native'
 import { useTheme } from '../Styles/theme'
 import Badge from '../Utilities/UI/Badge'
+import DarkLightButton from '../Utilities/UI/DarkLightButton'
 
 const Profile = () => {
   const navigation = useNavigation()
@@ -91,6 +92,7 @@ const CustomDrawer = props => {
         </View>
       </DrawerContentScrollView>
       <View style={{ padding: 20, borderTopWidth: 1, borderTopColor: '#ccc' }}>
+        <DarkLightButton />
         <TouchableOpacity onPress={() => {}} style={{ paddingVertical: 15 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Ionicons
