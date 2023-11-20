@@ -1,66 +1,56 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
-import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons'
+import { View, TouchableOpacity, StyleSheet, Text } from 'react-native'
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons'
 import { useTheme } from '../../Styles/theme'
 
-const DarkLightButton = () => {
-  const { theme, toggleTheme } = useTheme()
-  // Styles for the dark and light mode buttons
-  const buttonStyle = theme === 'light' ? styles.lightButton : styles.darkButton
-  const textStyle = theme === 'light' ? styles.lightText : styles.darkText
-  const iconName = theme === 'light' ? 'sun' : 'moon'
-  const iconComponent = theme === 'light' ? MaterialCommunityIcons : AntDesign
-  const iconColor = theme === 'light' ? 'black' : 'white'
+const DarkLightSwitch = () => {
+  const { theme, toggleTheme, isDarkMode } = useTheme()
+  /*  '#494F55' */
+  const backgroundColor = isDarkMode
+    ? theme.colors.primary200
+    : theme.colors.primary
+  const textColor = isDarkMode ? 'black' : 'white'
+  const iconName = isDarkMode ? 'white-balance-sunny' : 'moon'
+  const IconComponent = isDarkMode ? MaterialCommunityIcons : Feather
+  const text = isDarkMode ? 'Light' : 'Dark'
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        style={[styles.button, buttonStyle]}
-        onPress={toggleTheme}
-      >
-        <iconComponent name={iconName} size={24} color={iconColor} />
-        <Text style={[styles.text, textStyle]}>
-          {theme === 'light' ? 'Light' : 'Dark'}
-        </Text>
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity
+      style={[styles.switch, { backgroundColor }]}
+      onPress={toggleTheme}
+    >
+      {/* Icon */}
+      <IconComponent
+        name={iconName}
+        size={24}
+        color={textColor}
+        style={{ marginHorizontal: 5 }} // Add horizontal margin for spacing
+      />
+      {/* Text */}
+      <Text style={[styles.text, { color: textColor }]}>{text}</Text>
+    </TouchableOpacity>
   )
 }
 
-export default DarkLightButton
+export default DarkLightSwitch
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 20,
-    elevation: 3, // Only works on Android for shadow
-    shadowOpacity: 0.2, // Only works on iOS for shadow
+  switch: {
+    flexDirection: 'row', // Align children in a row
+    width: 100, // Increase width to accommodate text
+    height: 40, // Adjust height if needed
+    borderRadius: 20, // Half of the height to make it pill-shaped
+    alignItems: 'center', // Center items vertically
+    justifyContent: 'start', // Center items horizontally
+    paddingHorizontal: 1, // Padding on the sides
+    // Shadow for both Android and iOS
+    elevation: 3,
+    shadowOpacity: 0.2,
     shadowRadius: 3,
     shadowOffset: { width: 0, height: 3 },
   },
-  darkButton: {
-    backgroundColor: 'green',
-  },
-  lightButton: {
-    backgroundColor: 'lightgreen',
-  },
   text: {
-    marginLeft: 8,
+    fontSize: 16, // Adjust text size as needed
     fontWeight: 'bold',
-    fontSize: 16,
-  },
-  darkText: {
-    color: 'white',
-  },
-  lightText: {
-    color: 'black',
   },
 })
