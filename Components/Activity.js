@@ -12,7 +12,7 @@ const Activity = props => {
     <View style={styles.item}>
       <View style={styles.container}>
         <View style={styles.iconContainer}>
-          <Ionicons name='ios-football' size={44} color={'rgba(0,0,0,0.8)'} />
+          <Ionicons name={props.icon} size={44} color={'rgba(0,0,0,0.8)'} />
         </View>
         <Text style={styles.title}>{props.title}</Text>
         <View style={styles.buttonContainer}>

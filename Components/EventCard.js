@@ -53,7 +53,7 @@ const getStyles = theme =>
       backgroundColor: theme.colors.primary,
       flexDirection: 'row',
       padding: 10,
-      height: 110,
+      height: 125,
       marginBottom: 15,
       borderRadius: 15,
       shadowColor: 'black',
@@ -62,10 +62,10 @@ const getStyles = theme =>
       shadowRadius: 8,
     },
     imageContainer: {
+      width: '33%',
       height: '100%',
-      width: 120,
       borderRadius: 15,
-      marginRight: 15,
+      marginRight: 10,
     },
     image: {
       width: '100%',

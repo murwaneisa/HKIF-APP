@@ -11,13 +11,13 @@ import Activity from '../Components/Activity';
 import Announcement from '../Components/Announcement';
 
 const data = [
-  { key: '1', title: 'Strength', favorite: true },
-  { key: '2', title: 'Tennis', favorite: true },
-  { key: '3', title: 'Chess', favorite: true },
-  { key: '4', title: 'Football', favorite: false },
-  { key: '5', title: 'Swimming', favorite: false },
-  { key: '6', title: 'Running', favorite: false },
-  { key: '7', title: 'Salsa', favorite: false },
+  { key: '1', title: 'Strength', favorite: true, icon: 'basketball'  },
+  { key: '2', title: 'Tennis', favorite: true, icon: 'tennisball' },
+  { key: '3', title: 'Chess', favorite: true, icon: 'american-football' },
+  { key: '4', title: 'Football', favorite: false, icon: 'ios-football' },
+  { key: '5', title: 'Swimming', favorite: false, icon: 'bug' },
+  { key: '6', title: 'Running', favorite: false, icon: 'game-controller' },
+  { key: '7', title: 'Salsa', favorite: false, icon: 'body' },
 ];
 
 function Home({ navigation }) {
@@ -27,7 +27,7 @@ function Home({ navigation }) {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.announcementWrapper}>
-        <Announcement message={'Swimming is canceled today'} />
+        <Announcement message={'Swimming is canceled today the fox is in the forest'} />
       </View>
       <View style={styles.sectionContainer}>
         <Text style={styles.sectionTitle}>Upcoming Event</Text>
@@ -40,7 +40,7 @@ function Home({ navigation }) {
         <View style={styles.activities}>
           {
             data.filter((act) => act.favorite === true).map((item) => (
-              <Activity key={item.key} title={item.title} favorite={item.favorite} />
+              <Activity key={item.key} title={item.title} favorite={item.favorite} icon={item.icon} />
             ))
           }
         </View>
@@ -50,7 +50,7 @@ function Home({ navigation }) {
         <View style={styles.activities}>
           {
             data.filter((act) => act.favorite === false).map((item) => (
-              <Activity key={item.key} title={item.title} favorite={item.favorite} />
+              <Activity key={item.key} title={item.title} favorite={item.favorite} icon={item.icon} />
             ))
           }
         </View>

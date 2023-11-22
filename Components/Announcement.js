@@ -34,9 +34,11 @@ const getStyles = theme =>
       shadowRadius: 8,
     },
     icon: {
+      flex: 0,
       paddingTop: 2,
     },
     text: {
+      flex: 1,
       fontFamily: 'Inter-Medium',
       marginLeft: 10,
       fontSize: 15,
