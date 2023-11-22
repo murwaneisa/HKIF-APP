@@ -1,5 +1,5 @@
 import baseInstance from './api'
-import { storeAccessToken, storeRefreshToken } from './token'
+import { storeAccessToken, storeRefreshToken, storeToken } from './token'
 
 const userSuffix = '/users'
 
@@ -9,12 +9,11 @@ export const loginUser = async (email, password) => {
       email,
       password,
     })
-    const { userId, access, refresh } = response.data
+    const { access, refresh } = response.data
     await storeAccessToken(access)
     await storeRefreshToken(refresh)
-    return userId
   } catch (error) {
-    console.error('User Login failed:', JSON.stringify(error))
+    console.error('Login failed:', error)
   }
 }
 
@@ -23,6 +22,6 @@ export const getFullUserInfoByID = async userId => {
     const response = await baseInstance.get(`${userSuffix}/${userId}`)
     return response.data
   } catch (error) {
-    console.error('User Get Information failed:', JSON.stringify(error))
+    console.error('Get Information failed:', error)
   }
 }

@@ -94,7 +94,7 @@ function LoginForm({ navigation }) {
                 onChangeText={handlePasswordChange}
                 secureTextEntry
                 placeholder='Password'
-                placeholderTextColor={theme.colors.accent}
+                placeholderTextColor={theme.colors.text}
               />
             </View>
           </View>

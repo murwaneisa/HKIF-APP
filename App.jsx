@@ -1,3 +1,5 @@
+import 'react-native-gesture-handler'
+import { StyleSheet, Text, View } from 'react-native' // Import your navigator
 import { NavigationContainer } from '@react-navigation/native'
 import StackNav from './Utilities/Navigation/StackNav'
 import { FontLoader, ThemeProvider } from './Styles/theme'
@@ -9,9 +11,7 @@ export default function App() {
     <Provider store={store}>
       <ThemeProvider>
         <FontLoader>
-          <NavigationContainer>
-            <StackNav />
-          </NavigationContainer>
+          <StackNav />
         </FontLoader>
       </ThemeProvider>
     </Provider>
