@@ -26,3 +26,13 @@ export const getFullUserInfoByID = async userId => {
     console.error('User Get Information failed:', JSON.stringify(error))
   }
 }
+
+export const registerUser = async userData => {
+  try {
+    const response = await baseInstance.post(`${userSuffix}/register`, userData)
+    return response.data
+  } catch (error) {
+    console.error('User Registration failed:', JSON.stringify(error))
+    throw error
+  }
+}

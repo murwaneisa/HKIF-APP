@@ -1,12 +1,31 @@
 import React from 'react'
-import { Platform, StyleSheet, Text, TextInput, View } from 'react-native'
-import { Picker } from '@react-native-picker/picker'
-
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native'
 import { useTheme } from '../../Styles/theme'
+import CountryPicker from './CountryPicker'
 
-function Input({ label, textInputConfig, rightIcon, error, type, options }) {
+function Input({
+  label,
+  textInputConfig,
+  rightIcon,
+  countryCode,
+  error,
+  type,
+  options,
+  data,
+  onValueChange,
+}) {
   const { theme } = useTheme()
   const styles = getStyles(theme)
+  const screenWidth = Dimensions.get('window').width
+  const isWideScreen = screenWidth >= 1048
   /* 
   let inputElement = null
 
@@ -25,7 +44,20 @@ function Input({ label, textInputConfig, rightIcon, error, type, options }) {
   return (
     <View style={styles.inputContainer}>
       <Text style={styles.label}>{label}</Text>
-      <TextInput style={styles.input} {...textInputConfig} />
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        {countryCode && (
+          <View style={{ flex: 1 }}>
+            <CountryPicker
+              data={data}
+              selectedValue={countryCode}
+              onValueChange={onValueChange}
+            />
+          </View>
+        )}
+        <View style={{ flex: isWideScreen ? 9 : 3 }}>
+          <TextInput style={styles.input} {...textInputConfig} />
+        </View>
+      </View>
       {rightIcon && <View style={styles.iconContainer}>{rightIcon}</View>}
       {error && <Text style={styles.errorText}>{error}</Text>}
     </View>

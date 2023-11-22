@@ -3,8 +3,14 @@ import { Platform, StyleSheet, Text, View } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown'
 import { useTheme } from '../../Styles/theme'
 
-const DropdownList = ({ label, placeholder, data }) => {
-  const [value, setValue] = useState(null)
+const DropdownList = ({
+  label,
+  placeholder,
+  selectedValue,
+  onValueChange,
+  data,
+  error,
+}) => {
   const [isFocus, setIsFocus] = useState(false)
   const { theme } = useTheme()
   const styles = getStyles(theme)
@@ -15,7 +21,7 @@ const DropdownList = ({ label, placeholder, data }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
+      {label && <Text style={styles.label}>{label}</Text>}
       <View>
         {isSearch ? (
           <Dropdown
@@ -31,13 +37,10 @@ const DropdownList = ({ label, placeholder, data }) => {
             valueField='value'
             placeholder={!isFocus ? placeholder : '...'}
             searchPlaceholder='Search...'
-            value={value}
+            value={selectedValue}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
-            onChange={item => {
-              setValue(item.value)
-              setIsFocus(false)
-            }}
+            onChange={onValueChange}
           />
         ) : (
           <Dropdown
@@ -52,16 +55,14 @@ const DropdownList = ({ label, placeholder, data }) => {
             valueField='value'
             placeholder={!isFocus ? placeholder : '...'}
             searchPlaceholder='Search...'
-            value={value}
+            value={selectedValue}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
-            onChange={item => {
-              setValue(item.value)
-              setIsFocus(false)
-            }}
+            onChange={onValueChange}
           />
         )}
       </View>
+      {error && <Text style={styles.errorText}>{error}</Text>}
     </View>
   )
 }
@@ -102,10 +103,11 @@ const getStyles = theme =>
     },
     placeholderStyle: {
       fontSize: 16,
-      color: theme.colors.sccent,
+      color: theme.colors.text,
     },
     selectedTextStyle: {
       fontSize: 16,
+      color: theme.colors.text,
     },
     iconStyle: {
       width: 20,
@@ -114,5 +116,9 @@ const getStyles = theme =>
     inputSearchStyle: {
       height: 40,
       fontSize: 16,
+    },
+    errorText: {
+      color: 'red',
+      fontSize: 12,
     },
   })

@@ -9,100 +9,187 @@ import {
 } from 'react-native'
 
 import { useTheme } from '../Styles/theme'
-
+import { Formik, Form } from 'formik'
+import * as Yup from 'yup'
+import { isValidPhoneNumber } from 'libphonenumber-js'
 import { getFormatedDate } from 'react-native-modern-datepicker'
 import StepOne from './Components/Register/StepOne'
 import StepTwo from './Components/Register/StepTwo'
+import { registerUser } from '../Utilities/Axios/user'
 
 function Register() {
   const screenWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, screenWidth)
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
+
+  const [currentStep, setCurrentStep] = useState(1)
+  const totalSteps = 2
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false)
-  const [currentStep, setCurrentStep] = useState(1)
-  const [date, setDate] = useState(new Date())
-  const [selectedDate, setSelectedDate] = useState('')
 
   const [openStartDatePicker, setOpenStartDatePicker] = useState(false)
+
   const today = new Date()
   const startDate = getFormatedDate(
     today.setDate(today.getDate() + 1),
     'YYYY/MM/DD'
   )
-  const [selectedStartDate, setSelectedStartDate] = useState('')
-  const [startedDate, setStartedDate] = useState('12/12/2023')
 
-  function handleChangeStartDate(propDate) {
-    setStartedDate(propDate)
-  }
+  const stepOneValidationSchema = Yup.object({
+    firstName: Yup.string().required('First name is required'),
+    lastName: Yup.string().required('Last name is required'),
+    email: Yup.string()
+      .email('Invalid email address')
+      .required('Email is required'),
+    password: Yup.string()
+      .min(6, 'Password must be at least 6 characters')
+      .required('Password is required'),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'Passwords must match')
+      .required('Confirm password is required'),
+  })
 
-  const handleOnPressStartDate = () => {
-    setOpenStartDatePicker(!openStartDatePicker)
-  }
+  Yup.addMethod(Yup.object, 'phone', function (errorMessage) {
+    return this.test('phone', errorMessage, function (value) {
+      const { countryCode, phoneNumber } = value
+      const fullPhoneNumber = `${countryCode}${phoneNumber}`
+      const { path, createError } = this
 
-  const goToNextStep = () => {
-    if (currentStep < totalSteps) {
-      setCurrentStep(currentStep + 1)
-    } else {
-      // Handle the final submission
-      console.log('Final Form Data:')
-      // navigate to another screen or perform the submission action
-    }
-  }
+      return (
+        isValidPhoneNumber(fullPhoneNumber) ||
+        createError({ path: 'phoneNumber', message: errorMessage })
+      )
+    })
+  })
+
+  const stepTwoValidationSchema = Yup.object({
+    selectedStartDate: Yup.date()
+      .nullable()
+      .required('Birthday date is required'),
+    gender: Yup.string()
+      .oneOf(['Male', 'Female', 'Other'], 'Invalid gender')
+      .required('Gender is required'),
+    nationality: Yup.string().required('Nationality is required'),
+    role: Yup.string().required('Role is required'),
+    phoneNumber: Yup.string().required('Phone number is required'),
+    address: Yup.string().required('Address is required'),
+    city: Yup.string().required('City is required'),
+    zipCode: Yup.string()
+      .matches(/^[0-9]+$/, 'Zip code must be numeric')
+      .required('Zip code is required'),
+  }).phone('Invalid phone number')
+
   const goToPreviousStep = () => {
+    console.log(currentStep)
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1)
     }
   }
-  const totalSteps = 2
 
-  const renderStep = () => {
+  const initialValues = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    selectedStartDate: '',
+    startedDate: '',
+    gender: '',
+    nationality: '',
+    role: '',
+    countryCode: '+46',
+    phoneNumber: '',
+    address: '',
+    city: '',
+    zipCode: '',
+  }
+
+  const renderStep = formikProps => {
     switch (currentStep) {
       case 1:
         return (
           <StepOne
-            styles={styles}
-            goToNextStep={goToNextStep}
-            firstName={firstName}
-            setFirstName={setFirstName}
-            lastName={lastName}
-            setLastName={setLastName}
-            email={email}
-            setEmail={setEmail}
-            password={password}
-            setPassword={setPassword}
-            confirmPassword={confirmPassword}
-            setConfirmPassword={setConfirmPassword}
+            {...formikProps}
             passwordVisible={passwordVisible}
             setPasswordVisible={setPasswordVisible}
             confirmPasswordVisible={confirmPasswordVisible}
             setConfirmPasswordVisible={setConfirmPasswordVisible}
+            styles={styles}
+            goToNextStep={() =>
+              handleNextStep(formikProps.validateForm, formikProps.setTouched, {
+                firstName: true,
+                lastName: true,
+                email: true,
+                password: true,
+                confirmPassword: true,
+              })
+            }
           />
         )
       case 2:
         return (
           <StepTwo
+            {...formikProps}
             styles={styles}
-            goToNextStep={goToNextStep}
-            handleOnPressStartDate={handleOnPressStartDate}
-            handleChangeStartDate={handleChangeStartDate}
-            selectedStartDate={selectedStartDate}
             openStartDatePicker={openStartDatePicker}
-            startedDate={startedDate}
-            date={date}
-            setSelectedStartDate={setSelectedStartDate}
+            setOpenStartDatePicker={setOpenStartDatePicker}
+            goToNextStep={() =>
+              handleNextStep(
+                formikProps.validateForm,
+                formikProps.setTouched,
+                {
+                  selectedStartDate: true,
+                  gender: true,
+                  nationality: true,
+                  role: true,
+                  phoneNumber: true,
+                  address: true,
+                  city: true,
+                  zipCode: true,
+                },
+                formikProps.handleSubmit
+              )
+            }
             goToPreviousStep={goToPreviousStep}
           />
         )
       default:
         return null
     }
+  }
+
+  const getCurrentStepValidationSchema = () => {
+    switch (currentStep) {
+      case 1:
+        return stepOneValidationSchema
+      case 2:
+        return stepTwoValidationSchema
+      default:
+        return undefined
+    }
+  }
+
+  const handleNextStep = (
+    validateForm,
+    setTouched,
+    touchedFields,
+    handleSubmit
+  ) => {
+    validateForm().then(errors => {
+      setTouched(touchedFields)
+
+      // Check if there are no errors for the current step fields
+      const currentStepErrors = Object.keys(touchedFields).some(
+        field => errors[field]
+      )
+      if (!currentStepErrors) {
+        if (currentStep < totalSteps) {
+          setCurrentStep(currentStep + 1)
+        } else {
+          handleSubmit()
+        }
+      }
+    })
   }
 
   return (
@@ -114,10 +201,38 @@ function Register() {
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={{ flexGrow: 1 }}
-        keyboardShouldPersistTaps='handled' // This ensures taps are not dismissed when the keyboard is open
+        keyboardShouldPersistTaps='handled'
       >
         <View style={styles.container}>
-          <View style={styles.inputContainer}>{renderStep()}</View>
+          <View style={styles.inputContainer}>
+            <Formik
+              initialValues={initialValues}
+              validationSchema={getCurrentStepValidationSchema()}
+              onSubmit={async (values, actions) => {
+                try {
+                  const combinedPhone = `${values.countryCode}${values.phoneNumber}`
+                  const birthDateObject = new Date(values.selectedStartDate)
+                  const submitValues = {
+                    ...values,
+                    phoneNumber: combinedPhone,
+                    birthDate: birthDateObject,
+                    membershipType: 'GUEST',
+                  }
+                  delete submitValues.countryCode
+                  delete submitValues.confirmPassword
+                  delete submitValues.selectedStartDate
+
+                  const response = await registerUser(submitValues)
+                  console.log('Registration successful:', response)
+                } catch (error) {
+                  console.error('Registration failed:', error)
+                }
+                actions.setSubmitting(false)
+              }}
+            >
+              {formikProps => <View>{renderStep(formikProps)}</View>}
+            </Formik>
+          </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -243,6 +358,35 @@ const getStyles = theme =>
       shadowOpacity: 0.25,
       shadowRadius: 4,
       elevation: 5,
+    },
+    countryCodePicker: {
+      alignSelf: 'center',
+    },
+    togglerContainerStyle: {
+      backgroundColor: '#baffc0',
+      borderRadius: 10,
+      padding: 5,
+    },
+    togglerLabelStyle: {
+      fontSize: 20,
+    },
+    searchInputStyle: {
+      borderColor: '#888888',
+      borderWidth: 1,
+      height: 36,
+      borderRadius: 10,
+      paddingHorizontal: 10,
+    },
+    pickerItemLabelStyle: {
+      marginLeft: 10,
+      marginVertical: 10,
+      alignSelf: 'center',
+    },
+    pickerItemContainerStyle: {
+      width: '100%',
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      alignSelf: 'center',
     },
   })
 
