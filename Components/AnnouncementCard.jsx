@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import { useTheme } from '../Styles/theme'
 import { MaterialIcons } from '@expo/vector-icons'
 
-const Announcement = ({ message }) => {
+const AnnouncementCard = ({ message }) => {
   const { theme } = useTheme()
   const styles = getStyles(theme)
 
@@ -47,4 +47,4 @@ const getStyles = theme =>
     },
   })
 
-export default Announcement
+export default AnnouncementCard

@@ -4,7 +4,7 @@ import { useTheme } from '../Styles/theme'
 import { Ionicons } from '@expo/vector-icons'
 import { MaterialIcons } from '@expo/vector-icons'
 
-const Activity = props => {
+const ActivityCard = props => {
   const { theme } = useTheme()
   const styles = getStyles(theme)
 
@@ -66,4 +66,4 @@ const getStyles = theme =>
     },
   })
 
-export default Activity
+export default ActivityCard
