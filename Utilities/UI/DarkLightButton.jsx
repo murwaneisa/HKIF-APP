@@ -6,13 +6,11 @@ import { useTheme } from '../../Styles/theme'
 const DarkLightSwitch = () => {
   const { theme, toggleTheme, isDarkMode } = useTheme()
   /*  '#494F55' */
-  const backgroundColor = isDarkMode
-    ? theme.colors.primary200
-    : theme.colors.primary
+  const backgroundColor = isDarkMode ? theme.colors.primary200 : '#494F55'
   const textColor = isDarkMode ? 'black' : 'white'
   const iconName = isDarkMode ? 'white-balance-sunny' : 'moon'
   const IconComponent = isDarkMode ? MaterialCommunityIcons : Feather
-  const text = isDarkMode ? 'Light' : 'Dark'
+  const text = isDarkMode ? 'Light Mode' : 'Dark Mode'
 
   return (
     <TouchableOpacity
@@ -37,7 +35,7 @@ export default DarkLightSwitch
 const styles = StyleSheet.create({
   switch: {
     flexDirection: 'row', // Align children in a row
-    width: 100, // Increase width to accommodate text
+    width: 136, // Increase width to accommodate text
     height: 40, // Adjust height if needed
     borderRadius: 20, // Half of the height to make it pill-shaped
     alignItems: 'center', // Center items vertically
@@ -45,9 +43,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 1, // Padding on the sides
     // Shadow for both Android and iOS
     elevation: 3,
-    shadowOpacity: 0.2,
+    /*     shadowOpacity: 0.2,
     shadowRadius: 3,
-    shadowOffset: { width: 0, height: 3 },
+    shadowOffset: { width: 0, height: 3 }, */
   },
   text: {
     fontSize: 16, // Adjust text size as needed
