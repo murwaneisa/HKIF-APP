@@ -24,7 +24,7 @@ const Profile = () => {
   return (
     <View
       style={{
-        height: 86, // Slightly larger than the image
+        height: 70, // Slightly larger than the image
         width: 86, // Slightly larger than the image
         borderRadius: 43, // Half of the new width and height
         borderWidth: 3, // Width of the border
@@ -108,7 +108,7 @@ const CustomDrawer = props => {
                 color: theme.colors.text,
               }}
             >
-              Review the app
+              Share the app
             </Text>
           </View>
         </TouchableOpacity>
