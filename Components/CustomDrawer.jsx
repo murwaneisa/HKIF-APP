@@ -24,9 +24,9 @@ const Profile = () => {
   return (
     <View
       style={{
-        height: 70, // Slightly larger than the image
+        height: 86, // Slightly larger than the image
         width: 86, // Slightly larger than the image
-        borderRadius: 43, // Half of the new width and height
+        borderRadius: 45, // Half of the new width and height
         borderWidth: 3, // Width of the border
         borderColor: theme.colors.primary900, // Color of the border
         justifyContent: 'center',
