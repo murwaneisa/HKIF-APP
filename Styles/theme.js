@@ -45,8 +45,9 @@ const lightTheme = {
     primary200: '#A9CAA1',
     secondary: '#3B3D3B',
     accent: '#F5F5F5',
-    accentWhite: '#F5F5F5',
+    accent2: '#FFFFFF',
     background: '#FFFFFF',
+    background2: '#e5e5e5',
     text: '#6B6B6B',
   },
 }
@@ -59,8 +60,9 @@ const darkTheme = {
     primary200: '#A9CAA1',
     secondary: '#3B3D3B',
     accent: '#3B3D3B',
-    accentWhite: '#FFFFFF',
+    accent2: '#3B3D3B',
     background: '#121212',
+    background2: '#282525',
     text: '#C4C4C4',
   },
 }
