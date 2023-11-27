@@ -9,6 +9,8 @@ import {
 } from 'react-native'
 import { useTheme } from '../../Styles/theme'
 import UserRequest from '../../Components/UserRequest'
+import RenderRquests from '../../Components/RenderRequests'
+import RenderRequests from '../../Components/RenderRequests'
 
 const Users = () => {
   const windowWidth = Dimensions.get('window').width
@@ -84,7 +86,7 @@ const Users = () => {
         <Text>List of Members</Text>
       ) : (
         // ... render your members list component here
-        <UserRequest />
+        <RenderRequests />
         // ... render your requests list component here
       )}
     </View>
@@ -105,8 +107,8 @@ const getStyles = (theme, windowWidth) => {
       backgroundColor: theme.colors.accent2,
       borderRadius: 8,
       width: Platform.select({
-        ios: '85%',
-        android: '85%',
+        ios: '90%',
+        android: '90%',
         web: webWidth,
       }),
       height: Platform.select({

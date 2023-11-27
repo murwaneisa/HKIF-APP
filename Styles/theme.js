@@ -49,6 +49,7 @@ const lightTheme = {
     background: '#FFFFFF',
     background2: '#e5e5e5',
     text: '#6B6B6B',
+    text2: '#282525',
   },
 }
 
@@ -64,6 +65,7 @@ const darkTheme = {
     background: '#121212',
     background2: '#282525',
     text: '#C4C4C4',
+    text2: '#ffffff',
   },
 }
 
