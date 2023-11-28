@@ -11,7 +11,7 @@ import React from 'react'
 import { useTheme } from '../../../Styles/theme'
 import { AntDesign } from '@expo/vector-icons'
 
-const RequestCard = ({ user }) => {
+const MemberCard = ({ user }) => {
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
@@ -25,14 +25,11 @@ const RequestCard = ({ user }) => {
           <Text style={styles.name}>{user.name}</Text>
           <Text style={styles.text}>{user.membership}</Text>
           <Text style={styles.text}>{user.phone}</Text>
-          <Text style={styles.text}>{user.date}</Text>
+          <Text style={styles.text}>{user.email}</Text>
         </View>
         <View style={styles.actions}>
           <TouchableOpacity style={styles.actionButton}>
-            <AntDesign name='closecircle' size={24} color='red' />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.actionButton}>
-            <AntDesign name='checkcircle' size={24} color='green' />
+            <Text style={styles.viewText}>View</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -86,9 +83,23 @@ const getStyles = (theme, windowWidth) => {
       }),
     },
     text: {
-      fontSize: 14,
       color: theme.colors.text,
       fontFamily: 'Inter-SemiBold',
+      fontSize: Platform.select({
+        ios: 13,
+        android: 11,
+        web: 16,
+      }),
+    },
+    viewText: {
+      color: theme.colors.primary,
+      fontFamily: 'Inter-SemiBold',
+      fontWeight: 'bold',
+      fontSize: Platform.select({
+        ios: 16,
+        android: 15,
+        web: 16,
+      }),
     },
     membership: {
       fontSize: 14,
@@ -110,4 +121,4 @@ const getStyles = (theme, windowWidth) => {
     },
   })
 }
-export default RequestCard
+export default MemberCard

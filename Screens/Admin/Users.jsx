@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 import { useTheme } from '../../Styles/theme'
 import RenderRequests from '../../Components/Admin_comp/Users_comp/RenderRequests'
+import RenderMembers from '../../Components/Admin_comp/Users_comp/RenderMembers'
 
 const Users = () => {
   const windowWidth = Dimensions.get('window').width
@@ -81,7 +82,7 @@ const Users = () => {
         </Pressable>
       </View>
       {activeList === 'members' ? (
-        <Text>List of Members</Text>
+        <RenderMembers />
       ) : (
         // ... render your members list component here
         <RenderRequests />

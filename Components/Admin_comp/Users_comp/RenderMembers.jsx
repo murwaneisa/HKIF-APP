@@ -9,8 +9,9 @@ import {
 import React from 'react'
 import RequestCard from './RequetCard'
 import { useTheme } from '../../../Styles/theme'
+import MemberCard from './MemberCard'
 
-const RenderRequests = () => {
+const RenderMembers = () => {
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
@@ -21,75 +22,75 @@ const RenderRequests = () => {
       image: 'https://randomuser.me/api/portraits/women/1.jpg',
       membership: 'Full Membership',
       phone: '+1234567890',
-      date: '2023-01-15',
+      email: 'elin323@gmail.com',
     },
     {
-      name: 'Damon Salvatore',
+      name: 'Damon-Salvatore',
       image: 'https://randomuser.me/api/portraits/men/1.jpg',
       membership: 'Membership',
       phone: '+1234567891',
-      date: '2023-02-20',
+      email: 'Damon-Salvator@gmail.com',
     },
     {
       name: 'Caroline Forbes',
       image: 'https://randomuser.me/api/portraits/women/2.jpg',
       membership: 'Full Membership',
       phone: '+1234567892',
-      date: '2023-03-25',
+      email: 'Damon-Salvator@gmail.com',
     },
     {
       name: 'Stefan Salvatore',
       image: 'https://randomuser.me/api/portraits/men/2.jpg',
       membership: 'Membership',
       phone: '+1234567893',
-      date: '2023-04-30',
+      email: 'Damon-Salvator@gmail.com',
     },
     {
       name: 'Klaus Mikaelson',
       image: 'https://randomuser.me/api/portraits/men/3.jpg',
       membership: 'Membership',
       phone: '+1234567895',
-      date: '2023-06-10',
+      email: 'Damon-Salvator@gmail.com',
     },
     {
       name: 'Rebekah Mikaelson',
       image: 'https://randomuser.me/api/portraits/women/4.jpg',
       membership: 'Full Membership',
       phone: '+1234567896',
-      date: '2023-07-15',
+      email: 'Damon-Salvator@gmail.com',
     },
     {
       name: 'Rebekah Mikaelson',
       image: 'https://randomuser.me/api/portraits/women/4.jpg',
       membership: 'Full Membership',
       phone: '+1234567896',
-      date: '2023-07-15',
+      email: 'Damon-Salvator@gmail.com',
     },
     {
       name: 'Rebekah Mikaelson',
       image: 'https://randomuser.me/api/portraits/women/4.jpg',
       membership: 'Full Membership',
       phone: '+1234567896',
-      date: '2023-07-15',
+      email: 'Damon-Salvator@gmail.com',
     },
   ]
   return (
     <>
       <View style={styles.titleContainer}>
-        <Text style={styles.header}>Pending Requests</Text>
+        <Text style={styles.header}>Current Members</Text>
         <Text style={styles.subHeader}>Approve the member's payment</Text>
       </View>
       {Platform.OS == 'web' ? (
         <View style={styles.container}>
           {users.map((user, index) => (
-            <RequestCard key={index} user={user} />
+            <MemberCard key={index} user={user} />
           ))}
         </View>
       ) : (
         <FlatList
           data={users}
           renderItem={({ item, index }) => (
-            <RequestCard key={index} user={item} />
+            <MemberCard key={index} user={item} />
           )}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={styles.container}
@@ -113,7 +114,7 @@ const getStyles = (theme, windowWidth) => {
     },
     titleContainer: {
       /*     borderWidth: 2,
-      borderColor: 'red', */
+        borderColor: 'red', */
       width: Platform.select({
         ios: '90%',
         android: '90%',
@@ -137,4 +138,4 @@ const getStyles = (theme, windowWidth) => {
   })
 }
 
-export default RenderRequests
+export default RenderMembers
