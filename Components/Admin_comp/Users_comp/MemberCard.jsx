@@ -86,8 +86,8 @@ const getStyles = (theme, windowWidth) => {
       color: theme.colors.text,
       fontFamily: 'Inter-SemiBold',
       fontSize: Platform.select({
-        ios: 13,
-        android: 11,
+        ios: 14,
+        android: 12,
         web: 16,
       }),
     },
