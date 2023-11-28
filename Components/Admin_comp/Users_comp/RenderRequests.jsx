@@ -7,8 +7,9 @@ import {
   FlatList,
 } from 'react-native'
 import React from 'react'
-import { useTheme } from '../Styles/theme'
-import UserRequest from './UserRequest'
+
+import RequestCard from './RequetCard'
+import { useTheme } from '../../../Styles/theme'
 
 const RenderRequests = () => {
   const windowWidth = Dimensions.get('window').width
@@ -82,14 +83,14 @@ const RenderRequests = () => {
       {Platform.OS == 'web' ? (
         <View style={styles.container}>
           {users.map((user, index) => (
-            <UserRequest key={index} user={user} />
+            <RequestCard key={index} user={user} />
           ))}
         </View>
       ) : (
         <FlatList
           data={users}
           renderItem={({ item, index }) => (
-            <UserRequest key={index} user={item} />
+            <RequestCard key={index} user={item} />
           )}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={styles.container}
@@ -105,8 +106,7 @@ const getStyles = (theme, windowWidth) => {
     container: {
       width: '100%',
       backgroundColor: theme.colors.background2,
-      marginTop: 10,
-      paddingBottom: 5,
+
       alignItems: Platform.select({
         android: 'center',
         ios: 'center',
@@ -127,7 +127,7 @@ const getStyles = (theme, windowWidth) => {
     header: {
       fontWeight: 'bold',
       fontSize: 18,
-      paddingBottom: 8,
+      paddingBottom: 2,
       color: theme.colors.text2,
     },
     subHeader: {

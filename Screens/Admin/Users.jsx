@@ -8,9 +8,7 @@ import {
   Dimensions,
 } from 'react-native'
 import { useTheme } from '../../Styles/theme'
-import UserRequest from '../../Components/UserRequest'
-import RenderRquests from '../../Components/RenderRequests'
-import RenderRequests from '../../Components/RenderRequests'
+import RenderRequests from '../../Components/Admin_comp/Users_comp/RenderRequests'
 
 const Users = () => {
   const windowWidth = Dimensions.get('window').width

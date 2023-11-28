@@ -8,10 +8,10 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import React from 'react'
-import { useTheme } from '../Styles/theme'
+import { useTheme } from '../../../Styles/theme'
 import { AntDesign } from '@expo/vector-icons'
 
-const UserRequest = ({ user }) => {
+const RequestCard = ({ user }) => {
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
@@ -110,4 +110,4 @@ const getStyles = (theme, windowWidth) => {
     },
   })
 }
-export default UserRequest
+export default RequestCard
