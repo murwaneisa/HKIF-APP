@@ -1,4 +1,11 @@
-import { View, Text, Dimensions, StyleSheet, Platform } from 'react-native'
+import {
+  View,
+  Text,
+  Dimensions,
+  StyleSheet,
+  Platform,
+  FlatList,
+} from 'react-native'
 import React from 'react'
 import { useTheme } from '../Styles/theme'
 import UserRequest from './UserRequest'
@@ -7,28 +14,88 @@ const RenderRequests = () => {
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
+
+  const users = [
+    {
+      name: 'Elena Gilbert',
+      image: 'https://randomuser.me/api/portraits/women/1.jpg',
+      membership: 'Full Membership',
+      phone: '+1234567890',
+      date: '2023-01-15',
+    },
+    {
+      name: 'Damon Salvatore',
+      image: 'https://randomuser.me/api/portraits/men/1.jpg',
+      membership: 'Membership',
+      phone: '+1234567891',
+      date: '2023-02-20',
+    },
+    {
+      name: 'Caroline Forbes',
+      image: 'https://randomuser.me/api/portraits/women/2.jpg',
+      membership: 'Full Membership',
+      phone: '+1234567892',
+      date: '2023-03-25',
+    },
+    {
+      name: 'Stefan Salvatore',
+      image: 'https://randomuser.me/api/portraits/men/2.jpg',
+      membership: 'Membership',
+      phone: '+1234567893',
+      date: '2023-04-30',
+    },
+    {
+      name: 'Klaus Mikaelson',
+      image: 'https://randomuser.me/api/portraits/men/3.jpg',
+      membership: 'Membership',
+      phone: '+1234567895',
+      date: '2023-06-10',
+    },
+    {
+      name: 'Rebekah Mikaelson',
+      image: 'https://randomuser.me/api/portraits/women/4.jpg',
+      membership: 'Full Membership',
+      phone: '+1234567896',
+      date: '2023-07-15',
+    },
+    {
+      name: 'Rebekah Mikaelson',
+      image: 'https://randomuser.me/api/portraits/women/4.jpg',
+      membership: 'Full Membership',
+      phone: '+1234567896',
+      date: '2023-07-15',
+    },
+    {
+      name: 'Rebekah Mikaelson',
+      image: 'https://randomuser.me/api/portraits/women/4.jpg',
+      membership: 'Full Membership',
+      phone: '+1234567896',
+      date: '2023-07-15',
+    },
+  ]
   return (
-    <View style={styles.container}>
+    <>
       <View style={styles.titleContainer}>
         <Text style={styles.header}>Pending Requests</Text>
         <Text style={styles.subHeader}>Approve the member's payment</Text>
       </View>
-      <View>
-        <UserRequest />
-        <UserRequest />
-        <UserRequest />
-        <UserRequest />
-        <UserRequest />
-        <UserRequest />
-        <UserRequest />
-        <UserRequest />
-        <UserRequest />
-        <UserRequest />
-        <UserRequest />
-        <UserRequest />
-        <UserRequest />
-      </View>
-    </View>
+      {Platform.OS == 'web' ? (
+        <View style={styles.container}>
+          {users.map((user, index) => (
+            <UserRequest key={index} user={user} />
+          ))}
+        </View>
+      ) : (
+        <FlatList
+          data={users}
+          renderItem={({ item, index }) => (
+            <UserRequest key={index} user={item} />
+          )}
+          keyExtractor={(item, index) => index.toString()}
+          contentContainerStyle={styles.container}
+        />
+      )}
+    </>
   )
 }
 const getStyles = (theme, windowWidth) => {
@@ -39,14 +106,15 @@ const getStyles = (theme, windowWidth) => {
       width: '100%',
       backgroundColor: theme.colors.background2,
       marginTop: 10,
+      paddingBottom: 5,
       alignItems: Platform.select({
         android: 'center',
         ios: 'center',
       }),
     },
     titleContainer: {
-      borderWidth: 2,
-      borderColor: 'red',
+      /*     borderWidth: 2,
+      borderColor: 'red', */
       width: Platform.select({
         ios: '90%',
         android: '90%',
@@ -59,12 +127,13 @@ const getStyles = (theme, windowWidth) => {
     header: {
       fontWeight: 'bold',
       fontSize: 18,
+      paddingBottom: 8,
       color: theme.colors.text2,
     },
     subHeader: {
       fontSize: 14,
       color: theme.colors.text,
-      marginBottom: 20,
+      marginBottom: 8,
     },
   })
 }

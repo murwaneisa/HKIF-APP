@@ -11,7 +11,7 @@ import React from 'react'
 import { useTheme } from '../Styles/theme'
 import { AntDesign } from '@expo/vector-icons'
 
-const UserRequest = () => {
+const UserRequest = ({ user }) => {
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
@@ -19,16 +19,13 @@ const UserRequest = () => {
     <View style={styles.container}>
       <View style={styles.cardContainer}>
         <View>
-          <Image
-            source={require('../Assets/images/image.jpeg')}
-            style={styles.image}
-          />
+          <Image source={{ url: user.image }} style={styles.image} />
         </View>
         <View style={styles.details}>
-          <Text style={styles.name}>Anak Anastasia</Text>
-          <Text style={styles.text}>Full Membership</Text>
-          <Text style={styles.text}>+46725382736</Text>
-          <Text style={styles.text}>2023-11-12</Text>
+          <Text style={styles.name}>{user.name}</Text>
+          <Text style={styles.text}>{user.membership}</Text>
+          <Text style={styles.text}>{user.phone}</Text>
+          <Text style={styles.text}>{user.date}</Text>
         </View>
         <View style={styles.actions}>
           <TouchableOpacity style={styles.actionButton}>
@@ -57,7 +54,7 @@ const getStyles = (theme, windowWidth) => {
       alignItems: 'center',
       backgroundColor: theme.colors.accent2,
       borderRadius: 8,
-      padding: 15,
+      padding: 10,
       width: Platform.select({
         ios: '90%',
         android: '90%',
@@ -82,7 +79,11 @@ const getStyles = (theme, windowWidth) => {
       fontFamily: 'Inter-SemiBold',
       fontWeight: 'bold',
       color: theme.colors.text2,
-      fontSize: 16,
+      fontSize: Platform.select({
+        ios: 16,
+        android: 14,
+        web: 16,
+      }),
     },
     text: {
       fontSize: 14,
@@ -98,7 +99,11 @@ const getStyles = (theme, windowWidth) => {
       alignItems: 'center',
     },
     actionButton: {
-      marginLeft: 10,
+      marginLeft: Platform.select({
+        ios: 10,
+        android: 10,
+        web: 15,
+      }),
     },
     pressed: {
       opacity: 0.5,
