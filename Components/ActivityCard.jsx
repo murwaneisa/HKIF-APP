@@ -10,21 +10,23 @@ const ActivityCard = props => {
 
   return (
     <View style={styles.item}>
-      <View style={styles.container}>
-        <View style={styles.iconContainer}>
-          <Ionicons name={props.icon} size={44} color={'rgba(0,0,0,0.8)'} />
+      <Pressable onPress={props.onPress}>
+        <View style={styles.container}>
+          <View style={styles.iconContainer}>
+            <Ionicons name={props.icon} size={44} color={'rgba(0,0,0,0.8)'} />
+          </View>
+          <Text style={styles.title}>{props.title}</Text>
+          <View style={styles.buttonContainer}>
+            <Pressable onPress={() => console.log('test')}>
+              <MaterialIcons
+                name={props.favorite === true ? 'favorite' : 'favorite-border'}
+                size={24}
+                color='rgba(255,255,255,0.8)'
+              />
+            </Pressable>
+          </View>
         </View>
-        <Text style={styles.title}>{props.title}</Text>
-        <View style={styles.buttonContainer}>
-          <Pressable onPress={() => console.log('test')}>
-            <MaterialIcons
-              name={props.favorite === true ? 'favorite' : 'favorite-border'}
-              size={24}
-              color='rgba(255,255,255,0.8)'
-            />
-          </Pressable>
-        </View>
-      </View>
+      </Pressable>
     </View>
   )
 }

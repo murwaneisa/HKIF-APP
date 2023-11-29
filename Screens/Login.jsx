@@ -30,7 +30,7 @@ function Login({ navigation }) {
         <PrimaryButton
           paddingVertical={88}
           paddingHorizontal={12}
-          onPress={() => navigation.navigate('Activity')}
+          onPress={() => navigation.navigate('Home')}
         >
           Register
         </PrimaryButton>

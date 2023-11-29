@@ -43,6 +43,7 @@ function Home({ navigation }) {
                 title={item.title}
                 favorite={item.favorite}
                 icon={item.icon}
+                onPress={() => navigation.navigate('Activity')}
               />
             ))}
         </View>
@@ -58,6 +59,7 @@ function Home({ navigation }) {
                 title={item.title}
                 favorite={item.favorite}
                 icon={item.icon}
+                onPress={() => navigation.navigate('Activity')}
               />
             ))}
         </View>
