@@ -17,10 +17,10 @@ const MemberCard = ({ user }) => {
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
   const navigation = useNavigation()
-  const [user, setUser] = useState('Super admin')
+  const [admin, setAdmin] = useState('Superadmin')
 
   const handleViewPress = () => {
-    if (user !== 'Super admin') {
+    if (admin !== 'Superadmin') {
       //alert your not  a super admin
       return
     }

@@ -18,6 +18,8 @@ import Users from '../../Screens/Admin/Users'
 import Admins from '../../Screens/Admin/Admins'
 import Events from '../../Screens/Admin/Events'
 import Activities from '../../Screens/Admin/Activities'
+import { createStackNavigator } from '@react-navigation/stack'
+import MemberDetails from '../../Screens/Admin/MemberDetails'
 
 const customHeaderLeft = routeName => {
   const navigation = useNavigation()
@@ -84,7 +86,17 @@ const notificationBell = () => {
 }
 
 const Drawer = createDrawerNavigator()
+const Stack = createStackNavigator()
 
+// Create a Stack Navigator for Users and MemberDetails
+const UsersStack = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name='Users management' component={Users} />
+      <Stack.Screen name='MemberDetails' component={MemberDetails} />
+    </Stack.Navigator>
+  )
+}
 const AdminStack = () => {
   const { theme } = useTheme()
 
@@ -126,7 +138,12 @@ const AdminStack = () => {
       />
       <Drawer.Screen
         name='Users'
-        component={Users}
+        component={UsersStack} // Link to the UsersStack instead of the Users component
+        listeners={({ navigation }) => ({
+          focus: () => {
+            navigation.navigate('Users management') // Ensures 'Users management' is the starting screen
+          },
+        })}
         options={{
           drawerIcon: ({ color }) => (
             <Ionicons name='people-outline' size={22} color={color} />

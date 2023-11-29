@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const MemberDetails = () => {
+const MemberDetails = ({ navigation }) => {
   return (
     <View>
       <Text>MemberDetails</Text>
