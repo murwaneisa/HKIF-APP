@@ -77,8 +77,10 @@ const RenderMembers = () => {
   return (
     <>
       <View style={styles.titleContainer}>
-        <Text style={styles.header}>Current Members</Text>
-        <Text style={styles.subHeader}>Approve the member's payment</Text>
+        <Text style={styles.header}> 150 Current Members</Text>
+        <Text style={styles.subHeader}>
+          Click on view to show members's details
+        </Text>
       </View>
       {Platform.OS == 'web' ? (
         <View style={styles.container}>
@@ -125,13 +127,22 @@ const getStyles = (theme, windowWidth) => {
       alignItems: 'flex-start', // This aligns children to the start along the cross axis
     },
     header: {
-      fontWeight: 'bold',
-      fontSize: 18,
+      fontFamily: 'Inter-Bold',
+      fontSize: Platform.select({
+        ios: 18,
+        android: 16,
+        web: 25,
+      }),
       paddingBottom: 2,
       color: theme.colors.text2,
     },
     subHeader: {
-      fontSize: 14,
+      fontFamily: 'Inter-Regular',
+      fontSize: Platform.select({
+        ios: 16,
+        android: 14,
+        web: 18,
+      }),
       color: theme.colors.text,
       marginBottom: 8,
     },

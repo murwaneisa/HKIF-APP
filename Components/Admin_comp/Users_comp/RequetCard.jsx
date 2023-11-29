@@ -72,7 +72,7 @@ const getStyles = (theme, windowWidth) => {
       paddingLeft: Platform.select({
         ios: 0,
         android: tabletPadding,
-        web: 4,
+        web: 12,
       }),
     },
     name: {
@@ -86,9 +86,13 @@ const getStyles = (theme, windowWidth) => {
       }),
     },
     text: {
-      fontSize: 14,
       color: theme.colors.text,
       fontFamily: 'Inter-SemiBold',
+      fontSize: Platform.select({
+        ios: 14,
+        android: 12,
+        web: 16,
+      }),
     },
     membership: {
       fontSize: 14,
@@ -102,7 +106,7 @@ const getStyles = (theme, windowWidth) => {
       marginLeft: Platform.select({
         ios: 10,
         android: 10,
-        web: 15,
+        web: 20,
       }),
     },
     pressed: {

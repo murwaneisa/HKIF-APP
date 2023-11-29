@@ -7,14 +7,26 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { useTheme } from '../../../Styles/theme'
 import { AntDesign } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native'
 
 const MemberCard = ({ user }) => {
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
+  const navigation = useNavigation()
+  const [user, setUser] = useState('Super admin')
+
+  const handleViewPress = () => {
+    if (user !== 'Super admin') {
+      //alert your not  a super admin
+      return
+    }
+
+    navigation.navigate('MemberDetails', { userId: user.id }) // Replace 'MemberDetails' with your actual route name
+  }
   return (
     <View style={styles.container}>
       <View style={styles.cardContainer}>
@@ -28,7 +40,10 @@ const MemberCard = ({ user }) => {
           <Text style={styles.text}>{user.email}</Text>
         </View>
         <View style={styles.actions}>
-          <TouchableOpacity style={styles.actionButton}>
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={handleViewPress}
+          >
             <Text style={styles.viewText}>View</Text>
           </TouchableOpacity>
         </View>
@@ -69,7 +84,7 @@ const getStyles = (theme, windowWidth) => {
       paddingLeft: Platform.select({
         ios: 0,
         android: tabletPadding,
-        web: 4,
+        web: 12,
       }),
     },
     name: {
