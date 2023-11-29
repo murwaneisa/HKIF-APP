@@ -46,11 +46,7 @@ const Calendar = ({ startDate }) => {
 const getStyles = theme =>
   StyleSheet.create({
     picker: {
-      flex: 1,
-      maxHeight: 74,
-      paddingVertical: 12,
       flexDirection: 'row',
-      alignItems: 'center',
     },
     itemRow: {
       width: '100%',

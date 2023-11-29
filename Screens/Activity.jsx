@@ -1,13 +1,24 @@
-import React from 'react'
+import React, { useRef, useMemo } from 'react'
 import { View, Text, StyleSheet, Image, ScrollView } from 'react-native'
 import { useTheme } from '../Styles/theme'
 import Swiper from 'react-native-swiper'
 import Calendar from '../Components/Calendar'
-import BottomSheet from 'react-native-simple-bottom-sheet'
+import NextActivitySessionCard from '../Components/NextActivitySessionCard'
+import ActivityUserCard from '../Components/ActivityUserCard'
+import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet'
 
 function Activity({ navigation }) {
+  const sheetRef = useRef(null)
   const { theme } = useTheme()
   const styles = getStyles(theme)
+
+  const data = useMemo(
+    () =>
+      Array(50)
+        .fill(0)
+        .map((_, index) => `index-${index}`),
+    []
+  )
 
   const getISOWeek = date => {
     const d = new Date(date)
@@ -23,8 +34,14 @@ function Activity({ navigation }) {
     return `Week ${weekNumber}`
   }
 
+  const weeks = Array.from({ length: 4 }, (_, index) => {
+    const date = new Date(new Date())
+    date.setDate(new Date().getDate() + index * 7)
+    return date
+  })
+
   return (
-    <View style={styles.mainContainer}>
+    <View>
       <ScrollView style={styles.container}>
         <View style={styles.imageContainer}>
           <Image
@@ -33,77 +50,43 @@ function Activity({ navigation }) {
             resizeMode='cover'
           />
         </View>
-        <View style={styles.nextSessionCard}>
-          <Text style={styles.nextSessionCardTitle}>
-            NEXT SESSION: 16:00 - 18:00
-          </Text>
-          <View style={styles.nextSessionCardFlex}>
-            <View style={styles.profileImageContainer}>
-              <Image
-                style={styles.profileImage}
-                source={require('../Assets/images/movie.jpg')}
-                resizeMode='cover'
-              />
-            </View>
-            <View style={styles.nextSessionCardContent}>
-              <Text style={styles.nextSessionCardContentTitle}>
-                Thursday, September 28th
-              </Text>
-              <Text style={styles.nextSessionCardContentSubtitle}>
-                Coach: XXXX | Location: The Gym
-              </Text>
-            </View>
-          </View>
+
+        <View style={{ marginBottom: 20 }}>
+          <NextActivitySessionCard />
         </View>
 
-        <View style={styles.scheduleContainer}>
+        <View style={styles.calendarSection}>
           <Swiper
             style={styles.swiper}
             paginationStyle={styles.pagination}
             activeDotColor={theme.colors.primary}
           >
-            {/* Schedule List 1 */}
-            <View style={styles.slide}>
-              <Text style={styles.scheduleTitle}>
-                Schedule - {formatDate(new Date())}
-              </Text>
-              <Calendar startDate={new Date()} />
-            </View>
-
-            {/* Schedule List 2 */}
-            <View style={styles.slide}>
-              <Text style={styles.scheduleTitle}>
-                Schedule -{' '}
-                {formatDate(
-                  new Date(new Date().setDate(new Date().getDate() + 7))
-                )}
-              </Text>
-              <Calendar
-                startDate={
-                  new Date(new Date().setDate(new Date().getDate() + 7))
-                }
-              />
-            </View>
+            {weeks.map((item, index) => (
+              <View style={styles.slide} key={index}>
+                <Text style={styles.sectionTitle}>
+                  Schedule - {formatDate(item)}
+                </Text>
+                <Calendar startDate={item} />
+              </View>
+            ))}
           </Swiper>
         </View>
 
-        <View style={styles.descriptionContainer}>
-          <Text style={styles.descriptionTitle}>Description</Text>
-          <Text style={styles.descriptionText}>
-            Write a short description about the activity here. Write a short
-            description about the activity here. Write a short description about
-            the activity here.
-          </Text>
+        <View style={styles.descriptionSection}>
+          <Text style={styles.sectionTitle}>Description</Text>
+          <Text style={styles.descriptionText}>Description Text</Text>
         </View>
       </ScrollView>
-      <View style={styles.bottomSheetContainer}>
-        <View>
-          <Text>Your content</Text>
-        </View>
-        <BottomSheet isOpen={false}>
-          <View style={{ backgroundColor: 'red', height: 600 }}></View>
-        </BottomSheet>
-      </View>
+
+      <BottomSheet ref={sheetRef} snapPoints={['12.5%', '50%', '90%']}>
+        <Text style={styles.bottomSheetTitle}>Liked by</Text>
+        <BottomSheetFlatList
+          data={data}
+          keyExtractor={i => i}
+          renderItem={({ item }) => <ActivityUserCard />}
+          contentContainerStyle={styles.contentContainer}
+        />
+      </BottomSheet>
     </View>
   )
 }
@@ -113,32 +96,16 @@ const getStyles = theme =>
     container: {
       paddingHorizontal: 20,
     },
-    bottomSheetContainer: {
-      flex: 1,
-    },
-    scheduleContainer: {
-      // flex: 1,
-      // backgroundColor: 'red',
-    },
-    swiper: {
-      height: 120,
-    },
-    slide: {
-      flex: 1,
-    },
-    pagination: {
-      bottom: 10,
-    },
-    scheduleTitle: {
+    sectionTitle: {
       fontFamily: 'Inter-Bold',
       fontSize: 18,
-      marginBottom: 0,
+      marginBottom: 15,
     },
     imageContainer: {
       width: '100%',
-      height: 250,
+      height: 225,
       borderRadius: 15,
-      marginBottom: 15,
+      marginBottom: 20,
       paddingTop: 20,
     },
     image: {
@@ -146,59 +113,30 @@ const getStyles = theme =>
       height: '100%',
       borderRadius: 15,
     },
-    nextSessionCard: {
-      backgroundColor: theme.colors.primary,
-      borderRadius: 15,
-      padding: 15,
-      marginBottom: 15,
+    calendarSection: {
+      marginBottom: 20,
     },
-    nextSessionCardTitle: {
-      fontFamily: 'Inter-Bold',
-      fontSize: 12,
-      marginBottom: 10,
-      color: 'rgba(255, 255, 255, 1)',
+    swiper: {
+      height: 110,
     },
-    nextSessionCardFlex: {
-      flexDirection: 'row',
+    slide: {
+      flex: 1,
     },
-    profileImageContainer: {
-      width: 45,
-      height: 45,
-      marginRight: 10,
-      borderRadius: 50,
+    pagination: {
+      bottom: 0,
     },
-    profileImage: {
-      width: '100%',
-      height: '100%',
-      borderRadius: 50,
-    },
-    nextSessionCardContent: {
-      // marginTop: 2,
-    },
-    nextSessionCardContentTitle: {
-      fontFamily: 'Inter-Bold',
-      fontSize: 16,
-      marginBottom: 5,
-      color: 'rgba(255, 255, 255, 1)',
-    },
-    nextSessionCardContentSubtitle: {
-      fontFamily: 'Inter-SemiBold',
-      color: 'rgba(255, 255, 255, 0.85)',
-      fontSize: 13,
-    },
-    calendarContainer: {
-      // marginVertical: 10,
-    },
-    descriptionContainer: {
-      marginBottom: 40,
-    },
-    descriptionTitle: {
-      fontFamily: 'Inter-Bold',
-      fontSize: 18,
-      marginBottom: 10,
+    descriptionSection: {
+      marginBottom: 150,
     },
     descriptionText: {
       fontFamily: 'Inter-Regular',
+    },
+    bottomSheetTitle: {
+      fontFamily: 'Inter-Bold',
+      fontSize: 24,
+      marginBottom: 15,
+      paddingHorizontal: 15,
+      paddingTop: 10,
     },
   })
 
