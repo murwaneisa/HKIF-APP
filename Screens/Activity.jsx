@@ -135,7 +135,7 @@ const getStyles = theme =>
       fontFamily: 'Inter-Bold',
       fontSize: 24,
       marginBottom: 15,
-      paddingHorizontal: 15,
+      paddingHorizontal: 20,
       paddingTop: 10,
     },
   })

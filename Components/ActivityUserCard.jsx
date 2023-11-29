@@ -27,8 +27,8 @@ const getStyles = theme =>
     container: {
       flexDirection: 'row',
       paddingVertical: 15,
-      paddingRight: 15,
-      marginLeft: 15,
+      paddingRight: 20,
+      marginLeft: 20,
       borderBottomWidth: 1,
       borderBottomColor: 'rgba(0,0,0,0.1)',
       alignItems: 'center',

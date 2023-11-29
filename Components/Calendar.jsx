@@ -29,7 +29,7 @@ const Calendar = ({ startDate }) => {
               styles.item,
               new Date().toDateString() === item.toDateString() &&
                 styles.todayItem,
-              new Date().toDateString() === item.toDateString() &&
+              new Date(firstDayOfWeek).toDateString() === item.toDateString() &&
                 styles.activeItem,
             ]}
             key={dateIndex}
