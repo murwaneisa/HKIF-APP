@@ -40,22 +40,28 @@ export const ThemeContext = createContext()
 const lightTheme = {
   colors: {
     primary: '#669D58',
+    primary900: '#466C3D',
+    primary500: '#466C3D',
+    primary200: '#A9CAA1',
     secondary: '#3B3D3B',
-    accent: '#282525',
-    accentWhite: '#FFFFFF',
+    accent: '#F5F5F5',
+    accentWhite: '#F5F5F5',
     background: '#FFFFFF',
-    text: '#000000',
+    text: '#6B6B6B',
   },
 }
 
 const darkTheme = {
   colors: {
     primary: '#669D58',
+    primary900: '#466C3D',
+    primary500: '#466C3D',
+    primary200: '#A9CAA1',
     secondary: '#3B3D3B',
-    accent: '#FFFFFF',
+    accent: '#3B3D3B',
     accentWhite: '#FFFFFF',
-    background: '#282525',
-    text: '#FFFFFF',
+    background: '#121212',
+    text: '#C4C4C4',
   },
 }
 
@@ -80,7 +86,7 @@ export const ThemeProvider = ({ children }) => {
   }
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme, isDarkMode }}>
       {children}
     </ThemeContext.Provider>
   )

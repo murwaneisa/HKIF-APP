@@ -1,13 +1,21 @@
 import React from 'react'
-import { View, Text, StyleSheet, Platform, Image } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+  Image,
+  TouchableOpacity,
+} from 'react-native'
 import { useTheme } from '../Styles/theme'
 import PrimaryButton from '../Utilities/UI/PrimaryButton'
 
 function Login({ navigation }) {
   const { theme } = useTheme()
-
   const styles = getStyles(theme)
-
+  const handleGuestLogin = () => {
+    navigation.navigate('Home') // Replace 'Home' with the actual route name of your home screen
+  }
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
@@ -30,11 +38,13 @@ function Login({ navigation }) {
         <PrimaryButton
           paddingVertical={88}
           paddingHorizontal={12}
-          onPress={() => navigation.navigate('Home')}
+          onPress={() => navigation.navigate('Register')}
         >
           Register
         </PrimaryButton>
-        <Text style={styles.textStyle}>Login as Guest </Text>
+        <TouchableOpacity onPress={handleGuestLogin}>
+          <Text style={styles.textStyle}>Login as Guest</Text>
+        </TouchableOpacity>
       </View>
     </View>
   )

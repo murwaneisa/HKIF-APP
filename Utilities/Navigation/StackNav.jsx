@@ -1,36 +1,23 @@
-import { createStackNavigator } from '@react-navigation/stack'
-// Import your screen components
-import Home from '../../Screens/Home'
-import Details from '../../Screens/Details'
-import Welcome from '../../Screens/Welcome'
-import Login from '../../Screens/Login'
-import LoginForm from '../../Screens/LoginForm'
-import Activity from '../../Screens/Activity'
-import Event from '../../Screens/Event'
-import EventUsers from '../../Screens/EventUsers'
+import { useState } from 'react'
+import { NavigationContainer } from '@react-navigation/native'
+import { createDrawerNavigator } from '@react-navigation/drawer'
+import AuthStack from './AuthStack'
+import AppStack from './AppStack'
+import AdminStack from './AdminStack'
 
-// Create a Stack Navigator
-const Stack = createStackNavigator()
+const Drawer = createDrawerNavigator()
 
 export default function StackNav() {
-  return (
-    <Stack.Navigator initialRouteName='Welcome'>
-      <Stack.Screen
-        name='Welcome'
-        component={Welcome}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name='Login'
-        component={Login}
-        options={{ headerLeft: () => null, headerShown: false }}
-      />
-      <Stack.Screen name='Login Form' component={LoginForm} />
-      <Stack.Screen name='Home' component={Home} />
-      <Stack.Screen name='Details' component={Details} />
-      <Stack.Screen name='Activity' component={Activity} />
-      <Stack.Screen name='Event' component={Event} />
-      <Stack.Screen name='EventUsers' component={EventUsers} />
-    </Stack.Navigator>
-  )
+  const [isAuthenticated, setIsAuthenticated] = useState('user')
+  let stackToRender
+
+  if (isAuthenticated === 'admin') {
+    stackToRender = <AdminStack />
+  } else if (isAuthenticated === 'user') {
+    stackToRender = <AppStack />
+  } else {
+    stackToRender = <AuthStack />
+  }
+
+  return <NavigationContainer>{stackToRender}</NavigationContainer>
 }
