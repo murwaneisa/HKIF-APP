@@ -29,7 +29,7 @@ function Home({ navigation }) {
       <View style={styles.sectionContainer}>
         <Text style={styles.sectionTitle}>Upcoming Event</Text>
         <View style={styles.events}>
-          <EventCard />
+          <EventCard onPress={() => navigation.navigate('Event')} />
         </View>
       </View>
       <View style={styles.sectionContainer}>

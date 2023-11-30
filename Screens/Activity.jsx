@@ -41,7 +41,7 @@ function Activity({ navigation }) {
   })
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
         <View style={styles.imageContainer}>
           <Image

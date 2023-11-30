@@ -1,49 +1,53 @@
 import React from 'react'
-import { View, Text, StyleSheet, Image } from 'react-native'
+import { View, Text, StyleSheet, Image, Pressable } from 'react-native'
 import { useTheme } from '../Styles/theme'
 import { Ionicons } from '@expo/vector-icons'
 
-const EventCard = () => {
+const EventCard = props => {
   const { theme } = useTheme()
   const styles = getStyles(theme)
 
   return (
-    <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image
-          style={styles.image}
-          source={require('../Assets/images/movie.jpg')}
-          resizeMode='cover'
-        />
-      </View>
-      <View style={styles.content}>
-        <View>
-          <Text style={styles.title}>Movie Night</Text>
-          <View style={styles.textContainer}>
-            <Ionicons
-              name='ios-location'
-              size={14}
-              color='rgba(255,255,255,0.8)'
-            />
-            <Text style={styles.text}>Högskolan Kristianstad</Text>
+    <Pressable onPress={props.onPress}>
+      <View style={styles.container}>
+        <View style={styles.imageContainer}>
+          <Image
+            style={styles.image}
+            source={require('../Assets/images/movie.jpg')}
+            resizeMode='cover'
+          />
+        </View>
+        <View style={styles.content}>
+          <View>
+            <Text style={styles.title}>Movie Night</Text>
+            <View style={styles.textContainer}>
+              <Ionicons
+                name='ios-location'
+                size={14}
+                color='rgba(255,255,255,0.8)'
+              />
+              <Text style={styles.text}>Högskolan Kristianstad</Text>
+            </View>
+          </View>
+          <View
+            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+          >
+            <View style={styles.textContainer}>
+              <Ionicons
+                name='ios-calendar'
+                size={14}
+                color='rgba(255,255,255,0.8)'
+              />
+              <Text style={styles.text}>18 jun, 2023</Text>
+            </View>
+            <View style={styles.textContainer}>
+              <Ionicons name='time' size={14} color='rgba(255,255,255,0.8)' />
+              <Text style={styles.text}>kl 16:00</Text>
+            </View>
           </View>
         </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <View style={styles.textContainer}>
-            <Ionicons
-              name='ios-calendar'
-              size={14}
-              color='rgba(255,255,255,0.8)'
-            />
-            <Text style={styles.text}>18 jun, 2023</Text>
-          </View>
-          <View style={styles.textContainer}>
-            <Ionicons name='time' size={14} color='rgba(255,255,255,0.8)' />
-            <Text style={styles.text}>kl 16:00</Text>
-          </View>
-        </View>
       </View>
-    </View>
+    </Pressable>
   )
 }
 

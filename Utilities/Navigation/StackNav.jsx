@@ -6,6 +6,8 @@ import Welcome from '../../Screens/Welcome'
 import Login from '../../Screens/Login'
 import LoginForm from '../../Screens/LoginForm'
 import Activity from '../../Screens/Activity'
+import Event from '../../Screens/Event'
+import EventUsers from '../../Screens/EventUsers'
 
 // Create a Stack Navigator
 const Stack = createStackNavigator()
@@ -26,7 +28,9 @@ export default function StackNav() {
       <Stack.Screen name='Login Form' component={LoginForm} />
       <Stack.Screen name='Home' component={Home} />
       <Stack.Screen name='Details' component={Details} />
-      <Stack.Screen name='Activity' component={Activity}  />
+      <Stack.Screen name='Activity' component={Activity} />
+      <Stack.Screen name='Event' component={Event} />
+      <Stack.Screen name='EventUsers' component={EventUsers} />
     </Stack.Navigator>
   )
 }
