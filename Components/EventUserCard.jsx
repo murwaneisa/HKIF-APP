@@ -33,8 +33,8 @@ const getStyles = theme =>
       borderBottomColor: 'rgba(0,0,0,0.05)',
     },
     imageContainer: {
-      width: 35,
-      height: 35,
+      width: 45,
+      height: 45,
       marginRight: 10,
       borderRadius: 100,
     },

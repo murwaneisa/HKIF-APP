@@ -13,6 +13,10 @@ const data = [
   { key: '5', title: 'Swimming', favorite: false, icon: 'bug' },
   { key: '6', title: 'Running', favorite: false, icon: 'game-controller' },
   { key: '7', title: 'Salsa', favorite: false, icon: 'body' },
+  { key: '4', title: 'Football', favorite: false, icon: 'ios-football' },
+  { key: '5', title: 'Swimming', favorite: false, icon: 'bug' },
+  { key: '6', title: 'Running', favorite: false, icon: 'game-controller' },
+  { key: '7', title: 'Salsa', favorite: false, icon: 'body' },
 ]
 
 function Home({ navigation }) {
@@ -71,26 +75,33 @@ function Home({ navigation }) {
 const getStyles = theme =>
   StyleSheet.create({
     container: {
-      // backgroundColor
+      backgroundColor: theme.colors.background,
     },
     announcementWrapper: {
       marginHorizontal: 20,
       marginVertical: 20,
     },
     sectionContainer: {
-      marginBottom: 10,
+      marginBottom: Platform.select({
+        ios: 8,
+        android: 5,
+      }),
     },
     sectionTitle: {
-      fontFamily: 'Inter-SemiBold',
-      fontSize: 20,
+      fontFamily: 'Inter-Bold',
+      fontSize: Platform.select({
+        ios: 20,
+        android: 18,
+      }),
       marginBottom: 15,
       paddingHorizontal: 20,
+      color: theme.colors.text,
     },
     events: {
       paddingHorizontal: 20,
     },
     activities: {
-      marginHorizontal: 10,
+      marginHorizontal: 15,
       flexDirection: 'row',
       flexWrap: 'wrap',
     },

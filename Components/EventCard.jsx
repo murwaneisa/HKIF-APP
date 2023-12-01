@@ -1,5 +1,12 @@
 import React from 'react'
-import { View, Text, StyleSheet, Image, Pressable } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Pressable,
+  Platform,
+} from 'react-native'
 import { useTheme } from '../Styles/theme'
 import { Ionicons } from '@expo/vector-icons'
 
@@ -14,7 +21,7 @@ const EventCard = props => {
           <Image
             style={styles.image}
             source={require('../Assets/images/movie.jpg')}
-            resizeMode='cover'
+            resizeMode='fit'
           />
         </View>
         <View style={styles.content}>
@@ -23,8 +30,8 @@ const EventCard = props => {
             <View style={styles.textContainer}>
               <Ionicons
                 name='ios-location'
-                size={14}
                 color='rgba(255,255,255,0.8)'
+                style={styles.icon}
               />
               <Text style={styles.text}>Högskolan Kristianstad</Text>
             </View>
@@ -35,13 +42,17 @@ const EventCard = props => {
             <View style={styles.textContainer}>
               <Ionicons
                 name='ios-calendar'
-                size={14}
                 color='rgba(255,255,255,0.8)'
+                style={styles.icon}
               />
               <Text style={styles.text}>18 jun, 2023</Text>
             </View>
             <View style={styles.textContainer}>
-              <Ionicons name='time' size={14} color='rgba(255,255,255,0.8)' />
+              <Ionicons
+                name='time'
+                color='rgba(255,255,255,0.8)'
+                style={styles.icon}
+              />
               <Text style={styles.text}>kl 16:00</Text>
             </View>
           </View>
@@ -66,7 +77,10 @@ const getStyles = theme =>
       shadowRadius: 8,
     },
     imageContainer: {
-      width: '33%',
+      width: Platform.select({
+        ios: '33%',
+        android: '35%',
+      }),
       height: '100%',
       borderRadius: 15,
       marginRight: 10,
@@ -83,7 +97,10 @@ const getStyles = theme =>
     title: {
       fontFamily: 'Inter-SemiBold',
       fontWeight: 'bold',
-      fontSize: 18,
+      fontSize: Platform.select({
+        ios: 18,
+        android: 18,
+      }),
       marginBottom: 5,
       color: 'white',
     },
@@ -94,9 +111,18 @@ const getStyles = theme =>
     },
     text: {
       fontFamily: 'Inter-Regular',
-      fontSize: 12,
+      fontSize: Platform.select({
+        ios: 16,
+        android: 14,
+      }),
       marginLeft: 4,
       color: 'white',
+    },
+    icon: {
+      fontSize: Platform.select({
+        ios: 18,
+        android: 16,
+      }),
     },
   })
 

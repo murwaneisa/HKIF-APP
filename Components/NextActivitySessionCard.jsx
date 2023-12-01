@@ -31,7 +31,7 @@ const getStyles = theme =>
   StyleSheet.create({
     container: {
       backgroundColor: theme.colors.primary,
-      borderRadius: 15,
+      borderRadius: 12,
       padding: 15,
     },
     title: {

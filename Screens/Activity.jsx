@@ -46,7 +46,9 @@ function Activity({ navigation }) {
         <View style={styles.imageContainer}>
           <Image
             style={styles.image}
-            source={require('../Assets/images/movie.jpg')}
+            source={{
+              uri: 'https://images.unsplash.com/photo-1513635625218-6956bc843133?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Zm9vdGJhbGwlMjBpbiUyMHNwb3J0JTIwaGFsbHxlbnwwfHwwfHx8MA%3D%3D',
+            }}
             resizeMode='cover'
           />
         </View>
@@ -78,7 +80,11 @@ function Activity({ navigation }) {
         </View>
       </ScrollView>
 
-      <BottomSheet ref={sheetRef} snapPoints={['12.5%', '50%', '90%']}>
+      <BottomSheet
+        backgroundStyle={styles.bottomSheetContainer}
+        ref={sheetRef}
+        snapPoints={['12.5%', '50%', '90%']}
+      >
         <Text style={styles.bottomSheetTitle}>Liked by</Text>
         <BottomSheetFlatList
           data={data}
@@ -137,6 +143,9 @@ const getStyles = theme =>
       marginBottom: 15,
       paddingHorizontal: 20,
       paddingTop: 10,
+    },
+    bottomSheetContainer: {
+      backgroundColor: 'rgba(228, 228, 228, 228)',
     },
   })
 

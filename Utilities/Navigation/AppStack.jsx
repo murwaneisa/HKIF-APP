@@ -14,6 +14,8 @@ import { useNavigation } from '@react-navigation/native'
 import Register from '../../Screens/Register'
 import { Octicons } from '@expo/vector-icons'
 import Organization from '../../Screens/Organization'
+import Event from '../../Screens/Event'
+import Activity from '../../Screens/Activity'
 
 const hamburgerMenu = () => {
   const navigation = useNavigation()
@@ -140,6 +142,20 @@ const AuthStack = () => {
           drawerIcon: ({ color }) => (
             <Ionicons name='settings-outline' size={22} color={color} />
           ),
+        }}
+      />
+      <Drawer.Screen
+        name='Event'
+        component={Event}
+        options={{
+          drawerLabel: () => null, // Hide the label in the drawer
+        }}
+      />
+      <Drawer.Screen
+        name='Activity'
+        component={Activity}
+        options={{
+          drawerLabel: () => null, // Hide the label in the drawer
         }}
       />
     </Drawer.Navigator>
