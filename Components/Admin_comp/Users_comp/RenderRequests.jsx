@@ -72,6 +72,34 @@ const RenderRequests = () => {
       phone: '+1234567896',
       date: '2023-07-15',
     },
+    {
+      name: 'Rebekah Mikaelson',
+      image: 'https://randomuser.me/api/portraits/women/4.jpg',
+      membership: 'Full Membership',
+      phone: '+1234567896',
+      date: '2023-07-15',
+    },
+    {
+      name: 'Rebekah Mikaelson',
+      image: 'https://randomuser.me/api/portraits/women/4.jpg',
+      membership: 'Full Membership',
+      phone: '+1234567896',
+      date: '2023-07-15',
+    },
+    {
+      name: 'Rebekah Mikaelson',
+      image: 'https://randomuser.me/api/portraits/women/4.jpg',
+      membership: 'Full Membership',
+      phone: '+1234567896',
+      date: '2023-07-15',
+    },
+    {
+      name: 'Rebekah Mikaelson',
+      image: 'https://randomuser.me/api/portraits/women/4.jpg',
+      membership: 'Full Membership',
+      phone: '+1234567896',
+      date: '2023-07-15',
+    },
   ]
   return (
     <>
@@ -107,7 +135,6 @@ const getStyles = (theme, windowWidth) => {
     container: {
       width: '100%',
       backgroundColor: theme.colors.background2,
-
       alignItems: Platform.select({
         android: 'center',
         ios: 'center',

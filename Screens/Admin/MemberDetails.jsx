@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Platform,
   Image,
+  ScrollView,
 } from 'react-native'
 import React, { useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
@@ -20,75 +21,100 @@ const MemberDetails = () => {
   const styles = getStyles(theme, windowWidth)
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Image
-          source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }}
-          style={styles.image}
-        />
-        <View>
-          <Text style={styles.name}>Zach Brown</Text>
-          <Text style={styles.text}>Board Member </Text>
-          <Text style={styles.text}>Full Membership </Text>
+    <ScrollView style={styles.scrollContainer}>
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <Image
+            source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }}
+            style={styles.image}
+          />
+          <View>
+            <Text style={styles.name}>Zach Brown</Text>
+            <Text style={styles.text}>Board Member </Text>
+            <Text style={styles.text}>Full Membership </Text>
+          </View>
+        </View>
+        <View style={styles.infoContainer}>
+          <View style={styles.infoItem}>
+            <View style={styles.label}>
+              <Text style={styles.labelName}>First name</Text>
+            </View>
+            <Text style={styles.infoItemText}>Zach</Text>
+          </View>
+          <View style={styles.infoItem}>
+            <View style={styles.label}>
+              <Text style={styles.labelName}>Last name </Text>
+            </View>
+            <Text style={styles.infoItemText}>Brown</Text>
+          </View>
+          <View style={styles.infoItem}>
+            <View style={styles.label}>
+              <Text style={styles.labelName}>Email</Text>
+            </View>
+            <Text style={styles.infoItemText}>Zach.Brown@gmail.com</Text>
+          </View>
+          <View style={styles.infoItem}>
+            <View style={styles.label}>
+              <Text style={styles.labelName}>Phone</Text>
+            </View>
+            <Text style={styles.infoItemText}>+46765627016</Text>
+          </View>
+          <View style={styles.infoItem}>
+            <View style={styles.label}>
+              <Text style={styles.labelName}>Birth date</Text>
+            </View>
+            <Text style={styles.infoItemText}>23 Mars 1999</Text>
+          </View>
+          <View style={styles.infoItem}>
+            <View style={styles.label}>
+              <Text style={styles.labelName}>Gender</Text>
+            </View>
+            <Text style={styles.infoItemText}>Man</Text>
+          </View>
+          <View style={styles.infoItem}>
+            <View style={styles.label}>
+              <Text style={styles.labelName}>Role</Text>
+            </View>
+            <Text style={styles.infoItemText}>Board member</Text>
+          </View>
+          <View style={styles.infoItem}>
+            <View style={styles.label}>
+              <Text style={styles.labelName}>Nationality</Text>
+            </View>
+            <Text style={styles.infoItemText}>Swedish</Text>
+          </View>
+          <View style={[styles.infoItem, { borderBottomWidth: 0 }]}>
+            <View style={styles.label}>
+              <Text style={styles.labelName}>City</Text>
+            </View>
+            <Text style={styles.infoItemText}>Kristianstad</Text>
+          </View>
+        </View>
+        <View style={styles.headerContainer}>
+          <View
+            style={{
+              width: '100%',
+              height: 30,
+              justifyContent: 'center',
+            }}
+          >
+            <Text
+              style={{
+                textAlign: 'center',
+                color: 'red',
+                fontFamily: 'Inter-SemiBold',
+                fontSize: Platform.select({
+                  ios: 18,
+                  android: 16,
+                }),
+              }}
+            >
+              Delete user
+            </Text>
+          </View>
         </View>
       </View>
-      <View style={styles.infoContainer}>
-        <View style={styles.infoItem}>
-          <View style={styles.label}>
-            <Text style={styles.labelName}>First name</Text>
-          </View>
-          <Text style={styles.infoItemText}>Zach</Text>
-        </View>
-        <View style={styles.infoItem}>
-          <View style={styles.label}>
-            <Text style={styles.labelName}>Last name </Text>
-          </View>
-          <Text style={styles.infoItemText}>Brown</Text>
-        </View>
-        <View style={styles.infoItem}>
-          <View style={styles.label}>
-            <Text style={styles.labelName}>Email</Text>
-          </View>
-          <Text style={styles.infoItemText}>Zach.Brown@gmail.com</Text>
-        </View>
-        <View style={styles.infoItem}>
-          <View style={styles.label}>
-            <Text style={styles.labelName}>Phone</Text>
-          </View>
-          <Text style={styles.infoItemText}>+46765627016</Text>
-        </View>
-        <View style={styles.infoItem}>
-          <View style={styles.label}>
-            <Text style={styles.labelName}>Birth date</Text>
-          </View>
-          <Text style={styles.infoItemText}>23 Mars 1999</Text>
-        </View>
-        <View style={styles.infoItem}>
-          <View style={styles.label}>
-            <Text style={styles.labelName}>Gender</Text>
-          </View>
-          <Text style={styles.infoItemText}>Man</Text>
-        </View>
-        <View style={styles.infoItem}>
-          <View style={styles.label}>
-            <Text style={styles.labelName}>Role</Text>
-          </View>
-          <Text style={styles.infoItemText}>Board member</Text>
-        </View>
-        <View style={styles.infoItem}>
-          <View style={styles.label}>
-            <Text style={styles.labelName}>Nationality</Text>
-          </View>
-          <Text style={styles.infoItemText}>Swedish</Text>
-        </View>
-        <View style={styles.infoItem}>
-          <View style={styles.label}>
-            <Text style={styles.labelName}>City</Text>
-          </View>
-          <Text style={styles.infoItemText}>Kristianstad</Text>
-        </View>
-      </View>
-    </View>
+    </ScrollView>
   )
 }
 
@@ -96,6 +122,9 @@ const getStyles = (theme, windowWidth) => {
   const tabletPadding = windowWidth >= 720 ? 15 : 0
   const webWidth = windowWidth >= 900 ? '60%' : '85%'
   return StyleSheet.create({
+    scrollContainer: {
+      backgroundColor: theme.colors.background2,
+    },
     container: {
       flex: 1,
       alignItems: 'center',

@@ -100,6 +100,11 @@ const getStyles = (theme, windowWidth) => {
     text: {
       color: theme.colors.text,
       fontFamily: 'Inter-SemiBold',
+      paddingTop: Platform.select({
+        ios: 2,
+        android: 1,
+        web: 2,
+      }),
       fontSize: Platform.select({
         ios: 14,
         android: 12,
@@ -116,21 +121,7 @@ const getStyles = (theme, windowWidth) => {
         web: 16,
       }),
     },
-    membership: {
-      fontSize: 14,
-      color: '#666',
-    },
-    actions: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    actionButton: {
-      marginLeft: Platform.select({
-        ios: 10,
-        android: 10,
-        web: 15,
-      }),
-    },
+
     pressed: {
       opacity: 0.5,
     },

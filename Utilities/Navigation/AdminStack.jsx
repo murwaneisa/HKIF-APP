@@ -91,7 +91,7 @@ const Stack = createStackNavigator()
 // Create a Stack Navigator for Users and MemberDetails
 const UsersStack = () => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator screenOptions={{ headerShown: true }}>
       <Stack.Screen name='Users management' component={Users} />
       <Stack.Screen name='MemberDetails' component={MemberDetails} />
     </Stack.Navigator>
@@ -145,6 +145,7 @@ const AdminStack = () => {
           },
         })}
         options={{
+          headerShown: false,
           drawerIcon: ({ color }) => (
             <Ionicons name='people-outline' size={22} color={color} />
           ),
