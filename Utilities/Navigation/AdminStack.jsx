@@ -9,7 +9,7 @@ import Settings from '../../Screens/Settings'
 import Home from '../../Screens/Home'
 import CustomDrawer from '../../Components/CustomDrawer'
 import { useTheme } from '../../Styles/theme'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import Register from '../../Screens/Register'
 import { Octicons } from '@expo/vector-icons'
@@ -148,7 +148,11 @@ const MenuStack = () => {
         drawerLabelStyle: {
           marginLeft: -25,
           fontFamily: 'Inter-Medium',
-          fontSize: 15,
+          fontSize: Platform.select({
+            ios: 16,
+            android: 14,
+            wed: 20,
+          }),
         },
         drawerStyle: {
           backgroundColor: theme.colors.background, // Set the background color for the drawer

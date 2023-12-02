@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Platform } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { useTheme } from '../../Styles/theme'
 import { FontAwesome5 } from '@expo/vector-icons'
@@ -20,7 +20,7 @@ const Badge = ({ children }) => {
         {children === 'Not Member' ? (
           <FontAwesome5 name='sad-tear' size={24} color='black' />
         ) : (
-          <MaterialCommunityIcons name={iconsName} size={28} color='#FFB743' />
+          <MaterialCommunityIcons name={iconsName} size={24} color='#FFB743' />
         )}
       </View>
       <Text style={styles.badgeText}>{children}</Text>
@@ -34,9 +34,11 @@ const getStyles = theme =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#D4ECD9',
+      backgroundColor: '#D1F5FF',
+      borderWidth: 2,
+      borderColor: '#FFFFFF',
       paddingHorizontal: 10,
-      paddingVertical: 8,
+      paddingVertical: 4,
       borderRadius: 20,
     },
     checkmarkCircle: {
@@ -45,15 +47,21 @@ const getStyles = theme =>
       marginRight: 5,
       flexDirection: 'row',
       alignItems: 'center',
+      justifyContent: 'center',
     },
-    checkmarkText: {
+    icon: {
       color: 'white',
       fontWeight: 'bold',
     },
     badgeText: {
-      color: '#5CB85C',
+      fontFamily: 'Inter-SemiBold',
+      color: theme.colors.text,
       fontWeight: 'bold',
-      marginLeft: 5,
+      fontSize: Platform.select({
+        ios: 12,
+        android: 12,
+      }),
+      marginLeft: 4,
     },
   })
 
