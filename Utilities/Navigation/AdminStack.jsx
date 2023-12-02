@@ -89,15 +89,44 @@ const Drawer = createDrawerNavigator()
 const Stack = createStackNavigator()
 
 // Create a Stack Navigator for Users and MemberDetails
-const UsersStack = () => {
+const AdminStack = () => {
+  const { theme } = useTheme()
   return (
-    <Stack.Navigator screenOptions={{ headerShown: true }}>
-      <Stack.Screen name='Users management' component={Users} />
+    <Stack.Navigator
+      screenOptions={{
+        headerLeft: () => customHeaderLeft('Users'),
+        headerStyle: {
+          backgroundColor: theme.colors.accent, // Use the theme for styling
+        },
+        headerTitleStyle: {
+          color: theme.colors.text,
+        },
+        headerTitleAlign: 'center',
+        drawerActiveBackgroundColor: theme.colors.primary200,
+        drawerActiveTintColor: theme.colors.primary900,
+        drawerInactiveTintColor: theme.colors.text,
+        drawerLabelStyle: {
+          marginLeft: -25,
+          fontFamily: 'Inter-Medium',
+          fontSize: 15,
+        },
+        drawerStyle: {
+          backgroundColor: theme.colors.background, // Set the background color for the drawer
+        },
+      }}
+    >
+      <Stack.Screen
+        name='HomeMenu'
+        options={{
+          headerShown: false,
+        }}
+        component={MenuStack}
+      />
       <Stack.Screen name='MemberDetails' component={MemberDetails} />
     </Stack.Navigator>
   )
 }
-const AdminStack = () => {
+const MenuStack = () => {
   const { theme } = useTheme()
 
   return (
@@ -138,14 +167,8 @@ const AdminStack = () => {
       />
       <Drawer.Screen
         name='Users'
-        component={UsersStack} // Link to the UsersStack instead of the Users component
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.navigate('Users management') // Ensures 'Users management' is the starting screen
-          },
-        })}
+        component={Users}
         options={{
-          headerShown: false,
           drawerIcon: ({ color }) => (
             <Ionicons name='people-outline' size={22} color={color} />
           ),
