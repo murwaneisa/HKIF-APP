@@ -8,16 +8,14 @@ import {
   Dimensions,
 } from 'react-native'
 import { useTheme } from '../../Styles/theme'
-import RenderRequests from '../../Components/Admin_comp/Users_comp/RenderRequests'
-import RenderMembers from '../../Components/Admin_comp/Users_comp/RenderMembers'
-import RenderCurrent from '../../Components/Admin_comp/Event_comp/RenderCurrent'
-import RenderPrevious from '../../Components/Admin_comp/Event_comp/RenderPrevious'
+import RenderMembers from './Users_comp/RenderMembers'
+import RenderRequests from './Users_comp/RenderRequests'
 
-const Events = () => {
+const CustomManage = ({}) => {
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
-  const [activeList, setActiveList] = useState('current')
+  const [activeList, setActiveList] = useState('members')
   const [user, setUser] = useState({ role: 'superAdmin' })
 
   const getButtonStyle = listName => ({
@@ -34,10 +32,22 @@ const Events = () => {
   })
 
   const handlePress = listName => {
-    if (listName === 'previous' && user.role !== 'superAdmin') {
+    if (listName === 'requests' && user.role !== 'superAdmin') {
       return // You can also use Alert.alert to inform the user they don't have permission
     }
     setActiveList(listName)
+  }
+
+  let content
+  switch (activeList) {
+    case 'members':
+      content = renderMembers ? RenderMembers() : null
+      break
+    case 'requests':
+      content = renderRequests ? RenderRequests() : null
+      break
+    default:
+      content = null
   }
 
   return (
@@ -45,76 +55,67 @@ const Events = () => {
       <View style={styles.buttonContainer}>
         <Pressable
           style={({ pressed }) => [
-            getButtonStyle('current'),
+            getButtonStyle('members'),
             pressed && styles.pressed,
           ]}
-          onPress={() => setActiveList('current')}
+          onPress={() => setActiveList('members')}
         >
           {({ pressed }) => (
             <Text
               style={[
                 styles.buttonText,
-                getButtonTextStyle('current'),
+                getButtonTextStyle('members'),
                 pressed && styles.pressedText,
               ]}
             >
-              Current
+              Members
             </Text>
           )}
         </Pressable>
         <Pressable
           style={({ pressed }) => [
-            getButtonStyle('previous'),
+            getButtonStyle('requests'),
             pressed && user.role === 'superAdmin' && styles.pressed,
           ]}
-          onPress={() => handlePress('previous')}
+          onPress={() => handlePress('requests')}
           disabled={user.role !== 'superAdmin'} // Disable if not super admin
         >
           {({ pressed }) => (
             <Text
               style={[
                 styles.buttonText,
-                getButtonTextStyle('previous'),
+                getButtonTextStyle('requests'),
                 pressed && styles.pressedText,
               ]}
             >
-              Previous
+              Requests
             </Text>
           )}
         </Pressable>
       </View>
-
-      {activeList === 'current' ? (
-        <RenderCurrent />
-      ) : (
-        // ... render your members list component here
-        <RenderPrevious />
-        // ... render your requests list component here
-      )}
+      {content}
     </View>
   )
 }
 
 const getStyles = (theme, windowWidth) => {
   const tabletHeight = windowWidth >= 720 ? '5%' : '8%'
-  const tabletPadding = windowWidth >= 720 ? '10%' : '5%'
   const webWidth = windowWidth >= 900 ? '60%' : '85%'
   return StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: theme.colors.background2,
-      paddingHorizontal: Platform.select({
-        ios: tabletPadding,
-        android: tabletPadding,
-        web: '20%',
-      }),
+      alignItems: 'center',
     },
-
     buttonContainer: {
       flexDirection: 'row',
-      backgroundColor: theme.colors.accent,
+      backgroundColor: theme.colors.accent2,
       borderRadius: 8,
-
+      width: Platform.select({
+        ios: '90%',
+        android: '90%',
+        web: webWidth,
+      }),
       height: Platform.select({
         ios: '6%',
         android: tabletHeight,
@@ -132,4 +133,4 @@ const getStyles = (theme, windowWidth) => {
   })
 }
 
-export default Events
+export default CustomManage

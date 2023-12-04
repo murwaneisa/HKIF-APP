@@ -108,7 +108,6 @@ const getStyles = (theme, windowWidth) => {
     container: {
       width: '100%',
       backgroundColor: theme.colors.background2,
-
       alignItems: Platform.select({
         android: 'center',
         ios: 'center',
