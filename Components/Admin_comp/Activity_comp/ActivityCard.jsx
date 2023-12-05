@@ -10,7 +10,6 @@ import {
 import React from 'react'
 import { useTheme } from '../../../Styles/theme'
 import { useState } from 'react'
-import { Ionicons } from '@expo/vector-icons'
 
 const ActivityCard = ({ event }) => {
   const windowWidth = Dimensions.get('window').width
@@ -26,17 +25,10 @@ const ActivityCard = ({ event }) => {
       <View style={styles.textContainer}>
         <Text style={styles.title}>{event.title}</Text>
         <View style={styles.dateContainer}>
-          <View style={[styles.dateItem, { marginRight: 5 }]}>
-            <Text style={styles.dateText}>{event.date}</Text>
-          </View>
-          <View style={styles.dateItem}>
-            <Text style={styles.dateText}>{event.startTime}</Text>
-          </View>
+          <Text style={styles.date}>Jun 25, 2023 9:00 AM</Text>
+          <Text style={styles.date}> 9:00 AM</Text>
         </View>
-        <View style={[styles.dateContainer, { marginTop: 5 }]}>
-          <Ionicons name='location-outline' size={24} color='black' />
-          <Text style={styles.location}>{event.address}</Text>
-        </View>
+        <Text style={styles.location}>Chicago, IL</Text>
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
@@ -62,7 +54,7 @@ const getStyles = (theme, windowWidth) => {
       shadowOpacity: 0.1,
       shadowRadius: 8,
       elevation: 5,
-      backgroundColor: theme.colors.accent2,
+      backgroundColor: '#ffffff',
       marginTop: 15,
     },
     image: {
@@ -73,27 +65,26 @@ const getStyles = (theme, windowWidth) => {
       padding: 10,
     },
     title: {
-      fontFamily: 'Inter-SemiBold',
       fontWeight: 'bold',
-      fontSize: 15,
+      fontSize: 18,
       marginBottom: 8,
     },
     dateContainer: {
+      backgroundColor: 'red',
       flexDirection: 'row',
       alignItems: 'center',
+      padding: 10,
     },
-    dateItem: {
+    date: {
+      backgroundColor: 'red',
+      fontSize: 14,
       borderRadius: 8,
       padding: 12,
-      backgroundColor: theme.colors.accent,
-    },
-    dateText: {
-      fontSize: 14,
+      alignItems: 'center',
     },
     location: {
       fontSize: 14,
-      textAlign: 'center',
-      marginLeft: 5,
+      marginBottom: 16,
     },
     buttonContainer: {
       flexDirection: 'row',

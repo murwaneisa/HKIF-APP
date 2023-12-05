@@ -26,7 +26,7 @@ const RenderCurrent = () => {
     },
     {
       title: 'Tech Conference 2023',
-      address: 'Convention Center, 456 Technology Rd, Tech City',
+      address: 'Convention Center, 456 Technology ',
       date: '2023-08-21',
       startTime: '9:00 AM',
       imageUrl: 'https://source.unsplash.com/featured/?conference',
@@ -40,14 +40,14 @@ const RenderCurrent = () => {
     },
     {
       title: 'Local Food Fair',
-      address: 'Central Plaza, 321 Main St, Foodville',
+      address: 'Central Plaza, 321 Main St',
       date: '2023-10-05',
       startTime: '11:00 AM',
       imageUrl: 'https://source.unsplash.com/featured/?foodfair',
     },
     {
       title: 'Autumn Music Concert',
-      address: 'Outdoor Amphitheater, 654 Elm St, Music Town',
+      address: 'Outdoor Amphitheater, 654 Elm St',
       date: '2023-11-15',
       startTime: '6:00 PM',
       imageUrl: 'https://source.unsplash.com/featured/?concert',
@@ -56,10 +56,8 @@ const RenderCurrent = () => {
 
   const renderHeader = () => (
     <View style={styles.titleContainer}>
-      <Text style={styles.header}>150 Current Members</Text>
-      <Text style={styles.subHeader}>
-        Click on view to show members's details
-      </Text>
+      <Text style={styles.header}>5 Current Event</Text>
+      <Text style={styles.subHeader}>Add Event</Text>
     </View>
   )
 
@@ -92,12 +90,11 @@ const getStyles = (theme, windowWidth) => {
   return StyleSheet.create({
     container: {
       width: '100%',
-      backgroundColor: 'red',
+      backgroundColor: theme.colors.background2,
       paddingBottom: 15,
     },
     titleContainer: {
-      /*     borderWidth: 2,
-          borderColor: 'red', */
+      flexDirection: 'row',
       width: Platform.select({
         ios: '90%',
         android: '90%',
@@ -106,6 +103,7 @@ const getStyles = (theme, windowWidth) => {
       paddingHorizontal: tabletPadding, // This adds padding on the sides based on device width
       backgroundColor: theme.colors.background2,
       alignItems: 'flex-start', // This aligns children to the start along the cross axis
+      justifyContent: 'space-between',
     },
     header: {
       fontFamily: 'Inter-Bold',
