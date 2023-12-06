@@ -13,16 +13,24 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.HKIF.HKIFAPP"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./Assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.HKIF.HKIFAPP"
     },
     "web": {
       "favicon": "./Assets/favicon.png"
+    },
+    "plugins": ["@react-native-google-signin/google-signin"],
+    "extra": {
+      "eas": {
+        "projectId": "07b5556d-9467-40f3-b8f5-b86ac7e503df"
+      }
     }
   }
 }
