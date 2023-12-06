@@ -12,10 +12,10 @@ import { useTheme } from '../../../Styles/theme'
 import { useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 
-const ActivityCard = ({ event }) => {
+const ActivityCard = ({ event, previous }) => {
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
-  const styles = getStyles(theme, windowWidth)
+  const styles = getStyles(theme, windowWidth, previous)
   const [user, setUser] = useState({ role: 'superAdmin' })
   return (
     <View style={styles.cardContainer}>
@@ -34,7 +34,11 @@ const ActivityCard = ({ event }) => {
           </View>
         </View>
         <View style={[styles.dateContainer, { marginTop: 5 }]}>
-          <Ionicons name='location-outline' size={24} color='black' />
+          <Ionicons
+            name='location-outline'
+            size={24}
+            color={theme.colors.text}
+          />
           <Text style={styles.location}>{event.address}</Text>
         </View>
       </View>
@@ -44,14 +48,16 @@ const ActivityCard = ({ event }) => {
         >
           <Text style={styles.buttonText}>View</Text>
         </TouchableOpacity>
-        {/*  <TouchableOpacity style={[styles.button, { backgroundColor: 'red' }]}>
+        {previous ? (
+          <TouchableOpacity style={[styles.button, { backgroundColor: 'red' }]}>
             <Text style={styles.buttonText}>delete</Text>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
+        ) : null}
       </View>
     </View>
   )
 }
-const getStyles = (theme, windowWidth) => {
+const getStyles = (theme, windowWidth, previous) => {
   return StyleSheet.create({
     cardContainer: {
       width: '100%',
@@ -77,6 +83,7 @@ const getStyles = (theme, windowWidth) => {
       fontWeight: 'bold',
       fontSize: 15,
       marginBottom: 8,
+      color: theme.colors.text2,
     },
     dateContainer: {
       flexDirection: 'row',
@@ -89,11 +96,13 @@ const getStyles = (theme, windowWidth) => {
     },
     dateText: {
       fontSize: 14,
+      color: theme.colors.text,
     },
     location: {
       fontSize: 14,
       textAlign: 'center',
       marginLeft: 5,
+      color: theme.colors.text,
     },
     buttonContainer: {
       flexDirection: 'row',
@@ -101,7 +110,7 @@ const getStyles = (theme, windowWidth) => {
       justifyContent: 'space-between',
     },
     button: {
-      width: '100%',
+      width: previous ? '48%' : '100%',
       borderRadius: 8,
       padding: 12,
       alignItems: 'center',

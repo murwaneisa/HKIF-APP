@@ -20,6 +20,7 @@ import Events from '../../Screens/Admin/Events'
 import Activities from '../../Screens/Admin/Activities'
 import { createStackNavigator } from '@react-navigation/stack'
 import MemberDetails from '../../Screens/Admin/MemberDetails'
+import AddEvent from '../../Components/Admin_comp/Event_comp/AddEvent'
 
 const customHeaderLeft = routeName => {
   const navigation = useNavigation()
@@ -123,6 +124,7 @@ const AdminStack = () => {
         component={MenuStack}
       />
       <Stack.Screen name='MemberDetails' component={MemberDetails} />
+      <Stack.Screen name='AddEvent' component={AddEvent} />
     </Stack.Navigator>
   )
 }

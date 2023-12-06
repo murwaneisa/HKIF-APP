@@ -6,12 +6,16 @@ import {
   Platform,
   FlatList,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native'
 import React from 'react'
 import { useTheme } from '../../../Styles/theme'
 import EventCard from './EventCard'
+import { AntDesign } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native'
 
 const RenderCurrent = () => {
+  const navigation = useNavigation()
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
@@ -57,7 +61,13 @@ const RenderCurrent = () => {
   const renderHeader = () => (
     <View style={styles.titleContainer}>
       <Text style={styles.header}>5 Current Event</Text>
-      <Text style={styles.subHeader}>Add Event</Text>
+      <TouchableOpacity
+        style={styles.subtitleContainer}
+        onPress={() => navigation.navigate('AddEvent')}
+      >
+        <AntDesign name='pluscircleo' size={24} color={theme.colors.primary} />
+        <Text style={styles.subHeader}>Add Event</Text>
+      </TouchableOpacity>
     </View>
   )
 
@@ -89,17 +99,11 @@ const getStyles = (theme, windowWidth) => {
   const webWidth = windowWidth >= 900 ? '60%' : '85%'
   return StyleSheet.create({
     container: {
-      width: '100%',
       backgroundColor: theme.colors.background2,
       paddingBottom: 15,
     },
     titleContainer: {
       flexDirection: 'row',
-      width: Platform.select({
-        ios: '90%',
-        android: '90%',
-        web: webWidth,
-      }), // This ensures the titleContainer takes full width
       paddingHorizontal: tabletPadding, // This adds padding on the sides based on device width
       backgroundColor: theme.colors.background2,
       alignItems: 'flex-start', // This aligns children to the start along the cross axis
@@ -116,14 +120,18 @@ const getStyles = (theme, windowWidth) => {
       color: theme.colors.text2,
     },
     subHeader: {
-      fontFamily: 'Inter-Regular',
+      fontFamily: 'Inter-SemiBold',
       fontSize: Platform.select({
         ios: 16,
         android: 14,
         web: 18,
       }),
-      color: theme.colors.text,
-      marginBottom: 8,
+      color: theme.colors.primary,
+      marginLeft: 5,
+    },
+    subtitleContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
     },
   })
 }
