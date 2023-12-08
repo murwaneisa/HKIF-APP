@@ -4,9 +4,9 @@ import {
   StyleSheet,
   Platform,
   TextInput,
-  TouchableOpacity,
   Modal,
-  Pressable,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
 } from 'react-native'
 import React from 'react'
 import { useTheme } from '../../../Styles/theme'
@@ -14,6 +14,7 @@ import Input from '../../../Utilities/UI/Input'
 import DatePicker from 'react-native-modern-datepicker'
 import { useState } from 'react'
 import DatePickerModal from '../../../Utilities/UI/Model'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 const AddEvent = () => {
   const { theme } = useTheme()
@@ -42,113 +43,146 @@ const AddEvent = () => {
   }
   return (
     <View style={styles.container}>
-      <TextInput
-        placeholder='Title'
-        placeholderTextColor={theme.colors.text}
-        style={styles.input}
-      />
+      <View
+        style={[
+          styles.sectionContainer,
+          { backgroundColor: theme.colors.accent2 },
+        ]}
+      >
+        <View style={styles.sectionTitle}>
+          <Text style={styles.sectionText}>Title</Text>
+        </View>
+        <TextInput
+          placeholderTextColor={theme.colors.text}
+          style={styles.input}
+        />
+      </View>
       <View style={styles.dateTimeContainer}>
+        <View
+          style={[
+            styles.sectionContainer,
+            {
+              borderBottomWidth: 1,
+              borderBottomColor: theme.colors.text,
+              paddingHorizontal: 0,
+              paddingBottom: 10,
+              marginVertical: 0,
+              marginBottom: 10,
+            },
+          ]}
+        >
+          <MaterialCommunityIcons
+            name='calendar-clock'
+            size={24}
+            color={theme.colors.text}
+          />
+          <Text
+            style={[
+              styles.sectionText,
+              { marginLeft: 10, fontFamily: 'Inter-Bold' },
+            ]}
+          >
+            Event date & time
+          </Text>
+        </View>
         <View style={styles.startDate}>
-          <View style={styles.dateTitle}>
-            <Text>Starts</Text>
+          <View style={styles.sectionTitle}>
+            <Text style={styles.sectionText}>Starts</Text>
           </View>
-          <Pressable onPress={openDatePicker}>
+          <TouchableWithoutFeedback onPress={openDatePicker}>
             <View style={styles.dateField}>
               <TextInput
-                label='Birthday Date'
                 autoCorrect={false}
                 autoCapitalize='words'
                 placeholder='Aug 21 2002'
                 value={selectedStartDate}
+                placeholderTextColor={theme.colors.primary}
                 editable={false}
-                style={styles.input}
+                style={[styles.input, { backgroundColor: theme.colors.accent }]}
               />
             </View>
-          </Pressable>
-          <View style={styles.dateField}>
-            <Pressable onPress={openTimePicker}>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={openTimePicker}>
+            <View style={styles.dateField}>
               <TextInput
-                label='Birthday Date'
                 autoCorrect={false}
                 autoCapitalize='words'
                 placeholder='10:00'
+                placeholderTextColor={theme.colors.primary}
                 value={time}
                 editable={false}
-                style={styles.input}
+                style={[styles.input, { backgroundColor: theme.colors.accent }]}
               />
-            </Pressable>
-          </View>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
         <View style={styles.startDate}>
-          <View style={styles.dateTitle}>
-            <Text>Ends</Text>
+          <View style={styles.sectionTitle}>
+            <Text style={styles.sectionText}>Ends</Text>
           </View>
-          <View style={styles.dateField}>
-            <Pressable onPress={openDatePicker}>
+          <TouchableWithoutFeedback onPress={openDatePicker}>
+            <View style={styles.dateField}>
               <TextInput
-                label='Birthday Date'
                 autoCorrect={false}
                 autoCapitalize='words'
                 placeholder='Aug 21 2002'
+                placeholderTextColor={theme.colors.primary}
                 value={selectedStartDate}
                 editable={false}
-                style={styles.input}
+                style={[styles.input, { backgroundColor: theme.colors.accent }]}
               />
-            </Pressable>
-          </View>
-          <View style={styles.dateField}>
-            <Pressable onPress={openTimePicker}>
+            </View>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={openTimePicker}>
+            <View style={styles.dateField}>
               <TextInput
-                label='Birthday Date'
                 autoCorrect={false}
                 autoCapitalize='words'
                 placeholder='10:00'
+                placeholderTextColor={theme.colors.primary}
                 value={time}
                 editable={false}
-                style={styles.input}
+                style={[styles.input, { backgroundColor: theme.colors.accent }]}
               />
-            </Pressable>
-          </View>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
-        <DatePickerModal
-          isOpen={openStartDatePicker}
-          onClose={handleCloseModal}
-        >
-          {pickerType === 'date' && (
-            <DatePicker
-              mode='calendar'
-              selected={startedDate}
-              onDateChanged={handleChangeStartDate}
-              onSelectedChange={date => setSelectedStartDate(date)}
-              options={{
-                backgroundColor: '#080516',
-                textHeaderColor: theme.colors.primary,
-                textDefaultColor: '#FFFFFF',
-                selectedTextColor: '#FFF',
-                mainColor: theme.colors.primary,
-                textSecondaryColor: '#FFFFFF',
-                borderColor: 'rgba(122, 146, 165, 0.1)',
-              }}
-            />
-          )}
-          {pickerType === 'time' && (
-            <DatePicker
-              mode='time'
-              minuteInterval={3}
-              onTimeChange={selectedTime => setTime(selectedTime)}
-              options={{
-                backgroundColor: '#080516',
-                textHeaderColor: theme.colors.primary,
-                textDefaultColor: '#FFFFFF',
-                selectedTextColor: '#FFF',
-                mainColor: theme.colors.primary,
-                textSecondaryColor: '#FFFFFF',
-                borderColor: 'rgba(122, 146, 165, 0.1)',
-              }}
-            />
-          )}
-        </DatePickerModal>
       </View>
+      <DatePickerModal isOpen={openStartDatePicker} onClose={handleCloseModal}>
+        {pickerType === 'date' && (
+          <DatePicker
+            mode='calendar'
+            selected={startedDate}
+            onDateChanged={handleChangeStartDate}
+            onSelectedChange={date => setSelectedStartDate(date)}
+            options={{
+              backgroundColor: '#080516',
+              textHeaderColor: theme.colors.primary,
+              textDefaultColor: '#FFFFFF',
+              selectedTextColor: '#FFF',
+              mainColor: theme.colors.primary,
+              textSecondaryColor: '#FFFFFF',
+              borderColor: 'rgba(122, 146, 165, 0.1)',
+            }}
+          />
+        )}
+        {pickerType === 'time' && (
+          <DatePicker
+            mode='time'
+            minuteInterval={3}
+            onTimeChange={selectedTime => setTime(selectedTime)}
+            options={{
+              backgroundColor: '#080516',
+              textHeaderColor: theme.colors.primary,
+              textDefaultColor: '#FFFFFF',
+              selectedTextColor: '#FFF',
+              mainColor: theme.colors.primary,
+              textSecondaryColor: '#FFFFFF',
+              borderColor: 'rgba(122, 146, 165, 0.1)',
+            }}
+          />
+        )}
+      </DatePickerModal>
     </View>
   )
 }
@@ -170,20 +204,29 @@ const getStyles = theme => {
       }),
     },
     dateTimeContainer: {
-      backgroundColor: theme.colors.accent,
+      backgroundColor: theme.colors.accent2,
       marginVertical: 10,
       borderRadius: 6,
-
-      padding: 10,
+      padding: 12,
     },
     startDate: {
       flexDirection: 'row',
       alignItems: 'center',
       paddingVertical: 5,
     },
-    dateTitle: {
-      width: 50,
+    sectionContainer: {
+      flexDirection: 'row',
       alignItems: 'center',
+      marginVertical: 10,
+      borderRadius: 6,
+      paddingHorizontal: 12,
+    },
+    sectionTitle: {
+      width: 50,
+    },
+    sectionText: {
+      fontFamily: 'Inter-SemiBold',
+      color: theme.colors.text,
     },
     dateField: {
       marginHorizontal: 8,
