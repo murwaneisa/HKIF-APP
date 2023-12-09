@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
+import { useState, useEffect } from 'react'
 import Input from '../../../Utilities/UI/Input'
 import PrimaryButton from '../../../Utilities/UI/PrimaryButton'
 import GoogleButton from '../../../Utilities/UI/GoogleButton'
@@ -11,13 +12,44 @@ const StepOne = ({
   setPasswordVisible,
   confirmPasswordVisible,
   setConfirmPasswordVisible,
+  isGoogleSignUp,
+  setIsGoogleSignUp,
+  validateForm,
   values,
   errors,
   touched,
   handleChange,
+  setFieldValue,
   handleBlur,
   initialValues,
 }) => {
+  const [userInfo, setUserInfo] = useState({})
+  useEffect(() => {
+    if (userInfo && userInfo.user) {
+      setFieldValue('firstName', userInfo.user.givenName || '')
+      setFieldValue('lastName', userInfo.user.familyName || '')
+      setFieldValue('email', userInfo.user.email || '')
+      setIsGoogleSignUp(true)
+      setTimeout(() => {
+        validateForm()
+      }, 100)
+    }
+  }, [userInfo, setFieldValue, setIsGoogleSignUp])
+  const isDisabled = () => {
+    return (
+      values.firstName === initialValues.firstName ||
+      values.lastName === initialValues.lastName ||
+      values.email === initialValues.email ||
+      (!isGoogleSignUp &&
+        (values.password === initialValues.password ||
+          values.confirmPassword === initialValues.confirmPassword)) ||
+      Boolean(errors.firstName) ||
+      Boolean(errors.lastName) ||
+      Boolean(errors.email) ||
+      (!isGoogleSignUp &&
+        (Boolean(errors.password) || Boolean(errors.confirmPassword)))
+    )
+  }
   return (
     <>
       <Text style={styles.headerText}>
@@ -109,29 +141,14 @@ const StepOne = ({
             style={{ marginBottom: 10, width: '100%' }}
             paddingVertical={40}
             paddingHorizontal={12}
-            disabled={
-              values.firstName === initialValues.firstName ||
-              values.lastName === initialValues.lastName ||
-              values.email === initialValues.email ||
-              values.password === initialValues.password ||
-              values.confirmPassword === initialValues.confirmPassword ||
-              errors.firstName ||
-              errors.lastName ||
-              errors.email ||
-              errors.password ||
-              errors.confirmPassword
-            }
+            disabled={isDisabled()}
             onPress={goToNextStep}
           >
             Continue
           </PrimaryButton>
         </View>
         <Text style={styles.textStyle}>OR </Text>
-        <View style={styles.buttonWrapper}>
-          <GoogleButton paddingVertical={98} paddingHorizontal={12}>
-            Sign Up with Google
-          </GoogleButton>
-        </View>
+        <GoogleButton setUserInfo={setUserInfo} />
       </View>
     </>
   )

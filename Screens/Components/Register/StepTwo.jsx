@@ -12,7 +12,6 @@ import DatePicker from 'react-native-modern-datepicker'
 import PrimaryButton from '../../../Utilities/UI/PrimaryButton'
 import { useTheme } from '../../../Styles/theme'
 import DropdownList from '../../../Utilities/UI/DropDownList'
-import Countries from '../../../Assets/Countries'
 import { useState, useEffect } from 'react'
 import { fetchCountryData } from '../../../Utilities/Axios/country'
 
@@ -36,10 +35,17 @@ const StepTwo = ({
   }
   const [show, setShow] = useState(false)
   const [countryData, setCountryData] = useState([])
+  const [countryNames, setCountryNames] = useState([])
   useEffect(() => {
     const loadCountryData = async () => {
       const data = await fetchCountryData()
+      const countries = data.map(country => ({
+        label: country.label,
+        value: country.label,
+      }))
+      countries.sort((a, b) => a.label.localeCompare(b.label))
       setCountryData(data)
+      setCountryNames(countries)
     }
     loadCountryData()
   }, [])
@@ -55,14 +61,14 @@ const StepTwo = ({
             textInputConfig={{
               autoCorrect: false,
               autoCapitalize: 'words',
-              placeholder: 'set Aug 21 2002',
+              placeholder: 'set Birthday Date',
               editable: false,
-              value: values.selectedStartDate,
+              value: values.startedDate,
               onPressIn: handleOnPressStartDate,
             }}
             error={
-              values.nationality !== initialValues.nationality &&
-              errors.nationality
+              values.startedDate !== initialValues.startedDate &&
+              errors.startedDate
             }
           />
         </Pressable>
@@ -114,11 +120,11 @@ const StepTwo = ({
         <DropdownList
           label='Nationality'
           placeholder='Select country'
-          data={Countries}
+          data={countryNames}
           selectedValue={values.nationality}
-          onValueChange={itemValue =>
-            setFieldValue('nationality', itemValue.value)
-          }
+          onValueChange={itemValue => {
+            setFieldValue('nationality', itemValue.label)
+          }}
           error={
             values.nationality !== initialValues.nationality &&
             errors.nationality
@@ -197,14 +203,14 @@ const StepTwo = ({
                 values.address === initialValues.address ||
                 values.city === initialValues.city ||
                 values.zipCode === initialValues.zipCode ||
-                errors.selectedStartDate ||
-                errors.gender ||
-                errors.nationality ||
-                errors.role ||
-                errors.phoneNumber ||
-                errors.address ||
-                errors.city ||
-                errors.zipCode
+                Boolean(errors.selectedStartDate) ||
+                Boolean(errors.gender) ||
+                Boolean(errors.nationality) ||
+                Boolean(errors.role) ||
+                Boolean(errors.phoneNumber) ||
+                Boolean(errors.address) ||
+                Boolean(errors.city) ||
+                Boolean(errors.zipCode)
               }
             >
               Submit

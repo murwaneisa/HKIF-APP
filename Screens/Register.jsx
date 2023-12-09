@@ -26,7 +26,7 @@ function Register() {
   const totalSteps = 2
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false)
-
+  const [isGoogleSignUp, setIsGoogleSignUp] = useState(false)
   const [openStartDatePicker, setOpenStartDatePicker] = useState(false)
 
   const today = new Date()
@@ -47,6 +47,10 @@ function Register() {
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Passwords must match')
       .required('Confirm password is required'),
+  }).when('$isGoogleSignUp', (isGoogleSignUp, schema) => {
+    return isGoogleSignUp
+      ? schema.omit(['password', 'confirmPassword'])
+      : schema
   })
 
   Yup.addMethod(Yup.object, 'phone', function (errorMessage) {
@@ -63,9 +67,7 @@ function Register() {
   })
 
   const stepTwoValidationSchema = Yup.object({
-    selectedStartDate: Yup.date()
-      .nullable()
-      .required('Birthday date is required'),
+    selectedStartDate: Yup.string().required('Birthday date is required'),
     gender: Yup.string()
       .oneOf(['Male', 'Female', 'Other'], 'Invalid gender')
       .required('Gender is required'),
@@ -114,6 +116,8 @@ function Register() {
             setPasswordVisible={setPasswordVisible}
             confirmPasswordVisible={confirmPasswordVisible}
             setConfirmPasswordVisible={setConfirmPasswordVisible}
+            isGoogleSignUp={isGoogleSignUp}
+            setIsGoogleSignUp={setIsGoogleSignUp}
             styles={styles}
             goToNextStep={() =>
               handleNextStep(formikProps.validateForm, formikProps.setTouched, {
@@ -211,7 +215,9 @@ function Register() {
               onSubmit={async (values, actions) => {
                 try {
                   const combinedPhone = `${values.countryCode}${values.phoneNumber}`
-                  const birthDateObject = new Date(values.selectedStartDate)
+                  const dateString = values.selectedStartDate
+                  const formattedDateString = dateString.replace(/\//g, '-') // Replace all '/' with '-'
+                  const birthDateObject = new Date(formattedDateString)
                   const submitValues = {
                     ...values,
                     phoneNumber: combinedPhone,
