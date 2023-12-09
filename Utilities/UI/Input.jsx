@@ -24,7 +24,8 @@ function Input({ label, textInputConfig, type, options }) {
 
   return (
     <View style={styles.inputContainer}>
-      <Text style={styles.label}>{label}</Text>
+      {label ? <Text style={styles.label}>{label}</Text> : null}
+
       <TextInput style={styles.input} {...textInputConfig} />
     </View>
   )

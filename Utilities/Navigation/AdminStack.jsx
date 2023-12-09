@@ -9,7 +9,7 @@ import Settings from '../../Screens/Settings'
 import Home from '../../Screens/Home'
 import CustomDrawer from '../../Components/CustomDrawer'
 import { useTheme } from '../../Styles/theme'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import Register from '../../Screens/Register'
 import { Octicons } from '@expo/vector-icons'
@@ -18,6 +18,9 @@ import Users from '../../Screens/Admin/Users'
 import Admins from '../../Screens/Admin/Admins'
 import Events from '../../Screens/Admin/Events'
 import Activities from '../../Screens/Admin/Activities'
+import { createStackNavigator } from '@react-navigation/stack'
+import MemberDetails from '../../Screens/Admin/MemberDetails'
+import AddEvent from '../../Components/Admin_comp/Event_comp/AddEvent'
 
 const customHeaderLeft = routeName => {
   const navigation = useNavigation()
@@ -84,8 +87,48 @@ const notificationBell = () => {
 }
 
 const Drawer = createDrawerNavigator()
+const Stack = createStackNavigator()
 
+// Create a Stack Navigator for Users and MemberDetails
 const AdminStack = () => {
+  const { theme } = useTheme()
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerLeft: () => customHeaderLeft('Users'),
+        headerStyle: {
+          backgroundColor: theme.colors.accent, // Use the theme for styling
+        },
+        headerTitleStyle: {
+          color: theme.colors.text,
+        },
+        headerTitleAlign: 'center',
+        drawerActiveBackgroundColor: theme.colors.primary200,
+        drawerActiveTintColor: theme.colors.primary900,
+        drawerInactiveTintColor: theme.colors.text,
+        drawerLabelStyle: {
+          marginLeft: -25,
+          fontFamily: 'Inter-Medium',
+          fontSize: 15,
+        },
+        drawerStyle: {
+          backgroundColor: theme.colors.background, // Set the background color for the drawer
+        },
+      }}
+    >
+      <Stack.Screen
+        name='HomeMenu'
+        options={{
+          headerShown: false,
+        }}
+        component={MenuStack}
+      />
+      <Stack.Screen name='MemberDetails' component={MemberDetails} />
+      <Stack.Screen name='AddEvent' component={AddEvent} />
+    </Stack.Navigator>
+  )
+}
+const MenuStack = () => {
   const { theme } = useTheme()
 
   return (
@@ -107,7 +150,11 @@ const AdminStack = () => {
         drawerLabelStyle: {
           marginLeft: -25,
           fontFamily: 'Inter-Medium',
-          fontSize: 15,
+          fontSize: Platform.select({
+            ios: 16,
+            android: 14,
+            wed: 20,
+          }),
         },
         drawerStyle: {
           backgroundColor: theme.colors.background, // Set the background color for the drawer
