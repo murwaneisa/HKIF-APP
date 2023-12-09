@@ -13,6 +13,8 @@ import {
 import { useTheme } from '../Styles/theme'
 import { Ionicons } from '@expo/vector-icons'
 import EventUserCard from '../Components/EventUserCard'
+import BenefitCard from '../Components/BenefitCard'
+import JointEventCard from '../Components/JointEventCard'
 
 function Event({ navigation }) {
   const { theme } = useTheme()
@@ -39,78 +41,29 @@ function Event({ navigation }) {
         </View>
 
         <View style={styles.headerSection}>
-          <View style={{ marginBottom: 15 }}>
+          <View style={styles.headerInfoWrapper}>
             <Text style={styles.title}>Movie Night</Text>
             <View style={styles.textWrapper}>
-              <Ionicons
-                name='location-outline'
-                size={17}
-                color='black'
-                style={styles.icon}
-              />
+              <Ionicons name='location-outline' style={styles.icon} />
               <Text style={styles.addressText}>Högskolan Kristianstad</Text>
             </View>
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginBottom: 15,
-            }}
-          >
+
+          <View style={styles.dateInfoWrapper}>
             <View style={styles.textWrapper}>
-              <Ionicons
-                name='calendar-outline'
-                size={16}
-                color='black'
-                style={styles.icon}
-              />
+              <Ionicons name='calendar-outline' style={styles.icon} />
               <Text style={styles.dateText}>14 dec, 2023</Text>
             </View>
             <View style={styles.textWrapper}>
-              <Ionicons
-                name='time-outline'
-                size={16}
-                color='black'
-                style={styles.icon}
-              />
+              <Ionicons name='time-outline' style={styles.icon} />
               <Text style={styles.dateText}>16:00 - 18:00</Text>
             </View>
           </View>
+
           <View style={styles.benefitsList}>
-            <View style={styles.benefitCard}>
-              <View style={styles.textWrapper}>
-                <Ionicons
-                  name='fast-food-outline'
-                  size={17}
-                  color='black'
-                  style={styles.icon}
-                />
-                <Text style={styles.benefitText}>Food</Text>
-              </View>
-            </View>
-            <View style={styles.benefitCard}>
-              <View style={styles.textWrapper}>
-                <Ionicons
-                  name='fast-food-outline'
-                  size={17}
-                  color='black'
-                  style={styles.icon}
-                />
-                <Text style={styles.benefitText}>Food</Text>
-              </View>
-            </View>
-            <View style={styles.benefitCard}>
-              <View style={styles.textWrapper}>
-                <Ionicons
-                  name='fast-food-outline'
-                  size={17}
-                  color='black'
-                  style={styles.icon}
-                />
-                <Text style={styles.benefitText}>Food</Text>
-              </View>
-            </View>
+            <BenefitCard iconName={'fast-food-outline'} title={'Food'} />
+            <BenefitCard iconName={'fast-food-outline'} title={'Food'} />
+            <BenefitCard iconName={'fast-food-outline'} title={'Food'} />
           </View>
         </View>
 
@@ -125,7 +78,7 @@ function Event({ navigation }) {
           <View style={styles.usersSectionHeader}>
             <Text style={styles.SectionTitle}>People who've joined</Text>
             <Pressable onPress={() => navigation.navigate('EventUsers')}>
-              <Text style={styles.viewAll}>VIEW ALL</Text>
+              <Text style={styles.viewAll}>View all</Text>
             </Pressable>
           </View>
           <FlatList
@@ -136,12 +89,11 @@ function Event({ navigation }) {
         </View>
       </ScrollView>
 
-      <View style={styles.ctaWrapper}>
-        <Text style={styles.ctaTitle}>Price: 300 SEK</Text>
-        <View style={styles.ctaButton}>
-          <Text style={styles.ctaButtonText}>Join event</Text>
-        </View>
-      </View>
+      <JointEventCard
+        title={'Price: 300 SEK'}
+        buttonTitle={'Join Event'}
+        onPress={() => {}}
+      />
     </View>
   )
 }
@@ -158,60 +110,6 @@ const getStyles = (theme, windowWidth) => {
         ios: 0,
         android: 0,
         web: '20%',
-      }),
-    },
-    ctaWrapper: {
-      position: 'absolute',
-      left: Platform.select({
-        ios: 0,
-        android: 0,
-        web: '20%',
-      }),
-      right: Platform.select({
-        ios: 0,
-        android: 0,
-        web: '20%',
-      }),
-      bottom: 0,
-      margin: 20,
-      backgroundColor: 'white',
-      paddingHorizontal: 15,
-      paddingVertical: 13,
-      height: Platform.select({
-        ios: 85,
-        android: 85,
-        web: 100,
-      }),
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      borderRadius: 15,
-      borderWidth: 1,
-      borderColor: 'rgba(0,0,0,0.1)',
-    },
-    ctaTitle: {
-      fontFamily: 'Inter-SemiBold',
-      fontSize: Platform.select({
-        ios: 16,
-        android: 16,
-        web: 20,
-      }),
-    },
-    ctaButton: {
-      backgroundColor: theme.colors.primary,
-      height: '100%',
-      width: '48%',
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderRadius: 12,
-    },
-    ctaButtonText: {
-      color: 'white',
-      fontFamily: 'Inter-Bold',
-      fontSize: Platform.select({
-        ios: 15,
-        android: 15,
-        web: 20,
       }),
     },
     scrollView: {
@@ -236,10 +134,20 @@ const getStyles = (theme, windowWidth) => {
     headerSection: {
       marginBottom: 20,
     },
+    headerInfoWrapper: {
+      marginBottom: 15,
+    },
+    dateInfoWrapper: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: 15,
+    },
     textWrapper: {
       flexDirection: 'row',
     },
     icon: {
+      color: 'black',
+      fontSize: 17,
       marginRight: 4,
     },
     title: {
@@ -262,15 +170,6 @@ const getStyles = (theme, windowWidth) => {
       borderTopWidth: 1,
       borderColor: 'rgba(0,0,0,0.1)',
       marginTop: 4,
-    },
-    benefitCard: {
-      paddingVertical: 5,
-      marginRight: 10,
-      minWidth: 75,
-    },
-    benefitText: {
-      fontFamily: 'Inter-Regular',
-      fontSize: 16,
     },
     descriptionSection: {
       marginBottom: 25,
@@ -296,7 +195,7 @@ const getStyles = (theme, windowWidth) => {
     viewAll: {
       color: theme.colors.primary,
       fontFamily: 'Inter-SemiBold',
-      fontSize: 13,
+      fontSize: 14,
     },
   })
 }
