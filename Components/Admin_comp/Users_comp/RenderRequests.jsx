@@ -117,6 +117,7 @@ const RenderRequests = () => {
         </View>
       ) : (
         <FlatList
+          showsVerticalScrollIndicator={false}
           data={users}
           renderItem={({ item, index }) => (
             <RequestCard key={index} user={item} />

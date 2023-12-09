@@ -82,6 +82,7 @@ const RenderCurrent = () => {
         </View>
       ) : (
         <FlatList
+          showsVerticalScrollIndicator={false}
           ListHeaderComponent={renderHeader}
           data={events}
           renderItem={({ item, index }) => (

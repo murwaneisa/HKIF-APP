@@ -18,6 +18,7 @@ import { useState } from 'react'
 import DatePickerModal from '../../../Utilities/UI/Model'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons'
+import Checkbox from 'expo-checkbox'
 
 const AddEvent = () => {
   const { theme } = useTheme()
@@ -26,6 +27,9 @@ const AddEvent = () => {
   const [startedDate, setStartedDate] = useState('12/12/2023')
   const [selectedStartDate, setSelectedStartDate] = useState('')
   const [time, setTime] = useState('')
+  const [showInput, setShowInput] = useState(false)
+  const [showCheck, setCheck] = useState(true)
+  const [isChecked, setChecked] = useState(false)
   const styles = getStyles(theme)
 
   const openDatePicker = () => {
@@ -46,11 +50,14 @@ const AddEvent = () => {
   }
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
+      style={{ flex: 1, backgroundColor: theme.colors.background2 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
     >
-      <ScrollView style={styles.container}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.container}
+      >
         {/* title */}
         <View
           style={[
@@ -98,7 +105,11 @@ const AddEvent = () => {
           </View>
           <View style={styles.startDate}>
             <View style={styles.sectionTitle}>
-              <Text style={styles.sectionText}>Starts</Text>
+              <Text
+                style={[styles.sectionText, { fontFamily: 'Inter-SemiBold' }]}
+              >
+                Starts
+              </Text>
             </View>
             <TouchableWithoutFeedback onPress={openDatePicker}>
               <View style={styles.dateField}>
@@ -135,7 +146,11 @@ const AddEvent = () => {
           </View>
           <View style={styles.startDate}>
             <View style={styles.sectionTitle}>
-              <Text style={styles.sectionText}>Ends</Text>
+              <Text
+                style={[styles.sectionText, { fontFamily: 'Inter-SemiBold' }]}
+              >
+                Ends
+              </Text>
             </View>
             <TouchableWithoutFeedback onPress={openDatePicker}>
               <View style={styles.dateField}>
@@ -188,23 +203,77 @@ const AddEvent = () => {
           />
         </View>
         {/* description */}
-        <View
-          style={[
-            styles.sectionContainer,
-            { backgroundColor: theme.colors.accent2 },
-          ]}
-        >
-          <View style={styles.sectionTitle}>
-            <Text style={styles.sectionText}>Description</Text>
-          </View>
-          <TextInput
-            placeholder='Event description'
-            placeholderTextColor={theme.colors.text}
-            style={[styles.input]}
-            /*  value={}
-          onChangeText={} */
-            multiline={true}
-          />
+        <View style={[styles.descriptionContainer]}>
+          <TouchableOpacity
+            style={[styles.descriptionTitle]}
+            onPress={() => setShowInput(true)}
+          >
+            <View>
+              <Text style={styles.sectionText}>Description</Text>
+            </View>
+          </TouchableOpacity>
+          {showInput && (
+            <TextInput
+              style={styles.descriptionInput}
+              placeholderTextColor={theme.colors.text}
+              multiline
+              placeholder='Enter your description here...'
+            />
+          )}
+        </View>
+        {/* includes */}
+        <View style={[styles.descriptionContainer]}>
+          <TouchableOpacity
+            style={[styles.descriptionTitle]}
+            onPress={() => setShowInput(true)}
+          >
+            <View>
+              <Text style={styles.sectionText}>Includes</Text>
+            </View>
+          </TouchableOpacity>
+          {showCheck && (
+            <View>
+              <View style={styles.checkboxContainer}>
+                <Checkbox
+                  style={styles.checkbox}
+                  value={isChecked}
+                  onValueChange={setChecked}
+                  color={isChecked ? theme.colors.primary : undefined}
+                />
+                <Text
+                  style={[styles.sectionText, { fontFamily: 'Inter-SemiBold' }]}
+                >
+                  Food
+                </Text>
+              </View>
+              <View style={styles.checkboxContainer}>
+                <Checkbox
+                  style={styles.checkbox}
+                  value={isChecked}
+                  onValueChange={setChecked}
+                  color={isChecked ? theme.colors.primary : undefined}
+                />
+                <Text
+                  style={[styles.sectionText, { fontFamily: 'Inter-SemiBold' }]}
+                >
+                  Drinks
+                </Text>
+              </View>
+              <View style={styles.checkboxContainer}>
+                <Checkbox
+                  style={styles.checkbox}
+                  value={isChecked}
+                  onValueChange={setChecked}
+                  color={isChecked ? theme.colors.primary : undefined}
+                />
+                <Text
+                  style={[styles.sectionText, { fontFamily: 'Inter-SemiBold' }]}
+                >
+                  Games
+                </Text>
+              </View>
+            </View>
+          )}
         </View>
         {/* model */}
         <DatePickerModal
@@ -253,7 +322,6 @@ const AddEvent = () => {
 const getStyles = theme => {
   return StyleSheet.create({
     container: {
-      flex: 1,
       backgroundColor: theme.colors.background2,
       paddingHorizontal: Platform.select({
         ios: '5%',
@@ -288,7 +356,7 @@ const getStyles = theme => {
       width: 50,
     },
     sectionText: {
-      fontFamily: 'Inter-SemiBold',
+      fontFamily: 'Inter-Bold',
       color: theme.colors.text,
     },
     dateField: {
@@ -310,7 +378,37 @@ const getStyles = theme => {
       justifyContent: 'space-around',
       marginBottom: 20,
     },
-
+    descriptionContainer: {
+      backgroundColor: theme.colors.accent2,
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+      marginVertical: 10,
+      borderRadius: 6,
+      padding: 12,
+    },
+    descriptionTitle: { width: '100%' },
+    descriptionInput: {
+      height: Platform.select({
+        ios: 200,
+        android: 150,
+        web: 250,
+      }), // Adjust the height as needed
+      width: '100%', // Adjust the width as needed
+      borderColor: theme.colors.text,
+      borderRadius: 8,
+      borderWidth: 1,
+      padding: 10,
+      marginTop: 10,
+      textAlignVertical: 'top', // This ensures text starts from the top
+    },
+    checkboxContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: 10,
+    },
+    checkbox: {
+      marginRight: 8,
+    },
     centeredView: {
       flex: 1,
       alignItems: 'center',

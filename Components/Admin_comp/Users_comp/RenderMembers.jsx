@@ -90,6 +90,7 @@ const RenderMembers = () => {
         </View>
       ) : (
         <FlatList
+          showsVerticalScrollIndicator={false}
           data={users}
           renderItem={({ item, index }) => (
             <MemberCard key={index} user={item} />
