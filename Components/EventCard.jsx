@@ -6,13 +6,15 @@ import {
   Image,
   Pressable,
   Platform,
+  Dimensions,
 } from 'react-native'
 import { useTheme } from '../Styles/theme'
 import { Ionicons } from '@expo/vector-icons'
 
 const EventCard = props => {
   const { theme } = useTheme()
-  const styles = getStyles(theme)
+  const windowWidth = Dimensions.get('window').width
+  const styles = getStyles(theme, windowWidth)
 
   return (
     <Pressable onPress={props.onPress}>
@@ -62,28 +64,50 @@ const EventCard = props => {
   )
 }
 
-const getStyles = theme =>
+const getStyles = (theme, windowWidth) =>
   StyleSheet.create({
     container: {
+      width: Platform.select({
+        ios: windowWidth - 20 * 2,
+        android: windowWidth - 15 * 2,
+        web: windowWidth / 3,
+      }),
       backgroundColor: theme.colors.primary,
       flexDirection: 'row',
-      padding: 10,
-      height: 125,
-      marginBottom: 15,
+      padding: Platform.select({
+        ios: 10,
+        android: 10,
+        web: 20,
+      }),
+      height: Platform.select({
+        ios: 125,
+        android: 125,
+        web: 200,
+      }),
       borderRadius: 15,
       shadowColor: 'black',
       shadowOpacity: 0.1,
       shadowOffset: { width: 0, height: 0 },
       shadowRadius: 8,
+      marginRight: Platform.select({
+        ios: 10,
+        android: 10,
+        web: 20,
+      }),
     },
     imageContainer: {
       width: Platform.select({
         ios: '33%',
         android: '35%',
+        web: '40%',
       }),
       height: '100%',
       borderRadius: 15,
-      marginRight: 10,
+      marginRight: Platform.select({
+        ios: 10,
+        android: 10,
+        web: 20,
+      }),
     },
     image: {
       width: '100%',
@@ -100,6 +124,7 @@ const getStyles = theme =>
       fontSize: Platform.select({
         ios: 18,
         android: 18,
+        web: 22,
       }),
       marginBottom: 5,
       color: 'white',
@@ -114,15 +139,17 @@ const getStyles = theme =>
       fontSize: Platform.select({
         ios: 16,
         android: 14,
+        web: 18,
       }),
-      marginLeft: 4,
       color: 'white',
     },
     icon: {
       fontSize: Platform.select({
         ios: 18,
         android: 16,
+        web: 19,
       }),
+      marginRight: 4,
     },
   })
 

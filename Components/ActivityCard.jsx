@@ -28,9 +28,6 @@ const ActivityCard = props => {
               style={styles.icon}
             />
           </View>
-          {/* <Text style={styles.title} numberOfLines={1}>
-            {props.title}
-          </Text> */}
           <View style={styles.buttonContainer}>
             <Pressable onPress={() => console.log('test')}>
               <MaterialIcons
@@ -53,22 +50,30 @@ const ActivityCard = props => {
 const getStyles = (theme, screenWidth) =>
   StyleSheet.create({
     item: {
-      width: (screenWidth - 15 * 2) * 0.25,
-      // height: (screenWidth - 15 * 2) * 0.25,
-      // padding: 5,
-      marginBottom: Platform.select({
-        ios: 15,
-        android: 13,
+      width: Platform.select({
+        ios: (screenWidth - 15 * 2) * 0.25,
+        android: (screenWidth - 15 * 2) * 0.25,
+        web: screenWidth * 0.08,
       }),
-      // backgroundColor: 'red',
+      marginTop: Platform.select({
+        ios: 15,
+        android: 15,
+        web: 20,
+      }),
     },
     container: {
-      height: (screenWidth - 15 * 2) * 0.25,
-      // backgroundColor: theme.colors.primary,
+      height: Platform.select({
+        ios: (screenWidth - 15 * 2) * 0.25,
+        android: (screenWidth - 15 * 2) * 0.25,
+        web: screenWidth * 0.08,
+      }),
       justifyContent: 'center',
       alignItems: 'center',
-      // padding: 10,
-      padding: 5,
+      padding: Platform.select({
+        ios: 5,
+        android: 5,
+        web: 10,
+      }),
     },
     iconContainer: {
       height: '100%',
@@ -84,12 +89,14 @@ const getStyles = (theme, screenWidth) =>
       marginBottom: Platform.select({
         ios: 4,
         android: 2,
+        web: 8,
       }),
     },
     icon: {
       fontSize: Platform.select({
         ios: 40,
         android: 32,
+        web: 55,
       }),
     },
     title: {
@@ -97,21 +104,30 @@ const getStyles = (theme, screenWidth) =>
       fontSize: Platform.select({
         ios: 16,
         android: 14,
+        web: 18,
       }),
       color: theme.colors.text,
       textAlign: 'center',
-      // backgroundColor: 'red',
     },
     buttonContainer: {
       position: 'absolute',
-      top: 10,
-      right: 10,
+      top: Platform.select({
+        ios: 10,
+        android: 10,
+        web: 10,
+      }),
+      right: Platform.select({
+        ios: 10,
+        android: 10,
+        web: 16,
+      }),
       zIndex: 1,
     },
     favoriteIcon: {
       fontSize: Platform.select({
         ios: 28,
         android: 24,
+        web: 32,
       }),
     },
   })

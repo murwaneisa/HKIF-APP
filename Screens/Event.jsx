@@ -7,6 +7,8 @@ import {
   ScrollView,
   FlatList,
   Pressable,
+  Dimensions,
+  Platform,
 } from 'react-native'
 import { useTheme } from '../Styles/theme'
 import { Ionicons } from '@expo/vector-icons'
@@ -14,7 +16,8 @@ import EventUserCard from '../Components/EventUserCard'
 
 function Event({ navigation }) {
   const { theme } = useTheme()
-  const styles = getStyles(theme)
+  const windowWidth = Dimensions.get('window').width
+  const styles = getStyles(theme, windowWidth)
 
   const data = useMemo(
     () =>
@@ -143,21 +146,42 @@ function Event({ navigation }) {
   )
 }
 
-const getStyles = theme =>
-  StyleSheet.create({
+const getStyles = (theme, windowWidth) => {
+  const tabletHeight = windowWidth >= 720 ? '5%' : '8%'
+  const tabletPadding = windowWidth >= 720 ? '10%' : '5%'
+  const webWidth = windowWidth >= 900 ? '60%' : '85%'
+
+  return StyleSheet.create({
     container: {
       flex: 1,
+      paddingHorizontal: Platform.select({
+        ios: 0,
+        android: 0,
+        web: '20%',
+      }),
     },
     ctaWrapper: {
       position: 'absolute',
-      left: 0,
-      right: 0,
+      left: Platform.select({
+        ios: 0,
+        android: 0,
+        web: '20%',
+      }),
+      right: Platform.select({
+        ios: 0,
+        android: 0,
+        web: '20%',
+      }),
       bottom: 0,
       margin: 20,
       backgroundColor: 'white',
       paddingHorizontal: 15,
       paddingVertical: 13,
-      height: 85,
+      height: Platform.select({
+        ios: 85,
+        android: 85,
+        web: 100,
+      }),
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -167,7 +191,11 @@ const getStyles = theme =>
     },
     ctaTitle: {
       fontFamily: 'Inter-SemiBold',
-      fontSize: 16,
+      fontSize: Platform.select({
+        ios: 16,
+        android: 16,
+        web: 20,
+      }),
     },
     ctaButton: {
       backgroundColor: theme.colors.primary,
@@ -180,14 +208,22 @@ const getStyles = theme =>
     ctaButtonText: {
       color: 'white',
       fontFamily: 'Inter-Bold',
-      fontSize: 15,
+      fontSize: Platform.select({
+        ios: 15,
+        android: 15,
+        web: 20,
+      }),
     },
     scrollView: {
       padding: 20,
     },
     imageContainer: {
       width: '100%',
-      height: 225,
+      height: Platform.select({
+        ios: 225,
+        android: 225,
+        web: 450,
+      }),
       borderRadius: 25,
       marginBottom: 15,
       backgroundColor: 'rgba(0,0,0,0.2)',
@@ -263,5 +299,6 @@ const getStyles = theme =>
       fontSize: 13,
     },
   })
+}
 
 export default Event
