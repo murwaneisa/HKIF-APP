@@ -144,20 +144,6 @@ const AuthStack = () => {
           ),
         }}
       />
-      <Drawer.Screen
-        name='Event'
-        component={Event}
-        options={{
-          drawerLabel: () => null, // Hide the label in the drawer
-        }}
-      />
-      <Drawer.Screen
-        name='Activity'
-        component={Activity}
-        options={{
-          drawerLabel: () => null, // Hide the label in the drawer
-        }}
-      />
     </Drawer.Navigator>
   )
 }
