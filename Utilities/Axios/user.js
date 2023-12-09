@@ -36,3 +36,20 @@ export const registerUser = async userData => {
     throw error
   }
 }
+export const googleLogin = async (clientId, idToken) => {
+  try {
+    const response = await baseInstance.post(`${userSuffix}/google-login`, {
+      clientId: clientId,
+      idToken: idToken,
+    })
+    const { userId, access, refresh } = response.data
+
+    await storeAccessToken(access)
+    await storeRefreshToken(refresh)
+
+    return userId
+  } catch (error) {
+    console.error('Google Login failed:', error)
+    // throw error // Rethrow the error for further handling if necessary
+  }
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   View,
   Text,
@@ -17,6 +17,7 @@ import { validateEmail, dismissKeyboard } from '../Utilities/UI/Form'
 import { useDispatch } from 'react-redux'
 import { loginAndSetUser } from '../Utilities/Redux/Actions/userActions'
 import { loginAndSetAdmin } from '../Utilities/Redux/Actions/adminActions'
+import { googleLogin } from '../Utilities/Axios/user'
 
 function LoginForm({ navigation }) {
   const [showAdminButton, setShowAdminButton] = useState(false)
@@ -27,6 +28,8 @@ function LoginForm({ navigation }) {
 
   const [email, setEmail] = useState('')
   const [isEmailValid, setIsEmailValid] = useState(true)
+  const [userInfo, setUserInfo] = useState(null)
+
   const handleEmailChange = text => {
     setEmail(text)
     setIsEmailValid(validateEmail(text))
@@ -54,6 +57,17 @@ function LoginForm({ navigation }) {
     )
   }
 
+  useEffect(() => {
+    if (userInfo) {
+      const clientId = Platform.select({
+        ios: process.env.IOS_CLIENT_ID,
+        android: process.env.ANDROID_CLIENT_ID,
+        default: process.env.WEB_CLIENT_ID, // Default to web client ID
+      })
+      googleLogin(clientId, userInfo.idToken)
+      navigation.navigate('Home')
+    }
+  }, [userInfo])
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -142,11 +156,7 @@ function LoginForm({ navigation }) {
                 </PrimaryButton>
               </View>
             )}
-            <View style={styles.buttonWrapper}>
-              <GoogleButton paddingVertical={98} paddingHorizontal={12}>
-                Login with Google
-              </GoogleButton>
-            </View>
+            <GoogleButton setUserInfo={setUserInfo}></GoogleButton>
             <Text style={styles.textStyle}>Register</Text>
           </View>
         </View>

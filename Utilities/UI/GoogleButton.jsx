@@ -21,9 +21,8 @@ function GoogleButton({ setUserInfo }) {
           await GoogleSignin.hasPlayServices()
           const userInfo = await GoogleSignin.signIn()
           setUserInfo(userInfo)
-          console.log(JSON.stringify(userInfo, null, 2))
+          // console.log(JSON.stringify(userInfo, null, 2))
         } catch (error) {
-          console.error(error)
           console.error(JSON.stringify(error))
           // if (error.code === statusCodes.SIGN_IN_CANCELLED) {
           //   // user cancelled the login flow
