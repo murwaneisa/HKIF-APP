@@ -16,6 +16,49 @@ import { Octicons } from '@expo/vector-icons'
 import Organization from '../../Screens/Organization'
 import Event from '../../Screens/Event'
 import Activity from '../../Screens/Activity'
+import { createStackNavigator } from '@react-navigation/stack'
+import EventUsers from '../../Screens/EventUsers'
+
+const customHeaderLeft = routeName => {
+  const navigation = useNavigation()
+  const { theme } = useTheme()
+
+  if (routeName === 'Home') {
+    return (
+      <View
+        style={{
+          marginLeft: 15,
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100%',
+        }}
+      >
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
+          <Ionicons name='menu' size={38} color={theme.colors.text} />
+        </TouchableOpacity>
+      </View>
+    )
+  } else {
+    return (
+      <View
+        style={{
+          marginLeft: 15,
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100%',
+        }}
+      >
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons
+            name='arrow-back-outline'
+            size={38}
+            color={theme.colors.text}
+          />
+        </TouchableOpacity>
+      </View>
+    )
+  }
+}
 
 const hamburgerMenu = () => {
   const navigation = useNavigation()
@@ -60,8 +103,50 @@ const notificationBell = () => {
 }
 
 const Drawer = createDrawerNavigator()
+const Stack = createStackNavigator()
 
-const AuthStack = () => {
+// Create a Stack Navigator for Users and MemberDetails
+const UserStack = () => {
+  const { theme } = useTheme()
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerLeft: () => customHeaderLeft('Users'),
+        headerStyle: {
+          backgroundColor: theme.colors.accent, // Use the theme for styling
+        },
+        headerTitleStyle: {
+          color: theme.colors.text,
+        },
+        headerTitleAlign: 'center',
+        drawerActiveBackgroundColor: theme.colors.primary200,
+        drawerActiveTintColor: theme.colors.primary900,
+        drawerInactiveTintColor: theme.colors.text,
+        drawerLabelStyle: {
+          marginLeft: -25,
+          fontFamily: 'Inter-Medium',
+          fontSize: 15,
+        },
+        drawerStyle: {
+          backgroundColor: theme.colors.background, // Set the background color for the drawer
+        },
+      }}
+    >
+      <Stack.Screen
+        name='HomeMenu'
+        options={{
+          headerShown: false,
+        }}
+        component={MenuStack}
+      />
+      <Stack.Screen name='Event' component={Event} />
+      <Stack.Screen name='Activity' component={Activity} />
+      <Stack.Screen name='EventUsers' component={EventUsers} />
+    </Stack.Navigator>
+  )
+}
+
+const MenuStack = () => {
   const { theme } = useTheme()
 
   return (
@@ -148,4 +233,4 @@ const AuthStack = () => {
   )
 }
 
-export default AuthStack
+export default UserStack
