@@ -90,6 +90,7 @@ const RenderMembers = () => {
         </View>
       ) : (
         <FlatList
+          showsVerticalScrollIndicator={false}
           data={users}
           renderItem={({ item, index }) => (
             <MemberCard key={index} user={item} />
@@ -108,7 +109,6 @@ const getStyles = (theme, windowWidth) => {
     container: {
       width: '100%',
       backgroundColor: theme.colors.background2,
-
       alignItems: Platform.select({
         android: 'center',
         ios: 'center',
