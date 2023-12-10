@@ -60,12 +60,12 @@ const RenderCurrent = () => {
 
   const renderHeader = () => (
     <View style={styles.titleContainer}>
-      <Text style={styles.header}>5 Current Event</Text>
+      <Text style={styles.header}>(5) Current Event</Text>
       <TouchableOpacity
         style={styles.subtitleContainer}
         onPress={() => navigation.navigate('AddEvent')}
       >
-        <AntDesign name='pluscircleo' size={24} color={theme.colors.primary} />
+        <AntDesign name='pluscircleo' size={22} color={theme.colors.primary} />
         <Text style={styles.subHeader}>Add Event</Text>
       </TouchableOpacity>
     </View>

@@ -19,6 +19,7 @@ import DatePickerModal from '../../../Utilities/UI/Model'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons'
 import Checkbox from 'expo-checkbox'
+import { MaterialIcons } from '@expo/vector-icons'
 
 const AddEvent = () => {
   const { theme } = useTheme()
@@ -72,6 +73,28 @@ const AddEvent = () => {
             placeholderTextColor={theme.colors.text}
             style={styles.input}
           />
+        </View>
+        {/* image */}
+        <View
+          style={[
+            styles.descriptionInput,
+            {
+              backgroundColor: theme.colors.accent2,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderWidth: 0,
+              borderColor: theme.colors.text,
+            },
+          ]}
+        >
+          <MaterialIcons
+            name='add-a-photo'
+            size={28}
+            color={theme.colors.text}
+          />
+          <Text style={[styles.sectionText, { marginTop: 8 }]}>
+            Upload event image
+          </Text>
         </View>
         {/* date and time */}
         <View style={styles.dateTimeContainer}>
@@ -275,6 +298,15 @@ const AddEvent = () => {
             </View>
           )}
         </View>
+        {/*buttons  */}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: theme.colors.primary }]}
+          >
+            <Text style={styles.buttonText}>Create Event</Text>
+          </TouchableOpacity>
+        </View>
+
         {/* model */}
         <DatePickerModal
           isOpen={openStartDatePicker}
@@ -434,6 +466,20 @@ const getStyles = theme => {
       shadowOpacity: 0.25,
       shadowRadius: 4,
       elevation: 5,
+    },
+    buttonContainer: {
+      marginVertical: 10,
+      justifyContent: 'space-between',
+    },
+    button: {
+      width: '100%',
+      borderRadius: 8,
+      padding: 12,
+      alignItems: 'center',
+    },
+    buttonText: {
+      color: '#ffffff',
+      fontWeight: 'bold',
     },
   })
 }

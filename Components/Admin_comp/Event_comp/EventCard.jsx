@@ -46,7 +46,7 @@ const ActivityCard = ({ event, previous }) => {
         <TouchableOpacity
           style={[styles.button, { backgroundColor: theme.colors.primary }]}
         >
-          <Text style={styles.buttonText}>View</Text>
+          <Text style={styles.buttonText}>{previous ? 'Publish' : 'View'}</Text>
         </TouchableOpacity>
         {previous ? (
           <TouchableOpacity style={[styles.button, { backgroundColor: 'red' }]}>
