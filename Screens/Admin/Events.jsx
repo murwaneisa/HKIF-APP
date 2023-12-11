@@ -112,7 +112,7 @@ const getStyles = (theme, windowWidth) => {
 
     buttonContainer: {
       flexDirection: 'row',
-      backgroundColor: theme.colors.accent,
+      backgroundColor: theme.colors.accent2,
       borderRadius: 8,
 
       height: Platform.select({
