@@ -22,7 +22,6 @@ import { FontAwesome5 } from '@expo/vector-icons'
 const AddEvent = ({ route, navigation }) => {
   const { theme } = useTheme()
   const { eventId } = route.params || {}
-
   const [openStartDatePicker, setOpenStartDatePicker] = useState(false)
   const [pickerType, setPickerType] = useState('date') // New state for picker type
   const [startedDate, setStartedDate] = useState('12/12/2023')
@@ -35,11 +34,6 @@ const AddEvent = ({ route, navigation }) => {
 
   const openDatePicker = () => {
     setPickerType('date')
-    setOpenStartDatePicker(true)
-  }
-
-  const openTimePicker = () => {
-    setPickerType('time')
     setOpenStartDatePicker(true)
   }
 
@@ -376,9 +370,9 @@ const AddEvent = ({ route, navigation }) => {
           </TouchableOpacity>
           {eventId ? (
             <TouchableOpacity
-              style={[styles.button, { backgroundColor: theme.colors.error }]}
+              style={[styles.button, { backgroundColor: 'red' }]}
             >
-              <Text style={styles.buttonText}>Delete</Text>
+              <Text style={styles.buttonText}>Delete Event</Text>
             </TouchableOpacity>
           ) : null}
         </View>
@@ -538,7 +532,6 @@ const getStyles = theme => {
       width: '100%',
       borderRadius: 8,
       padding: 12,
-      marginVertical: 10,
       alignItems: 'center',
     },
     buttonText: {
