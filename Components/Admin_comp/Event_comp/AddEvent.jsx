@@ -21,8 +21,10 @@ import { Entypo } from '@expo/vector-icons'
 import Checkbox from 'expo-checkbox'
 import { MaterialIcons } from '@expo/vector-icons'
 
-const AddEvent = () => {
+const AddEvent = ({ route, navigation }) => {
   const { theme } = useTheme()
+  const { eventId } = route.params || {}
+
   const [openStartDatePicker, setOpenStartDatePicker] = useState(false)
   const [pickerType, setPickerType] = useState('date') // New state for picker type
   const [startedDate, setStartedDate] = useState('12/12/2023')
@@ -303,8 +305,17 @@ const AddEvent = () => {
           <TouchableOpacity
             style={[styles.button, { backgroundColor: theme.colors.primary }]}
           >
-            <Text style={styles.buttonText}>Create Event</Text>
+            <Text style={styles.buttonText}>
+              {eventId ? 'Edit' : 'Create event'}
+            </Text>
           </TouchableOpacity>
+          {eventId ? (
+            <TouchableOpacity
+              style={[styles.button, { backgroundColor: 'red' }]}
+            >
+              <Text style={styles.buttonText}>Delete Event</Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
 
         {/* model */}
@@ -475,6 +486,7 @@ const getStyles = theme => {
       width: '100%',
       borderRadius: 8,
       padding: 12,
+      marginVertical: 10,
       alignItems: 'center',
     },
     buttonText: {
