@@ -4,17 +4,13 @@ import {
   StyleSheet,
   Platform,
   TextInput,
-  Modal,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   KeyboardAvoidingView,
   ScrollView,
   Pressable,
 } from 'react-native'
 import React from 'react'
 import { useTheme } from '../../../Styles/theme'
-import Input from '../../../Utilities/UI/Input'
-import DatePicker from 'react-native-modern-datepicker'
 import { useState } from 'react'
 import DatePickerModal from '../../../Utilities/UI/Model'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
