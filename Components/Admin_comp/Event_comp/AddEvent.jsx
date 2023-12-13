@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   ScrollView,
+  Pressable,
 } from 'react-native'
 import React from 'react'
 import { useTheme } from '../../../Styles/theme'
@@ -136,38 +137,20 @@ const AddEvent = ({ route, navigation }) => {
                 Starts
               </Text>
             </View>
-            <TouchableWithoutFeedback onPress={openDatePicker}>
-              <View style={styles.dateField}>
-                <TextInput
-                  autoCorrect={false}
-                  autoCapitalize='words'
-                  placeholder='Aug 21 2002'
-                  value={selectedStartDate}
-                  placeholderTextColor={theme.colors.primary}
-                  editable={false}
-                  style={[
-                    styles.input,
-                    { backgroundColor: theme.colors.accent },
-                  ]}
-                />
-              </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={openTimePicker}>
-              <View style={styles.dateField}>
-                <TextInput
-                  autoCorrect={false}
-                  autoCapitalize='words'
-                  placeholder='10:00'
-                  placeholderTextColor={theme.colors.primary}
-                  value={time}
-                  editable={false}
-                  style={[
-                    styles.input,
-                    { backgroundColor: theme.colors.accent },
-                  ]}
-                />
-              </View>
-            </TouchableWithoutFeedback>
+            <View style={[styles.dateField]}>
+              <Pressable onPress={openDatePicker} style={styles.pressable}>
+                <Text style={styles.inputText}>
+                  {selectedStartDate || 'Aug 21 2002'}
+                </Text>
+              </Pressable>
+            </View>
+            <View style={styles.dateField}>
+              <Pressable onPress={openTimePicker} style={styles.pressable}>
+                <View style={[styles.inputContainer, { borderRadius: 6 }]}>
+                  <Text style={styles.inputText}>{time || '10:00'}</Text>
+                </View>
+              </Pressable>
+            </View>
           </View>
           <View style={styles.startDate}>
             <View style={styles.sectionTitle}>
@@ -177,38 +160,22 @@ const AddEvent = ({ route, navigation }) => {
                 Ends
               </Text>
             </View>
-            <TouchableWithoutFeedback onPress={openDatePicker}>
-              <View style={styles.dateField}>
-                <TextInput
-                  autoCorrect={false}
-                  autoCapitalize='words'
-                  placeholder='Aug 21 2002'
-                  placeholderTextColor={theme.colors.primary}
-                  value={selectedStartDate}
-                  editable={false}
-                  style={[
-                    styles.input,
-                    { backgroundColor: theme.colors.accent },
-                  ]}
-                />
-              </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={openTimePicker}>
-              <View style={styles.dateField}>
-                <TextInput
-                  autoCorrect={false}
-                  autoCapitalize='words'
-                  placeholder='10:00'
-                  placeholderTextColor={theme.colors.primary}
-                  value={time}
-                  editable={false}
-                  style={[
-                    styles.input,
-                    { backgroundColor: theme.colors.accent },
-                  ]}
-                />
-              </View>
-            </TouchableWithoutFeedback>
+            <View style={styles.dateField}>
+              <Pressable onPress={openDatePicker} style={styles.pressable}>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.inputText}>
+                    {selectedStartDate || 'Aug 21 2002'}
+                  </Text>
+                </View>
+              </Pressable>
+            </View>
+            <View style={styles.dateField}>
+              <Pressable onPress={openTimePicker} style={styles.pressable}>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.inputText}>{time || '11.00'}</Text>
+                </View>
+              </Pressable>
+            </View>
           </View>
         </View>
         {/* location */}
@@ -320,43 +287,14 @@ const AddEvent = ({ route, navigation }) => {
 
         {/* model */}
         <DatePickerModal
+          startedDate={startedDate}
           isOpen={openStartDatePicker}
           onClose={handleCloseModal}
-        >
-          {pickerType === 'date' && (
-            <DatePicker
-              mode='calendar'
-              selected={startedDate}
-              onDateChanged={handleChangeStartDate}
-              onSelectedChange={date => setSelectedStartDate(date)}
-              options={{
-                backgroundColor: '#080516',
-                textHeaderColor: theme.colors.primary,
-                textDefaultColor: '#FFFFFF',
-                selectedTextColor: '#FFF',
-                mainColor: theme.colors.primary,
-                textSecondaryColor: '#FFFFFF',
-                borderColor: 'rgba(122, 146, 165, 0.1)',
-              }}
-            />
-          )}
-          {pickerType === 'time' && (
-            <DatePicker
-              mode='time'
-              minuteInterval={3}
-              onTimeChange={selectedTime => setTime(selectedTime)}
-              options={{
-                backgroundColor: '#080516',
-                textHeaderColor: theme.colors.primary,
-                textDefaultColor: '#FFFFFF',
-                selectedTextColor: '#FFF',
-                mainColor: theme.colors.primary,
-                textSecondaryColor: '#FFFFFF',
-                borderColor: 'rgba(122, 146, 165, 0.1)',
-              }}
-            />
-          )}
-        </DatePickerModal>
+          handleChangeStartDate={handleChangeStartDate}
+          onSelectedChange={date => setSelectedStartDate(date)}
+          selectedTime={selectedTime => setTime(selectedTime)}
+          pickerType={pickerType}
+        ></DatePickerModal>
       </ScrollView>
     </KeyboardAvoidingView>
   )
@@ -402,6 +340,15 @@ const getStyles = theme => {
       fontFamily: 'Inter-Bold',
       color: theme.colors.text,
     },
+    pressable: {
+      borderRadius: 6,
+      backgroundColor: theme.colors.accent,
+      padding: Platform.select({
+        ios: 10,
+        android: 6,
+        web: 16,
+      }),
+    },
     dateField: {
       marginHorizontal: 8,
     },
@@ -413,7 +360,11 @@ const getStyles = theme => {
         android: 6,
         web: 16,
       }),
-      borderRadius: 6,
+      fontSize: 18,
+    },
+    inputText: {
+      color: theme.colors.text,
+
       fontSize: 18,
     },
     DatePickerButton: {
