@@ -15,9 +15,11 @@ import PrimaryButton from '../Utilities/UI/PrimaryButton'
 import GoogleButton from '../Utilities/UI/GoogleButton'
 import { validateEmail, dismissKeyboard } from '../Utilities/UI/Form'
 import { useDispatch } from 'react-redux'
-import { loginAndSetUser } from '../Utilities/Redux/Actions/userActions'
+import {
+  loginAndSetUser,
+  loginAndSetUserWithGoogle,
+} from '../Utilities/Redux/Actions/userActions'
 import { loginAndSetAdmin } from '../Utilities/Redux/Actions/adminActions'
-import { googleLogin } from '../Utilities/Axios/user'
 
 function LoginForm({ navigation }) {
   const [showAdminButton, setShowAdminButton] = useState(false)
@@ -64,7 +66,7 @@ function LoginForm({ navigation }) {
         android: process.env.ANDROID_CLIENT_ID,
         default: process.env.WEB_CLIENT_ID, // Default to web client ID
       })
-      googleLogin(clientId, userInfo.idToken)
+      loginAndSetUserWithGoogle(clientId, userInfo.idToken)
       navigation.navigate('Home')
     }
   }, [userInfo])
