@@ -1,11 +1,11 @@
 import { View, Text, Pressable, Modal, TouchableOpacity } from 'react-native'
 import React from 'react'
-import Input from '../../../Utilities/UI/Input'
+import Input from '../../Utilities/UI/Input'
 import DatePicker from 'react-native-modern-datepicker'
-import PrimaryButton from '../../../Utilities/UI/PrimaryButton'
-import { useTheme } from '../../../Styles/theme'
-import DropdownList from '../../../Utilities/UI/DropDownList'
-import Countries from '../../../Assets/Countries'
+import PrimaryButton from '../../Utilities/UI/PrimaryButton'
+import { useTheme } from '../../Styles/theme'
+import DropdownList from '../../Utilities/UI/DropDownList'
+import Countries from '../../Assets/Countries'
 
 const StepTwo = ({
   styles,
