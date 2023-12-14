@@ -93,7 +93,7 @@ const getStyles = (theme, windowWidth) => {
 
   return StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.backgroundPrimary,
       paddingHorizontal: Platform.select({
         ios: 0,
         android: 0,

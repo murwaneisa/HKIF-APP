@@ -94,13 +94,13 @@ const getStyles = (theme, windowWidth) => {
   const webWidth = windowWidth >= 900 ? '60%' : '85%'
   return StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.background2,
+      backgroundColor: theme.colors.backgroundSecondary,
       paddingBottom: 15,
     },
     titleContainer: {
       flexDirection: 'row',
       paddingHorizontal: tabletPadding, // This adds padding on the sides based on device width
-      backgroundColor: theme.colors.background2,
+      backgroundColor: theme.colors.backgroundSecondary,
       alignItems: 'flex-start', // This aligns children to the start along the cross axis
       justifyContent: 'space-between',
     },
@@ -112,7 +112,7 @@ const getStyles = (theme, windowWidth) => {
         web: 25,
       }),
       paddingBottom: 2,
-      color: theme.colors.text2,
+      color: theme.colors.title,
     },
     subHeader: {
       fontFamily: 'Inter-SemiBold',

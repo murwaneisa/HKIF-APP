@@ -166,7 +166,7 @@ const getStyles = (theme, screenWidth) =>
       flex: 1,
       alignItems: 'center', // This will horizontally center the child elements
       justifyContent: 'center',
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.backgroundPrimary,
     },
     imageContainer: {
       height: '48%', // This sets the height to 60% of the parent container

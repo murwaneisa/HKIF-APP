@@ -50,7 +50,7 @@ const AddEvent = () => {
   }
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1, backgroundColor: theme.colors.background2 }}
+      style={{ flex: 1, backgroundColor: theme.colors.backgroundSecondary }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
     >
@@ -322,7 +322,7 @@ const AddEvent = () => {
 const getStyles = theme => {
   return StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.background2,
+      backgroundColor: theme.colors.backgroundSecondary,
       paddingHorizontal: Platform.select({
         ios: '5%',
         android: '5%',

@@ -83,7 +83,7 @@ const getStyles = (theme, windowWidth, previous) => {
       fontWeight: 'bold',
       fontSize: 15,
       marginBottom: 8,
-      color: theme.colors.text2,
+      color: theme.colors.title,
     },
     dateContainer: {
       flexDirection: 'row',

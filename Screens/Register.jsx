@@ -122,7 +122,7 @@ const getStyles = theme =>
         web: 'center',
       }),
       paddingHorizontal: '6%',
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.backgroundPrimary,
     },
     inputContainer: {
       flex: 1,

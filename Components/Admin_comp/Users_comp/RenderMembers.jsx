@@ -108,7 +108,7 @@ const getStyles = (theme, windowWidth) => {
   return StyleSheet.create({
     container: {
       width: '100%',
-      backgroundColor: theme.colors.background2,
+      backgroundColor: theme.colors.backgroundSecondary,
       alignItems: Platform.select({
         android: 'center',
         ios: 'center',
@@ -123,7 +123,7 @@ const getStyles = (theme, windowWidth) => {
         web: webWidth,
       }), // This ensures the titleContainer takes full width
       paddingHorizontal: tabletPadding, // This adds padding on the sides based on device width
-      backgroundColor: theme.colors.background2,
+      backgroundColor: theme.colors.backgroundSecondary,
       alignItems: 'flex-start', // This aligns children to the start along the cross axis
     },
     header: {
@@ -134,7 +134,7 @@ const getStyles = (theme, windowWidth) => {
         web: 25,
       }),
       paddingBottom: 2,
-      color: theme.colors.text2,
+      color: theme.colors.title,
     },
     subHeader: {
       fontFamily: 'Inter-Regular',
