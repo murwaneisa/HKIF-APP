@@ -32,7 +32,7 @@ function Home({ navigation }) {
   const styles = getStyles(theme, windowWidth)
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.announcementWrapper}>
         <AnnouncementCard
           message={'Swimming is canceled today the fox is in the forest'}

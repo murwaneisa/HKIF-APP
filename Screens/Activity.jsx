@@ -59,7 +59,7 @@ function Activity({ navigation }) {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.imageContainer}>
           <Image
             style={styles.image}
