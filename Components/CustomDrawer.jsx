@@ -78,7 +78,7 @@ const CustomDrawer = props => {
         <View
           style={{
             flex: 1,
-            backgroundColor: theme.colors.background,
+            backgroundColor: theme.colors.backgroundPrimary,
             paddingTop: Platform.select({
               ios: 10,
               android: 8,

@@ -112,7 +112,7 @@ const AdminStack = () => {
           fontSize: 15,
         },
         drawerStyle: {
-          backgroundColor: theme.colors.background, // Set the background color for the drawer
+          backgroundColor: theme.colors.backgroundPrimary, // Set the background color for the drawer
         },
       }}
     >
@@ -157,7 +157,7 @@ const MenuStack = () => {
           }),
         },
         drawerStyle: {
-          backgroundColor: theme.colors.background, // Set the background color for the drawer
+          backgroundColor: theme.colors.backgroundPrimary, // Set the background color for the drawer
         },
       }}
     >

@@ -54,7 +54,7 @@ const getStyles = theme =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.backgroundPrimary,
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -64,7 +64,7 @@ const getStyles = theme =>
       padding: '5%',
     },
     buttonsContainer: {
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.backgroundPrimary,
       alignItems: 'center',
       justifyContent: 'center',
     },

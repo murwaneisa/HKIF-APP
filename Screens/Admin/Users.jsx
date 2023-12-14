@@ -98,7 +98,7 @@ const getStyles = (theme, windowWidth) => {
   return StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.colors.background2,
+      backgroundColor: theme.colors.backgroundSecondary,
       alignItems: 'center',
     },
     buttonContainer: {

@@ -39,17 +39,21 @@ export const FontLoader = ({ children }) => {
 export const ThemeContext = createContext()
 const lightTheme = {
   colors: {
-    primary: '#669D58',
+    primary: '#669D58', //actions buttons and text
     primary900: '#466C3D',
     primary500: '#466C3D',
-    primary200: '#A9CAA1',
+    primary200: '#A9CAA1', //disable actions buttons  and navigation selection
     secondary: '#3B3D3B',
     accent: '#F5F5F5',
     accent2: '#FFFFFF',
-    background: '#FFFFFF',
-    background2: '#e5e5e5',
+    backgroundPrimary: '#FFFFFF',
+    backgroundSecondary: '#e5e5e5',
     text: '#6B6B6B',
-    text2: '#282525',
+    title: '#282525',
+    border: 'rgba(0,0,0,0.1)',
+    success: '#27ae60',
+    warning: '#f39c12',
+    error: '#e74c3c',
   },
 }
 
@@ -62,10 +66,14 @@ const darkTheme = {
     secondary: '#3B3D3B',
     accent: '#3B3D3B',
     accent2: '#3B3D3B',
-    background: '#121212',
-    background2: '#282525',
+    backgroundPrimary: '#282525',
+    backgroundSecondary: '#282525',
     text: '#C4C4C4',
-    text2: '#ffffff',
+    title: '#ffffff',
+    border: 'rgba(255,255,255,0.1)',
+    success: '#27ae60',
+    warning: '#f39c12',
+    error: '#e74c3c',
   },
 }
 
