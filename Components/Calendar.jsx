@@ -61,10 +61,10 @@ const getStyles = theme =>
       borderRadius: 8,
       flexDirection: 'column',
       alignItems: 'center',
-      backgroundColor: 'rgba(0,0,0,0.25)',
+      backgroundColor: theme.colors.secondary,
     },
     todayItem: {
-      backgroundColor: 'grey',
+      // backgroundColor: theme.colors.primary500,
     },
     activeItem: {
       backgroundColor: theme.colors.primary,
@@ -78,7 +78,7 @@ const getStyles = theme =>
     itemDate: {
       fontSize: 16,
       fontWeight: '600',
-      color: '#fff',
+      color: 'white',
     },
   })
 

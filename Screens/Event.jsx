@@ -12,9 +12,9 @@ import {
 } from 'react-native'
 import { useTheme } from '../Styles/theme'
 import { Ionicons } from '@expo/vector-icons'
-import EventUserCard from '../Components/EventUserCard'
 import BenefitCard from '../Components/BenefitCard'
 import JointEventCard from '../Components/JointEventCard'
+import UserCard from '../Components/UserCard'
 
 function Event({ navigation }) {
   const { theme } = useTheme()
@@ -82,7 +82,7 @@ function Event({ navigation }) {
           </View>
         }
         data={data}
-        renderItem={({ item }) => <EventUserCard />}
+        renderItem={({ item }) => <UserCard />}
         keyExtractor={i => i}
         showsVerticalScrollIndicator={false}
         ListFooterComponent={<View style={{ marginBottom: 110 }} />}
@@ -154,7 +154,7 @@ const getStyles = (theme, windowWidth) => {
       fontFamily: 'Inter-Bold',
       fontSize: 24,
       marginBottom: 7,
-      color: theme.colors.text,
+      color: theme.colors.text2,
     },
     addressText: {
       fontFamily: 'Inter-Regular',
@@ -171,7 +171,7 @@ const getStyles = (theme, windowWidth) => {
       paddingVertical: 10,
       borderBottomWidth: 1,
       borderTopWidth: 1,
-      borderColor: theme.colors.accent,
+      borderColor: theme.colors.border,
       marginTop: 4,
     },
     descriptionSection: {
@@ -191,7 +191,7 @@ const getStyles = (theme, windowWidth) => {
     SectionTitle: {
       fontFamily: 'Inter-Bold',
       fontSize: 20,
-      color: theme.colors.text,
+      color: theme.colors.text2,
     },
     viewAll: {
       color: theme.colors.primary,

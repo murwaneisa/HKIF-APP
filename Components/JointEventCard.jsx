@@ -44,7 +44,7 @@ const getStyles = theme =>
       alignItems: 'center',
       borderRadius: 15,
       borderWidth: 1,
-      borderColor: theme.colors.accent,
+      borderColor: theme.colors.border,
     },
     title: {
       fontFamily: 'Inter-SemiBold',
@@ -53,7 +53,7 @@ const getStyles = theme =>
         android: 16,
         web: 20,
       }),
-      color: theme.colors.text,
+      color: theme.colors.text2,
     },
     button: {
       backgroundColor: theme.colors.primary,
