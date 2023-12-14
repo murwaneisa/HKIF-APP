@@ -23,7 +23,7 @@ const EventCard = props => {
           <Image
             style={styles.image}
             source={require('../Assets/images/movie.jpg')}
-            resizeMode='fit'
+            resizeMode='stretch'
           />
         </View>
         <View style={styles.content}>

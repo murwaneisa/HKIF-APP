@@ -11,6 +11,7 @@ import { useTheme } from '../Styles/theme'
 import EventCard from '../Components/EventCard'
 import ActivityCard from '../Components/ActivityCard'
 import AnnouncementCard from '../Components/AnnouncementCard'
+import ImagePickerExample from '../Components/ImagePickerExample'
 
 const data = [
   { key: '1', title: 'Strength', favorite: true, icon: 'basketball' },
@@ -33,6 +34,9 @@ function Home({ navigation }) {
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      {/* <ImagePickerExample>
+        <View></View>
+      </ImagePickerExample> */}
       <View style={styles.announcementWrapper}>
         <AnnouncementCard
           message={'Swimming is canceled today the fox is in the forest'}
@@ -40,11 +44,9 @@ function Home({ navigation }) {
       </View>
       <View style={styles.sectionContainer}>
         <Text style={styles.sectionTitle}>Upcoming Event</Text>
-        <ScrollView horizontal style={styles.events}>
+        <View style={styles.events}>
           <EventCard onPress={() => navigation.navigate('Event')} />
-          <EventCard onPress={() => navigation.navigate('Event')} />
-          <EventCard onPress={() => navigation.navigate('Event')} />
-        </ScrollView>
+        </View>
       </View>
       <View style={styles.sectionContainer}>
         <Text style={styles.sectionTitleFavorites}>Favorites</Text>
@@ -147,7 +149,7 @@ const getStyles = (theme, windowWidth) => {
     },
     events: {
       width: '100%',
-      paddingLeft: 20,
+      paddingHorizontal: 20,
     },
     activities: {
       marginHorizontal: Platform.select({
