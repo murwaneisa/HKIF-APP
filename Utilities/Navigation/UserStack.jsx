@@ -105,7 +105,6 @@ const notificationBell = () => {
 const Drawer = createDrawerNavigator()
 const Stack = createStackNavigator()
 
-// Create a Stack Navigator for Users and MemberDetails
 const UserStack = () => {
   const { theme } = useTheme()
   return (
@@ -140,7 +139,13 @@ const UserStack = () => {
         component={MenuStack}
       />
       <Stack.Screen name='Event' component={Event} />
-      <Stack.Screen name='Activity' component={Activity} />
+      <Stack.Screen
+        name='Activity'
+        component={Activity}
+        options={({ route }) => ({
+          headerTitle: route.params?.title || 'Activity',
+        })}
+      />
       <Stack.Screen name='EventUsers' component={EventUsers} />
     </Stack.Navigator>
   )
