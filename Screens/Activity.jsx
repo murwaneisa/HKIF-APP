@@ -12,9 +12,8 @@ import { useTheme } from '../Styles/theme'
 // import Swiper from 'react-native-swiper'
 import Calendar from '../Components/Calendar'
 import NextActivitySessionCard from '../Components/NextActivitySessionCard'
-import ActivityUserCard from '../Components/ActivityUserCard'
 import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet'
-// import Swiper from 'react-native-web-swiper'
+import UserCard from '../Components/UserCard'
 
 function Activity({ navigation }) {
   const sheetRef = useRef(null)
@@ -60,7 +59,7 @@ function Activity({ navigation }) {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.imageContainer}>
           <Image
             style={styles.image}
@@ -81,6 +80,7 @@ function Activity({ navigation }) {
               style={styles.swiper}
               paginationStyle={styles.pagination}
               activeDotColor={theme.colors.primary}
+              dotColor={theme.colors.secondary}
             >
               {weeks.map((item, index) => (
                 <View style={styles.slide} key={index}>
@@ -118,7 +118,7 @@ function Activity({ navigation }) {
           <BottomSheetFlatList
             data={data}
             keyExtractor={i => i}
-            renderItem={({ item }) => <ActivityUserCard />}
+            renderItem={({ item }) => <UserCard />}
             contentContainerStyle={styles.contentContainer}
           />
         </BottomSheet>
@@ -133,6 +133,7 @@ const getStyles = (theme, windowWidth) => {
 
   return StyleSheet.create({
     container: {
+      backgroundColor: theme.colors.background,
       flex: 1,
       paddingHorizontal: Platform.select({
         ios: 20,
@@ -144,6 +145,7 @@ const getStyles = (theme, windowWidth) => {
       fontFamily: 'Inter-Bold',
       fontSize: 18,
       marginBottom: 15,
+      color: theme.colors.text2,
     },
     imageContainer: {
       width: '100%',
@@ -174,6 +176,7 @@ const getStyles = (theme, windowWidth) => {
     },
     descriptionText: {
       fontFamily: 'Inter-Regular',
+      color: theme.colors.text,
     },
     bottomSheetTitle: {
       fontFamily: 'Inter-Bold',
@@ -181,9 +184,10 @@ const getStyles = (theme, windowWidth) => {
       marginBottom: 15,
       paddingHorizontal: 20,
       paddingTop: 10,
+      color: theme.colors.text2,
     },
     bottomSheetContainer: {
-      backgroundColor: 'rgba(228, 228, 228, 228)',
+      backgroundColor: theme.colors.background2,
     },
   })
 }

@@ -1,8 +1,8 @@
 import React from 'react'
-import { View, Text, StyleSheet, Image } from 'react-native'
+import { View, Text, StyleSheet, Image, Platform } from 'react-native'
 import { useTheme } from '../Styles/theme'
 
-const ActivityUserCard = () => {
+const UserCard = () => {
   const { theme } = useTheme()
   const styles = getStyles(theme)
 
@@ -26,16 +26,20 @@ const getStyles = theme =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
-      paddingVertical: 15,
-      paddingRight: 20,
-      marginLeft: 20,
-      borderBottomWidth: 1,
-      borderBottomColor: 'rgba(0,0,0,0.1)',
+      paddingVertical: 10,
+      marginHorizontal: Platform.select({
+        ios: 20,
+        android: 20,
+        web: 20,
+      }),
       alignItems: 'center',
+      marginBottom: 5,
+      borderBottomWidth: 1,
+      borderBottomColor: theme.colors.border,
     },
     imageContainer: {
-      width: 35,
-      height: 35,
+      width: 42,
+      height: 42,
       marginRight: 10,
       borderRadius: 100,
     },
@@ -48,10 +52,10 @@ const getStyles = theme =>
       flex: 1,
     },
     title: {
-      fontFamily: 'Inter-Bold',
+      fontFamily: 'Inter-SemiBold',
       fontSize: 16,
-      color: 'rgba(0, 0, 0, 1)',
+      color: theme.colors.text,
     },
   })
 
-export default ActivityUserCard
+export default UserCard

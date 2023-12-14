@@ -32,7 +32,7 @@ function Home({ navigation }) {
   const styles = getStyles(theme, windowWidth)
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.announcementWrapper}>
         <AnnouncementCard
           message={'Swimming is canceled today the fox is in the forest'}
@@ -57,7 +57,9 @@ function Home({ navigation }) {
                 title={item.title}
                 favorite={item.favorite}
                 icon={item.icon}
-                onPress={() => navigation.navigate('Activity')}
+                onPress={() =>
+                  navigation.navigate('Activity', { title: item.title })
+                }
               />
             ))}
         </View>
@@ -73,7 +75,9 @@ function Home({ navigation }) {
                 title={item.title}
                 favorite={item.favorite}
                 icon={item.icon}
-                onPress={() => navigation.navigate('Activity')}
+                onPress={() =>
+                  navigation.navigate('Activity', { title: item.title })
+                }
               />
             ))}
         </View>

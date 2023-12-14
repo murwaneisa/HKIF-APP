@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import AuthStack from './AuthStack'
-import AppStack from './AppStack'
+import UserStack from './UserStack'
 import AdminStack from './AdminStack'
 
 const Drawer = createDrawerNavigator()
@@ -14,7 +14,7 @@ export default function StackNav() {
   if (isAuthenticated === 'admin') {
     stackToRender = <AdminStack />
   } else if (isAuthenticated === 'user') {
-    stackToRender = <AppStack />
+    stackToRender = <UserStack />
   } else {
     stackToRender = <AuthStack />
   }

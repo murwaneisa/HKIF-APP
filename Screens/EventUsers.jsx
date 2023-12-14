@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
-import { View, StyleSheet, FlatList } from 'react-native'
+import { View, StyleSheet, FlatList, Platform } from 'react-native'
 import { useTheme } from '../Styles/theme'
-import EventUserCard from '../Components/EventUserCard'
+import UserCard from '../Components/UserCard'
 
 function EventUsers({ navigation }) {
   const { theme } = useTheme()
@@ -19,7 +19,7 @@ function EventUsers({ navigation }) {
     <View style={styles.container}>
       <FlatList
         data={data}
-        renderItem={({ item }) => <EventUserCard />}
+        renderItem={({ item }) => <UserCard />}
         keyExtractor={i => i}
       />
     </View>
@@ -29,9 +29,14 @@ function EventUsers({ navigation }) {
 const getStyles = theme =>
   StyleSheet.create({
     container: {
+      backgroundColor: theme.colors.background,
       flex: 1,
-      paddingLeft: 20,
       paddingTop: 10,
+      paddingHorizontal: Platform.select({
+        ios: 0,
+        android: 0,
+        web: '20%',
+      }),
     },
   })
 

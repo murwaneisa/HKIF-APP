@@ -50,6 +50,7 @@ const lightTheme = {
     background2: '#e5e5e5',
     text: '#6B6B6B',
     text2: '#282525',
+    border: 'rgba(0,0,0,0.1)',
   },
 }
 
@@ -66,6 +67,7 @@ const darkTheme = {
     background2: '#282525',
     text: '#C4C4C4',
     text2: '#ffffff',
+    border: 'rgba(255,255,255,0.1)',
   },
 }
 

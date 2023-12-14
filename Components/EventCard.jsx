@@ -30,11 +30,7 @@ const EventCard = props => {
           <View>
             <Text style={styles.title}>Movie Night</Text>
             <View style={styles.textContainer}>
-              <Ionicons
-                name='ios-location'
-                color='rgba(255,255,255,0.8)'
-                style={styles.icon}
-              />
+              <Ionicons name='ios-location' style={styles.icon} />
               <Text style={styles.text}>Högskolan Kristianstad</Text>
             </View>
           </View>
@@ -42,19 +38,11 @@ const EventCard = props => {
             style={{ flexDirection: 'row', justifyContent: 'space-between' }}
           >
             <View style={styles.textContainer}>
-              <Ionicons
-                name='ios-calendar'
-                color='rgba(255,255,255,0.8)'
-                style={styles.icon}
-              />
+              <Ionicons name='ios-calendar' style={styles.icon} />
               <Text style={styles.text}>18 jun, 2023</Text>
             </View>
             <View style={styles.textContainer}>
-              <Ionicons
-                name='time'
-                color='rgba(255,255,255,0.8)'
-                style={styles.icon}
-              />
+              <Ionicons name='time' style={styles.icon} />
               <Text style={styles.text}>kl 16:00</Text>
             </View>
           </View>
@@ -144,6 +132,7 @@ const getStyles = (theme, windowWidth) =>
       color: 'white',
     },
     icon: {
+      color: 'rgba(255,255,255,0.8)',
       fontSize: Platform.select({
         ios: 18,
         android: 16,
