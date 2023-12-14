@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, Image } from 'react-native'
+import { View, Text, StyleSheet, Image, Platform } from 'react-native'
 import { useTheme } from '../Styles/theme'
 
 const EventUserCard = () => {
@@ -27,10 +27,15 @@ const getStyles = theme =>
     container: {
       flexDirection: 'row',
       paddingVertical: 10,
+      marginHorizontal: Platform.select({
+        ios: 20,
+        android: 20,
+        web: 20,
+      }),
       alignItems: 'center',
       marginBottom: 5,
       borderBottomWidth: 1,
-      borderBottomColor: 'rgba(0,0,0,0.05)',
+      borderBottomColor: theme.colors.accent,
     },
     imageContainer: {
       width: 45,
@@ -49,7 +54,7 @@ const getStyles = theme =>
     title: {
       fontFamily: 'Inter-SemiBold',
       fontSize: 16,
-      color: 'rgba(0, 0, 0, 1)',
+      color: theme.colors.text,
     },
   })
 

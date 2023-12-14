@@ -38,10 +38,11 @@ const getStyles = theme =>
         android: 16,
         web: 18,
       }),
+      color: theme.colors.text,
     },
     icon: {
       fontSize: 17,
-      color: 'black',
+      color: theme.colors.primary,
       marginRight: Platform.select({
         ios: 4,
         android: 4,

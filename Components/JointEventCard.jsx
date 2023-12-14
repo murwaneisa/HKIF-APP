@@ -31,7 +31,7 @@ const getStyles = theme =>
         web: '20%',
       }),
       bottom: 20,
-      backgroundColor: 'white',
+      backgroundColor: theme.colors.background,
       paddingHorizontal: 15,
       paddingVertical: 13,
       height: Platform.select({
@@ -44,7 +44,7 @@ const getStyles = theme =>
       alignItems: 'center',
       borderRadius: 15,
       borderWidth: 1,
-      borderColor: 'rgba(0,0,0,0.1)',
+      borderColor: theme.colors.accent,
     },
     title: {
       fontFamily: 'Inter-SemiBold',
@@ -53,6 +53,7 @@ const getStyles = theme =>
         android: 16,
         web: 20,
       }),
+      color: theme.colors.text,
     },
     button: {
       backgroundColor: theme.colors.primary,

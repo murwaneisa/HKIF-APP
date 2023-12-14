@@ -31,63 +31,62 @@ function Event({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.imageContainer}>
-          <Image
-            style={styles.image}
-            source={require('../Assets/images/movie.jpg')}
-            resizeMode='cover'
-          />
-        </View>
+      <FlatList
+        ListHeaderComponent={
+          <View style={styles.headerComponent}>
+            <View style={styles.imageContainer}>
+              <Image
+                style={styles.image}
+                source={require('../Assets/images/movie.jpg')}
+                resizeMode='cover'
+              />
+            </View>
+            <View style={styles.headerSection}>
+              <View style={styles.headerInfoWrapper}>
+                <Text style={styles.title}>Movie Night</Text>
+                <View style={styles.textWrapper}>
+                  <Ionicons name='location-outline' style={styles.icon} />
+                  <Text style={styles.addressText}>Högskolan Kristianstad</Text>
+                </View>
+              </View>
 
-        <View style={styles.headerSection}>
-          <View style={styles.headerInfoWrapper}>
-            <Text style={styles.title}>Movie Night</Text>
-            <View style={styles.textWrapper}>
-              <Ionicons name='location-outline' style={styles.icon} />
-              <Text style={styles.addressText}>Högskolan Kristianstad</Text>
+              <View style={styles.dateInfoWrapper}>
+                <View style={styles.textWrapper}>
+                  <Ionicons name='calendar-outline' style={styles.icon} />
+                  <Text style={styles.dateText}>14 dec, 2023</Text>
+                </View>
+                <View style={styles.textWrapper}>
+                  <Ionicons name='time-outline' style={styles.icon} />
+                  <Text style={styles.dateText}>16:00 - 18:00</Text>
+                </View>
+              </View>
+
+              <View style={styles.benefitsList}>
+                <BenefitCard iconName={'fast-food-outline'} title={'Food'} />
+                <BenefitCard iconName={'fast-food-outline'} title={'Food'} />
+                <BenefitCard iconName={'fast-food-outline'} title={'Food'} />
+              </View>
+            </View>
+            <View style={styles.descriptionSection}>
+              <Text style={styles.descriptionText}>
+                Excellent two-storey villa with a terrace, private pool and
+                parking spaces is located only 5 minutes from the Indian Ocean
+              </Text>
+            </View>
+            <View style={styles.usersSectionHeader}>
+              <Text style={styles.SectionTitle}>People who've joined</Text>
+              <Pressable onPress={() => navigation.navigate('EventUsers')}>
+                <Text style={styles.viewAll}>View all</Text>
+              </Pressable>
             </View>
           </View>
-
-          <View style={styles.dateInfoWrapper}>
-            <View style={styles.textWrapper}>
-              <Ionicons name='calendar-outline' style={styles.icon} />
-              <Text style={styles.dateText}>14 dec, 2023</Text>
-            </View>
-            <View style={styles.textWrapper}>
-              <Ionicons name='time-outline' style={styles.icon} />
-              <Text style={styles.dateText}>16:00 - 18:00</Text>
-            </View>
-          </View>
-
-          <View style={styles.benefitsList}>
-            <BenefitCard iconName={'fast-food-outline'} title={'Food'} />
-            <BenefitCard iconName={'fast-food-outline'} title={'Food'} />
-            <BenefitCard iconName={'fast-food-outline'} title={'Food'} />
-          </View>
-        </View>
-
-        <View style={styles.descriptionSection}>
-          <Text style={styles.descriptionText}>
-            Excellent two-storey villa with a terrace, private pool and parking
-            spaces is located only 5 minutes from the Indian Ocean
-          </Text>
-        </View>
-
-        <View style={styles.usersSection}>
-          <View style={styles.usersSectionHeader}>
-            <Text style={styles.SectionTitle}>People who've joined</Text>
-            <Pressable onPress={() => navigation.navigate('EventUsers')}>
-              <Text style={styles.viewAll}>View all</Text>
-            </Pressable>
-          </View>
-          <FlatList
-            data={data}
-            renderItem={({ item }) => <EventUserCard />}
-            keyExtractor={i => i}
-          />
-        </View>
-      </ScrollView>
+        }
+        data={data}
+        renderItem={({ item }) => <EventUserCard />}
+        keyExtractor={i => i}
+        showsVerticalScrollIndicator={false}
+        ListFooterComponent={<View style={{ marginBottom: 110 }} />}
+      />
 
       <JointEventCard
         title={'Price: 300 SEK'}
@@ -105,6 +104,7 @@ const getStyles = (theme, windowWidth) => {
 
   return StyleSheet.create({
     container: {
+      backgroundColor: theme.colors.background,
       flex: 1,
       paddingHorizontal: Platform.select({
         ios: 0,
@@ -112,7 +112,7 @@ const getStyles = (theme, windowWidth) => {
         web: '20%',
       }),
     },
-    scrollView: {
+    headerComponent: {
       padding: 20,
     },
     imageContainer: {
@@ -146,7 +146,7 @@ const getStyles = (theme, windowWidth) => {
       flexDirection: 'row',
     },
     icon: {
-      color: 'black',
+      color: theme.colors.primary,
       fontSize: 17,
       marginRight: 4,
     },
@@ -154,21 +154,24 @@ const getStyles = (theme, windowWidth) => {
       fontFamily: 'Inter-Bold',
       fontSize: 24,
       marginBottom: 7,
+      color: theme.colors.text,
     },
     addressText: {
       fontFamily: 'Inter-Regular',
       fontSize: 15,
+      color: theme.colors.text,
     },
     dateText: {
       fontFamily: 'Inter-Regular',
       fontSize: 15,
+      color: theme.colors.text,
     },
     benefitsList: {
       flexDirection: 'row',
       paddingVertical: 10,
       borderBottomWidth: 1,
       borderTopWidth: 1,
-      borderColor: 'rgba(0,0,0,0.1)',
+      borderColor: theme.colors.accent,
       marginTop: 4,
     },
     descriptionSection: {
@@ -178,19 +181,17 @@ const getStyles = (theme, windowWidth) => {
       fontFamily: 'Inter-Regular',
       fontSize: 17,
       lineHeight: 22,
-    },
-    usersSection: {
-      marginBottom: 125,
+      color: theme.colors.text,
     },
     usersSectionHeader: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: 10,
     },
     SectionTitle: {
       fontFamily: 'Inter-Bold',
       fontSize: 20,
+      color: theme.colors.text,
     },
     viewAll: {
       color: theme.colors.primary,
