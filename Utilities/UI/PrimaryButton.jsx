@@ -54,7 +54,7 @@ const getStyles = (theme, paddingHorizontal, paddingVertical) => {
       opacity: 0.75,
     },
     disabled: {
-      color: theme.colors.background,
+      color: theme.colors.backgroundPrimary,
       backgroundColor: theme.colors.accent, // Add a disabled color to your theme or use a hardcoded color
       opacity: 0.5, // Optional: reduce opacity for disabled state
     },

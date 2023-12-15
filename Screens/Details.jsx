@@ -27,7 +27,7 @@ const getStyles = theme =>
     },
     container: {
       flex: 1,
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.backgroundPrimary,
       alignItems: 'center',
       justifyContent: 'center',
     },

@@ -123,12 +123,12 @@ const getStyles = (theme, windowWidth) => {
   const webWidth = windowWidth >= 900 ? '60%' : '85%'
   return StyleSheet.create({
     scrollContainer: {
-      backgroundColor: theme.colors.background2,
+      backgroundColor: theme.colors.backgroundSecondary,
     },
     container: {
       flex: 1,
       alignItems: 'center',
-      backgroundColor: theme.colors.background2,
+      backgroundColor: theme.colors.backgroundSecondary,
     },
     headerContainer: {
       flexDirection: 'row',
@@ -198,7 +198,7 @@ const getStyles = (theme, windowWidth) => {
     name: {
       fontFamily: 'Inter-SemiBold',
       fontWeight: 'bold',
-      color: theme.colors.text2,
+      color: theme.colors.title,
       textAlign: 'center',
       fontSize: Platform.select({
         ios: 16,
@@ -209,7 +209,7 @@ const getStyles = (theme, windowWidth) => {
     labelName: {
       fontFamily: 'Inter-SemiBold',
       fontWeight: 'bold',
-      color: theme.colors.text2,
+      color: theme.colors.title,
       textAlign: 'left',
       fontSize: Platform.select({
         ios: 16,

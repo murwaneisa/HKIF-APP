@@ -45,7 +45,7 @@ const getStyles = (theme, windowWidth) => {
   return StyleSheet.create({
     container: {
       width: '100%',
-      backgroundColor: theme.colors.background2,
+      backgroundColor: theme.colors.backgroundSecondary,
       alignItems: 'center',
       marginTop: 10,
     },
@@ -78,7 +78,7 @@ const getStyles = (theme, windowWidth) => {
     name: {
       fontFamily: 'Inter-SemiBold',
       fontWeight: 'bold',
-      color: theme.colors.text2,
+      color: theme.colors.title,
       fontSize: Platform.select({
         ios: 16,
         android: 14,
