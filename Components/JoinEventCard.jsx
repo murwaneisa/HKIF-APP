@@ -2,12 +2,12 @@ import React from 'react'
 import { View, Text, StyleSheet, Platform, Pressable } from 'react-native'
 import { useTheme } from '../Styles/theme'
 
-const JointEventCard = ({ title, buttonTitle, onPress }) => {
+const JoinEventCard = ({ title, buttonTitle, containerStyle, onPress }) => {
   const { theme } = useTheme()
   const styles = getStyles(theme)
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.basic, containerStyle]}>
       <Text style={styles.title}>{title}</Text>
       <Pressable onPress={onPress} style={styles.button}>
         <Text style={styles.buttonTitle}>{buttonTitle}</Text>
@@ -18,19 +18,7 @@ const JointEventCard = ({ title, buttonTitle, onPress }) => {
 
 const getStyles = theme =>
   StyleSheet.create({
-    container: {
-      position: 'absolute',
-      left: Platform.select({
-        ios: 20,
-        android: 20,
-        web: '20%',
-      }),
-      right: Platform.select({
-        ios: 20,
-        android: 20,
-        web: '20%',
-      }),
-      bottom: 20,
+    basic: {
       backgroundColor: theme.colors.backgroundPrimary,
       paddingHorizontal: 15,
       paddingVertical: 13,
@@ -74,4 +62,4 @@ const getStyles = theme =>
     },
   })
 
-export default JointEventCard
+export default JoinEventCard

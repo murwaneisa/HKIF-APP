@@ -13,13 +13,14 @@ import {
 import { useTheme } from '../Styles/theme'
 import { Ionicons } from '@expo/vector-icons'
 import BenefitCard from '../Components/BenefitCard'
-import JointEventCard from '../Components/JointEventCard'
+import JoinEventCard from '../Components/JoinEventCard'
 import UserCard from '../Components/UserCard'
 
 function Event({ navigation }) {
   const { theme } = useTheme()
   const windowWidth = Dimensions.get('window').width
-  const styles = getStyles(theme, windowWidth)
+  const windowHeight = Dimensions.get('window').height
+  const styles = getStyles(theme, windowWidth, windowHeight)
 
   const data = useMemo(
     () =>
@@ -67,6 +68,14 @@ function Event({ navigation }) {
                 <BenefitCard iconName={'fast-food-outline'} title={'Food'} />
               </View>
             </View>
+            {Platform.OS === 'web' ? (
+              <JoinEventCard
+                title={'Price: 300 SEK'}
+                buttonTitle={'Join Event'}
+                containerStyle={styles.joinEventCard}
+                onPress={() => {}}
+              />
+            ) : null}
             <View style={styles.descriptionSection}>
               <Text style={styles.descriptionText}>
                 Excellent two-storey villa with a terrace, private pool and
@@ -88,16 +97,19 @@ function Event({ navigation }) {
         ListFooterComponent={<View style={{ marginBottom: 110 }} />}
       />
 
-      <JointEventCard
-        title={'Price: 300 SEK'}
-        buttonTitle={'Join Event'}
-        onPress={() => {}}
-      />
+      {Platform.OS === 'android' || Platform.OS === 'ios' ? (
+        <JoinEventCard
+          title={'Price: 300 SEK'}
+          buttonTitle={'Join Event'}
+          containerStyle={styles.joinEventCardBottom}
+          onPress={() => {}}
+        />
+      ) : null}
     </View>
   )
 }
 
-const getStyles = (theme, windowWidth) => {
+const getStyles = (theme, windowWidth, windowHeight) => {
   const tabletHeight = windowWidth >= 720 ? '5%' : '8%'
   const tabletPadding = windowWidth >= 720 ? '10%' : '5%'
   const webWidth = windowWidth >= 900 ? '60%' : '85%'
@@ -197,6 +209,23 @@ const getStyles = (theme, windowWidth) => {
       color: theme.colors.primary,
       fontFamily: 'Inter-SemiBold',
       fontSize: 14,
+    },
+    joinEventCard: {
+      marginBottom: 20,
+    },
+    joinEventCardBottom: {
+      position: 'absolute',
+      left: Platform.select({
+        ios: 20,
+        android: 20,
+        web: '20%',
+      }),
+      right: Platform.select({
+        ios: 20,
+        android: 20,
+        web: '20%',
+      }),
+      bottom: 20,
     },
   })
 }
