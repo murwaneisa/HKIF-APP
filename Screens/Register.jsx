@@ -11,8 +11,8 @@ import {
 import { useTheme } from '../Styles/theme'
 
 import { getFormatedDate } from 'react-native-modern-datepicker'
-import StepOne from './Components/Register/StepOne'
-import StepTwo from './Components/Register/StepTwo'
+import StepOne from '../Components/Register/StepOne'
+import StepTwo from '../Components/Register/StepTwo'
 
 function Register() {
   const screenWidth = Dimensions.get('window').width
