@@ -1,16 +1,13 @@
 import { initializeApp } from 'firebase/app'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyCvw9j4eIBdn8BJqQzO0RpM-uGfNYLd3Yg',
-  authDomain: 'hkif-8a79e.firebaseapp.com',
-  databaseURL:
-    'https://hkif-8a79e-default-rtdb.europe-west1.firebasedatabase.app',
-  projectId: 'hkif-8a79e',
-  storageBucket: 'hkif-8a79e.appspot.com',
-  messagingSenderId: '855322523840',
-  appId: '1:855322523840:web:7ad919ccee6d02192dd525',
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.FIREBASE_DATABASE_URL,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID,
 }
 
-const app = initializeApp(firebaseConfig)
-
-export { app }
+initializeApp(firebaseConfig)

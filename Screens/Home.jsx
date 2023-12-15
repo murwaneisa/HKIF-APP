@@ -11,7 +11,6 @@ import { useTheme } from '../Styles/theme'
 import EventCard from '../Components/EventCard'
 import ActivityCard from '../Components/ActivityCard'
 import AnnouncementCard from '../Components/AnnouncementCard'
-import ImagePickerExample from '../Components/ImagePickerExample'
 
 const data = [
   { key: '1', title: 'Strength', favorite: true, icon: 'basketball' },
@@ -34,9 +33,6 @@ function Home({ navigation }) {
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* <ImagePickerExample>
-        <View></View>
-      </ImagePickerExample> */}
       <View style={styles.announcementWrapper}>
         <AnnouncementCard
           message={'Swimming is canceled today the fox is in the forest'}
