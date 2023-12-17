@@ -17,6 +17,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons'
 import Checkbox from 'expo-checkbox'
 import { MaterialIcons } from '@expo/vector-icons'
+import { FontAwesome5 } from '@expo/vector-icons'
 
 const AddEvent = ({ route, navigation }) => {
   const { theme } = useTheme()
@@ -134,18 +135,58 @@ const AddEvent = ({ route, navigation }) => {
               </Text>
             </View>
             <View style={[styles.dateField]}>
-              <Pressable onPress={openDatePicker} style={styles.pressable}>
-                <Text style={styles.inputText}>
-                  {selectedStartDate || 'Aug 21 2002'}
-                </Text>
-              </Pressable>
+              {Platform.OS === 'web' ? (
+                <TextInput
+                  autoCorrect={false}
+                  autoCapitalize='words'
+                  placeholder='Aug 21 2002'
+                  onChangeText={setSelectedStartDate}
+                  value={selectedStartDate}
+                  placeholderTextColor={theme.colors.primary}
+                  style={[
+                    styles.input,
+                    { backgroundColor: theme.colors.accent },
+                  ]}
+                />
+              ) : (
+                <Pressable
+                  onPress={
+                    Platform.select === 'web' ? undefine : openDatePicker
+                  }
+                  style={styles.pressable}
+                >
+                  <Text style={styles.inputText}>
+                    {selectedStartDate || 'Aug 21 2002'}
+                  </Text>
+                </Pressable>
+              )}
             </View>
             <View style={styles.dateField}>
-              <Pressable onPress={openTimePicker} style={styles.pressable}>
-                <View style={[styles.inputContainer, { borderRadius: 6 }]}>
-                  <Text style={styles.inputText}>{time || '10:00'}</Text>
-                </View>
-              </Pressable>
+              {Platform.OS === 'web' ? (
+                <TextInput
+                  autoCorrect={false}
+                  autoCapitalize='words'
+                  placeholder='10:00'
+                  onChangeText={setSelectedStartDate}
+                  value={selectedStartDate}
+                  placeholderTextColor={theme.colors.primary}
+                  style={[
+                    styles.input,
+                    { backgroundColor: theme.colors.accent },
+                  ]}
+                />
+              ) : (
+                <Pressable
+                  onPress={
+                    Platform.select === 'web' ? undefine : openDatePicker
+                  }
+                  style={styles.pressable}
+                >
+                  <View style={[styles.inputContainer, { borderRadius: 6 }]}>
+                    <Text style={styles.inputText}>{time || '10:00'}</Text>
+                  </View>
+                </Pressable>
+              )}
             </View>
           </View>
           <View style={styles.startDate}>
@@ -157,20 +198,60 @@ const AddEvent = ({ route, navigation }) => {
               </Text>
             </View>
             <View style={styles.dateField}>
-              <Pressable onPress={openDatePicker} style={styles.pressable}>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.inputText}>
-                    {selectedStartDate || 'Aug 21 2002'}
-                  </Text>
-                </View>
-              </Pressable>
+              {Platform.OS === 'web' ? (
+                <TextInput
+                  autoCorrect={false}
+                  autoCapitalize='words'
+                  placeholder='Aug 21 2002'
+                  onChangeText={setSelectedStartDate}
+                  value={selectedStartDate}
+                  placeholderTextColor={theme.colors.primary}
+                  style={[
+                    styles.input,
+                    { backgroundColor: theme.colors.accent },
+                  ]}
+                />
+              ) : (
+                <Pressable
+                  onPress={
+                    Platform.select === 'web' ? undefine : openDatePicker
+                  }
+                  style={styles.pressable}
+                >
+                  <View style={styles.inputContainer}>
+                    <Text style={styles.inputText}>
+                      {selectedStartDate || 'Aug 21 2002'}
+                    </Text>
+                  </View>
+                </Pressable>
+              )}
             </View>
             <View style={styles.dateField}>
-              <Pressable onPress={openTimePicker} style={styles.pressable}>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.inputText}>{time || '11.00'}</Text>
-                </View>
-              </Pressable>
+              {Platform.OS === 'web' ? (
+                <TextInput
+                  autoCorrect={false}
+                  autoCapitalize='words'
+                  placeholder='10:00'
+                  onChangeText={setSelectedStartDate}
+                  value={selectedStartDate}
+                  placeholderTextColor={theme.colors.primary}
+                  style={[
+                    styles.input,
+                    { backgroundColor: theme.colors.accent },
+                  ]}
+                />
+              ) : (
+                <Pressable
+                  onPress={
+                    Platform.select === 'web' ? undefine : openDatePicker
+                  }
+                  style={styles.pressable}
+                >
+                  <View style={[styles.inputContainer, { borderRadius: 6 }]}>
+                    <Text style={styles.inputText}>{time || '10:00'}</Text>
+                  </View>
+                </Pressable>
+              )}
             </View>
           </View>
         </View>
@@ -186,6 +267,26 @@ const AddEvent = ({ route, navigation }) => {
           </View>
           <TextInput
             placeholder='Add location'
+            placeholderTextColor={theme.colors.text}
+            style={styles.input}
+          />
+        </View>
+        {/* Price */}
+        <View
+          style={[
+            styles.sectionContainer,
+            { backgroundColor: theme.colors.accent2 },
+          ]}
+        >
+          <View style={styles.sectionTitle}>
+            <FontAwesome5
+              name='dollar-sign'
+              size={24}
+              color={theme.colors.text}
+            />
+          </View>
+          <TextInput
+            placeholder='Add price'
             placeholderTextColor={theme.colors.text}
             style={styles.input}
           />
@@ -263,6 +364,7 @@ const AddEvent = ({ route, navigation }) => {
             </View>
           )}
         </View>
+
         {/*buttons  */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -274,9 +376,9 @@ const AddEvent = ({ route, navigation }) => {
           </TouchableOpacity>
           {eventId ? (
             <TouchableOpacity
-              style={[styles.button, { backgroundColor: 'red' }]}
+              style={[styles.button, { backgroundColor: theme.colors.error }]}
             >
-              <Text style={styles.buttonText}>Delete Event</Text>
+              <Text style={styles.buttonText}>Delete</Text>
             </TouchableOpacity>
           ) : null}
         </View>
@@ -350,6 +452,9 @@ const getStyles = theme => {
     },
     input: {
       backgroundColor: theme.colors.accent2,
+      width: Platform.select({
+        web: ' 100%',
+      }),
       color: theme.colors.text,
       padding: Platform.select({
         ios: 10,
@@ -439,6 +544,11 @@ const getStyles = theme => {
     buttonText: {
       color: '#ffffff',
       fontWeight: 'bold',
+      fontSize: Platform.select({
+        ios: 16,
+        android: 15,
+        web: 18,
+      }),
     },
   })
 }
