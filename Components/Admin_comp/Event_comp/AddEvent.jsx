@@ -9,7 +9,7 @@ import {
   ScrollView,
   Pressable,
 } from 'react-native'
-import React from 'react'
+import React, { useRef } from 'react'
 import { useTheme } from '../../../Styles/theme'
 import { useState } from 'react'
 import DatePickerModal from '../../../Utilities/UI/Model'
@@ -43,6 +43,16 @@ const AddEvent = ({ route, navigation }) => {
   function handleChangeStartDate(propDate) {
     setStartedDate(propDate)
   }
+
+  const inputRefs = useRef({
+    titleInput: null,
+    locationInput: null,
+    priceInput: null,
+  })
+  const focusInput = inputKey => {
+    inputRefs.current[inputKey]?.focus()
+  }
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: theme.colors.backgroundSecondary }}
@@ -54,20 +64,22 @@ const AddEvent = ({ route, navigation }) => {
         contentContainerStyle={styles.container}
       >
         {/* title */}
-        <View
+        <TouchableOpacity
           style={[
             styles.sectionContainer,
             { backgroundColor: theme.colors.accent2 },
           ]}
+          onPress={() => focusInput('titleInput')}
         >
           <View style={styles.sectionTitle}>
             <Text style={styles.sectionText}>Title</Text>
           </View>
           <TextInput
+            ref={el => (inputRefs.current.titleInput = el)}
             placeholderTextColor={theme.colors.text}
             style={styles.input}
           />
-        </View>
+        </TouchableOpacity>
         {/* image */}
         <View
           style={[
@@ -250,7 +262,8 @@ const AddEvent = ({ route, navigation }) => {
           </View>
         </View>
         {/* location */}
-        <View
+        <TouchableOpacity
+          onPress={() => focusInput('locationInput')}
           style={[
             styles.sectionContainer,
             { backgroundColor: theme.colors.accent2 },
@@ -260,13 +273,15 @@ const AddEvent = ({ route, navigation }) => {
             <Entypo name='location' size={24} color={theme.colors.text} />
           </View>
           <TextInput
+            ref={el => (inputRefs.current.locationInput = el)}
             placeholder='Add location'
             placeholderTextColor={theme.colors.text}
             style={styles.input}
           />
-        </View>
+        </TouchableOpacity>
         {/* Price */}
-        <View
+        <TouchableOpacity
+          onPress={() => focusInput('priceInput')}
           style={[
             styles.sectionContainer,
             { backgroundColor: theme.colors.accent2 },
@@ -280,11 +295,12 @@ const AddEvent = ({ route, navigation }) => {
             />
           </View>
           <TextInput
-            placeholder='Add price'
+            ref={el => (inputRefs.current.priceInput = el)}
+            placeholder='Add price kr'
             placeholderTextColor={theme.colors.text}
             style={styles.input}
           />
-        </View>
+        </TouchableOpacity>
         {/* description */}
         <View style={[styles.descriptionContainer]}>
           <TouchableOpacity
@@ -365,7 +381,7 @@ const AddEvent = ({ route, navigation }) => {
             style={[styles.button, { backgroundColor: theme.colors.primary }]}
           >
             <Text style={styles.buttonText}>
-              {eventId ? 'Edit' : 'Create event'}
+              {eventId ? 'Edit Event' : 'Create Event'}
             </Text>
           </TouchableOpacity>
           {eventId ? (
@@ -533,6 +549,7 @@ const getStyles = theme => {
       borderRadius: 8,
       padding: 12,
       alignItems: 'center',
+      marginVertical: 10,
     },
     buttonText: {
       color: '#ffffff',
