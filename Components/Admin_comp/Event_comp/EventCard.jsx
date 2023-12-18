@@ -13,7 +13,7 @@ import { useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 
-const ActivityCard = ({ event, previous }) => {
+const EventCard = ({ event, previous }) => {
   const navigation = useNavigation()
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
@@ -126,4 +126,4 @@ const getStyles = (theme, windowWidth, previous) => {
     },
   })
 }
-export default ActivityCard
+export default EventCard
