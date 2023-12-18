@@ -21,6 +21,7 @@ import Activities from '../../Screens/Admin/Activities'
 import { createStackNavigator } from '@react-navigation/stack'
 import MemberDetails from '../../Screens/Admin/MemberDetails'
 import AddEvent from '../../Components/Admin_comp/Event_comp/AddEvent'
+import CreateActivity from '../../Components/Admin_comp/Activity_comp/CreateActivity'
 
 const customHeaderLeft = routeName => {
   const navigation = useNavigation()
@@ -132,6 +133,11 @@ const AdminStack = () => {
         name='AddEvent'
         options={{ headerTitle: 'Create Event' }}
         component={AddEvent}
+      />
+      <Stack.Screen
+        name='CreateActivity'
+        options={{ headerTitle: 'Edit Activity' }}
+        component={CreateActivity}
       />
     </Stack.Navigator>
   )
