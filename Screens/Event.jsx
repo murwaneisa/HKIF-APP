@@ -104,7 +104,7 @@ const getStyles = (theme, windowWidth) => {
 
   return StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.backgroundPrimary,
       flex: 1,
       paddingHorizontal: Platform.select({
         ios: 0,
@@ -154,7 +154,7 @@ const getStyles = (theme, windowWidth) => {
       fontFamily: 'Inter-Bold',
       fontSize: 24,
       marginBottom: 7,
-      color: theme.colors.text2,
+      color: theme.colors.title,
     },
     addressText: {
       fontFamily: 'Inter-Regular',
@@ -191,7 +191,7 @@ const getStyles = (theme, windowWidth) => {
     SectionTitle: {
       fontFamily: 'Inter-Bold',
       fontSize: 20,
-      color: theme.colors.text2,
+      color: theme.colors.title,
     },
     viewAll: {
       color: theme.colors.primary,

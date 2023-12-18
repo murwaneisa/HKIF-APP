@@ -29,7 +29,7 @@ function EventUsers({ navigation }) {
 const getStyles = theme =>
   StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.backgroundPrimary,
       flex: 1,
       paddingTop: 10,
       paddingHorizontal: Platform.select({

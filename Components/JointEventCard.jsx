@@ -31,7 +31,7 @@ const getStyles = theme =>
         web: '20%',
       }),
       bottom: 20,
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.backgroundPrimary,
       paddingHorizontal: 15,
       paddingVertical: 13,
       height: Platform.select({
@@ -53,7 +53,7 @@ const getStyles = theme =>
         android: 16,
         web: 20,
       }),
-      color: theme.colors.text2,
+      color: theme.colors.title,
     },
     button: {
       backgroundColor: theme.colors.primary,

@@ -113,13 +113,13 @@ function Activity({ navigation }) {
           backgroundStyle={styles.bottomSheetContainer}
           ref={sheetRef}
           snapPoints={['12.5%', '50%', '90%']}
+          handleIndicatorStyle={styles.bottomSheetIndicator}
         >
           <Text style={styles.bottomSheetTitle}>Liked by</Text>
           <BottomSheetFlatList
             data={data}
             keyExtractor={i => i}
             renderItem={({ item }) => <UserCard />}
-            contentContainerStyle={styles.contentContainer}
           />
         </BottomSheet>
       ) : null}
@@ -133,7 +133,7 @@ const getStyles = (theme, windowWidth) => {
 
   return StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.backgroundPrimary,
       flex: 1,
       paddingHorizontal: Platform.select({
         ios: 20,
@@ -145,7 +145,7 @@ const getStyles = (theme, windowWidth) => {
       fontFamily: 'Inter-Bold',
       fontSize: 18,
       marginBottom: 15,
-      color: theme.colors.text2,
+      color: theme.colors.title,
     },
     imageContainer: {
       width: '100%',
@@ -184,10 +184,13 @@ const getStyles = (theme, windowWidth) => {
       marginBottom: 15,
       paddingHorizontal: 20,
       paddingTop: 10,
-      color: theme.colors.text2,
+      color: theme.colors.title,
     },
     bottomSheetContainer: {
-      backgroundColor: theme.colors.background2,
+      backgroundColor: theme.colors.accent,
+    },
+    bottomSheetIndicator: {
+      backgroundColor: theme.colors.title,
     },
   })
 }
