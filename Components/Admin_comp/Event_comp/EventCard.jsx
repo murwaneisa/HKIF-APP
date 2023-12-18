@@ -11,8 +11,10 @@ import React from 'react'
 import { useTheme } from '../../../Styles/theme'
 import { useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native'
 
 const ActivityCard = ({ event, previous }) => {
+  const navigation = useNavigation()
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth, previous)
@@ -44,9 +46,12 @@ const ActivityCard = ({ event, previous }) => {
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('AddEvent', { eventId: 'event.id' })
+          }
           style={[styles.button, { backgroundColor: theme.colors.primary }]}
         >
-          <Text style={styles.buttonText}>View</Text>
+          <Text style={styles.buttonText}>{previous ? 'Publish' : 'View'}</Text>
         </TouchableOpacity>
         {previous ? (
           <TouchableOpacity style={[styles.button, { backgroundColor: 'red' }]}>

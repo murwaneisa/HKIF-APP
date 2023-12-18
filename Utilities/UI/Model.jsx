@@ -9,15 +9,58 @@ import {
 } from 'react-native'
 import { useState } from 'react'
 import { useTheme } from '../../Styles/theme'
+import DatePicker from 'react-native-modern-datepicker'
 
-const DatePickerModal = ({ isOpen, onClose, children }) => {
+const DatePickerModal = ({
+  isOpen,
+  onClose,
+  children,
+  handleChangeStartDate,
+  onSelectedChange,
+  pickerType,
+  startedDate,
+  selectedTime,
+}) => {
   const { theme } = useTheme()
   const styles = getStyles(theme)
+  console.log('Modal isOpen:', isOpen)
   return (
-    <Modal animationType='slide' transparent={true} visible={isOpen}>
+    <Modal animationType='fade' transparent={true} visible={isOpen}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          {children}
+          {pickerType === 'date' && (
+            <DatePicker
+              mode='calendar'
+              selected={startedDate}
+              onDateChanged={handleChangeStartDate}
+              onSelectedChange={onSelectedChange}
+              options={{
+                backgroundColor: '#080516',
+                textHeaderColor: theme.colors.primary,
+                textDefaultColor: '#FFFFFF',
+                selectedTextColor: '#FFF',
+                mainColor: theme.colors.primary,
+                textSecondaryColor: '#FFFFFF',
+                borderColor: 'rgba(122, 146, 165, 0.1)',
+              }}
+            />
+          )}
+          {pickerType === 'time' && (
+            <DatePicker
+              mode='time'
+              minuteInterval={3}
+              onTimeChange={selectedTime}
+              options={{
+                backgroundColor: '#080516',
+                textHeaderColor: theme.colors.primary,
+                textDefaultColor: '#FFFFFF',
+                selectedTextColor: '#FFF',
+                mainColor: theme.colors.primary,
+                textSecondaryColor: '#FFFFFF',
+                borderColor: 'rgba(122, 146, 165, 0.1)',
+              }}
+            />
+          )}
           <TouchableOpacity onPress={onClose}>
             <Text style={{ color: theme.colors.primary }}>Close</Text>
           </TouchableOpacity>

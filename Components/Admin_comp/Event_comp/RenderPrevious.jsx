@@ -57,11 +57,11 @@ const RenderCurrent = () => {
 
   const renderHeader = () => (
     <View style={styles.titleContainer}>
-      <Text style={styles.header}>5 Current Event</Text>
-      <View style={styles.subtitleContainer}>
+      <Text style={styles.header}>(5) previous Event</Text>
+      {/*    <View style={styles.subtitleContainer}>
         <AntDesign name='pluscircleo' size={24} color={theme.colors.primary} />
         <Text style={styles.subHeader}>Add Event</Text>
-      </View>
+      </View> */}
     </View>
   )
 

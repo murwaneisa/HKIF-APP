@@ -37,7 +37,7 @@ const customHeaderLeft = routeName => {
         }}
       >
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
-          <Ionicons name='menu' size={38} color={theme.colors.text} />
+          <Ionicons name='menu' size={30} color={theme.colors.text} />
         </TouchableOpacity>
       </View>
     )
@@ -54,7 +54,7 @@ const customHeaderLeft = routeName => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons
             name='arrow-back-outline'
-            size={38}
+            size={30}
             color={theme.colors.text}
           />
         </TouchableOpacity>
@@ -78,7 +78,7 @@ const notificationBell = () => {
       <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
         <Ionicons
           name='notifications-outline'
-          size={38}
+          size={30}
           color={theme.colors.text}
         />
       </TouchableOpacity>
@@ -123,8 +123,16 @@ const AdminStack = () => {
         }}
         component={MenuStack}
       />
-      <Stack.Screen name='MemberDetails' component={MemberDetails} />
-      <Stack.Screen name='AddEvent' component={AddEvent} />
+      <Stack.Screen
+        name='MemberDetails'
+        options={{ headerTitle: 'Member Details' }}
+        component={MemberDetails}
+      />
+      <Stack.Screen
+        name='AddEvent'
+        options={{ headerTitle: 'Create Event' }}
+        component={AddEvent}
+      />
     </Stack.Navigator>
   )
 }

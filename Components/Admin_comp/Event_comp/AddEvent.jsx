@@ -4,24 +4,24 @@ import {
   StyleSheet,
   Platform,
   TextInput,
-  Modal,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   KeyboardAvoidingView,
   ScrollView,
+  Pressable,
 } from 'react-native'
 import React from 'react'
 import { useTheme } from '../../../Styles/theme'
-import Input from '../../../Utilities/UI/Input'
-import DatePicker from 'react-native-modern-datepicker'
 import { useState } from 'react'
 import DatePickerModal from '../../../Utilities/UI/Model'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons'
 import Checkbox from 'expo-checkbox'
+import { MaterialIcons } from '@expo/vector-icons'
+import { FontAwesome5 } from '@expo/vector-icons'
 
-const AddEvent = () => {
+const AddEvent = ({ route, navigation }) => {
   const { theme } = useTheme()
+  const { eventId } = route.params || {}
   const [openStartDatePicker, setOpenStartDatePicker] = useState(false)
   const [pickerType, setPickerType] = useState('date') // New state for picker type
   const [startedDate, setStartedDate] = useState('12/12/2023')
@@ -34,11 +34,6 @@ const AddEvent = () => {
 
   const openDatePicker = () => {
     setPickerType('date')
-    setOpenStartDatePicker(true)
-  }
-
-  const openTimePicker = () => {
-    setPickerType('time')
     setOpenStartDatePicker(true)
   }
 
@@ -72,6 +67,28 @@ const AddEvent = () => {
             placeholderTextColor={theme.colors.text}
             style={styles.input}
           />
+        </View>
+        {/* image */}
+        <View
+          style={[
+            styles.descriptionInput,
+            {
+              backgroundColor: theme.colors.accent2,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderWidth: 0,
+              borderColor: theme.colors.text,
+            },
+          ]}
+        >
+          <MaterialIcons
+            name='add-a-photo'
+            size={28}
+            color={theme.colors.text}
+          />
+          <Text style={[styles.sectionText, { marginTop: 8 }]}>
+            Upload event image
+          </Text>
         </View>
         {/* date and time */}
         <View style={styles.dateTimeContainer}>
@@ -111,38 +128,60 @@ const AddEvent = () => {
                 Starts
               </Text>
             </View>
-            <TouchableWithoutFeedback onPress={openDatePicker}>
-              <View style={styles.dateField}>
+            <View style={[styles.dateField]}>
+              {Platform.OS === 'web' ? (
                 <TextInput
                   autoCorrect={false}
                   autoCapitalize='words'
                   placeholder='Aug 21 2002'
+                  onChangeText={setSelectedStartDate}
                   value={selectedStartDate}
                   placeholderTextColor={theme.colors.primary}
-                  editable={false}
                   style={[
                     styles.input,
                     { backgroundColor: theme.colors.accent },
                   ]}
                 />
-              </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={openTimePicker}>
-              <View style={styles.dateField}>
+              ) : (
+                <Pressable
+                  onPress={
+                    Platform.select === 'web' ? undefine : openDatePicker
+                  }
+                  style={styles.pressable}
+                >
+                  <Text style={styles.inputText}>
+                    {selectedStartDate || 'Aug 21 2002'}
+                  </Text>
+                </Pressable>
+              )}
+            </View>
+            <View style={styles.dateField}>
+              {Platform.OS === 'web' ? (
                 <TextInput
                   autoCorrect={false}
                   autoCapitalize='words'
                   placeholder='10:00'
+                  onChangeText={setSelectedStartDate}
+                  value={selectedStartDate}
                   placeholderTextColor={theme.colors.primary}
-                  value={time}
-                  editable={false}
                   style={[
                     styles.input,
                     { backgroundColor: theme.colors.accent },
                   ]}
                 />
-              </View>
-            </TouchableWithoutFeedback>
+              ) : (
+                <Pressable
+                  onPress={
+                    Platform.select === 'web' ? undefine : openDatePicker
+                  }
+                  style={styles.pressable}
+                >
+                  <View style={[styles.inputContainer, { borderRadius: 6 }]}>
+                    <Text style={styles.inputText}>{time || '10:00'}</Text>
+                  </View>
+                </Pressable>
+              )}
+            </View>
           </View>
           <View style={styles.startDate}>
             <View style={styles.sectionTitle}>
@@ -152,38 +191,62 @@ const AddEvent = () => {
                 Ends
               </Text>
             </View>
-            <TouchableWithoutFeedback onPress={openDatePicker}>
-              <View style={styles.dateField}>
+            <View style={styles.dateField}>
+              {Platform.OS === 'web' ? (
                 <TextInput
                   autoCorrect={false}
                   autoCapitalize='words'
                   placeholder='Aug 21 2002'
-                  placeholderTextColor={theme.colors.primary}
+                  onChangeText={setSelectedStartDate}
                   value={selectedStartDate}
-                  editable={false}
+                  placeholderTextColor={theme.colors.primary}
                   style={[
                     styles.input,
                     { backgroundColor: theme.colors.accent },
                   ]}
                 />
-              </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={openTimePicker}>
-              <View style={styles.dateField}>
+              ) : (
+                <Pressable
+                  onPress={
+                    Platform.select === 'web' ? undefine : openDatePicker
+                  }
+                  style={styles.pressable}
+                >
+                  <View style={styles.inputContainer}>
+                    <Text style={styles.inputText}>
+                      {selectedStartDate || 'Aug 21 2002'}
+                    </Text>
+                  </View>
+                </Pressable>
+              )}
+            </View>
+            <View style={styles.dateField}>
+              {Platform.OS === 'web' ? (
                 <TextInput
                   autoCorrect={false}
                   autoCapitalize='words'
                   placeholder='10:00'
+                  onChangeText={setSelectedStartDate}
+                  value={selectedStartDate}
                   placeholderTextColor={theme.colors.primary}
-                  value={time}
-                  editable={false}
                   style={[
                     styles.input,
                     { backgroundColor: theme.colors.accent },
                   ]}
                 />
-              </View>
-            </TouchableWithoutFeedback>
+              ) : (
+                <Pressable
+                  onPress={
+                    Platform.select === 'web' ? undefine : openDatePicker
+                  }
+                  style={styles.pressable}
+                >
+                  <View style={[styles.inputContainer, { borderRadius: 6 }]}>
+                    <Text style={styles.inputText}>{time || '10:00'}</Text>
+                  </View>
+                </Pressable>
+              )}
+            </View>
           </View>
         </View>
         {/* location */}
@@ -198,6 +261,26 @@ const AddEvent = () => {
           </View>
           <TextInput
             placeholder='Add location'
+            placeholderTextColor={theme.colors.text}
+            style={styles.input}
+          />
+        </View>
+        {/* Price */}
+        <View
+          style={[
+            styles.sectionContainer,
+            { backgroundColor: theme.colors.accent2 },
+          ]}
+        >
+          <View style={styles.sectionTitle}>
+            <FontAwesome5
+              name='dollar-sign'
+              size={24}
+              color={theme.colors.text}
+            />
+          </View>
+          <TextInput
+            placeholder='Add price'
             placeholderTextColor={theme.colors.text}
             style={styles.input}
           />
@@ -275,45 +358,35 @@ const AddEvent = () => {
             </View>
           )}
         </View>
+
+        {/*buttons  */}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: theme.colors.primary }]}
+          >
+            <Text style={styles.buttonText}>
+              {eventId ? 'Edit' : 'Create event'}
+            </Text>
+          </TouchableOpacity>
+          {eventId ? (
+            <TouchableOpacity
+              style={[styles.button, { backgroundColor: 'red' }]}
+            >
+              <Text style={styles.buttonText}>Delete Event</Text>
+            </TouchableOpacity>
+          ) : null}
+        </View>
+
         {/* model */}
         <DatePickerModal
+          startedDate={startedDate}
           isOpen={openStartDatePicker}
           onClose={handleCloseModal}
-        >
-          {pickerType === 'date' && (
-            <DatePicker
-              mode='calendar'
-              selected={startedDate}
-              onDateChanged={handleChangeStartDate}
-              onSelectedChange={date => setSelectedStartDate(date)}
-              options={{
-                backgroundColor: '#080516',
-                textHeaderColor: theme.colors.primary,
-                textDefaultColor: '#FFFFFF',
-                selectedTextColor: '#FFF',
-                mainColor: theme.colors.primary,
-                textSecondaryColor: '#FFFFFF',
-                borderColor: 'rgba(122, 146, 165, 0.1)',
-              }}
-            />
-          )}
-          {pickerType === 'time' && (
-            <DatePicker
-              mode='time'
-              minuteInterval={3}
-              onTimeChange={selectedTime => setTime(selectedTime)}
-              options={{
-                backgroundColor: '#080516',
-                textHeaderColor: theme.colors.primary,
-                textDefaultColor: '#FFFFFF',
-                selectedTextColor: '#FFF',
-                mainColor: theme.colors.primary,
-                textSecondaryColor: '#FFFFFF',
-                borderColor: 'rgba(122, 146, 165, 0.1)',
-              }}
-            />
-          )}
-        </DatePickerModal>
+          handleChangeStartDate={handleChangeStartDate}
+          onSelectedChange={date => setSelectedStartDate(date)}
+          selectedTime={selectedTime => setTime(selectedTime)}
+          pickerType={pickerType}
+        ></DatePickerModal>
       </ScrollView>
     </KeyboardAvoidingView>
   )
@@ -359,18 +432,34 @@ const getStyles = theme => {
       fontFamily: 'Inter-Bold',
       color: theme.colors.text,
     },
+    pressable: {
+      borderRadius: 6,
+      backgroundColor: theme.colors.accent,
+      padding: Platform.select({
+        ios: 10,
+        android: 6,
+        web: 16,
+      }),
+    },
     dateField: {
       marginHorizontal: 8,
     },
     input: {
       backgroundColor: theme.colors.accent2,
+      width: Platform.select({
+        web: ' 100%',
+      }),
       color: theme.colors.text,
       padding: Platform.select({
         ios: 10,
         android: 6,
         web: 16,
       }),
-      borderRadius: 6,
+      fontSize: 18,
+    },
+    inputText: {
+      color: theme.colors.text,
+
       fontSize: 18,
     },
     DatePickerButton: {
@@ -434,6 +523,25 @@ const getStyles = theme => {
       shadowOpacity: 0.25,
       shadowRadius: 4,
       elevation: 5,
+    },
+    buttonContainer: {
+      marginVertical: 10,
+      justifyContent: 'space-between',
+    },
+    button: {
+      width: '100%',
+      borderRadius: 8,
+      padding: 12,
+      alignItems: 'center',
+    },
+    buttonText: {
+      color: '#ffffff',
+      fontWeight: 'bold',
+      fontSize: Platform.select({
+        ios: 16,
+        android: 15,
+        web: 18,
+      }),
     },
   })
 }

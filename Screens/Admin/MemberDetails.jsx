@@ -13,9 +13,6 @@ import { useTheme } from '../../Styles/theme'
 
 const MemberDetails = () => {
   const navigation = useNavigation()
-  useEffect(() => {
-    navigation.setOptions({ headerTitle: 'Member Details' })
-  }, [navigation])
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
