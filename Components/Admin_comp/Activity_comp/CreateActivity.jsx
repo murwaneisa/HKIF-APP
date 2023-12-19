@@ -21,7 +21,8 @@ import { FontAwesome5 } from '@expo/vector-icons'
 
 const CreateActivity = ({ route, navigation }) => {
   const { theme } = useTheme()
-  const { eventId } = route.params || {}
+  const { activityId } = route?.params || {}
+  console.log(activityId)
   const [openStartDatePicker, setOpenStartDatePicker] = useState(false)
   const [pickerType, setPickerType] = useState('date') // New state for picker type
   const [startedDate, setStartedDate] = useState('12/12/2023')
@@ -381,10 +382,10 @@ const CreateActivity = ({ route, navigation }) => {
             style={[styles.button, { backgroundColor: theme.colors.primary }]}
           >
             <Text style={styles.buttonText}>
-              {eventId ? 'Edit Event' : 'Create Event'}
+              {activityId ? 'Edit Event' : 'Create Event'}
             </Text>
           </TouchableOpacity>
-          {eventId ? (
+          {activityId ? (
             <TouchableOpacity
               style={[styles.button, { backgroundColor: 'red' }]}
             >
@@ -412,11 +413,6 @@ const getStyles = theme => {
   return StyleSheet.create({
     container: {
       backgroundColor: theme.colors.backgroundSecondary,
-      paddingHorizontal: Platform.select({
-        ios: '5%',
-        android: '5%',
-        web: '10%',
-      }),
       paddingVertical: Platform.select({
         ios: '2%',
         android: '2%',

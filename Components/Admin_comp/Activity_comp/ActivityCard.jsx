@@ -67,7 +67,7 @@ const ActivityCard = ({ activity }) => {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate('CreateActivity', { eventId: 'activity.id' })
+            navigation.navigate('CreateActivity', { activityId: 'activity.id' })
           }
           style={[styles.button, { backgroundColor: theme.colors.primary }]}
         >

@@ -11,6 +11,7 @@ import { useTheme } from '../../Styles/theme'
 import RenderPrevious from '../../Components/Admin_comp/Event_comp/RenderPrevious'
 import RenderActivities from '../../Components/Admin_comp/Activity_comp/RenderActivities'
 import CreateActivity from '../../Components/Admin_comp/Activity_comp/CreateActivity'
+import { useNavigation } from '@react-navigation/native'
 
 const Activities = () => {
   const windowWidth = Dimensions.get('window').width
@@ -18,6 +19,7 @@ const Activities = () => {
   const styles = getStyles(theme, windowWidth)
   const [activeList, setActiveList] = useState('Activities')
   const [user, setUser] = useState({ role: 'superAdmin' })
+  const navigation = useNavigation()
 
   const getButtonStyle = listName => ({
     flex: 1,
@@ -87,7 +89,7 @@ const Activities = () => {
         <RenderActivities />
       ) : (
         // ... render your members list component here
-        <CreateActivity />
+        <CreateActivity navigation={navigation} />
         // ... render your requests list component here
       )}
     </View>
