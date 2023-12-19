@@ -32,6 +32,16 @@ const CreateActivity = ({ route, navigation }) => {
   const [showCheck, setCheck] = useState(true)
   const [isChecked, setChecked] = useState(false)
   const styles = getStyles(theme)
+  const [selectedDays, setSelectedDays] = useState({})
+  const weekdays = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+  ]
 
   const openDatePicker = () => {
     setPickerType('date')
@@ -53,7 +63,23 @@ const CreateActivity = ({ route, navigation }) => {
   const focusInput = inputKey => {
     inputRefs.current[inputKey]?.focus()
   }
+  // Function to toggle day selection
+  const toggleDaySelection = day => {
+    setSelectedDays(prevSelectedDays => ({
+      ...prevSelectedDays,
+      [day]: !prevSelectedDays[day],
+    }))
+  }
 
+  // Function to handle start time selection
+  const handleStartTimeChange = (day, time) => {
+    // Logic to update start time for a specific day
+  }
+
+  // Function to handle end time selection
+  const handleEndTimeChange = (day, time) => {
+    // Logic to update end time for a specific day
+  }
   return (
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: theme.colors.backgroundSecondary }}
@@ -102,165 +128,6 @@ const CreateActivity = ({ route, navigation }) => {
           <Text style={[styles.sectionText, { marginTop: 8 }]}>
             Upload event image
           </Text>
-        </View>
-        {/* date and time */}
-        <View style={styles.dateTimeContainer}>
-          <View
-            style={[
-              styles.sectionContainer,
-              {
-                borderBottomWidth: 1,
-                borderBottomColor: theme.colors.text,
-                paddingHorizontal: 0,
-                paddingBottom: 10,
-                marginVertical: 0,
-                marginBottom: 10,
-                borderRadius: 0,
-              },
-            ]}
-          >
-            <MaterialCommunityIcons
-              name='calendar-clock'
-              size={24}
-              color={theme.colors.text}
-            />
-            <Text
-              style={[
-                styles.sectionText,
-                { marginLeft: 10, fontFamily: 'Inter-Bold' },
-              ]}
-            >
-              Event date & time
-            </Text>
-          </View>
-          <View style={styles.startDate}>
-            <View style={styles.sectionTitle}>
-              <Text
-                style={[styles.sectionText, { fontFamily: 'Inter-SemiBold' }]}
-              >
-                Starts
-              </Text>
-            </View>
-            <View style={[styles.dateField]}>
-              {Platform.OS === 'web' ? (
-                <TextInput
-                  autoCorrect={false}
-                  autoCapitalize='words'
-                  placeholder='Aug 21 2002'
-                  onChangeText={setSelectedStartDate}
-                  value={selectedStartDate}
-                  placeholderTextColor={theme.colors.primary}
-                  style={[
-                    styles.input,
-                    { backgroundColor: theme.colors.accent },
-                  ]}
-                />
-              ) : (
-                <Pressable
-                  onPress={
-                    Platform.select === 'web' ? undefine : openDatePicker
-                  }
-                  style={styles.pressable}
-                >
-                  <Text style={styles.inputText}>
-                    {selectedStartDate || 'Aug 21 2002'}
-                  </Text>
-                </Pressable>
-              )}
-            </View>
-            <View style={styles.dateField}>
-              {Platform.OS === 'web' ? (
-                <TextInput
-                  autoCorrect={false}
-                  autoCapitalize='words'
-                  placeholder='10:00'
-                  onChangeText={setSelectedStartDate}
-                  value={selectedStartDate}
-                  placeholderTextColor={theme.colors.primary}
-                  style={[
-                    styles.input,
-                    { backgroundColor: theme.colors.accent },
-                  ]}
-                />
-              ) : (
-                <Pressable
-                  onPress={
-                    Platform.select === 'web' ? undefine : openDatePicker
-                  }
-                  style={styles.pressable}
-                >
-                  <View style={[styles.inputContainer, { borderRadius: 6 }]}>
-                    <Text style={styles.inputText}>{time || '10:00'}</Text>
-                  </View>
-                </Pressable>
-              )}
-            </View>
-          </View>
-          <View style={styles.startDate}>
-            <View style={styles.sectionTitle}>
-              <Text
-                style={[styles.sectionText, { fontFamily: 'Inter-SemiBold' }]}
-              >
-                Ends
-              </Text>
-            </View>
-            <View style={styles.dateField}>
-              {Platform.OS === 'web' ? (
-                <TextInput
-                  autoCorrect={false}
-                  autoCapitalize='words'
-                  placeholder='Aug 21 2002'
-                  onChangeText={setSelectedStartDate}
-                  value={selectedStartDate}
-                  placeholderTextColor={theme.colors.primary}
-                  style={[
-                    styles.input,
-                    { backgroundColor: theme.colors.accent },
-                  ]}
-                />
-              ) : (
-                <Pressable
-                  onPress={
-                    Platform.select === 'web' ? undefine : openDatePicker
-                  }
-                  style={styles.pressable}
-                >
-                  <View style={styles.inputContainer}>
-                    <Text style={styles.inputText}>
-                      {selectedStartDate || 'Aug 21 2002'}
-                    </Text>
-                  </View>
-                </Pressable>
-              )}
-            </View>
-            <View style={styles.dateField}>
-              {Platform.OS === 'web' ? (
-                <TextInput
-                  autoCorrect={false}
-                  autoCapitalize='words'
-                  placeholder='10:00'
-                  onChangeText={setSelectedStartDate}
-                  value={selectedStartDate}
-                  placeholderTextColor={theme.colors.primary}
-                  style={[
-                    styles.input,
-                    { backgroundColor: theme.colors.accent },
-                  ]}
-                />
-              ) : (
-                <Pressable
-                  onPress={
-                    Platform.select === 'web' ? undefine : openDatePicker
-                  }
-                  style={styles.pressable}
-                >
-                  <View style={[styles.inputContainer, { borderRadius: 6 }]}>
-                    <Text style={styles.inputText}>{time || '10:00'}</Text>
-                  </View>
-                </Pressable>
-              )}
-            </View>
-          </View>
         </View>
         {/* location */}
         <TouchableOpacity
@@ -321,61 +188,125 @@ const CreateActivity = ({ route, navigation }) => {
             />
           )}
         </View>
-        {/* includes */}
-        <View style={[styles.descriptionContainer]}>
-          <TouchableOpacity
-            style={[styles.descriptionTitle]}
-            onPress={() => setShowInput(true)}
+        {/* day and time section */}
+        <View style={styles.dateTimeContainer}>
+          <View
+            style={[
+              styles.sectionContainer,
+              {
+                borderBottomWidth: 1,
+                borderBottomColor: theme.colors.text,
+                paddingHorizontal: 0,
+                paddingBottom: 10,
+                marginVertical: 0,
+                marginBottom: 10,
+                borderRadius: 0,
+              },
+            ]}
           >
-            <View>
-              <Text style={styles.sectionText}>Includes</Text>
-            </View>
-          </TouchableOpacity>
-          {showCheck && (
-            <View>
-              <View style={styles.checkboxContainer}>
-                <Checkbox
-                  style={styles.checkbox}
-                  value={isChecked}
-                  onValueChange={setChecked}
-                  color={isChecked ? theme.colors.primary : undefined}
-                />
-                <Text
-                  style={[styles.sectionText, { fontFamily: 'Inter-SemiBold' }]}
-                >
-                  Food
-                </Text>
-              </View>
-              <View style={styles.checkboxContainer}>
-                <Checkbox
-                  style={styles.checkbox}
-                  value={isChecked}
-                  onValueChange={setChecked}
-                  color={isChecked ? theme.colors.primary : undefined}
-                />
-                <Text
-                  style={[styles.sectionText, { fontFamily: 'Inter-SemiBold' }]}
-                >
-                  Drinks
-                </Text>
-              </View>
-              <View style={styles.checkboxContainer}>
-                <Checkbox
-                  style={styles.checkbox}
-                  value={isChecked}
-                  onValueChange={setChecked}
-                  color={isChecked ? theme.colors.primary : undefined}
-                />
-                <Text
-                  style={[styles.sectionText, { fontFamily: 'Inter-SemiBold' }]}
-                >
-                  Games
-                </Text>
-              </View>
-            </View>
-          )}
-        </View>
+            <MaterialCommunityIcons
+              name='calendar-clock'
+              size={24}
+              color={theme.colors.text}
+            />
+            <Text
+              style={[
+                styles.sectionText,
+                { marginLeft: 10, fontFamily: 'Inter-Bold' },
+              ]}
+            >
+              Activity day & time
+            </Text>
+          </View>
+          {/* render week days */}
+          {weekdays.map(day => (
+            <View key={day} style={styles.checkboxContainer}>
+              <Checkbox
+                style={styles.checkbox}
+                value={isChecked}
+                onValueChange={setChecked}
+                color={isChecked ? theme.colors.primary : undefined}
+              />
+              <Text
+                style={[
+                  styles.sectionText,
+                  {
+                    fontFamily: 'Inter-SemiBold',
 
+                    width: '28%',
+                  },
+                ]}
+              >
+                {day}
+              </Text>
+              <View style={styles.timePickerContainer}>
+                {/* start time  picker */}
+                <View style={styles.dateField}>
+                  {Platform.OS === 'web' ? (
+                    <TextInput
+                      autoCorrect={false}
+                      autoCapitalize='words'
+                      placeholder='10:00'
+                      onChangeText={setSelectedStartDate}
+                      value={selectedStartDate}
+                      placeholderTextColor={theme.colors.primary}
+                      style={[
+                        styles.input,
+                        { backgroundColor: theme.colors.accent },
+                      ]}
+                    />
+                  ) : (
+                    <Pressable
+                      onPress={
+                        Platform.select === 'web' ? undefine : openDatePicker
+                      }
+                      style={styles.pressable}
+                    >
+                      <View
+                        style={[styles.inputContainer, { borderRadius: 6 }]}
+                      >
+                        <Text style={styles.inputText}>{time || '00:00'}</Text>
+                      </View>
+                    </Pressable>
+                  )}
+                </View>
+
+                {/* end time picker */}
+
+                <View style={styles.dateField}>
+                  {Platform.OS === 'web' ? (
+                    <TextInput
+                      autoCorrect={false}
+                      autoCapitalize='words'
+                      placeholder='10:00'
+                      onChangeText={setSelectedStartDate}
+                      value={selectedStartDate}
+                      placeholderTextColor={theme.colors.primary}
+                      style={[
+                        styles.input,
+                        { backgroundColor: theme.colors.accent },
+                      ]}
+                    />
+                  ) : (
+                    <Pressable
+                      onPress={
+                        Platform.select === 'web' ? undefine : openDatePicker
+                      }
+                      style={styles.pressable}
+                    >
+                      <View
+                        style={[styles.inputContainer, { borderRadius: 6 }]}
+                      >
+                        <Text style={styles.inputText}>{time || '00:00'}</Text>
+                      </View>
+                    </Pressable>
+                  )}
+                </View>
+              </View>
+            </View>
+          ))}
+          {/* end of render week days */}
+        </View>
         {/*buttons  */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -555,6 +486,11 @@ const getStyles = theme => {
         android: 15,
         web: 18,
       }),
+    },
+
+    timePickerContainer: {
+      flexDirection: 'row',
+      marginLeft: 10,
     },
   })
 }
