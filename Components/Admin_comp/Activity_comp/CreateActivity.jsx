@@ -18,6 +18,7 @@ import { Entypo } from '@expo/vector-icons'
 import Checkbox from 'expo-checkbox'
 import { MaterialIcons } from '@expo/vector-icons'
 import { FontAwesome5 } from '@expo/vector-icons'
+import CoachSelector from './CoachSelector'
 
 const CreateActivity = ({ route, navigation }) => {
   const { theme } = useTheme()
@@ -117,6 +118,9 @@ const CreateActivity = ({ route, navigation }) => {
               alignItems: 'center',
               borderWidth: 0,
               borderColor: theme.colors.text,
+              shadowOpacity: 0.2,
+              shadowRadius: 1.41,
+              elevation: 2,
             },
           ]}
         >
@@ -169,6 +173,8 @@ const CreateActivity = ({ route, navigation }) => {
             style={styles.input}
           />
         </TouchableOpacity>
+        {/* select coach */}
+        {<CoachSelector />}
         {/* description */}
         <View style={[styles.descriptionContainer]}>
           <TouchableOpacity
@@ -201,6 +207,9 @@ const CreateActivity = ({ route, navigation }) => {
                 marginVertical: 0,
                 marginBottom: 10,
                 borderRadius: 0,
+                shadowOpacity: 0,
+                shadowRadius: 0,
+                elevation: 0,
               },
             ]}
           >
@@ -307,6 +316,7 @@ const CreateActivity = ({ route, navigation }) => {
           ))}
           {/* end of render week days */}
         </View>
+
         {/*buttons  */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -367,6 +377,9 @@ const getStyles = theme => {
       marginVertical: 10,
       borderRadius: 6,
       paddingHorizontal: 12,
+      shadowOpacity: 0.2,
+      shadowRadius: 1.41,
+      elevation: 2,
     },
     sectionTitle: {
       width: 50,
