@@ -9,6 +9,7 @@ import {
 import React from 'react'
 import { useTheme } from '../Styles/theme'
 import { Feather } from '@expo/vector-icons'
+import UserInfoCard from '../Components/UserInfoCard'
 
 const Profile = ({ navigation }) => {
   const { theme } = useTheme()
@@ -30,64 +31,34 @@ const Profile = ({ navigation }) => {
         <Text style={styles.title}>Ahmed Mohammed</Text>
       </View>
       <View style={styles.contentSection}>
-        <View style={styles.infoCard}>
-          <View style={styles.iconTextWrapper}>
-            <Feather name='user' style={styles.infoIcon} />
-            <Text style={styles.infoText}>Ahmed Mohammed</Text>
-          </View>
-          <Pressable
-            style={styles.editIconWrapper}
-            onPress={() => {
-              navigation.navigate('EditProfile', { type: 'Name' })
-            }}
-          >
-            <Feather name='edit' style={styles.icon} />
-          </Pressable>
-        </View>
-        <View style={styles.infoCard}>
-          <View style={styles.iconTextWrapper}>
-            <Feather name='mail' style={styles.infoIcon} />
-            <Text style={styles.infoText}>a23134@gmail.com</Text>
-          </View>
-          <Pressable
-            style={styles.editIconWrapper}
-            onPress={() => {
-              navigation.navigate('EditProfile', { type: 'Email' })
-            }}
-          >
-            <Feather name='edit' style={styles.icon} />
-          </Pressable>
-        </View>
-        <View style={styles.infoCard}>
-          <View style={styles.iconTextWrapper}>
-            <Feather name='map-pin' style={styles.infoIcon} />
-            <Text style={styles.infoText} numberOfLines={1}>
-              Olastorpsvägen 38, 391 29, Kristianstad asdfdsaf
-            </Text>
-          </View>
-          <Pressable
-            style={styles.editIconWrapper}
-            onPress={() => {
-              navigation.navigate('EditProfile', { type: 'Address' })
-            }}
-          >
-            <Feather name='edit' style={styles.icon} />
-          </Pressable>
-        </View>
-        <View style={styles.infoCard}>
-          <View style={styles.iconTextWrapper}>
-            <Feather name='phone' style={styles.infoIcon} />
-            <Text style={styles.infoText}>070022442214</Text>
-          </View>
-          <Pressable
-            style={styles.editIconWrapper}
-            onPress={() => {
-              navigation.navigate('EditProfile', { type: 'Phone' })
-            }}
-          >
-            <Feather name='edit' style={styles.icon} />
-          </Pressable>
-        </View>
+        <UserInfoCard
+          iconName={'user'}
+          text={'Ahmed Mohammed'}
+          onPress={() => {
+            navigation.navigate('EditProfile', { type: 'Name' })
+          }}
+        />
+        <UserInfoCard
+          iconName={'mail'}
+          text={'a23134@gmail.com'}
+          onPress={() => {
+            navigation.navigate('EditProfile', { type: 'Email' })
+          }}
+        />
+        <UserInfoCard
+          iconName={'map-pin'}
+          text={'Olastorpsvägen 38, 391 29, Kristianstad asdfdsaf'}
+          onPress={() => {
+            navigation.navigate('EditProfile', { type: 'Address' })
+          }}
+        />
+        <UserInfoCard
+          iconName={'phone'}
+          text={'070022442214'}
+          onPress={() => {
+            navigation.navigate('EditProfile', { type: 'Phone' })
+          }}
+        />
       </View>
     </View>
   )
@@ -131,33 +102,6 @@ const getStyles = (theme, windowWidth) => {
     contentSection: {
       marginTop: 20,
       paddingHorizontal: 20,
-    },
-    infoCard: {
-      backgroundColor: theme.colors.accent,
-      flexDirection: 'row',
-      padding: 20,
-      borderRadius: 15,
-      marginBottom: 20,
-    },
-    iconTextWrapper: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      flex: 1,
-    },
-    infoIcon: {
-      color: theme.colors.primary,
-      fontSize: 16,
-      marginRight: 8,
-    },
-    infoText: {
-      color: theme.colors.text,
-      fontFamily: 'Inter-SemiBold',
-      fontSize: 15,
-      marginRight: 40,
-    },
-    icon: {
-      fontSize: 16,
-      color: theme.colors.text,
     },
   })
 }
