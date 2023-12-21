@@ -148,11 +148,12 @@ const getStyles = (theme, windowWidth) => {
       color: theme.colors.title,
     },
     imageContainer: {
+      backgroundColor: 'rgba(0,0,0,0.2)',
       width: '100%',
       height: 225,
       borderRadius: 15,
       marginBottom: 20,
-      paddingTop: 20,
+      marginTop: 20,
     },
     image: {
       width: '100%',
