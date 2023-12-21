@@ -10,7 +10,7 @@ import React from 'react'
 import { useTheme } from '../Styles/theme'
 import { Feather } from '@expo/vector-icons'
 
-const Profile = () => {
+const Profile = ({ navigation }) => {
   const { theme } = useTheme()
   const windowWidth = Dimensions.get('window').width
   const styles = getStyles(theme, windowWidth)
@@ -35,7 +35,12 @@ const Profile = () => {
             <Feather name='user' style={styles.infoIcon} />
             <Text style={styles.infoText}>Ahmed Mohammed</Text>
           </View>
-          <Pressable style={styles.editIconWrapper}>
+          <Pressable
+            style={styles.editIconWrapper}
+            onPress={() => {
+              navigation.navigate('EditProfile', { type: 'Name' })
+            }}
+          >
             <Feather name='edit' style={styles.icon} />
           </Pressable>
         </View>
@@ -44,7 +49,12 @@ const Profile = () => {
             <Feather name='mail' style={styles.infoIcon} />
             <Text style={styles.infoText}>a23134@gmail.com</Text>
           </View>
-          <Pressable style={styles.editIconWrapper}>
+          <Pressable
+            style={styles.editIconWrapper}
+            onPress={() => {
+              navigation.navigate('EditProfile', { type: 'Email' })
+            }}
+          >
             <Feather name='edit' style={styles.icon} />
           </Pressable>
         </View>
@@ -55,7 +65,12 @@ const Profile = () => {
               Olastorpsvägen 38, 391 29, Kristianstad asdfdsaf
             </Text>
           </View>
-          <Pressable style={styles.editIconWrapper}>
+          <Pressable
+            style={styles.editIconWrapper}
+            onPress={() => {
+              navigation.navigate('EditProfile', { type: 'Address' })
+            }}
+          >
             <Feather name='edit' style={styles.icon} />
           </Pressable>
         </View>
@@ -64,7 +79,12 @@ const Profile = () => {
             <Feather name='phone' style={styles.infoIcon} />
             <Text style={styles.infoText}>070022442214</Text>
           </View>
-          <Pressable style={styles.editIconWrapper}>
+          <Pressable
+            style={styles.editIconWrapper}
+            onPress={() => {
+              navigation.navigate('EditProfile', { type: 'Phone' })
+            }}
+          >
             <Feather name='edit' style={styles.icon} />
           </Pressable>
         </View>
@@ -115,7 +135,6 @@ const getStyles = (theme, windowWidth) => {
     infoCard: {
       backgroundColor: theme.colors.accent,
       flexDirection: 'row',
-      // justifyContent: 'space-between',
       padding: 20,
       borderRadius: 15,
       marginBottom: 20,
