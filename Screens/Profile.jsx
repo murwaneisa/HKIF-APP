@@ -6,28 +6,46 @@ import {
   Image,
   Pressable,
 } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { useTheme } from '../Styles/theme'
 import { Feather } from '@expo/vector-icons'
 import UserInfoCard from '../Components/UserInfoCard'
+import HKIFImagePicker from '../Utilities/Helper/HKIFImagePicker'
 
 const Profile = ({ navigation }) => {
   const { theme } = useTheme()
   const windowWidth = Dimensions.get('window').width
   const styles = getStyles(theme, windowWidth)
+  const [image, setImage] = useState(null)
+
+  const handlePickImage = async () => {
+    const uri = await HKIFImagePicker.pickImage()
+    if (uri) {
+      setImage(uri)
+    }
+  }
+
+  const handleUploadImage = async () => {
+    if (image) {
+      await HKIFImagePicker.uploadImageAsync(image)
+    }
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.headerSection}>
-        <View style={styles.imageContainer}>
+        <Pressable style={styles.imageContainer} onPress={handlePickImage}>
           <Image
             style={styles.image}
             source={{
-              uri: 'https://images.unsplash.com/photo-1513635625218-6956bc843133?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Zm9vdGJhbGwlMjBpbiUyMHNwb3J0JTIwaGFsbHxlbnwwfHwwfHx8MA%3D%3D',
+              uri: image,
             }}
             resizeMode='cover'
           />
-        </View>
+          <View style={styles.editIconWrapper}>
+            <Feather name='edit' style={styles.editIcon} />
+          </View>
+        </Pressable>
         <Text style={styles.title}>Ahmed Mohammed</Text>
       </View>
       <View style={styles.contentSection}>
@@ -88,11 +106,26 @@ const getStyles = (theme, windowWidth) => {
       height: 120,
       borderRadius: 120,
       marginBottom: 15,
+      position: 'relative',
     },
     image: {
       width: '100%',
       height: '100%',
       borderRadius: 120,
+    },
+    editIconWrapper: {
+      position: 'absolute',
+      right: 1,
+      bottom: 1,
+      backgroundColor: theme.colors.accent,
+      padding: 8,
+      borderRadius: 40,
+      borderWidth: 4,
+      borderColor: theme.colors.backgroundPrimary,
+    },
+    editIcon: {
+      fontSize: 16,
+      color: theme.colors.text,
     },
     title: {
       color: theme.colors.text,
