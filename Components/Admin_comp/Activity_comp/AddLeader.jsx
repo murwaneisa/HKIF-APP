@@ -1,5 +1,12 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
-import React from 'react'
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  TextInput,
+} from 'react-native'
+import React, { useState } from 'react'
 import { useTheme } from '../../../Styles/theme'
 import { Platform } from 'react-native'
 import { Feather } from '@expo/vector-icons'
@@ -19,6 +26,13 @@ const AddLeader = () => {
     android: 28,
     web: 45,
   })
+  // State to manage if the password is visible or not
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+
+  // Function to toggle password visibility
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible)
+  }
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.iconContainer}>
@@ -30,7 +44,48 @@ const AddLeader = () => {
           <Entypo name='plus' size={plusIcon} color='#ffffff' />
         </View>
       </TouchableOpacity>
-      <View style={styles.inputContainer}></View>
+      <View style={styles.inputContainer}>
+        <TextInput
+          placeholder='First Name*'
+          placeholderTextColor={theme.colors.text}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder='Last Name*'
+          placeholderTextColor={theme.colors.text}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder='Email *'
+          placeholderTextColor={theme.colors.text}
+          keyboardType='email-address'
+          style={styles.input}
+        />
+        <TextInput
+          placeholder='Phone*'
+          placeholderTextColor={theme.colors.text}
+          keyboardType='phone-pad'
+          style={styles.input}
+        />
+        <View style={styles.passwordContainer}>
+          <TextInput
+            placeholder='Password*'
+            placeholderTextColor={theme.colors.text}
+            secureTextEntry={!isPasswordVisible} // Toggle based on the state
+            style={[styles.input, { marginVertical: 0 }]}
+          />
+          <TouchableOpacity
+            style={styles.visibilityToggle}
+            onPress={togglePasswordVisibility}
+          >
+            <Feather
+              name={isPasswordVisible ? 'eye-off' : 'eye'}
+              size={24}
+              color={theme.colors.text}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   )
 }
@@ -47,7 +102,6 @@ const getStyles = (theme, isDarkMode) => {
         web: '10%',
       }),
     },
-
     icon: {
       width: 48, // Slightly smaller than the container to create a border effect
       height: 48,
@@ -69,11 +123,11 @@ const getStyles = (theme, isDarkMode) => {
         ios: 45,
         web: 75,
       }),
-      backgroundColor: '#ffffff', // Background color for the icon container
+      backgroundColor: '#ffffff',
       justifyContent: 'center',
       alignItems: 'center',
-      position: 'relative', // Required for positioning the plus icon
-      borderWidth: 4, // Width of the border
+      position: 'relative',
+      borderWidth: 4,
       borderColor: isDarkMode ? theme.colors.accent : '#C4C4C4',
     },
     plusIconContainer: {
@@ -94,13 +148,40 @@ const getStyles = (theme, isDarkMode) => {
         web: 45,
       }),
       borderRadius: Platform.select({
-        ios: 17.5, // Half of 28
-        android: 15, // Half of 35
-        web: 22.5, // Half of 45
+        ios: 17.5,
+        android: 15,
+        web: 22.5,
       }),
     },
-
-    inputContainer: {},
+    inputContainer: {
+      padding: 20,
+      width: '100%',
+    },
+    input: {
+      height: 50,
+      marginVertical: 10,
+      borderWidth: 1,
+      borderColor: theme.colors.accent2,
+      padding: 10,
+      borderRadius: 10,
+      fontSize: 16,
+      backgroundColor: theme.colors.accent2,
+    },
+    passwordContainer: {
+      backgroundColor: theme.colors.accent2,
+      borderRadius: 10,
+      marginVertical: 10,
+      flexDirection: 'row',
+      alignItems: 'center',
+      position: 'relative',
+    },
+    visibilityToggle: {
+      position: 'absolute',
+      right: 10,
+      height: '100%',
+      justifyContent: 'center',
+      paddingRight: 10,
+    },
   })
 }
 
