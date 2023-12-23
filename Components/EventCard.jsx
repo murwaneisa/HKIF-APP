@@ -23,7 +23,7 @@ const EventCard = props => {
           <Image
             style={styles.image}
             source={require('../Assets/images/movie.jpg')}
-            resizeMode='stretch'
+            resizeMode='cover'
           />
         </View>
         <View style={styles.content}>
@@ -58,7 +58,7 @@ const getStyles = (theme, windowWidth) =>
       width: Platform.select({
         ios: windowWidth - 20 * 2,
         android: windowWidth - 15 * 2,
-        web: windowWidth / 3,
+        web: '100%',
       }),
       backgroundColor: theme.colors.primary,
       flexDirection: 'row',
@@ -70,7 +70,7 @@ const getStyles = (theme, windowWidth) =>
       height: Platform.select({
         ios: 125,
         android: 125,
-        web: 200,
+        web: 250,
       }),
       borderRadius: 15,
       shadowColor: 'black',
@@ -112,7 +112,7 @@ const getStyles = (theme, windowWidth) =>
       fontSize: Platform.select({
         ios: 18,
         android: 18,
-        web: 22,
+        web: 28,
       }),
       marginBottom: 5,
       color: 'white',
@@ -127,7 +127,7 @@ const getStyles = (theme, windowWidth) =>
       fontSize: Platform.select({
         ios: 16,
         android: 14,
-        web: 18,
+        web: 22,
       }),
       color: 'white',
     },
@@ -136,7 +136,7 @@ const getStyles = (theme, windowWidth) =>
       fontSize: Platform.select({
         ios: 18,
         android: 16,
-        web: 19,
+        web: 24,
       }),
       marginRight: 4,
     },

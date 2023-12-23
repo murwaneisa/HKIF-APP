@@ -18,6 +18,7 @@ import Event from '../../Screens/Event'
 import Activity from '../../Screens/Activity'
 import { createStackNavigator } from '@react-navigation/stack'
 import EventUsers from '../../Screens/EventUsers'
+import EditProfile from '../../Screens/EditProfile'
 
 const customHeaderLeft = routeName => {
   const navigation = useNavigation()
@@ -147,6 +148,13 @@ const UserStack = () => {
         })}
       />
       <Stack.Screen name='EventUsers' component={EventUsers} />
+      <Stack.Screen
+        name='EditProfile'
+        component={EditProfile}
+        options={({ route }) => ({
+          headerTitle: `Edit ${route.params?.type}` || 'Edit Profile',
+        })}
+      />
     </Stack.Navigator>
   )
 }
