@@ -1,4 +1,11 @@
-import { View, Text, Dimensions, StyleSheet, Pressable } from 'react-native'
+import {
+  View,
+  Text,
+  Dimensions,
+  StyleSheet,
+  Pressable,
+  Platform,
+} from 'react-native'
 import React, { useState } from 'react'
 import { useTheme } from '../Styles/theme'
 import ProfileTextField from '../Components/ProfileTextField'
@@ -145,6 +152,11 @@ const getStyles = (theme, windowWidth) => {
     container: {
       backgroundColor: theme.colors.backgroundPrimary,
       flex: 1,
+      paddingHorizontal: Platform.select({
+        ios: 0,
+        android: 0,
+        web: '25%',
+      }),
     },
     contentSection: {
       marginTop: 20,
