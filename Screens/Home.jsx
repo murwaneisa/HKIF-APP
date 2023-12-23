@@ -6,6 +6,7 @@ import {
   Platform,
   ScrollView,
   Dimensions,
+  Pressable,
 } from 'react-native'
 import { useTheme } from '../Styles/theme'
 import EventCard from '../Components/EventCard'
@@ -39,7 +40,12 @@ function Home({ navigation }) {
         />
       </View>
       <View style={styles.sectionContainer}>
-        <Text style={styles.sectionTitle}>Upcoming Event</Text>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Upcoming Event</Text>
+          <Pressable onPress={() => navigation.navigate('Events')}>
+            <Text style={styles.viewAll}>View all</Text>
+          </Pressable>
+        </View>
         <View style={styles.events}>
           <EventCard onPress={() => navigation.navigate('Event')} />
         </View>
@@ -118,6 +124,17 @@ const getStyles = (theme, windowWidth) => {
         web: 25,
       }),
     },
+    sectionHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginHorizontal: 20,
+      marginBottom: Platform.select({
+        ios: 15,
+        android: 15,
+        web: 17,
+      }),
+    },
     sectionTitle: {
       fontFamily: 'Inter-Bold',
       fontSize: Platform.select({
@@ -125,13 +142,16 @@ const getStyles = (theme, windowWidth) => {
         android: 18,
         web: 22,
       }),
-      marginBottom: Platform.select({
-        ios: 15,
-        android: 15,
+      color: theme.colors.text,
+    },
+    viewAll: {
+      color: theme.colors.primary,
+      fontFamily: 'Inter-SemiBold',
+      fontSize: Platform.select({
+        ios: 14,
+        android: 14,
         web: 20,
       }),
-      paddingHorizontal: 20,
-      color: theme.colors.text,
     },
     sectionTitleFavorites: {
       fontFamily: 'Inter-Bold',

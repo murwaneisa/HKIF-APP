@@ -11,14 +11,14 @@ import {
 import { useTheme } from '../Styles/theme'
 import { Ionicons } from '@expo/vector-icons'
 
-const EventCard = props => {
+const EventCard = ({ onPress, marginBottom }) => {
   const { theme } = useTheme()
   const windowWidth = Dimensions.get('window').width
   const styles = getStyles(theme, windowWidth)
 
   return (
-    <Pressable onPress={props.onPress}>
-      <View style={styles.container}>
+    <Pressable onPress={onPress}>
+      <View style={[styles.container, { marginBottom: marginBottom }]}>
         <View style={styles.imageContainer}>
           <Image
             style={styles.image}

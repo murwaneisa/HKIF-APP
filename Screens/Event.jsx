@@ -83,7 +83,7 @@ function Event({ navigation }) {
               </Text>
             </View>
             <View style={styles.usersSectionHeader}>
-              <Text style={styles.SectionTitle}>People who've joined</Text>
+              <Text style={styles.sectionTitle}>People who've joined</Text>
               <Pressable onPress={() => navigation.navigate('EventUsers')}>
                 <Text style={styles.viewAll}>View all</Text>
               </Pressable>
@@ -200,7 +200,7 @@ const getStyles = (theme, windowWidth, windowHeight) => {
       justifyContent: 'space-between',
       alignItems: 'center',
     },
-    SectionTitle: {
+    sectionTitle: {
       fontFamily: 'Inter-Bold',
       fontSize: 20,
       color: theme.colors.title,
