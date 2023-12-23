@@ -354,9 +354,9 @@ const getStyles = theme => {
   return StyleSheet.create({
     container: {
       backgroundColor: theme.colors.backgroundSecondary,
-      paddingVertical: Platform.select({
+      padding: Platform.select({
         ios: '2%',
-        android: '2%',
+        android: '5%',
         web: '5%',
       }),
     },

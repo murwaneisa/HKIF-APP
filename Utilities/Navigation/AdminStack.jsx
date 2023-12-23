@@ -136,7 +136,7 @@ const AdminStack = () => {
         component={AddEvent}
       />
       <Stack.Screen
-        name='CreateActivity'
+        name='AddActivity'
         options={{ headerTitle: 'Edit Activity' }}
         component={CreateActivity}
       />

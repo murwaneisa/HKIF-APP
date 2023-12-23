@@ -73,10 +73,10 @@ const RenderActivities = () => {
       <Text style={styles.header}>(5) Current Activities</Text>
       <TouchableOpacity
         style={styles.subtitleContainer}
-        onPress={() => navigation.navigate('AddLeader')}
+        onPress={() => navigation.navigate('AddActivity')}
       >
         <AntDesign name='pluscircleo' size={22} color={theme.colors.primary} />
-        <Text style={styles.subHeader}>Add Leader</Text>
+        <Text style={styles.subHeader}>Add activity</Text>
       </TouchableOpacity>
     </View>
   )

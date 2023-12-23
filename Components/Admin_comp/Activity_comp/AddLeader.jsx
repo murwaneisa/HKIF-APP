@@ -5,6 +5,8 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
+  KeyboardAvoidingView,
+  ScrollView,
 } from 'react-native'
 import React, { useState } from 'react'
 import { useTheme } from '../../../Styles/theme'
@@ -12,8 +14,9 @@ import { Platform } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons'
 
-const AddLeader = () => {
+const AddLeader = ({ route }) => {
   const { theme, isDarkMode } = useTheme()
+  const { leaderId } = route?.params || {}
   console.log(isDarkMode)
   const styles = getStyles(theme, isDarkMode)
   const userIcon = Platform.select({
@@ -34,59 +37,90 @@ const AddLeader = () => {
     setIsPasswordVisible(!isPasswordVisible)
   }
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.iconContainer}>
-        {/*    <Image source={source} style={styles.icon} /> */}
-        {/* Using Ionicons for the profile icon */}
-        <Feather name='user' size={userIcon} color='black' />
-        {/* Plus icon in the bottom right corner */}
-        <View style={styles.plusIconContainer}>
-          <Entypo name='plus' size={plusIcon} color='#ffffff' />
-        </View>
-      </TouchableOpacity>
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder='First Name*'
-          placeholderTextColor={theme.colors.text}
-          style={styles.input}
-        />
-        <TextInput
-          placeholder='Last Name*'
-          placeholderTextColor={theme.colors.text}
-          style={styles.input}
-        />
-        <TextInput
-          placeholder='Email *'
-          placeholderTextColor={theme.colors.text}
-          keyboardType='email-address'
-          style={styles.input}
-        />
-        <TextInput
-          placeholder='Phone*'
-          placeholderTextColor={theme.colors.text}
-          keyboardType='phone-pad'
-          style={styles.input}
-        />
-        <View style={styles.passwordContainer}>
-          <TextInput
-            placeholder='Password*'
-            placeholderTextColor={theme.colors.text}
-            secureTextEntry={!isPasswordVisible} // Toggle based on the state
-            style={[styles.input, { marginVertical: 0 }]}
-          />
-          <TouchableOpacity
-            style={styles.visibilityToggle}
-            onPress={togglePasswordVisibility}
-          >
-            <Feather
-              name={isPasswordVisible ? 'eye-off' : 'eye'}
-              size={24}
-              color={theme.colors.text}
-            />
+    <KeyboardAvoidingView
+      style={{ flex: 1, backgroundColor: theme.colors.backgroundSecondary }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 80}
+    >
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.ScrollContainer}
+      >
+        <View style={styles.container}>
+          <TouchableOpacity style={styles.iconContainer}>
+            {/*    <Image source={source} style={styles.icon} /> */}
+            {/* Using Ionicons for the profile icon */}
+            <Feather name='user' size={userIcon} color='#C4C4C4' />
+            {/* Plus icon in the bottom right corner */}
+            <View style={styles.plusIconContainer}>
+              <Entypo name='plus' size={plusIcon} color='#ffffff' />
+            </View>
           </TouchableOpacity>
+          <View style={styles.inputContainer}>
+            <TextInput
+              placeholder='First Name*'
+              placeholderTextColor={theme.colors.text}
+              style={styles.input}
+            />
+            <TextInput
+              placeholder='Last Name*'
+              placeholderTextColor={theme.colors.text}
+              style={styles.input}
+            />
+            <TextInput
+              placeholder='Email *'
+              placeholderTextColor={theme.colors.text}
+              keyboardType='email-address'
+              style={styles.input}
+            />
+            <TextInput
+              placeholder='Phone*'
+              placeholderTextColor={theme.colors.text}
+              keyboardType='phone-pad'
+              style={styles.input}
+            />
+            <View style={styles.passwordContainer}>
+              <TextInput
+                placeholder='Password*'
+                placeholderTextColor={theme.colors.text}
+                secureTextEntry={!isPasswordVisible}
+                style={[styles.input, { marginVertical: 0 }]}
+              />
+              <TouchableOpacity
+                style={styles.visibilityToggle}
+                onPress={togglePasswordVisibility}
+              >
+                <Feather
+                  name={isPasswordVisible ? 'eye-off' : 'eye'}
+                  size={24}
+                  color={theme.colors.text}
+                />
+              </TouchableOpacity>
+            </View>
+            {/*buttons  */}
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.button,
+                  { backgroundColor: theme.colors.primary },
+                ]}
+              >
+                <Text style={styles.buttonText}>
+                  {leaderId ? 'Edit Event' : 'Add Leader'}
+                </Text>
+              </TouchableOpacity>
+              {leaderId ? (
+                <TouchableOpacity
+                  style={[styles.button, { backgroundColor: 'red' }]}
+                >
+                  <Text style={styles.buttonText}>Delete Event</Text>
+                </TouchableOpacity>
+              ) : null}
+            </View>
+          </View>
         </View>
-      </View>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   )
 }
 
@@ -101,6 +135,9 @@ const getStyles = (theme, isDarkMode) => {
         ios: '5%',
         web: '10%',
       }),
+    },
+    ScrollContainer: {
+      backgroundColor: theme.colors.backgroundSecondary,
     },
     icon: {
       width: 48, // Slightly smaller than the container to create a border effect
@@ -181,6 +218,26 @@ const getStyles = (theme, isDarkMode) => {
       height: '100%',
       justifyContent: 'center',
       paddingRight: 10,
+    },
+    buttonContainer: {
+      marginVertical: 10,
+      justifyContent: 'space-between',
+    },
+    button: {
+      width: '100%',
+      borderRadius: 8,
+      padding: 12,
+      alignItems: 'center',
+      marginVertical: 10,
+    },
+    buttonText: {
+      color: '#ffffff',
+      fontWeight: 'bold',
+      fontSize: Platform.select({
+        ios: 16,
+        android: 15,
+        web: 18,
+      }),
     },
   })
 }
