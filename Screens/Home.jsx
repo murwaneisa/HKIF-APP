@@ -150,7 +150,7 @@ const getStyles = (theme, windowWidth) => {
       fontSize: Platform.select({
         ios: 14,
         android: 14,
-        web: 20,
+        web: 18,
       }),
     },
     sectionTitleFavorites: {
