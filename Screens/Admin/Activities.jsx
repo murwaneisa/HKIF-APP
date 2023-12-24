@@ -12,6 +12,7 @@ import RenderPrevious from '../../Components/Admin_comp/Event_comp/RenderPreviou
 import RenderActivities from '../../Components/Admin_comp/Activity_comp/RenderActivities'
 import CreateActivity from '../../Components/Admin_comp/Activity_comp/CreateActivity'
 import { useNavigation } from '@react-navigation/native'
+import RenderLeaders from '../../Components/Admin_comp/Activity_comp/Renderleaders'
 
 const Activities = () => {
   const windowWidth = Dimensions.get('window').width
@@ -35,7 +36,7 @@ const Activities = () => {
   })
 
   const handlePress = listName => {
-    if (listName === 'createActivity' && user.role !== 'superAdmin') {
+    if (listName === 'activityLeaders' && user.role !== 'superAdmin') {
       return // You can also use Alert.alert to inform the user they don't have permission
     }
     setActiveList(listName)
@@ -65,21 +66,21 @@ const Activities = () => {
         </Pressable>
         <Pressable
           style={({ pressed }) => [
-            getButtonStyle('createActivity'),
+            getButtonStyle('activityLeaders'),
             pressed && user.role === 'superAdmin' && styles.pressed,
           ]}
-          onPress={() => handlePress('createActivity')}
+          onPress={() => handlePress('activityLeaders')}
           disabled={user.role !== 'superAdmin'} // Disable if not super admin
         >
           {({ pressed }) => (
             <Text
               style={[
                 styles.buttonText,
-                getButtonTextStyle('createActivity'),
+                getButtonTextStyle('activityLeaders'),
                 pressed && styles.pressedText,
               ]}
             >
-              Create activity
+              Activity leaders
             </Text>
           )}
         </Pressable>
@@ -89,7 +90,7 @@ const Activities = () => {
         <RenderActivities />
       ) : (
         // ... render your members list component here
-        <CreateActivity navigation={navigation} />
+        <RenderLeaders />
         // ... render your requests list component here
       )}
     </View>

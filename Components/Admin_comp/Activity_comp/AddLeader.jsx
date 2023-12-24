@@ -13,11 +13,12 @@ import { useTheme } from '../../../Styles/theme'
 import { Platform } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons'
+import DropdownRole from '../DropdownRole'
 
 const AddLeader = ({ route }) => {
   const { theme, isDarkMode } = useTheme()
   const { leaderId } = route?.params || {}
-  console.log(isDarkMode)
+  console.log(leaderId)
   const styles = getStyles(theme, isDarkMode)
   const userIcon = Platform.select({
     ios: 50,
@@ -36,6 +37,18 @@ const AddLeader = ({ route }) => {
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible)
   }
+
+  const data = [
+    { label: 'Soccer', value: '1' },
+    { label: 'Basketball', value: '2' },
+    { label: 'Tennis', value: '3' },
+    { label: 'Baseball', value: '4' },
+    { label: 'Volleyball', value: '5' },
+    { label: 'Swimming', value: '6' },
+    { label: 'Track and Field', value: '7' },
+    { label: 'Golf', value: '8' },
+  ]
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: theme.colors.backgroundSecondary }}
@@ -67,6 +80,7 @@ const AddLeader = ({ route }) => {
               placeholderTextColor={theme.colors.text}
               style={styles.input}
             />
+            <DropdownRole data={data} placeholder={'Select Activity'} />
             <TextInput
               placeholder='Email *'
               placeholderTextColor={theme.colors.text}
@@ -106,14 +120,17 @@ const AddLeader = ({ route }) => {
                 ]}
               >
                 <Text style={styles.buttonText}>
-                  {leaderId ? 'Edit Event' : 'Add Leader'}
+                  {leaderId ? 'Edit leader' : 'Add Leader'}
                 </Text>
               </TouchableOpacity>
               {leaderId ? (
                 <TouchableOpacity
-                  style={[styles.button, { backgroundColor: 'red' }]}
+                  style={[
+                    styles.button,
+                    { backgroundColor: theme.colors.error },
+                  ]}
                 >
-                  <Text style={styles.buttonText}>Delete Event</Text>
+                  <Text style={styles.buttonText}>Delete leader</Text>
                 </TouchableOpacity>
               ) : null}
             </View>
