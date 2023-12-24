@@ -120,6 +120,7 @@ const getStyles = (theme, windowWidth) => {
   const webWidth = windowWidth >= 900 ? '60%' : '85%'
   return StyleSheet.create({
     container: {
+      backgroundColor: theme.colors.backgroundSecondary,
       paddingBottom: 15,
     },
     titleContainer: {
