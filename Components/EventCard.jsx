@@ -11,40 +11,58 @@ import {
 import { useTheme } from '../Styles/theme'
 import { Ionicons } from '@expo/vector-icons'
 
-const EventCard = ({ onPress, marginBottom }) => {
+const EventCard = ({ data, onPress, webWidth, marginBottom }) => {
   const { theme } = useTheme()
   const windowWidth = Dimensions.get('window').width
   const styles = getStyles(theme, windowWidth)
 
+  const formatDate = dateString => {
+    return new Date(dateString).toLocaleDateString('en-SE', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      timeZone: 'UTC',
+    })
+  }
+
+  const formatTime = dataString => {
+    return new Date(dataString).toLocaleTimeString('en-SE', {
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: 'UTC',
+    })
+  }
+
   return (
-    <Pressable onPress={onPress}>
-      <View style={[styles.container, { marginBottom: marginBottom }]}>
-        <View style={styles.imageContainer}>
-          <Image
-            style={styles.image}
-            source={require('../Assets/images/movie.jpg')}
-            resizeMode='cover'
-          />
-        </View>
-        <View style={styles.content}>
-          <View>
-            <Text style={styles.title}>Movie Night</Text>
-            <View style={styles.textContainer}>
-              <Ionicons name='ios-location' style={styles.icon} />
-              <Text style={styles.text}>Högskolan Kristianstad</Text>
-            </View>
+    <Pressable
+      onPress={onPress}
+      style={[
+        styles.container,
+        {
+          marginBottom: marginBottom,
+          width: Platform.select({ web: webWidth }),
+        },
+      ]}
+    >
+      <View style={styles.imageContainer}>
+        <Image style={styles.image} source={data.imageUrl} resizeMode='cover' />
+      </View>
+      <View style={styles.content}>
+        <View>
+          <Text style={styles.title}>{data.title}</Text>
+          <View style={styles.textContainer}>
+            <Ionicons name='ios-location' style={styles.icon} />
+            <Text style={styles.text}>Högskolan Kristianstad</Text>
           </View>
-          <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
-          >
-            <View style={styles.textContainer}>
-              <Ionicons name='ios-calendar' style={styles.icon} />
-              <Text style={styles.text}>18 jun, 2023</Text>
-            </View>
-            <View style={styles.textContainer}>
-              <Ionicons name='time' style={styles.icon} />
-              <Text style={styles.text}>kl 16:00</Text>
-            </View>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={styles.textContainer}>
+            <Ionicons name='ios-calendar' style={styles.icon} />
+            <Text style={styles.text}>{formatDate(data.startTime)}</Text>
+          </View>
+          <View style={styles.textContainer}>
+            <Ionicons name='time' style={styles.icon} />
+            <Text style={styles.text}>kl {formatTime(data.startTime)}</Text>
           </View>
         </View>
       </View>
@@ -56,9 +74,8 @@ const getStyles = (theme, windowWidth) =>
   StyleSheet.create({
     container: {
       width: Platform.select({
-        ios: windowWidth - 20 * 2,
-        android: windowWidth - 15 * 2,
-        web: '100%',
+        ios: '100%',
+        android: '100%',
       }),
       backgroundColor: theme.colors.primary,
       flexDirection: 'row',
@@ -70,20 +87,16 @@ const getStyles = (theme, windowWidth) =>
       height: Platform.select({
         ios: 125,
         android: 125,
-        web: 250,
+        web: 180,
       }),
       borderRadius: 15,
       shadowColor: 'black',
       shadowOpacity: 0.1,
       shadowOffset: { width: 0, height: 0 },
       shadowRadius: 8,
-      marginRight: Platform.select({
-        ios: 10,
-        android: 10,
-        web: 20,
-      }),
     },
     imageContainer: {
+      backgroundColor: 'rgba(0,0,0,0.2)',
       width: Platform.select({
         ios: '33%',
         android: '35%',
@@ -94,7 +107,7 @@ const getStyles = (theme, windowWidth) =>
       marginRight: Platform.select({
         ios: 10,
         android: 10,
-        web: 20,
+        web: 15,
       }),
     },
     image: {
@@ -110,9 +123,9 @@ const getStyles = (theme, windowWidth) =>
       fontFamily: 'Inter-SemiBold',
       fontWeight: 'bold',
       fontSize: Platform.select({
-        ios: 18,
-        android: 18,
-        web: 28,
+        ios: 17,
+        android: 17,
+        web: 22,
       }),
       marginBottom: 5,
       color: 'white',
@@ -125,9 +138,9 @@ const getStyles = (theme, windowWidth) =>
     text: {
       fontFamily: 'Inter-Regular',
       fontSize: Platform.select({
-        ios: 16,
+        ios: 15,
         android: 14,
-        web: 22,
+        web: 18,
       }),
       color: 'white',
     },
@@ -136,7 +149,7 @@ const getStyles = (theme, windowWidth) =>
       fontSize: Platform.select({
         ios: 18,
         android: 16,
-        web: 24,
+        web: 18,
       }),
       marginRight: 4,
     },

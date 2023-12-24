@@ -14,6 +14,7 @@ import ActivityCard from '../Components/ActivityCard'
 import AnnouncementCard from '../Components/AnnouncementCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchActivities } from '../Utilities/Redux/Actions/activityActions'
+import { fetchEvents } from '../Utilities/Redux/Actions/eventActions'
 
 function Home({ navigation }) {
   const { theme } = useTheme()
@@ -21,23 +22,14 @@ function Home({ navigation }) {
   const styles = getStyles(theme, windowWidth)
 
   const currentUser = '6522c9aa889e288bfa25d7cd'
+  const events = useSelector(state => state.event.data || [])
   const activities = useSelector(state => state.activity.data || [])
-  const loading = useSelector(state => state.activity.loading)
-  const error = useSelector(state => state.activity.error)
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(fetchActivities())
-    console.log(currentUser)
+    dispatch(fetchEvents())
   }, [dispatch])
-
-  if (loading) {
-    return <p>Loading...</p>
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>
-  }
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -48,13 +40,32 @@ function Home({ navigation }) {
       </View>
       <View style={styles.sectionContainer}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Upcoming Event</Text>
+          <Text style={styles.sectionTitle}>Upcoming Events</Text>
           <Pressable onPress={() => navigation.navigate('Events')}>
             <Text style={styles.viewAll}>View all</Text>
           </Pressable>
         </View>
         <View style={styles.events}>
-          <EventCard onPress={() => navigation.navigate('Event')} />
+          {Platform.OS === 'web'
+            ? events
+                .slice(0, 2)
+                .map(event => (
+                  <EventCard
+                    key={event._id}
+                    data={event}
+                    onPress={() => navigation.navigate('Event')}
+                    webWidth={'49.4%'}
+                  />
+                ))
+            : events
+                .slice(0, 1)
+                .map(event => (
+                  <EventCard
+                    key={event._id}
+                    data={event}
+                    onPress={() => navigation.navigate('Event')}
+                  />
+                ))}
         </View>
       </View>
       <View style={styles.sectionContainer}>
@@ -171,6 +182,12 @@ const getStyles = (theme, windowWidth) => {
       color: theme.colors.text,
     },
     events: {
+      flexDirection: Platform.select({
+        web: 'row',
+      }),
+      justifyContent: Platform.select({
+        web: 'space-between',
+      }),
       width: '100%',
       paddingHorizontal: 20,
     },

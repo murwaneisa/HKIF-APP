@@ -156,7 +156,13 @@ const UserStack = () => {
           headerTitle: `Edit ${route.params?.type}` || 'Edit Profile',
         })}
       />
-      <Stack.Screen name='Events' component={Events} />
+      <Stack.Screen
+        name='Events'
+        component={Events}
+        options={{
+          headerTitle: 'Upcoming Events',
+        }}
+      />
     </Stack.Navigator>
   )
 }
