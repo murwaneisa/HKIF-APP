@@ -84,7 +84,7 @@ function Home({ navigation }) {
                 favorite={activity.membersIds.includes(currentUser)}
                 icon={'basketball'}
                 onPress={() =>
-                  navigation.navigate('Activity', { title: activity.title })
+                  navigation.navigate('Activity', { activity: activity })
                 }
               />
             ))}
@@ -102,7 +102,7 @@ function Home({ navigation }) {
                 favorite={activity.membersIds.includes(currentUser)}
                 icon={'football'}
                 onPress={() =>
-                  navigation.navigate('Activity', { title: activity.title })
+                  navigation.navigate('Activity', { activity: activity })
                 }
               />
             ))}

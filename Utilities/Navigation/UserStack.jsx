@@ -151,7 +151,7 @@ const UserStack = () => {
         name='Activity'
         component={Activity}
         options={({ route }) => ({
-          headerTitle: route.params?.title || 'Activity',
+          headerTitle: route.params?.activity.title || 'Activity',
         })}
       />
       <Stack.Screen name='EventUsers' component={EventUsers} />
