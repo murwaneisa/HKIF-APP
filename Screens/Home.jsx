@@ -53,7 +53,9 @@ function Home({ navigation }) {
                   <EventCard
                     key={event._id}
                     data={event}
-                    onPress={() => navigation.navigate('Event')}
+                    onPress={() =>
+                      navigation.navigate('EventDetails', { event: event })
+                    }
                     webWidth={'49.4%'}
                   />
                 ))
@@ -63,7 +65,9 @@ function Home({ navigation }) {
                   <EventCard
                     key={event._id}
                     data={event}
-                    onPress={() => navigation.navigate('Event')}
+                    onPress={() =>
+                      navigation.navigate('EventDetails', { event: event })
+                    }
                   />
                 ))}
         </View>

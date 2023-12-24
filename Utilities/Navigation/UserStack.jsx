@@ -14,12 +14,12 @@ import { useNavigation } from '@react-navigation/native'
 import Register from '../../Screens/Register'
 import { Octicons } from '@expo/vector-icons'
 import Organization from '../../Screens/Organization'
-import Event from '../../Screens/Event'
 import Activity from '../../Screens/Activity'
 import { createStackNavigator } from '@react-navigation/stack'
 import EventUsers from '../../Screens/EventUsers'
 import EditProfile from '../../Screens/EditProfile'
 import Events from '../../Screens/Events'
+import EventDetails from '../../Screens/EventDetails'
 
 const customHeaderLeft = routeName => {
   const navigation = useNavigation()
@@ -140,7 +140,13 @@ const UserStack = () => {
         }}
         component={MenuStack}
       />
-      <Stack.Screen name='Event' component={Event} />
+      <Stack.Screen
+        name='EventDetails'
+        component={EventDetails}
+        options={({ route }) => ({
+          headerTitle: route.params?.event.title || 'Event Details',
+        })}
+      />
       <Stack.Screen
         name='Activity'
         component={Activity}

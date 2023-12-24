@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   Image,
-  ScrollView,
   FlatList,
   Pressable,
   Dimensions,
@@ -15,12 +14,16 @@ import { Ionicons } from '@expo/vector-icons'
 import BenefitCard from '../Components/BenefitCard'
 import JoinEventCard from '../Components/JoinEventCard'
 import UserCard from '../Components/UserCard'
+import { useRoute } from '@react-navigation/native'
 
-function Event({ navigation }) {
+function EventDetails({ navigation }) {
   const { theme } = useTheme()
   const windowWidth = Dimensions.get('window').width
   const windowHeight = Dimensions.get('window').height
   const styles = getStyles(theme, windowWidth, windowHeight)
+
+  const route = useRoute()
+  const event = route.params.event
 
   const data = useMemo(
     () =>
@@ -30,6 +33,23 @@ function Event({ navigation }) {
     []
   )
 
+  const formatDate = dateString => {
+    return new Date(dateString).toLocaleDateString('en-SE', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      timeZone: 'UTC',
+    })
+  }
+
+  const formatTime = dataString => {
+    return new Date(dataString).toLocaleTimeString('en-SE', {
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: 'UTC',
+    })
+  }
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -38,13 +58,15 @@ function Event({ navigation }) {
             <View style={styles.imageContainer}>
               <Image
                 style={styles.image}
-                source={require('../Assets/images/movie.jpg')}
+                source={{
+                  uri: event.imageUrl,
+                }}
                 resizeMode='cover'
               />
             </View>
             <View style={styles.headerSection}>
               <View style={styles.headerInfoWrapper}>
-                <Text style={styles.title}>Movie Night</Text>
+                <Text style={styles.title}>{event.title}</Text>
                 <View style={styles.textWrapper}>
                   <Ionicons name='location-outline' style={styles.icon} />
                   <Text style={styles.addressText}>Högskolan Kristianstad</Text>
@@ -54,11 +76,15 @@ function Event({ navigation }) {
               <View style={styles.dateInfoWrapper}>
                 <View style={styles.textWrapper}>
                   <Ionicons name='calendar-outline' style={styles.icon} />
-                  <Text style={styles.dateText}>14 dec, 2023</Text>
+                  <Text style={styles.dateText}>
+                    {formatDate(event.startTime)}
+                  </Text>
                 </View>
                 <View style={styles.textWrapper}>
                   <Ionicons name='time-outline' style={styles.icon} />
-                  <Text style={styles.dateText}>16:00 - 18:00</Text>
+                  <Text style={styles.dateText}>
+                    {formatTime(event.startTime)} - {formatTime(event.endTime)}
+                  </Text>
                 </View>
               </View>
 
@@ -70,17 +96,14 @@ function Event({ navigation }) {
             </View>
             {Platform.OS === 'web' ? (
               <JoinEventCard
-                title={'Price: 300 SEK'}
+                title={`Price: ${event.price} SEK`}
                 buttonTitle={'Join Event'}
                 containerStyle={styles.joinEventCard}
                 onPress={() => {}}
               />
             ) : null}
             <View style={styles.descriptionSection}>
-              <Text style={styles.descriptionText}>
-                Excellent two-storey villa with a terrace, private pool and
-                parking spaces is located only 5 minutes from the Indian Ocean
-              </Text>
+              <Text style={styles.descriptionText}>{event.description}</Text>
             </View>
             <View style={styles.usersSectionHeader}>
               <Text style={styles.sectionTitle}>People who've joined</Text>
@@ -99,7 +122,7 @@ function Event({ navigation }) {
 
       {Platform.OS === 'android' || Platform.OS === 'ios' ? (
         <JoinEventCard
-          title={'Price: 300 SEK'}
+          title={`Price: ${event.price} SEK`}
           buttonTitle={'Join Event'}
           containerStyle={styles.joinEventCardBottom}
           onPress={() => {}}
@@ -230,4 +253,4 @@ const getStyles = (theme, windowWidth, windowHeight) => {
   })
 }
 
-export default Event
+export default EventDetails

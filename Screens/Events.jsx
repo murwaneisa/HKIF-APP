@@ -24,7 +24,7 @@ function Events({ navigation }) {
         renderItem={({ item }) => (
           <EventCard
             data={item}
-            onPress={() => navigation.navigate('Event')}
+            onPress={() => navigation.navigate('EventDetails', { event: item })}
             webWidth={'100%'}
             marginBottom={20}
           />

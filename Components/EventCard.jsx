@@ -45,7 +45,13 @@ const EventCard = ({ data, onPress, webWidth, marginBottom }) => {
       ]}
     >
       <View style={styles.imageContainer}>
-        <Image style={styles.image} source={data.imageUrl} resizeMode='cover' />
+        <Image
+          style={styles.image}
+          source={{
+            uri: data.imageUrl,
+          }}
+          resizeMode='cover'
+        />
       </View>
       <View style={styles.content}>
         <View>
