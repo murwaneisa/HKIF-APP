@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 import {
   View,
   Text,
@@ -32,14 +32,6 @@ function EventDetails({ navigation }) {
   useEffect(() => {
     dispatch(fetchPublicUsersById(event.attendeesIds))
   }, [dispatch])
-
-  const data = useMemo(
-    () =>
-      Array(10)
-        .fill(0)
-        .map((_, index) => `index-${index}`),
-    []
-  )
 
   const formatDate = dateString => {
     return new Date(dateString).toLocaleDateString('en-SE', {
@@ -115,7 +107,11 @@ function EventDetails({ navigation }) {
             </View>
             <View style={styles.usersSectionHeader}>
               <Text style={styles.sectionTitle}>People who've joined</Text>
-              <Pressable onPress={() => navigation.navigate('EventUsers')}>
+              <Pressable
+                onPress={() =>
+                  navigation.navigate('EventUsers', { users: publicUsers })
+                }
+              >
                 <Text style={styles.viewAll}>View all</Text>
               </Pressable>
             </View>
@@ -123,7 +119,7 @@ function EventDetails({ navigation }) {
         }
         data={publicUsers}
         renderItem={({ item }) => <UserCard user={item} />}
-        keyExtractor={i => i}
+        keyExtractor={i => i.firstName.toString().concat(i.lastName.toString())}
         showsVerticalScrollIndicator={false}
         ListFooterComponent={<View style={{ marginBottom: 110 }} />}
       />

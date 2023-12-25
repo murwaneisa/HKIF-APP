@@ -2,25 +2,21 @@ import React, { useMemo } from 'react'
 import { View, StyleSheet, FlatList, Platform } from 'react-native'
 import { useTheme } from '../Styles/theme'
 import UserCard from '../Components/UserCard'
+import { useRoute } from '@react-navigation/native'
 
 function EventUsers({ navigation }) {
   const { theme } = useTheme()
   const styles = getStyles(theme)
 
-  const data = useMemo(
-    () =>
-      Array(10)
-        .fill(0)
-        .map((_, index) => `index-${index}`),
-    []
-  )
+  const route = useRoute()
+  const users = route.params.users
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={data}
-        renderItem={({ item }) => <UserCard />}
-        keyExtractor={i => i}
+        data={users}
+        renderItem={({ item }) => <UserCard user={item} />}
+        keyExtractor={i => i.firstName.toString().concat(i.lastName.toString())}
       />
     </View>
   )
