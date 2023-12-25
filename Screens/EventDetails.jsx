@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   View,
   Text,
@@ -15,8 +15,7 @@ import BenefitCard from '../Components/BenefitCard'
 import JoinEventCard from '../Components/JoinEventCard'
 import UserCard from '../Components/UserCard'
 import { useRoute } from '@react-navigation/native'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchPublicUsersById } from '../Utilities/Redux/Actions/userActions'
+import { getPublicUsersByID } from '../Utilities/Axios/user'
 
 function EventDetails({ navigation }) {
   const { theme } = useTheme()
@@ -26,12 +25,15 @@ function EventDetails({ navigation }) {
 
   const route = useRoute()
   const event = route.params.event
-  const publicUsers = useSelector(state => state.user.publicUsersInfo || [])
-  const dispatch = useDispatch()
+  const [attendees, setAttendees] = useState([])
 
   useEffect(() => {
-    dispatch(fetchPublicUsersById(event.attendeesIds))
-  }, [dispatch])
+    const fetchData = async () => {
+      const data = await getPublicUsersByID(event.attendeesIds)
+      setAttendees(data)
+    }
+    fetchData()
+  }, [event.attendeesIds])
 
   const formatDate = dateString => {
     return new Date(dateString).toLocaleDateString('en-SE', {
@@ -109,7 +111,7 @@ function EventDetails({ navigation }) {
               <Text style={styles.sectionTitle}>People who've joined</Text>
               <Pressable
                 onPress={() =>
-                  navigation.navigate('EventUsers', { users: publicUsers })
+                  navigation.navigate('EventUsers', { attendees: attendees })
                 }
               >
                 <Text style={styles.viewAll}>View all</Text>
@@ -117,7 +119,7 @@ function EventDetails({ navigation }) {
             </View>
           </View>
         }
-        data={publicUsers}
+        data={attendees}
         renderItem={({ item }) => <UserCard user={item} />}
         keyExtractor={i => i.firstName.toString().concat(i.lastName.toString())}
         showsVerticalScrollIndicator={false}

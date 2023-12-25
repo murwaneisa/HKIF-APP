@@ -9,12 +9,12 @@ function EventUsers({ navigation }) {
   const styles = getStyles(theme)
 
   const route = useRoute()
-  const users = route.params.users
+  const attendees = route.params.attendees
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={users}
+        data={attendees}
         renderItem={({ item }) => <UserCard user={item} />}
         keyExtractor={i => i.firstName.toString().concat(i.lastName.toString())}
       />

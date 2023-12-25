@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import NextActivitySessionCard from '../Components/NextActivitySessionCard'
 import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet'
 import UserCard from '../Components/UserCard'
 import { useRoute } from '@react-navigation/native'
+import { getPublicUsersByID } from '../Utilities/Axios/user'
 
 function Activity({ navigation }) {
   const sheetRef = useRef(null)
@@ -23,6 +24,15 @@ function Activity({ navigation }) {
 
   const route = useRoute()
   const activity = route.params.activity
+  const [members, setMembers] = useState([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getPublicUsersByID(activity.membersIds)
+      setMembers(data)
+    }
+    fetchData()
+  }, [activity.membersIds])
 
   let Swiper
 
@@ -31,14 +41,6 @@ function Activity({ navigation }) {
   } else {
     Swiper = undefined
   }
-
-  const data = useMemo(
-    () =>
-      Array(50)
-        .fill(0)
-        .map((_, index) => `index-${index}`),
-    []
-  )
 
   const getISOWeek = date => {
     const d = new Date(date)
@@ -112,9 +114,11 @@ function Activity({ navigation }) {
         >
           <Text style={styles.bottomSheetTitle}>Liked by</Text>
           <BottomSheetFlatList
-            data={data}
-            keyExtractor={i => i}
-            renderItem={({ item }) => <UserCard />}
+            data={members}
+            keyExtractor={i =>
+              i.firstName.toString().concat(i.lastName.toString())
+            }
+            renderItem={({ item }) => <UserCard user={item} />}
           />
         </BottomSheet>
       ) : null}
