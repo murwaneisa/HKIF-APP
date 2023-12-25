@@ -90,7 +90,7 @@ function EventDetails({ navigation }) {
 
               <View style={styles.benefitsList}>
                 {event.benefits.map(benefit => (
-                  <BenefitCard iconName={'fast-food-outline'} title={benefit} />
+                  <BenefitCard title={benefit} />
                 ))}
               </View>
             </View>
