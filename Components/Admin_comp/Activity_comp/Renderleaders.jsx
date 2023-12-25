@@ -9,7 +9,6 @@ import {
 } from 'react-native'
 import React from 'react'
 import { useTheme } from '../../../Styles/theme'
-import MemberCard from '../Users_comp/MemberCard'
 import { useNavigation } from '@react-navigation/core'
 import { AntDesign } from '@expo/vector-icons'
 import LeaderCard from './learderCard'

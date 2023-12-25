@@ -14,11 +14,13 @@ import { Platform } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons'
 import DropdownRole from '../DropdownRole'
+import HKIFImagePicker from '../../../Utilities/Helper/HKIFImagePicker'
 
 const AddLeader = ({ route }) => {
   const { theme, isDarkMode } = useTheme()
   const { leaderId } = route?.params || {}
-  console.log(leaderId)
+  const [image, setImage] = useState(null)
+  console.log(image)
   const styles = getStyles(theme, isDarkMode)
   const userIcon = Platform.select({
     ios: 50,
@@ -36,6 +38,19 @@ const AddLeader = ({ route }) => {
   // Function to toggle password visibility
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible)
+  }
+
+  const handlePickImage = async () => {
+    const uri = await HKIFImagePicker.pickImage()
+    if (uri) {
+      setImage(uri)
+    }
+  }
+
+  const handleUploadImage = async () => {
+    if (image) {
+      await HKIFImagePicker.uploadImageAsync(image)
+    }
   }
 
   const data = [
@@ -60,10 +75,22 @@ const AddLeader = ({ route }) => {
         contentContainerStyle={styles.ScrollContainer}
       >
         <View style={styles.container}>
-          <TouchableOpacity style={styles.iconContainer}>
-            {/*    <Image source={source} style={styles.icon} /> */}
-            {/* Using Ionicons for the profile icon */}
-            <Feather name='user' size={userIcon} color='#C4C4C4' />
+          <TouchableOpacity
+            style={styles.iconContainer}
+            onPress={handlePickImage}
+          >
+            {image ? (
+              <Image
+                style={styles.image}
+                source={{
+                  uri: image,
+                }}
+                resizeMode='cover'
+              />
+            ) : (
+              <Feather name='user' size={userIcon} color='#C4C4C4' />
+            )}
+
             {/* Plus icon in the bottom right corner */}
             <View style={styles.plusIconContainer}>
               <Entypo name='plus' size={plusIcon} color='#ffffff' />
@@ -206,6 +233,11 @@ const getStyles = (theme, isDarkMode) => {
         android: 15,
         web: 22.5,
       }),
+    },
+    image: {
+      width: '100%',
+      height: '100%',
+      borderRadius: 120,
     },
     inputContainer: {
       padding: 20,
