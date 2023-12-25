@@ -16,7 +16,7 @@ import { Entypo } from '@expo/vector-icons'
 import DropdownRole from '../DropdownRole'
 import HKIFImagePicker from '../../../Utilities/Helper/HKIFImagePicker'
 
-const AddLeader = ({ route }) => {
+const AddAdmin = ({ route }) => {
   const { theme, isDarkMode } = useTheme()
   const { leaderId } = route?.params || {}
   const [image, setImage] = useState(null)
@@ -62,6 +62,7 @@ const AddLeader = ({ route }) => {
     lastName: '',
     email: '',
     phone: '',
+    password: '',
     roles: [],
   })
 
@@ -70,6 +71,7 @@ const AddLeader = ({ route }) => {
     lastName: '',
     email: '',
     phone: '',
+    password: '',
     roles: '',
   })
 
@@ -97,6 +99,11 @@ const AddLeader = ({ route }) => {
         if (!/^\d{10}$/.test(value)) {
           // Example for US numbers
           error = 'Please enter a valid 10-digit phone number'
+        }
+        break
+      case 'password':
+        if (value === '') {
+          error = 'Please enter a password'
         }
         break
       case 'roles':
@@ -263,6 +270,26 @@ const AddLeader = ({ route }) => {
             {!!formErrors.password && ( // Show error text if there's an error
               <Text style={styles.errorText}>{formErrors.password}</Text>
             )}
+            <View style={styles.passwordContainer}>
+              <TextInput
+                placeholder='Password*'
+                value={form.password}
+                onChangeText={value => handleInputChange('password', value)}
+                placeholderTextColor={theme.colors.text}
+                secureTextEntry={!isPasswordVisible}
+                style={[styles.input, { marginVertical: 0 }]}
+              />
+              <TouchableOpacity
+                style={styles.visibilityToggle}
+                onPress={togglePasswordVisibility}
+              >
+                <Feather
+                  name={isPasswordVisible ? 'eye-off' : 'eye'}
+                  size={24}
+                  color={theme.colors.text}
+                />
+              </TouchableOpacity>
+            </View>
             {/*buttons  */}
             <View style={styles.buttonContainer}>
               <TouchableOpacity
@@ -384,7 +411,21 @@ const getStyles = (theme, isDarkMode) => {
       fontSize: 16,
       backgroundColor: theme.colors.accent2,
     },
-
+    passwordContainer: {
+      backgroundColor: theme.colors.accent2,
+      borderRadius: 10,
+      marginVertical: 10,
+      flexDirection: 'row',
+      alignItems: 'center',
+      position: 'relative',
+    },
+    visibilityToggle: {
+      position: 'absolute',
+      right: 10,
+      height: '100%',
+      justifyContent: 'center',
+      paddingRight: 10,
+    },
     buttonContainer: {
       marginVertical: 10,
       justifyContent: 'space-between',
@@ -419,4 +460,4 @@ const getStyles = (theme, isDarkMode) => {
   })
 }
 
-export default AddLeader
+export default AddAdmin
