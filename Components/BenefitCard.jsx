@@ -1,15 +1,29 @@
 import React from 'react'
 import { View, Text, StyleSheet, Platform } from 'react-native'
 import { useTheme } from '../Styles/theme'
-import { Ionicons } from '@expo/vector-icons'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { MaterialIcons } from '@expo/vector-icons'
 
-const BenefitCard = ({ iconName, title }) => {
+const BenefitCard = ({ title }) => {
   const { theme } = useTheme()
   const styles = getStyles(theme)
+  let icon
+
+  switch (title) {
+    case 'FOOD':
+      icon = <MaterialCommunityIcons name='food-turkey' style={styles.icon} />
+      break
+    case 'DRINK':
+      icon = <MaterialCommunityIcons name='beer' style={styles.icon} />
+      break
+    case 'GAMES':
+      icon = <MaterialIcons name='sports-kabaddi' style={styles.icon} />
+      break
+  }
 
   return (
     <View style={styles.container}>
-      <Ionicons name={iconName} style={styles.icon} />
+      {icon}
       <Text style={styles.text}>{title}</Text>
     </View>
   )
@@ -28,20 +42,20 @@ const getStyles = theme =>
         android: 10,
         web: 10,
       }),
-      minWidth: 75,
+      minWidth: 40,
       flexDirection: 'row',
     },
     text: {
-      fontFamily: 'Inter-Regular',
+      fontFamily: 'Inter-Medium',
       fontSize: Platform.select({
-        ios: 16,
-        android: 16,
+        ios: 14,
+        android: 14,
         web: 18,
       }),
       color: theme.colors.text,
     },
     icon: {
-      fontSize: 17,
+      fontSize: 18,
       color: theme.colors.primary,
       marginRight: Platform.select({
         ios: 4,

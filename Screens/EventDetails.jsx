@@ -89,9 +89,9 @@ function EventDetails({ navigation }) {
               </View>
 
               <View style={styles.benefitsList}>
-                <BenefitCard iconName={'fast-food-outline'} title={'Food'} />
-                <BenefitCard iconName={'fast-food-outline'} title={'Food'} />
-                <BenefitCard iconName={'fast-food-outline'} title={'Food'} />
+                {event.benefits.map(benefit => (
+                  <BenefitCard iconName={'fast-food-outline'} title={benefit} />
+                ))}
               </View>
             </View>
             {Platform.OS === 'web' ? (
