@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import {
   View,
   Text,
@@ -15,6 +15,8 @@ import BenefitCard from '../Components/BenefitCard'
 import JoinEventCard from '../Components/JoinEventCard'
 import UserCard from '../Components/UserCard'
 import { useRoute } from '@react-navigation/native'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchPublicUsersById } from '../Utilities/Redux/Actions/userActions'
 
 function EventDetails({ navigation }) {
   const { theme } = useTheme()
@@ -24,6 +26,12 @@ function EventDetails({ navigation }) {
 
   const route = useRoute()
   const event = route.params.event
+  const publicUsers = useSelector(state => state.user.publicUsersInfo || [])
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(fetchPublicUsersById(event.attendeesIds))
+  }, [dispatch])
 
   const data = useMemo(
     () =>
@@ -113,8 +121,8 @@ function EventDetails({ navigation }) {
             </View>
           </View>
         }
-        data={data}
-        renderItem={({ item }) => <UserCard />}
+        data={publicUsers}
+        renderItem={({ item }) => <UserCard user={item} />}
         keyExtractor={i => i}
         showsVerticalScrollIndicator={false}
         ListFooterComponent={<View style={{ marginBottom: 110 }} />}

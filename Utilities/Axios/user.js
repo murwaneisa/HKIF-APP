@@ -25,3 +25,16 @@ export const getFullUserInfoByID = async userId => {
     console.error('Get Information failed:', error)
   }
 }
+
+export const getPublicUsersByID = async userIds => {
+  try {
+    let users = []
+    for (uid of userIds) {
+      const response = await baseInstance.get(`${userSuffix}/public/${uid}`)
+      users.push(response.data)
+    }
+    return users
+  } catch (error) {
+    console.error('Get Information failed:', error)
+  }
+}

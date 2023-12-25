@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, StyleSheet, Image, Platform } from 'react-native'
 import { useTheme } from '../Styles/theme'
 
-const UserCard = () => {
+const UserCard = ({ user }) => {
   const { theme } = useTheme()
   const styles = getStyles(theme)
 
@@ -16,7 +16,9 @@ const UserCard = () => {
         />
       </View>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>John Doe</Text>
+        <Text style={styles.title}>
+          {user.firstName} {user.lastName}
+        </Text>
       </View>
     </View>
   )
