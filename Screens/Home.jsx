@@ -55,40 +55,43 @@ function Home({ navigation }) {
               message={'Swimming is canceled today the fox is in the forest'}
             />
           </View>
-          <View style={styles.sectionContainer}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Upcoming Events</Text>
-              <Pressable onPress={() => navigation.navigate('Events')}>
-                <Text style={styles.viewAll}>View all</Text>
-              </Pressable>
-            </View>
-            <View style={styles.events}>
-              {Platform.OS === 'web'
-                ? events
-                    .slice(0, 2)
-                    .map(event => (
+
+          {events.length === 0 ? null : (
+            <View style={styles.sectionContainer}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>Upcoming Events</Text>
+                <Pressable onPress={() => navigation.navigate('Events')}>
+                  <Text style={styles.viewAll}>View all</Text>
+                </Pressable>
+              </View>
+              <View style={styles.events}>
+                {Platform.OS === 'web'
+                  ? events.slice(0, 2).map(event => (
                       <EventCard
                         key={event._id}
                         data={event}
                         onPress={() =>
-                          navigation.navigate('EventDetails', { event: event })
+                          navigation.navigate('EventDetails', {
+                            event: event,
+                          })
                         }
                         webWidth={'49.4%'}
                       />
                     ))
-                : events
-                    .slice(0, 1)
-                    .map(event => (
+                  : events.slice(0, 1).map(event => (
                       <EventCard
                         key={event._id}
                         data={event}
                         onPress={() =>
-                          navigation.navigate('EventDetails', { event: event })
+                          navigation.navigate('EventDetails', {
+                            event: event,
+                          })
                         }
                       />
                     ))}
+              </View>
             </View>
-          </View>
+          )}
 
           {activities.filter(act => act.membersIds.includes(currentUser))
             .length === 0 ? null : (
