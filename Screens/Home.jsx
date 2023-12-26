@@ -13,7 +13,10 @@ import EventCard from '../Components/EventCard'
 import ActivityCard from '../Components/ActivityCard'
 import AnnouncementCard from '../Components/AnnouncementCard'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchActivities } from '../Utilities/Redux/Actions/activityActions'
+import {
+  fetchActivities,
+  toggleActivityFavorite,
+} from '../Utilities/Redux/Actions/activityActions'
 import { fetchEvents } from '../Utilities/Redux/Actions/eventActions'
 import LoadingIndicator from '../Components/LoadingIndicator'
 
@@ -33,6 +36,10 @@ function Home({ navigation }) {
     dispatch(fetchActivities())
     dispatch(fetchEvents())
   }, [dispatch])
+
+  const handleFavoriteActivity = activity => {
+    dispatch(toggleActivityFavorite(activity._id, currentUser))
+  }
 
   return (
     <>
@@ -96,6 +103,7 @@ function Home({ navigation }) {
                     onPress={() =>
                       navigation.navigate('Activity', { activity: activity })
                     }
+                    onPressFavorite={() => handleFavoriteActivity(activity)}
                   />
                 ))}
             </View>
@@ -114,6 +122,7 @@ function Home({ navigation }) {
                     onPress={() =>
                       navigation.navigate('Activity', { activity: activity })
                     }
+                    onPressFavorite={() => handleFavoriteActivity(activity)}
                   />
                 ))}
             </View>
