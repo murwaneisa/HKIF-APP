@@ -11,7 +11,10 @@ import {
 import { useTheme } from '../Styles/theme'
 import Calendar from '../Components/Calendar'
 import NextActivitySessionCard from '../Components/NextActivitySessionCard'
-import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet'
+import BottomSheet, {
+  BottomSheetFlatList,
+  BottomSheetView,
+} from '@gorhom/bottom-sheet'
 import UserCard from '../Components/UserCard'
 import { useRoute } from '@react-navigation/native'
 import { getPublicUsersByID } from '../Utilities/Axios/user'
@@ -121,14 +124,22 @@ function Activity({ navigation }) {
           handleIndicatorStyle={styles.bottomSheetIndicator}
         >
           <Text style={styles.bottomSheetTitle}>Liked by</Text>
-          <BottomSheetFlatList
-            data={members}
-            keyExtractor={i =>
-              i.firstName.toString().concat(i.lastName.toString())
-            }
-            renderItem={({ item }) => <UserCard user={item} />}
-            ListFooterComponent={renderFooter}
-          />
+          {members.length === 0 ? (
+            <BottomSheetView style={styles.emptyBSView}>
+              <Text style={styles.emptyBSViewText}>
+                Be the first to like this activity
+              </Text>
+            </BottomSheetView>
+          ) : (
+            <BottomSheetFlatList
+              data={members}
+              keyExtractor={i =>
+                i.firstName.toString().concat(i.lastName.toString())
+              }
+              renderItem={({ item }) => <UserCard user={item} />}
+              ListFooterComponent={renderFooter}
+            />
+          )}
         </BottomSheet>
       ) : null}
     </View>
@@ -200,6 +211,19 @@ const getStyles = (theme, windowWidth) => {
     },
     bottomSheetIndicator: {
       backgroundColor: theme.colors.title,
+    },
+    emptyBSView: {
+      flex: 1,
+      paddingTop: 80,
+    },
+    emptyBSViewText: {
+      textAlign: 'center',
+      fontFamily: 'Inter-Bold',
+      fontSize: Platform.select({
+        ios: 17,
+        android: 16,
+      }),
+      color: theme.colors.text,
     },
   })
 }
