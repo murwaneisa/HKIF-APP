@@ -37,7 +37,9 @@ const AdminCard = ({ info }) => {
           <Text style={styles.name}>{info.name}</Text>
           <View style={styles.rolesContainer}>
             {info.roles.map(role => (
-              <Text style={styles.text}>{role} </Text>
+              <Text key={role} style={styles.text}>
+                {role}
+              </Text>
             ))}
           </View>
           <Text style={styles.text}>{info.phone}</Text>

@@ -8,9 +8,6 @@ import {
   Dimensions,
 } from 'react-native'
 import { useTheme } from '../../Styles/theme'
-import RenderPrevious from '../../Components/Admin_comp/Event_comp/RenderPrevious'
-import RenderActivities from '../../Components/Admin_comp/Activity_comp/RenderActivities'
-import CreateActivity from '../../Components/Admin_comp/Activity_comp/CreateActivity'
 import { useNavigation } from '@react-navigation/native'
 import RenderAdmins from '../../Components/Admin_comp/manager_comp/RenderAdmins'
 import AddAdmin from '../../Components/Admin_comp/manager_comp/AddAdmin'
