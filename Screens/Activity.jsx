@@ -15,6 +15,7 @@ import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet'
 import UserCard from '../Components/UserCard'
 import { useRoute } from '@react-navigation/native'
 import { getPublicUsersByID } from '../Utilities/Axios/user'
+import LoadingIndicator from '../Components/LoadingIndicator'
 
 function Activity({ navigation }) {
   const sheetRef = useRef(null)
@@ -25,10 +26,13 @@ function Activity({ navigation }) {
   const route = useRoute()
   const activity = route.params.activity
   const [members, setMembers] = useState([])
+  const [loadingMembers, setLoadingMembers] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoadingMembers(true)
       const data = await getPublicUsersByID(activity.membersIds)
+      setLoadingMembers(false)
       setMembers(data)
     }
     fetchData()
@@ -61,6 +65,10 @@ function Activity({ navigation }) {
     date.setDate(new Date().getDate() + index * 7)
     return date
   })
+
+  const renderFooter = () => {
+    return loadingMembers ? <LoadingIndicator /> : null
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -119,6 +127,7 @@ function Activity({ navigation }) {
               i.firstName.toString().concat(i.lastName.toString())
             }
             renderItem={({ item }) => <UserCard user={item} />}
+            ListFooterComponent={renderFooter}
           />
         </BottomSheet>
       ) : null}

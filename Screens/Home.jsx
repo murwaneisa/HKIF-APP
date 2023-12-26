@@ -25,10 +25,8 @@ function Home({ navigation }) {
   const currentUser = '6573c82961a72b4119925725'
   const events = useSelector(state => state.event.data || [])
   const activities = useSelector(state => state.activity.data || [])
-
   const loadingEvents = useSelector(state => state.event.loading)
   const loadingActivities = useSelector(state => state.activity.loading)
-
   const dispatch = useDispatch()
 
   useEffect(() => {

@@ -16,6 +16,7 @@ import JoinEventCard from '../Components/JoinEventCard'
 import UserCard from '../Components/UserCard'
 import { useRoute } from '@react-navigation/native'
 import { getPublicUsersByID } from '../Utilities/Axios/user'
+import LoadingIndicator from '../Components/LoadingIndicator'
 
 function EventDetails({ navigation }) {
   const { theme } = useTheme()
@@ -26,10 +27,13 @@ function EventDetails({ navigation }) {
   const route = useRoute()
   const event = route.params.event
   const [attendees, setAttendees] = useState([])
+  const [loadingAttendees, setLoadingAttendees] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoadingAttendees(true)
       const data = await getPublicUsersByID(event.attendeesIds)
+      setLoadingAttendees(false)
       setAttendees(data)
     }
     fetchData()
@@ -50,6 +54,14 @@ function EventDetails({ navigation }) {
       minute: '2-digit',
       timeZone: 'UTC',
     })
+  }
+
+  const renderFooter = () => {
+    return loadingAttendees ? (
+      <LoadingIndicator />
+    ) : (
+      <View style={{ marginBottom: 110 }} />
+    )
   }
 
   return (
@@ -123,7 +135,7 @@ function EventDetails({ navigation }) {
         renderItem={({ item }) => <UserCard user={item} />}
         keyExtractor={i => i.firstName.toString().concat(i.lastName.toString())}
         showsVerticalScrollIndicator={false}
-        ListFooterComponent={<View style={{ marginBottom: 110 }} />}
+        ListFooterComponent={renderFooter}
       />
 
       {Platform.OS === 'android' || Platform.OS === 'ios' ? (

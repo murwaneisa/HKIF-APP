@@ -4,12 +4,14 @@ import { useTheme } from '../Styles/theme'
 import EventCard from '../Components/EventCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchEvents } from '../Utilities/Redux/Actions/eventActions'
+import LoadingIndicator from '../Components/LoadingIndicator'
 
 function Events({ navigation }) {
   const { theme } = useTheme()
   const styles = getStyles(theme)
 
   const events = useSelector(state => state.event.data || [])
+  const loadingEvents = useSelector(state => state.event.loading)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -17,22 +19,30 @@ function Events({ navigation }) {
   }, [dispatch])
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={events}
-        renderItem={({ item }) => (
-          <EventCard
-            data={item}
-            onPress={() => navigation.navigate('EventDetails', { event: item })}
-            webWidth={'100%'}
-            marginBottom={20}
+    <>
+      {loadingEvents ? (
+        <LoadingIndicator />
+      ) : (
+        <View style={styles.container}>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={events}
+            renderItem={({ item }) => (
+              <EventCard
+                data={item}
+                onPress={() =>
+                  navigation.navigate('EventDetails', { event: item })
+                }
+                webWidth={'100%'}
+                marginBottom={20}
+              />
+            )}
+            keyExtractor={item => item._id}
+            contentContainerStyle={styles.contentContainerStyle}
           />
-        )}
-        keyExtractor={item => item._id}
-        contentContainerStyle={styles.contentContainerStyle}
-      />
-    </View>
+        </View>
+      )}
+    </>
   )
 }
 
