@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   Pressable,
+  Platform,
 } from 'react-native'
 import React from 'react'
 import { useTheme } from '../Styles/theme'
@@ -50,7 +51,11 @@ const getStyles = (theme, windowWidth) => {
       backgroundColor: theme.colors.backgroundPrimary,
       flex: 1,
       paddingTop: 20,
-      paddingHorizontal: 20,
+      paddingHorizontal: Platform.select({
+        ios: 20,
+        android: 20,
+        web: '25%',
+      }),
     },
     button: {
       backgroundColor: theme.colors.primary200,

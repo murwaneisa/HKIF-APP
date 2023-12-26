@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   View,
   Text,
@@ -6,30 +6,30 @@ import {
   Platform,
   ScrollView,
   Dimensions,
+  Pressable,
 } from 'react-native'
 import { useTheme } from '../Styles/theme'
 import EventCard from '../Components/EventCard'
 import ActivityCard from '../Components/ActivityCard'
 import AnnouncementCard from '../Components/AnnouncementCard'
-
-const data = [
-  { key: '1', title: 'Strength', favorite: true, icon: 'basketball' },
-  { key: '2', title: 'Tennis', favorite: true, icon: 'tennisball' },
-  { key: '3', title: 'Chess', favorite: true, icon: 'american-football' },
-  { key: '4', title: 'Football', favorite: false, icon: 'ios-football' },
-  { key: '5', title: 'Swimming', favorite: false, icon: 'bug' },
-  { key: '6', title: 'Running', favorite: false, icon: 'game-controller' },
-  { key: '7', title: 'Salsa', favorite: false, icon: 'body' },
-  { key: '8', title: 'Football', favorite: false, icon: 'ios-football' },
-  { key: '9', title: 'Swimming', favorite: false, icon: 'bug' },
-  { key: '10', title: 'Running', favorite: false, icon: 'game-controller' },
-  { key: '11', title: 'Salsa', favorite: false, icon: 'body' },
-]
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchActivities } from '../Utilities/Redux/Actions/activityActions'
+import { fetchEvents } from '../Utilities/Redux/Actions/eventActions'
 
 function Home({ navigation }) {
   const { theme } = useTheme()
   const windowWidth = Dimensions.get('window').width
   const styles = getStyles(theme, windowWidth)
+
+  const currentUser = '6522c9aa889e288bfa25d7cd'
+  const events = useSelector(state => state.event.data || [])
+  const activities = useSelector(state => state.activity.data || [])
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(fetchActivities())
+    dispatch(fetchEvents())
+  }, [dispatch])
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -39,24 +39,52 @@ function Home({ navigation }) {
         />
       </View>
       <View style={styles.sectionContainer}>
-        <Text style={styles.sectionTitle}>Upcoming Event</Text>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Upcoming Events</Text>
+          <Pressable onPress={() => navigation.navigate('Events')}>
+            <Text style={styles.viewAll}>View all</Text>
+          </Pressable>
+        </View>
         <View style={styles.events}>
-          <EventCard onPress={() => navigation.navigate('Event')} />
+          {Platform.OS === 'web'
+            ? events
+                .slice(0, 2)
+                .map(event => (
+                  <EventCard
+                    key={event._id}
+                    data={event}
+                    onPress={() =>
+                      navigation.navigate('EventDetails', { event: event })
+                    }
+                    webWidth={'49.4%'}
+                  />
+                ))
+            : events
+                .slice(0, 1)
+                .map(event => (
+                  <EventCard
+                    key={event._id}
+                    data={event}
+                    onPress={() =>
+                      navigation.navigate('EventDetails', { event: event })
+                    }
+                  />
+                ))}
         </View>
       </View>
       <View style={styles.sectionContainer}>
         <Text style={styles.sectionTitleFavorites}>Favorites</Text>
         <View style={styles.activities}>
-          {data
-            .filter(act => act.favorite === true)
-            .map(item => (
+          {activities
+            .filter(act => act.membersIds.includes(currentUser))
+            .map(activity => (
               <ActivityCard
-                key={item.key}
-                title={item.title}
-                favorite={item.favorite}
-                icon={item.icon}
+                key={activity._id}
+                title={activity.title}
+                favorite={activity.membersIds.includes(currentUser)}
+                icon={'basketball'}
                 onPress={() =>
-                  navigation.navigate('Activity', { title: item.title })
+                  navigation.navigate('Activity', { activity: activity })
                 }
               />
             ))}
@@ -65,16 +93,16 @@ function Home({ navigation }) {
       <View style={[styles.sectionContainer, { marginBottom: 60 }]}>
         <Text style={styles.sectionTitleFavorites}>Activities</Text>
         <View style={styles.activities}>
-          {data
-            .filter(act => act.favorite === false)
-            .map(item => (
+          {activities
+            .filter(act => !act.membersIds.includes(currentUser))
+            .map(activity => (
               <ActivityCard
-                key={item.key}
-                title={item.title}
-                favorite={item.favorite}
-                icon={item.icon}
+                key={activity._id}
+                title={activity.title}
+                favorite={activity.membersIds.includes(currentUser)}
+                icon={'football'}
                 onPress={() =>
-                  navigation.navigate('Activity', { title: item.title })
+                  navigation.navigate('Activity', { activity: activity })
                 }
               />
             ))}
@@ -118,6 +146,17 @@ const getStyles = (theme, windowWidth) => {
         web: 25,
       }),
     },
+    sectionHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginHorizontal: 20,
+      marginBottom: Platform.select({
+        ios: 15,
+        android: 15,
+        web: 17,
+      }),
+    },
     sectionTitle: {
       fontFamily: 'Inter-Bold',
       fontSize: Platform.select({
@@ -125,13 +164,16 @@ const getStyles = (theme, windowWidth) => {
         android: 18,
         web: 22,
       }),
-      marginBottom: Platform.select({
-        ios: 15,
-        android: 15,
-        web: 20,
-      }),
-      paddingHorizontal: 20,
       color: theme.colors.text,
+    },
+    viewAll: {
+      color: theme.colors.primary,
+      fontFamily: 'Inter-SemiBold',
+      fontSize: Platform.select({
+        ios: 14,
+        android: 14,
+        web: 18,
+      }),
     },
     sectionTitleFavorites: {
       fontFamily: 'Inter-Bold',
@@ -144,6 +186,12 @@ const getStyles = (theme, windowWidth) => {
       color: theme.colors.text,
     },
     events: {
+      flexDirection: Platform.select({
+        web: 'row',
+      }),
+      justifyContent: Platform.select({
+        web: 'space-between',
+      }),
       width: '100%',
       paddingHorizontal: 20,
     },

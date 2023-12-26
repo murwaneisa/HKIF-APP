@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import {
   View,
   Text,
@@ -9,17 +9,30 @@ import {
   Dimensions,
 } from 'react-native'
 import { useTheme } from '../Styles/theme'
-// import Swiper from 'react-native-swiper'
 import Calendar from '../Components/Calendar'
 import NextActivitySessionCard from '../Components/NextActivitySessionCard'
 import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet'
 import UserCard from '../Components/UserCard'
+import { useRoute } from '@react-navigation/native'
+import { getPublicUsersByID } from '../Utilities/Axios/user'
 
 function Activity({ navigation }) {
   const sheetRef = useRef(null)
   const { theme } = useTheme()
   const windowWidth = Dimensions.get('window').width
   const styles = getStyles(theme, windowWidth)
+
+  const route = useRoute()
+  const activity = route.params.activity
+  const [members, setMembers] = useState([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getPublicUsersByID(activity.membersIds)
+      setMembers(data)
+    }
+    fetchData()
+  }, [activity.membersIds])
 
   let Swiper
 
@@ -28,14 +41,6 @@ function Activity({ navigation }) {
   } else {
     Swiper = undefined
   }
-
-  const data = useMemo(
-    () =>
-      Array(50)
-        .fill(0)
-        .map((_, index) => `index-${index}`),
-    []
-  )
 
   const getISOWeek = date => {
     const d = new Date(date)
@@ -64,7 +69,7 @@ function Activity({ navigation }) {
           <Image
             style={styles.image}
             source={{
-              uri: 'https://images.unsplash.com/photo-1513635625218-6956bc843133?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Zm9vdGJhbGwlMjBpbiUyMHNwb3J0JTIwaGFsbHxlbnwwfHwwfHx8MA%3D%3D',
+              uri: activity.imageUrl,
             }}
             resizeMode='cover'
           />
@@ -96,15 +101,7 @@ function Activity({ navigation }) {
 
         <View style={styles.descriptionSection}>
           <Text style={styles.sectionTitle}>Description</Text>
-          <Text style={styles.descriptionText}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </Text>
+          <Text style={styles.descriptionText}>{activity.description}</Text>
         </View>
       </ScrollView>
 
@@ -117,9 +114,11 @@ function Activity({ navigation }) {
         >
           <Text style={styles.bottomSheetTitle}>Liked by</Text>
           <BottomSheetFlatList
-            data={data}
-            keyExtractor={i => i}
-            renderItem={({ item }) => <UserCard />}
+            data={members}
+            keyExtractor={i =>
+              i.firstName.toString().concat(i.lastName.toString())
+            }
+            renderItem={({ item }) => <UserCard user={item} />}
           />
         </BottomSheet>
       ) : null}

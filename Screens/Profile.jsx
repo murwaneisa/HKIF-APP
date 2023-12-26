@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Image,
   Pressable,
+  Platform,
 } from 'react-native'
 import React, { useState } from 'react'
 import { useTheme } from '../Styles/theme'
@@ -91,6 +92,11 @@ const getStyles = (theme, windowWidth) => {
     container: {
       backgroundColor: theme.colors.backgroundPrimary,
       flex: 1,
+      paddingHorizontal: Platform.select({
+        ios: 0,
+        android: 0,
+        web: '25%',
+      }),
     },
     headerSection: {
       justifyContent: 'center',
