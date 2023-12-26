@@ -46,7 +46,7 @@ const CoachSelector = () => {
         data={data}
         labelField='label'
         valueField='value'
-        placeholder='Select Coach'
+        placeholder='Select Leader'
         value={selected}
         search
         searchPlaceholder='Search...'
@@ -105,6 +105,7 @@ const getStyles = theme => {
     placeholderStyle: {
       fontFamily: 'Inter-Bold',
       color: theme.colors.text,
+      fontSize: 14,
     },
     selectedTextStyle: {
       fontSize: 14,

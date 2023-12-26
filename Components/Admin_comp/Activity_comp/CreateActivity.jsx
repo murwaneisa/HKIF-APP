@@ -25,7 +25,7 @@ const CreateActivity = ({ route, navigation }) => {
   const { activityId } = route?.params || {}
   console.log(activityId)
   const [openStartDatePicker, setOpenStartDatePicker] = useState(false)
-  const [pickerType, setPickerType] = useState('date') // New state for picker type
+  const [pickerType, setPickerType] = useState('time') // New state for picker type
   const [startedDate, setStartedDate] = useState('12/12/2023')
   const [selectedStartDate, setSelectedStartDate] = useState('')
   const [time, setTime] = useState('')
@@ -45,7 +45,7 @@ const CreateActivity = ({ route, navigation }) => {
   ]
 
   const openDatePicker = () => {
-    setPickerType('date')
+    setPickerType('time')
     setOpenStartDatePicker(true)
   }
 
@@ -382,7 +382,7 @@ const getStyles = theme => {
       elevation: 2,
     },
     sectionTitle: {
-      width: 50,
+      width: 35,
     },
     sectionText: {
       fontFamily: 'Inter-Bold',
@@ -401,6 +401,7 @@ const getStyles = theme => {
       marginHorizontal: 8,
     },
     input: {
+      height: 50,
       backgroundColor: theme.colors.accent2,
       width: Platform.select({
         web: ' 100%',
@@ -429,7 +430,10 @@ const getStyles = theme => {
       alignItems: 'flex-start',
       marginVertical: 10,
       borderRadius: 6,
-      padding: 12,
+      padding: 14,
+      shadowOpacity: 0.2,
+      shadowRadius: 1.41,
+      elevation: 2,
     },
     descriptionTitle: { width: '100%' },
     descriptionInput: {

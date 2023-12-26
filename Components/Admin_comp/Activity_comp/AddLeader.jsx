@@ -218,6 +218,7 @@ const AddLeader = ({ route }) => {
               placeholder='First Name*'
               value={form.firstName}
               onChangeText={value => handleInputChange('firstName', value)}
+              placeholderTextColor={theme.colors.text}
               style={styles.input}
             />
             {!!formErrors.lastName && ( // Show error text if there's an error
@@ -383,6 +384,7 @@ const getStyles = (theme, isDarkMode) => {
       borderRadius: 10,
       fontSize: 16,
       backgroundColor: theme.colors.accent2,
+      color: theme.colors.text,
     },
 
     buttonContainer: {
