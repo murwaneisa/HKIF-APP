@@ -89,44 +89,52 @@ function Home({ navigation }) {
                     ))}
             </View>
           </View>
-          <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitleFavorites}>Favorites</Text>
-            <View style={styles.activities}>
-              {activities
-                .filter(act => act.membersIds.includes(currentUser))
-                .map(activity => (
-                  <ActivityCard
-                    key={activity._id}
-                    title={activity.title}
-                    favorite={activity.membersIds.includes(currentUser)}
-                    icon={'basketball'}
-                    onPress={() =>
-                      navigation.navigate('Activity', { activity: activity })
-                    }
-                    onPressFavorite={() => handleFavoriteActivity(activity)}
-                  />
-                ))}
+
+          {activities.filter(act => act.membersIds.includes(currentUser))
+            .length === 0 ? null : (
+            <View style={styles.sectionContainer}>
+              <Text style={styles.sectionTitleFavorites}>Favorites</Text>
+              <View style={styles.activities}>
+                {activities
+                  .filter(act => act.membersIds.includes(currentUser))
+                  .map(activity => (
+                    <ActivityCard
+                      key={activity._id}
+                      title={activity.title}
+                      favorite={activity.membersIds.includes(currentUser)}
+                      icon={'basketball'}
+                      onPress={() =>
+                        navigation.navigate('Activity', { activity: activity })
+                      }
+                      onPressFavorite={() => handleFavoriteActivity(activity)}
+                    />
+                  ))}
+              </View>
             </View>
-          </View>
-          <View style={[styles.sectionContainer, { marginBottom: 60 }]}>
-            <Text style={styles.sectionTitleFavorites}>Activities</Text>
-            <View style={styles.activities}>
-              {activities
-                .filter(act => !act.membersIds.includes(currentUser))
-                .map(activity => (
-                  <ActivityCard
-                    key={activity._id}
-                    title={activity.title}
-                    favorite={activity.membersIds.includes(currentUser)}
-                    icon={'football'}
-                    onPress={() =>
-                      navigation.navigate('Activity', { activity: activity })
-                    }
-                    onPressFavorite={() => handleFavoriteActivity(activity)}
-                  />
-                ))}
+          )}
+
+          {activities.filter(act => !act.membersIds.includes(currentUser))
+            .length === 0 ? null : (
+            <View style={[styles.sectionContainer, { marginBottom: 60 }]}>
+              <Text style={styles.sectionTitleFavorites}>Activities</Text>
+              <View style={styles.activities}>
+                {activities
+                  .filter(act => !act.membersIds.includes(currentUser))
+                  .map(activity => (
+                    <ActivityCard
+                      key={activity._id}
+                      title={activity.title}
+                      favorite={activity.membersIds.includes(currentUser)}
+                      icon={'football'}
+                      onPress={() =>
+                        navigation.navigate('Activity', { activity: activity })
+                      }
+                      onPressFavorite={() => handleFavoriteActivity(activity)}
+                    />
+                  ))}
+              </View>
             </View>
-          </View>
+          )}
         </ScrollView>
       )}
     </>
