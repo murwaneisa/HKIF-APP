@@ -119,16 +119,19 @@ function EventDetails({ navigation }) {
             <View style={styles.descriptionSection}>
               <Text style={styles.descriptionText}>{event.description}</Text>
             </View>
-            <View style={styles.usersSectionHeader}>
-              <Text style={styles.sectionTitle}>People who've joined</Text>
-              <Pressable
-                onPress={() =>
-                  navigation.navigate('EventUsers', { attendees: attendees })
-                }
-              >
-                <Text style={styles.viewAll}>View all</Text>
-              </Pressable>
-            </View>
+
+            {!loadingAttendees && attendees.length === 0 ? null : (
+              <View style={styles.usersSectionHeader}>
+                <Text style={styles.sectionTitle}>People who've joined</Text>
+                <Pressable
+                  onPress={() =>
+                    navigation.navigate('EventUsers', { attendees: attendees })
+                  }
+                >
+                  <Text style={styles.viewAll}>View all</Text>
+                </Pressable>
+              </View>
+            )}
           </View>
         }
         data={attendees}
