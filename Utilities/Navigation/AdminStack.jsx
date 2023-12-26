@@ -1,19 +1,12 @@
 import React from 'react'
 import { createDrawerNavigator } from '@react-navigation/drawer'
-
 import Ionicons from 'react-native-vector-icons/Ionicons'
-
-import Profile from '../../Screens/Profile'
-import Message from '../../Screens/Message'
 import Settings from '../../Screens/Settings'
 import Home from '../../Screens/Home'
 import CustomDrawer from '../../Components/CustomDrawer'
 import { useTheme } from '../../Styles/theme'
 import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import Register from '../../Screens/Register'
-import { Octicons } from '@expo/vector-icons'
-import Organization from '../../Screens/Organization'
 import Users from '../../Screens/Admin/Users'
 import Admins from '../../Screens/Admin/Admins'
 import Events from '../../Screens/Admin/Events'
@@ -23,6 +16,7 @@ import MemberDetails from '../../Screens/Admin/MemberDetails'
 import AddEvent from '../../Components/Admin_comp/Event_comp/AddEvent'
 import CreateActivity from '../../Components/Admin_comp/Activity_comp/CreateActivity'
 import AddLeader from '../../Components/Admin_comp/Activity_comp/AddLeader'
+import AddAdmin from '../../Components/Admin_comp/manager_comp/AddAdmin'
 
 const customHeaderLeft = routeName => {
   const navigation = useNavigation()
@@ -144,6 +138,11 @@ const AdminStack = () => {
         name='AddLeader'
         options={{ headerTitle: 'Edit Leader' }}
         component={AddLeader}
+      />
+      <Stack.Screen
+        name='AddAdmin'
+        options={{ headerTitle: 'Edit Admin' }}
+        component={AddAdmin}
       />
     </Stack.Navigator>
   )
