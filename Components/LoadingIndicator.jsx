@@ -17,7 +17,7 @@ const LoadingIndicator = () => {
 const getStyles = theme =>
   StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.primaryBackground,
+      backgroundColor: theme.colors.backgroundPrimary,
       width: '100%',
       height: '100%',
       paddingTop: 25,
