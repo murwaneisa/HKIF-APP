@@ -20,6 +20,7 @@ import { useRoute } from '@react-navigation/native'
 import { getPublicUsersByID } from '../Utilities/Axios/user'
 import LoadingIndicator from '../Components/LoadingIndicator'
 import DateFormatter from '../Utilities/Helper/DateFormatter'
+import ActivitySession from '../Utilities/Helper/ActivitySession'
 
 function Activity({ navigation }) {
   const sheetRef = useRef(null)
@@ -40,8 +41,8 @@ function Activity({ navigation }) {
     },
     {
       day: 'Thursday',
-      startTime: '16:00',
-      endTime: '18:00',
+      startTime: '18:00',
+      endTime: '20:00',
     },
   ]
 
@@ -77,7 +78,9 @@ function Activity({ navigation }) {
         </View>
 
         <View style={{ marginBottom: 20 }}>
-          <NextActivitySessionCard />
+          <NextActivitySessionCard
+            sessionInfo={ActivitySession.getNextSession(schedules)}
+          />
         </View>
 
         {Platform.OS === 'android' || Platform.OS === 'ios' ? (
