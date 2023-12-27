@@ -2,42 +2,68 @@ import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { useTheme } from '../Styles/theme'
 
-const Calendar = ({ startDate }) => {
+const Calendar = ({ startDate, schedules }) => {
   const { theme } = useTheme()
   const styles = getStyles(theme)
 
   const firstDayOfWeek = new Date(startDate)
   firstDayOfWeek.setDate(startDate.getDate() - startDate.getDay())
 
-  const nextTwoWeeks = Array.from({ length: 7 }, (_, index) => {
+  const daysOfWeek = Array.from({ length: 7 }, (_, index) => {
     const date = new Date(firstDayOfWeek)
     date.setDate(firstDayOfWeek.getDate() + index)
     return date
   })
 
-  const formatDate = date => {
-    const options = { weekday: 'short', day: 'numeric' }
-    return date.toLocaleDateString('en-SE', options).slice(0, 3)
+  const getWeekday = (date, type) => {
+    const daysOfWeek = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+    ]
+    const weekday = daysOfWeek[date.getDay()]
+    return type === 'short' ? weekday.substring(0, 3) : weekday
   }
 
   return (
     <View style={styles.picker}>
       <View style={styles.itemRow}>
-        {nextTwoWeeks.map((item, dateIndex) => (
-          <View
-            style={[
-              styles.item,
-              new Date().toDateString() === item.toDateString() &&
-                styles.todayItem,
-              new Date(firstDayOfWeek).toDateString() === item.toDateString() &&
-                styles.activeItem,
-            ]}
-            key={dateIndex}
-          >
-            <Text style={styles.itemWeekday}>{formatDate(item)}</Text>
-            <Text style={styles.itemDate}>{item.getDate()}</Text>
-          </View>
-        ))}
+        {daysOfWeek.map((item, dateIndex) => {
+          const hasSchedule = schedules.some(
+            schedule => schedule.day === getWeekday(item)
+          )
+          return (
+            <View
+              style={[styles.item, hasSchedule && styles.activeItem]}
+              key={dateIndex}
+            >
+              <Text
+                style={[
+                  styles.itemWeekday,
+                  !hasSchedule &&
+                    new Date().toDateString() === item.toDateString() &&
+                    styles.todayItem,
+                ]}
+              >
+                {getWeekday(item, 'short')}
+              </Text>
+              <Text
+                style={[
+                  styles.itemDate,
+                  !hasSchedule &&
+                    new Date().toDateString() === item.toDateString() &&
+                    styles.todayItem,
+                ]}
+              >
+                {item.getDate()}
+              </Text>
+            </View>
+          )
+        })}
       </View>
     </View>
   )
@@ -63,9 +89,6 @@ const getStyles = theme =>
       alignItems: 'center',
       backgroundColor: theme.colors.secondary,
     },
-    todayItem: {
-      // backgroundColor: theme.colors.primary500,
-    },
     activeItem: {
       backgroundColor: theme.colors.primary,
     },
@@ -79,6 +102,9 @@ const getStyles = theme =>
       fontSize: 16,
       fontWeight: '600',
       color: 'white',
+    },
+    todayItem: {
+      color: theme.colors.primary200,
     },
   })
 

@@ -49,6 +49,19 @@ function Activity({ navigation }) {
     Swiper = undefined
   }
 
+  const schedules = [
+    {
+      day: 'Tuesday',
+      startTime: '16:00',
+      endTime: '18:00',
+    },
+    {
+      day: 'Thursday',
+      startTime: '16:00',
+      endTime: '18:00',
+    },
+  ]
+
   const getISOWeek = date => {
     const d = new Date(date)
     d.setHours(0, 0, 0, 0)
@@ -103,7 +116,7 @@ function Activity({ navigation }) {
                   <Text style={styles.sectionTitle}>
                     Schedule - {formatDate(item)}
                   </Text>
-                  <Calendar startDate={item} />
+                  <Calendar startDate={item} schedules={schedules} />
                 </View>
               ))}
             </Swiper>
