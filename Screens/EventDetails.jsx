@@ -17,6 +17,7 @@ import UserCard from '../Components/UserCard'
 import { useRoute } from '@react-navigation/native'
 import { getPublicUsersByID } from '../Utilities/Axios/user'
 import LoadingIndicator from '../Components/LoadingIndicator'
+import DateFormatter from '../Utilities/Helper/DateFormatter'
 
 function EventDetails({ navigation }) {
   const { theme } = useTheme()
@@ -38,23 +39,6 @@ function EventDetails({ navigation }) {
     }
     fetchData()
   }, [event.attendeesIds])
-
-  const formatDate = dateString => {
-    return new Date(dateString).toLocaleDateString('en-SE', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      timeZone: 'UTC',
-    })
-  }
-
-  const formatTime = dataString => {
-    return new Date(dataString).toLocaleTimeString('en-SE', {
-      hour: '2-digit',
-      minute: '2-digit',
-      timeZone: 'UTC',
-    })
-  }
 
   const renderFooter = () => {
     return loadingAttendees ? (
@@ -91,13 +75,14 @@ function EventDetails({ navigation }) {
                 <View style={styles.textWrapper}>
                   <Ionicons name='calendar-outline' style={styles.icon} />
                   <Text style={styles.dateText}>
-                    {formatDate(event.startTime)}
+                    {DateFormatter.formatDate(event.startTime)}
                   </Text>
                 </View>
                 <View style={styles.textWrapper}>
                   <Ionicons name='time-outline' style={styles.icon} />
                   <Text style={styles.dateText}>
-                    {formatTime(event.startTime)} - {formatTime(event.endTime)}
+                    {DateFormatter.formatTime(event.startTime)} -{' '}
+                    {DateFormatter.formatTime(event.endTime)}
                   </Text>
                 </View>
               </View>

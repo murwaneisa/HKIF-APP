@@ -19,6 +19,7 @@ import UserCard from '../Components/UserCard'
 import { useRoute } from '@react-navigation/native'
 import { getPublicUsersByID } from '../Utilities/Axios/user'
 import LoadingIndicator from '../Components/LoadingIndicator'
+import DateFormatter from '../Utilities/Helper/DateFormatter'
 
 function Activity({ navigation }) {
   const sheetRef = useRef(null)
@@ -30,6 +31,19 @@ function Activity({ navigation }) {
   const activity = route.params.activity
   const [members, setMembers] = useState([])
   const [loadingMembers, setLoadingMembers] = useState(false)
+
+  const schedules = [
+    {
+      day: 'Tuesday',
+      startTime: '16:00',
+      endTime: '18:00',
+    },
+    {
+      day: 'Thursday',
+      startTime: '16:00',
+      endTime: '18:00',
+    },
+  ]
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,43 +61,6 @@ function Activity({ navigation }) {
     Swiper = require('react-native-swiper').default
   } else {
     Swiper = undefined
-  }
-
-  const schedules = [
-    {
-      day: 'Tuesday',
-      startTime: '16:00',
-      endTime: '18:00',
-    },
-    {
-      day: 'Thursday',
-      startTime: '16:00',
-      endTime: '18:00',
-    },
-  ]
-
-  const getISOWeek = date => {
-    const d = new Date(date)
-    d.setHours(0, 0, 0, 0)
-    d.setDate(d.getDate() + 4 - (d.getDay() || 7))
-    const yearStart = new Date(d.getFullYear(), 0, 1)
-    const weekNumber = Math.ceil(((d - yearStart) / 86400000 + 1) / 7)
-    return weekNumber
-  }
-
-  const formatDate = date => {
-    const weekNumber = getISOWeek(date)
-    return `Week ${weekNumber}`
-  }
-
-  const weeks = Array.from({ length: 4 }, (_, index) => {
-    const date = new Date(new Date())
-    date.setDate(new Date().getDate() + index * 7)
-    return date
-  })
-
-  const renderFooter = () => {
-    return loadingMembers ? <LoadingIndicator /> : null
   }
 
   return (
@@ -111,10 +88,11 @@ function Activity({ navigation }) {
               activeDotColor={theme.colors.primary}
               dotColor={theme.colors.secondary}
             >
-              {weeks.map((item, index) => (
+              {DateFormatter.getWeeksArray((len = 4)).map((item, index) => (
                 <View style={styles.slide} key={index}>
                   <Text style={styles.sectionTitle}>
-                    Schedule - {formatDate(item)}
+                    Schedule -{' '}
+                    {`Week ${DateFormatter.getWeekNumber((date = item))}`}
                   </Text>
                   <Calendar startDate={item} schedules={schedules} />
                 </View>
@@ -150,7 +128,7 @@ function Activity({ navigation }) {
                 i.firstName.toString().concat(i.lastName.toString())
               }
               renderItem={({ item }) => <UserCard user={item} />}
-              ListFooterComponent={renderFooter}
+              ListFooterComponent={loadingMembers ? <LoadingIndicator /> : null}
             />
           )}
         </BottomSheet>

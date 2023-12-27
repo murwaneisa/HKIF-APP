@@ -1,40 +1,18 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { useTheme } from '../Styles/theme'
+import DateFormatter from '../Utilities/Helper/DateFormatter'
 
 const Calendar = ({ startDate, schedules }) => {
   const { theme } = useTheme()
   const styles = getStyles(theme)
 
-  const firstDayOfWeek = new Date(startDate)
-  firstDayOfWeek.setDate(startDate.getDate() - startDate.getDay())
-
-  const daysOfWeek = Array.from({ length: 7 }, (_, index) => {
-    const date = new Date(firstDayOfWeek)
-    date.setDate(firstDayOfWeek.getDate() + index)
-    return date
-  })
-
-  const getWeekday = (date, type) => {
-    const daysOfWeek = [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-    ]
-    const weekday = daysOfWeek[date.getDay()]
-    return type === 'short' ? weekday.substring(0, 3) : weekday
-  }
-
   return (
     <View style={styles.picker}>
       <View style={styles.itemRow}>
-        {daysOfWeek.map((item, dateIndex) => {
+        {DateFormatter.getDaysOfWeek(startDate).map((item, dateIndex) => {
           const hasSchedule = schedules.some(
-            schedule => schedule.day === getWeekday(item)
+            schedule => schedule.day === DateFormatter.getWeekday(item)
           )
           return (
             <View
@@ -49,7 +27,7 @@ const Calendar = ({ startDate, schedules }) => {
                     styles.todayItem,
                 ]}
               >
-                {getWeekday(item, 'short')}
+                {DateFormatter.getWeekday(item, 'short')}
               </Text>
               <Text
                 style={[
