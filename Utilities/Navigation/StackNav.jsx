@@ -8,7 +8,7 @@ import AdminStack from './AdminStack'
 const Drawer = createDrawerNavigator()
 
 export default function StackNav() {
-  const [isAuthenticated, setIsAuthenticated] = useState('')
+  const [isAuthenticated, setIsAuthenticated] = useState('admin')
   let stackToRender
 
   if (isAuthenticated === 'admin') {
