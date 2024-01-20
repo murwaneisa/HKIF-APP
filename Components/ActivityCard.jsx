@@ -13,7 +13,6 @@ import { MaterialIcons } from '@expo/vector-icons'
 
 const ActivityCard = props => {
   const screenWidth = Dimensions.get('window').width
-  const cardWidth = screenWidth * 0.33
   const { theme } = useTheme()
   const styles = getStyles(theme, screenWidth)
 
@@ -29,7 +28,7 @@ const ActivityCard = props => {
             />
           </View>
           <View style={styles.buttonContainer}>
-            <Pressable onPress={() => console.log('test')}>
+            <Pressable onPress={props.onPressFavorite}>
               <MaterialIcons
                 name={props.favorite === true ? 'favorite' : 'favorite-border'}
                 color='rgba(255,255,255,0.8)'

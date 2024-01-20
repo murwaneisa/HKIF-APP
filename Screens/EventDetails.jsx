@@ -16,6 +16,8 @@ import JoinEventCard from '../Components/JoinEventCard'
 import UserCard from '../Components/UserCard'
 import { useRoute } from '@react-navigation/native'
 import { getPublicUsersByID } from '../Utilities/Axios/user'
+import LoadingIndicator from '../Components/LoadingIndicator'
+import DateFormatter from '../Utilities/Helper/DateFormatter'
 
 function EventDetails({ navigation }) {
   const { theme } = useTheme()
@@ -26,30 +28,24 @@ function EventDetails({ navigation }) {
   const route = useRoute()
   const event = route.params.event
   const [attendees, setAttendees] = useState([])
+  const [loadingAttendees, setLoadingAttendees] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoadingAttendees(true)
       const data = await getPublicUsersByID(event.attendeesIds)
+      setLoadingAttendees(false)
       setAttendees(data)
     }
     fetchData()
   }, [event.attendeesIds])
 
-  const formatDate = dateString => {
-    return new Date(dateString).toLocaleDateString('en-SE', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      timeZone: 'UTC',
-    })
-  }
-
-  const formatTime = dataString => {
-    return new Date(dataString).toLocaleTimeString('en-SE', {
-      hour: '2-digit',
-      minute: '2-digit',
-      timeZone: 'UTC',
-    })
+  const renderFooter = () => {
+    return loadingAttendees ? (
+      <LoadingIndicator />
+    ) : (
+      <View style={{ marginBottom: 110 }} />
+    )
   }
 
   return (
@@ -79,13 +75,14 @@ function EventDetails({ navigation }) {
                 <View style={styles.textWrapper}>
                   <Ionicons name='calendar-outline' style={styles.icon} />
                   <Text style={styles.dateText}>
-                    {formatDate(event.startTime)}
+                    {DateFormatter.formatDate(event.startTime)}
                   </Text>
                 </View>
                 <View style={styles.textWrapper}>
                   <Ionicons name='time-outline' style={styles.icon} />
                   <Text style={styles.dateText}>
-                    {formatTime(event.startTime)} - {formatTime(event.endTime)}
+                    {DateFormatter.formatTime(event.startTime)} -{' '}
+                    {DateFormatter.formatTime(event.endTime)}
                   </Text>
                 </View>
               </View>
@@ -107,23 +104,26 @@ function EventDetails({ navigation }) {
             <View style={styles.descriptionSection}>
               <Text style={styles.descriptionText}>{event.description}</Text>
             </View>
-            <View style={styles.usersSectionHeader}>
-              <Text style={styles.sectionTitle}>People who've joined</Text>
-              <Pressable
-                onPress={() =>
-                  navigation.navigate('EventUsers', { attendees: attendees })
-                }
-              >
-                <Text style={styles.viewAll}>View all</Text>
-              </Pressable>
-            </View>
+
+            {!loadingAttendees && attendees.length === 0 ? null : (
+              <View style={styles.usersSectionHeader}>
+                <Text style={styles.sectionTitle}>People who've joined</Text>
+                <Pressable
+                  onPress={() =>
+                    navigation.navigate('EventUsers', { attendees: attendees })
+                  }
+                >
+                  <Text style={styles.viewAll}>View all</Text>
+                </Pressable>
+              </View>
+            )}
           </View>
         }
         data={attendees}
         renderItem={({ item }) => <UserCard user={item} />}
         keyExtractor={i => i.firstName.toString().concat(i.lastName.toString())}
         showsVerticalScrollIndicator={false}
-        ListFooterComponent={<View style={{ marginBottom: 110 }} />}
+        ListFooterComponent={renderFooter}
       />
 
       {Platform.OS === 'android' || Platform.OS === 'ios' ? (
