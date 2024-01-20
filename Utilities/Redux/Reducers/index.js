@@ -6,10 +6,9 @@ import eventReducer from '../Slices/eventSlice'
 
 const rootReducer = combineReducers({
   user: userReducer,
-  adminReducer: adminReducer,
+  admin: adminReducer,
   activity: activityReducer,
   event: eventReducer,
-  // Add other slices here
 })
 
 export default rootReducer

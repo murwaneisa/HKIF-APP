@@ -1,23 +1,19 @@
-import { useState } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
-import { createDrawerNavigator } from '@react-navigation/drawer'
 import AuthStack from './AuthStack'
 import UserStack from './UserStack'
 import AdminStack from './AdminStack'
-
-const Drawer = createDrawerNavigator()
+import { useSelector } from 'react-redux'
 
 export default function StackNav() {
-  const [isAuthenticated, setIsAuthenticated] = useState('admin')
+  const user = useSelector(state => state.user.currentUser)
+  const admin = useSelector(state => state.admin.currentAdmin)
   let stackToRender
-
-  if (isAuthenticated === 'admin') {
-    stackToRender = <AdminStack />
-  } else if (isAuthenticated === 'user') {
+  if (user) {
     stackToRender = <UserStack />
+  } else if (admin) {
+    stackToRender = <AdminStack />
   } else {
     stackToRender = <AuthStack />
   }
-
   return <NavigationContainer>{stackToRender}</NavigationContainer>
 }
