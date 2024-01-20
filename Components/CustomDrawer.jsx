@@ -19,6 +19,9 @@ import { useNavigation } from '@react-navigation/native'
 import { useTheme } from '../Styles/theme'
 import Badge from '../Utilities/UI/Badge'
 import DarkLightSwitch from '../Utilities/UI/DarkLightButton'
+import { userLogout } from '../Utilities/Redux/Actions/userActions'
+import { useDispatch, useSelector } from 'react-redux'
+import { adminLogout } from '../Utilities/Redux/Actions/adminActions'
 
 const Profile = () => {
   const navigation = useNavigation()
@@ -42,6 +45,18 @@ const CustomDrawer = props => {
   const { theme } = useTheme()
   const windowWidth = Dimensions.get('window').width
   const styles = getStyles(theme)
+  const dispatch = useDispatch()
+  const user = useSelector(state => state.user.currentUser)
+  const admin = useSelector(state => state.admin.currentAdmin)
+
+  const handleLogout = async () => {
+    if (user) {
+      dispatch(userLogout())
+    } else if (admin) {
+      dispatch(adminLogout())
+    }
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView
@@ -101,7 +116,7 @@ const CustomDrawer = props => {
             <Text style={styles.bottomItemText}>Share the app</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}} style={styles.bottomTouchable}>
+        <TouchableOpacity onPress={handleLogout} style={styles.bottomTouchable}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Ionicons name='exit-outline' size={22} color={theme.colors.text} />
             <Text style={styles.bottomItemText}>Sign Out</Text>

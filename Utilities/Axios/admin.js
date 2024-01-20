@@ -1,5 +1,5 @@
 import baseInstance from './api'
-import { storeAccessToken, storeRefreshToken, storeUserID } from './token'
+import { storeAccessToken, storeRefreshToken, storeUserID } from './storage'
 
 const adminSuffix = '/admins'
 

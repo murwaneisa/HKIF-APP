@@ -11,8 +11,11 @@ const adminSlice = createSlice({
     setAdmin: (state, action) => {
       state.currentAdmin = action.payload
     },
+    logoutAdmin: state => {
+      state.currentAdmin = null
+    },
   },
 })
 
-export const { setAdmin } = adminSlice.actions
+export const { setAdmin, logoutAdmin } = adminSlice.actions
 export default adminSlice.reducer

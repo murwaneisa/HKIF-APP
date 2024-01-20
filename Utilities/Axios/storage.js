@@ -57,3 +57,13 @@ export const getUserID = async () => {
     return null
   }
 }
+
+export const resetUser = async () => {
+  try {
+    await AsyncStorage.removeItem('accessToken')
+    await AsyncStorage.removeItem('refreshToken')
+    await AsyncStorage.removeItem('userID')
+  } catch (error) {
+    console.error('Error clearing the tokens during logout', error)
+  }
+}

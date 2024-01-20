@@ -5,7 +5,7 @@ import AdminStack from './AdminStack'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { checkAndSetUser } from '../Redux/Actions/userActions'
-import { getAccessToken, getUserID } from '../Axios/token'
+import { getAccessToken, getUserID } from '../Axios/storage'
 import { checkAndSetAdmin } from '../Redux/Actions/adminActions'
 
 export default function StackNav() {
