@@ -10,3 +10,10 @@ export const loginAndSetUser = (email, password) => async dispatch => {
     console.error('Executing loginAndSetUser failed:' + error)
   }
 }
+
+export const checkAndSetUser = userId => async dispatch => {
+  const user = await getFullUserInfoByID(userId)
+  if (user) {
+    dispatch(setUser(user))
+  }
+}

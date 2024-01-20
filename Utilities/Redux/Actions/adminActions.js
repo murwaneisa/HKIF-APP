@@ -10,3 +10,10 @@ export const loginAndSetAdmin = (email, password) => async dispatch => {
     console.error('Executing loginAndSetAdmin failed:' + error.message)
   }
 }
+
+export const checkAndSetAdmin = adminId => async dispatch => {
+  const admin = await getFullAdminInfoByID(adminId)
+  if (admin) {
+    dispatch(setAdmin(admin))
+  }
+}
