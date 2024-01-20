@@ -11,10 +11,16 @@ import {
 import { useTheme } from '../Styles/theme'
 import Calendar from '../Components/Calendar'
 import NextActivitySessionCard from '../Components/NextActivitySessionCard'
-import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet'
+import BottomSheet, {
+  BottomSheetFlatList,
+  BottomSheetView,
+} from '@gorhom/bottom-sheet'
 import UserCard from '../Components/UserCard'
 import { useRoute } from '@react-navigation/native'
 import { getPublicUsersByID } from '../Utilities/Axios/user'
+import LoadingIndicator from '../Components/LoadingIndicator'
+import DateFormatter from '../Utilities/Helper/DateFormatter'
+import ActivitySession from '../Utilities/Helper/ActivitySession'
 
 function Activity({ navigation }) {
   const sheetRef = useRef(null)
@@ -25,10 +31,26 @@ function Activity({ navigation }) {
   const route = useRoute()
   const activity = route.params.activity
   const [members, setMembers] = useState([])
+  const [loadingMembers, setLoadingMembers] = useState(false)
+
+  const schedules = [
+    {
+      day: 'Tuesday',
+      startTime: '16:00',
+      endTime: '18:00',
+    },
+    {
+      day: 'Thursday',
+      startTime: '18:00',
+      endTime: '20:00',
+    },
+  ]
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoadingMembers(true)
       const data = await getPublicUsersByID(activity.membersIds)
+      setLoadingMembers(false)
       setMembers(data)
     }
     fetchData()
@@ -41,26 +63,6 @@ function Activity({ navigation }) {
   } else {
     Swiper = undefined
   }
-
-  const getISOWeek = date => {
-    const d = new Date(date)
-    d.setHours(0, 0, 0, 0)
-    d.setDate(d.getDate() + 4 - (d.getDay() || 7))
-    const yearStart = new Date(d.getFullYear(), 0, 1)
-    const weekNumber = Math.ceil(((d - yearStart) / 86400000 + 1) / 7)
-    return weekNumber
-  }
-
-  const formatDate = date => {
-    const weekNumber = getISOWeek(date)
-    return `Week ${weekNumber}`
-  }
-
-  const weeks = Array.from({ length: 4 }, (_, index) => {
-    const date = new Date(new Date())
-    date.setDate(new Date().getDate() + index * 7)
-    return date
-  })
 
   return (
     <View style={{ flex: 1 }}>
@@ -76,7 +78,9 @@ function Activity({ navigation }) {
         </View>
 
         <View style={{ marginBottom: 20 }}>
-          <NextActivitySessionCard />
+          <NextActivitySessionCard
+            sessionInfo={ActivitySession.getNextSession(schedules)}
+          />
         </View>
 
         {Platform.OS === 'android' || Platform.OS === 'ios' ? (
@@ -87,12 +91,13 @@ function Activity({ navigation }) {
               activeDotColor={theme.colors.primary}
               dotColor={theme.colors.secondary}
             >
-              {weeks.map((item, index) => (
+              {DateFormatter.getWeeksArray((len = 4)).map((item, index) => (
                 <View style={styles.slide} key={index}>
                   <Text style={styles.sectionTitle}>
-                    Schedule - {formatDate(item)}
+                    Schedule -{' '}
+                    {`Week ${DateFormatter.getWeekNumber((date = item))}`}
                   </Text>
-                  <Calendar startDate={item} />
+                  <Calendar startDate={item} schedules={schedules} />
                 </View>
               ))}
             </Swiper>
@@ -113,13 +118,22 @@ function Activity({ navigation }) {
           handleIndicatorStyle={styles.bottomSheetIndicator}
         >
           <Text style={styles.bottomSheetTitle}>Liked by</Text>
-          <BottomSheetFlatList
-            data={members}
-            keyExtractor={i =>
-              i.firstName.toString().concat(i.lastName.toString())
-            }
-            renderItem={({ item }) => <UserCard user={item} />}
-          />
+          {members.length === 0 ? (
+            <BottomSheetView style={styles.emptyBSView}>
+              <Text style={styles.emptyBSViewText}>
+                Be the first to like this activity
+              </Text>
+            </BottomSheetView>
+          ) : (
+            <BottomSheetFlatList
+              data={members}
+              keyExtractor={i =>
+                i.firstName.toString().concat(i.lastName.toString())
+              }
+              renderItem={({ item }) => <UserCard user={item} />}
+              ListFooterComponent={loadingMembers ? <LoadingIndicator /> : null}
+            />
+          )}
         </BottomSheet>
       ) : null}
     </View>
@@ -191,6 +205,19 @@ const getStyles = (theme, windowWidth) => {
     },
     bottomSheetIndicator: {
       backgroundColor: theme.colors.title,
+    },
+    emptyBSView: {
+      flex: 1,
+      paddingTop: 80,
+    },
+    emptyBSViewText: {
+      textAlign: 'center',
+      fontFamily: 'Inter-Bold',
+      fontSize: Platform.select({
+        ios: 17,
+        android: 16,
+      }),
+      color: theme.colors.text,
     },
   })
 }

@@ -10,28 +10,12 @@ import {
 } from 'react-native'
 import { useTheme } from '../Styles/theme'
 import { Ionicons } from '@expo/vector-icons'
+import DateFormatter from '../Utilities/Helper/DateFormatter'
 
 const EventCard = ({ data, onPress, webWidth, marginBottom }) => {
   const { theme } = useTheme()
   const windowWidth = Dimensions.get('window').width
   const styles = getStyles(theme, windowWidth)
-
-  const formatDate = dateString => {
-    return new Date(dateString).toLocaleDateString('en-SE', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      timeZone: 'UTC',
-    })
-  }
-
-  const formatTime = dataString => {
-    return new Date(dataString).toLocaleTimeString('en-SE', {
-      hour: '2-digit',
-      minute: '2-digit',
-      timeZone: 'UTC',
-    })
-  }
 
   return (
     <Pressable
@@ -64,11 +48,15 @@ const EventCard = ({ data, onPress, webWidth, marginBottom }) => {
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={styles.textContainer}>
             <Ionicons name='ios-calendar' style={styles.icon} />
-            <Text style={styles.text}>{formatDate(data.startTime)}</Text>
+            <Text style={styles.text}>
+              {DateFormatter.formatDate(data.startTime)}
+            </Text>
           </View>
           <View style={styles.textContainer}>
             <Ionicons name='time' style={styles.icon} />
-            <Text style={styles.text}>kl {formatTime(data.startTime)}</Text>
+            <Text style={styles.text}>
+              kl {DateFormatter.formatTime(data.startTime)}
+            </Text>
           </View>
         </View>
       </View>

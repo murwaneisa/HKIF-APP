@@ -1,14 +1,18 @@
 import React from 'react'
 import { View, Text, StyleSheet, Image } from 'react-native'
 import { useTheme } from '../Styles/theme'
+import DateFormatter from '../Utilities/Helper/DateFormatter'
 
-const NextActivitySessionCard = () => {
+const NextActivitySessionCard = ({ sessionInfo }) => {
   const { theme } = useTheme()
   const styles = getStyles(theme)
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>NEXT SESSION: 16:00 - 18:00</Text>
+      <Text style={styles.title}>
+        NEXT SESSION: {sessionInfo.session.startTime} -{' '}
+        {sessionInfo.session.endTime}
+      </Text>
       <View style={styles.box}>
         <View style={styles.imageContainer}>
           <Image
@@ -18,7 +22,10 @@ const NextActivitySessionCard = () => {
           />
         </View>
         <View style={styles.content}>
-          <Text style={styles.contentHeader}>Thursday, September 28th</Text>
+          <Text style={styles.contentHeader}>
+            {sessionInfo.session.day},{' '}
+            {DateFormatter.formatDate(sessionInfo.date)}
+          </Text>
           <Text style={styles.contentText}>
             Coach: XXXX | Location: The Gym
           </Text>
