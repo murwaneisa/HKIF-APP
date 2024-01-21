@@ -40,3 +40,11 @@ export const getPublicUsersByID = async userIds => {
     console.error('Get Information failed:', error)
   }
 }
+
+export const geUsersInfo = async () => {
+  try {
+    return await baseInstance.get(`${userSuffix}`)
+  } catch (error) {
+    console.error('Get Information failed:', error)
+  }
+}

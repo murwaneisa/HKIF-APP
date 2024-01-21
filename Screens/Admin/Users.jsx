@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   View,
   Text,
@@ -8,15 +8,19 @@ import {
   Dimensions,
 } from 'react-native'
 import { useTheme } from '../../Styles/theme'
+import { useSelector } from 'react-redux'
 import RenderRequests from '../../Components/Admin_comp/Users_comp/RenderRequests'
 import RenderMembers from '../../Components/Admin_comp/Users_comp/RenderMembers'
+import { Alert } from 'react-native'
+import { geUsersInfo } from '../../Utilities/Axios/user'
 
 const Users = () => {
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
   const [activeList, setActiveList] = useState('members')
-  const [user, setUser] = useState({ role: 'superAdmin' })
+  const admin = useSelector(state => state.admin.currentAdmin)
+  const [user, setUser] = useState(admin.role.includes('SUPERADMIN'))
 
   const getButtonStyle = listName => ({
     flex: 1,
@@ -32,11 +36,34 @@ const Users = () => {
   })
 
   const handlePress = listName => {
-    if (listName === 'requests' && user.role !== 'superAdmin') {
+    if (listName === 'requests' && !user) {
+      Alert.alert(
+        'Access Denied', // Title of the alert
+        'You do not have permission to view this section.', // Message of the alert
+        [
+          { text: 'OK', onPress: () => console.log('OK Pressed') }, // Button to dismiss the alert
+        ]
+      )
       return // You can also use Alert.alert to inform the user they don't have permission
     }
     setActiveList(listName)
   }
+
+  const [userData, setUserData] = useState(null) // State to store user data
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const data = await geUsersInfo()
+        console.log('the data is the big data', data.data)
+        setUserData(data.data) // Store the data in state
+      } catch (error) {
+        console.error('Error fetching users:', error)
+      }
+    }
+
+    fetchUsers()
+  }, []) // Empty dependency array means this effect runs once on mount
 
   return (
     <View style={styles.container}>
@@ -63,10 +90,10 @@ const Users = () => {
         <Pressable
           style={({ pressed }) => [
             getButtonStyle('requests'),
-            pressed && user.role === 'superAdmin' && styles.pressed,
+            pressed && user && styles.pressed,
           ]}
           onPress={() => handlePress('requests')}
-          disabled={user.role !== 'superAdmin'} // Disable if not super admin
+          /*  disabled={!user} // Disable if not super admin */
         >
           {({ pressed }) => (
             <Text
