@@ -1,5 +1,5 @@
 import baseInstance from './api'
-import { storeAccessToken, storeRefreshToken } from './token'
+import { storeAccessToken, storeRefreshToken, storeUserID } from './storage'
 
 const adminSuffix = '/admins'
 
@@ -12,6 +12,7 @@ export const loginAdmin = async (email, password) => {
     const { adminId, access, refresh } = response.data
     await storeAccessToken(access)
     await storeRefreshToken(refresh)
+    await storeUserID(adminId)
     return adminId
   } catch (error) {
     console.error('Admin Login failed:\n', JSON.stringify(error))

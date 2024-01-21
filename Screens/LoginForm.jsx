@@ -81,7 +81,7 @@ function LoginForm({ navigation }) {
                 placeholderTextColor={theme.colors.accent}
                 keyboardType={
                   Platform.OS !== 'web' ? 'email-address' : undefined
-                } // Set keyboard type for email input
+                }
               />
               {!isEmailValid && (
                 <Text style={styles.errorText}>Invalid email format</Text>
@@ -105,11 +105,10 @@ function LoginForm({ navigation }) {
                 paddingVertical={40}
                 paddingHorizontal={12}
                 onLongPress={() => setShowAdminButton(true)}
-                onPress={async () => {
+                onPress={() => {
                   if (isFormValid()) {
                     try {
-                      await dispatch(loginAndSetUser(email, password))
-                      navigation.navigate('Home')
+                      dispatch(loginAndSetUser(email, password))
                     } catch (error) {
                       console.error('Login failed:', error)
                     }
@@ -129,8 +128,7 @@ function LoginForm({ navigation }) {
                   onPress={async () => {
                     if (isFormValid()) {
                       try {
-                        await dispatch(loginAndSetAdmin(email, password))
-                        navigation.navigate('Home')
+                        dispatch(loginAndSetAdmin(email, password))
                       } catch (error) {
                         console.error('Login failed:', error)
                       }

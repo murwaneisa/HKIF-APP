@@ -1,16 +1,10 @@
 import React from 'react'
 import { createDrawerNavigator } from '@react-navigation/drawer'
-
 import Ionicons from 'react-native-vector-icons/Ionicons'
-
 import Profile from '../../Screens/Profile'
 import Message from '../../Screens/Message'
 import Settings from '../../Screens/Settings'
 import Home from '../../Screens/Home'
-import CustomDrawer from '../../Components/CustomDrawer'
-import { useTheme } from '../../Styles/theme'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
 import Register from '../../Screens/Register'
 import { Octicons } from '@expo/vector-icons'
 import Organization from '../../Screens/Organization'
@@ -20,125 +14,23 @@ import EventUsers from '../../Screens/EventUsers'
 import EditProfile from '../../Screens/EditProfile'
 import Events from '../../Screens/Events'
 import EventDetails from '../../Screens/EventDetails'
+import HeaderLeft from '../../Components/Navigation/HeaderLeft'
+import HeaderRight from '../../Components/Navigation/HeaderRight'
+import DrawerNavigator from '../../Components/Navigation/DrawerNavigator'
+import StackNavigator from '../../Components/Navigation/StackNavigator'
 
-const customHeaderLeft = routeName => {
-  const navigation = useNavigation()
-  const { theme } = useTheme()
-
-  if (routeName === 'Home') {
-    return (
-      <View
-        style={{
-          marginLeft: 15,
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100%',
-        }}
-      >
-        <TouchableOpacity onPress={() => navigation.openDrawer()}>
-          <Ionicons name='menu' size={38} color={theme.colors.text} />
-        </TouchableOpacity>
-      </View>
-    )
-  } else {
-    return (
-      <View
-        style={{
-          marginLeft: 15,
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100%',
-        }}
-      >
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons
-            name='arrow-back-outline'
-            size={38}
-            color={theme.colors.text}
-          />
-        </TouchableOpacity>
-      </View>
-    )
-  }
-}
-
-const hamburgerMenu = () => {
-  const navigation = useNavigation()
-  const { theme } = useTheme()
-  return (
-    <View
-      style={{
-        marginLeft: 15,
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100%',
-      }}
-    >
-      <TouchableOpacity onPress={() => navigation.openDrawer()}>
-        <Ionicons name='menu' size={38} color={theme.colors.text} />
-      </TouchableOpacity>
-    </View>
-  )
-}
-
-const notificationBell = () => {
-  const navigation = useNavigation()
-  const { theme } = useTheme()
-  return (
-    <View
-      style={{
-        marginRight: 15,
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100%',
-      }}
-    >
-      <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-        <Ionicons
-          name='notifications-outline'
-          size={38}
-          color={theme.colors.text}
-        />
-      </TouchableOpacity>
-    </View>
-  )
-}
-
-const Drawer = createDrawerNavigator()
 const Stack = createStackNavigator()
+const Drawer = createDrawerNavigator()
 
 const UserStack = () => {
-  const { theme } = useTheme()
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerLeft: () => customHeaderLeft('Users'),
-        headerStyle: {
-          backgroundColor: theme.colors.accent, // Use the theme for styling
-        },
-        headerTitleStyle: {
-          color: theme.colors.text,
-        },
-        headerTitleAlign: 'center',
-        drawerActiveBackgroundColor: theme.colors.primary200,
-        drawerActiveTintColor: theme.colors.primary900,
-        drawerInactiveTintColor: theme.colors.text,
-        drawerLabelStyle: {
-          marginLeft: -25,
-          fontFamily: 'Inter-Medium',
-          fontSize: 15,
-        },
-        drawerStyle: {
-          backgroundColor: theme.colors.backgroundPrimary, // Set the background color for the drawer
-        },
-      }}
-    >
+    <StackNavigator headerLeft={() => HeaderLeft()}>
       <Stack.Screen
         name='HomeMenu'
         options={{
           headerShown: false,
         }}
-        component={MenuStack}
+        component={DrawerMenu}
       />
       <Stack.Screen
         name='EventDetails'
@@ -169,38 +61,15 @@ const UserStack = () => {
           headerTitle: 'Upcoming Events',
         }}
       />
-    </Stack.Navigator>
+    </StackNavigator>
   )
 }
 
-const MenuStack = () => {
-  const { theme } = useTheme()
-
+const DrawerMenu = () => {
   return (
-    <Drawer.Navigator
-      drawerContent={props => <CustomDrawer {...props} />}
-      screenOptions={{
-        headerRight: () => notificationBell(),
-        headerLeft: () => hamburgerMenu(),
-        headerStyle: {
-          backgroundColor: theme.colors.accent, // Use the theme for styling
-        },
-        headerTitleStyle: {
-          color: theme.colors.text,
-        },
-        headerTitleAlign: 'center',
-        drawerActiveBackgroundColor: theme.colors.primary200,
-        drawerActiveTintColor: theme.colors.primary900,
-        drawerInactiveTintColor: theme.colors.text,
-        drawerLabelStyle: {
-          marginLeft: -25,
-          fontFamily: 'Inter-Medium',
-          fontSize: 15,
-        },
-        drawerStyle: {
-          backgroundColor: theme.colors.backgroundPrimary, // Set the background color for the drawer
-        },
-      }}
+    <DrawerNavigator
+      headerLeft={() => HeaderLeft('Home')}
+      headerRight={() => HeaderRight()}
     >
       <Drawer.Screen
         name='Home'
@@ -256,7 +125,7 @@ const MenuStack = () => {
           ),
         }}
       />
-    </Drawer.Navigator>
+    </DrawerNavigator>
   )
 }
 

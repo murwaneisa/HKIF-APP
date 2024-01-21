@@ -1,20 +1,36 @@
-import { useState } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
-import { createDrawerNavigator } from '@react-navigation/drawer'
 import AuthStack from './AuthStack'
 import UserStack from './UserStack'
 import AdminStack from './AdminStack'
-
-const Drawer = createDrawerNavigator()
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { checkAndSetUser } from '../Redux/Actions/userActions'
+import { getAccessToken, getUserID } from '../Axios/storage'
+import { checkAndSetAdmin } from '../Redux/Actions/adminActions'
 
 export default function StackNav() {
-  const [isAuthenticated, setIsAuthenticated] = useState('admin')
+  const user = useSelector(state => state.user.currentUser)
+  const admin = useSelector(state => state.admin.currentAdmin)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    async function autoLogin() {
+      const accessToken = await getAccessToken()
+      if (accessToken) {
+        const userId = await getUserID()
+        dispatch(checkAndSetUser(userId))
+        dispatch(checkAndSetAdmin(userId))
+      }
+    }
+    autoLogin()
+  }, [dispatch])
+
   let stackToRender
 
-  if (isAuthenticated === 'admin') {
-    stackToRender = <AdminStack />
-  } else if (isAuthenticated === 'user') {
+  if (user) {
     stackToRender = <UserStack />
+  } else if (admin) {
+    stackToRender = <AdminStack />
   } else {
     stackToRender = <AuthStack />
   }
