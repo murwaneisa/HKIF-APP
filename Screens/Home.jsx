@@ -9,8 +9,8 @@ import {
   Pressable,
 } from 'react-native'
 import { useTheme } from '../Styles/theme'
-import EventCard from '../Components/EventCard'
-import ActivityCard from '../Components/ActivityCard'
+import EventCard from '../Components/Event/EventCard'
+import ActivityCard from '../Components/Activity/ActivityCard'
 import AnnouncementCard from '../Components/AnnouncementCard'
 import { useDispatch, useSelector } from 'react-redux'
 import {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, Platform } from 'react-native'
-import { useTheme } from '../Styles/theme'
+import { useTheme } from '../../Styles/theme'
 import { Feather } from '@expo/vector-icons'
 import { TextInput } from 'react-native-gesture-handler'
 

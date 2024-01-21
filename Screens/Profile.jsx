@@ -10,7 +10,7 @@ import {
 import React, { useState } from 'react'
 import { useTheme } from '../Styles/theme'
 import { Feather } from '@expo/vector-icons'
-import UserInfoCard from '../Components/UserInfoCard'
+import UserInfoCard from '../Components/Profile/UserInfoCard'
 import HKIFImagePicker from '../Utilities/Helper/HKIFImagePicker'
 
 const Profile = ({ navigation }) => {

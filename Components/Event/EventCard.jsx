@@ -8,9 +8,9 @@ import {
   Platform,
   Dimensions,
 } from 'react-native'
-import { useTheme } from '../Styles/theme'
+import { useTheme } from '../../Styles/theme'
 import { Ionicons } from '@expo/vector-icons'
-import DateFormatter from '../Utilities/Helper/DateFormatter'
+import DateFormatter from '../../Utilities/Helper/DateFormatter'
 
 const EventCard = ({ data, onPress, webWidth, marginBottom }) => {
   const { theme } = useTheme()

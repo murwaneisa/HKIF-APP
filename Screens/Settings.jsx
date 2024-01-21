@@ -9,8 +9,8 @@ import {
 } from 'react-native'
 import React from 'react'
 import { useTheme } from '../Styles/theme'
-import SettingsOptionCard from '../Components/SettingsOptionCard'
-import SettingsSection from '../Components/SettingsSection'
+import SettingsOptionCard from '../Components/Settings/SettingsOptionCard'
+import SettingsSection from '../Components/Settings/SettingsSection'
 
 const Settings = () => {
   const { theme } = useTheme()

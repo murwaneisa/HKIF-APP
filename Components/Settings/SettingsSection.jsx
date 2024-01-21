@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet, Image, Platform } from 'react-native'
-import { useTheme } from '../Styles/theme'
+import { useTheme } from '../../Styles/theme'
 
 const SettingsSection = ({ title, children }) => {
   const { theme } = useTheme()

@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet, Image } from 'react-native'
-import { useTheme } from '../Styles/theme'
-import DateFormatter from '../Utilities/Helper/DateFormatter'
+import { useTheme } from '../../Styles/theme'
+import DateFormatter from '../../Utilities/Helper/DateFormatter'
 
 const NextActivitySessionCard = ({ sessionInfo }) => {
   const { theme } = useTheme()
@@ -17,7 +17,7 @@ const NextActivitySessionCard = ({ sessionInfo }) => {
         <View style={styles.imageContainer}>
           <Image
             style={styles.image}
-            source={require('../Assets/images/movie.jpg')}
+            source={require('../../Assets/images/movie.jpg')}
             resizeMode='cover'
           />
         </View>
