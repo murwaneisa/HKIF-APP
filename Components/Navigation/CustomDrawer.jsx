@@ -16,12 +16,12 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { useNavigation } from '@react-navigation/native'
-import { useTheme } from '../Styles/theme'
-import Badge from '../Utilities/UI/Badge'
-import DarkLightSwitch from '../Utilities/UI/DarkLightButton'
-import { userLogout } from '../Utilities/Redux/Actions/userActions'
+import { useTheme } from '../../Styles/theme'
+import Badge from '../../Utilities/UI/Badge'
+import DarkLightSwitch from '../../Utilities/UI/DarkLightButton'
+import { userLogout } from '../../Utilities/Redux/Actions/userActions'
 import { useDispatch, useSelector } from 'react-redux'
-import { adminLogout } from '../Utilities/Redux/Actions/adminActions'
+import { adminLogout } from '../../Utilities/Redux/Actions/adminActions'
 
 const Profile = () => {
   const navigation = useNavigation()
