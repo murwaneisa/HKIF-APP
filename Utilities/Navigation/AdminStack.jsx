@@ -17,6 +17,9 @@ import HeaderLeft from '../../Components/Navigation/HeaderLeft'
 import HeaderRight from '../../Components/Navigation/HeaderRight'
 import DrawerNavigator from '../../Components/Navigation/DrawerNavigator'
 import StackNavigator from '../../Components/Navigation/StackNavigator'
+import EventDetails from '../../Screens/EventDetails'
+import Activity from '../../Screens/Activity'
+import EventUsers from '../../Screens/EventUsers'
 
 const Stack = createStackNavigator()
 const Drawer = createDrawerNavigator()
@@ -55,6 +58,29 @@ const AdminStack = () => {
         name='AddAdmin'
         options={{ headerTitle: 'Edit Admin' }}
         component={AddAdmin}
+      />
+      <Stack.Screen
+        name='EventDetails'
+        component={EventDetails}
+        options={({ route }) => ({
+          headerTitle: route.params?.event.title || 'Event Details',
+        })}
+      />
+      <Stack.Screen
+        name='Activity'
+        component={Activity}
+        options={({ route }) => ({
+          headerTitle: route.params?.activity.title || 'Activity',
+        })}
+      />
+      <Stack.Screen name='EventUsers' component={EventUsers} />
+      {/* Duplicate screen names in users & admin "Events" */}
+      <Stack.Screen
+        name='Events'
+        component={Events}
+        options={{
+          headerTitle: 'Upcoming Events',
+        }}
       />
     </StackNavigator>
   )
