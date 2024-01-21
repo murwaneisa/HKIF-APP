@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import React, { useState } from 'react'
 import { useTheme } from '../Styles/theme'
-import ProfileTextField from '../Components/ProfileTextField'
+import ProfileTextField from '../Components/Profile/ProfileTextField'
 
 const EditProfile = ({ route }) => {
   const { theme } = useTheme()

@@ -9,8 +9,8 @@ import {
   Dimensions,
 } from 'react-native'
 import { useTheme } from '../Styles/theme'
-import Calendar from '../Components/Calendar'
-import NextActivitySessionCard from '../Components/NextActivitySessionCard'
+import Calendar from '../Components/Activity/Calendar'
+import NextActivitySessionCard from '../Components/Activity/NextActivitySessionCard'
 import BottomSheet, {
   BottomSheetFlatList,
   BottomSheetView,

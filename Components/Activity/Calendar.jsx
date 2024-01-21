@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import { useTheme } from '../Styles/theme'
-import DateFormatter from '../Utilities/Helper/DateFormatter'
+import { useTheme } from '../../Styles/theme'
+import DateFormatter from '../../Utilities/Helper/DateFormatter'
 
 const Calendar = ({ startDate, schedules }) => {
   const { theme } = useTheme()

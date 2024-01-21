@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet, Platform, Pressable } from 'react-native'
-import { useTheme } from '../Styles/theme'
+import { useTheme } from '../../Styles/theme'
 import { Feather } from '@expo/vector-icons'
 
 const UserInfoCard = ({ iconName, text, onPress }) => {

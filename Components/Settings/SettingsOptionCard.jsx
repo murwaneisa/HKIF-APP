@@ -1,13 +1,6 @@
 import React from 'react'
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  Platform,
-  Pressable,
-} from 'react-native'
-import { useTheme } from '../Styles/theme'
+import { Text, StyleSheet, Pressable } from 'react-native'
+import { useTheme } from '../../Styles/theme'
 
 const SettingsOptionCard = ({ title, onPress }) => {
   const { theme } = useTheme()

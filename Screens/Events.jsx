@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react'
 import { View, StyleSheet, FlatList, Platform } from 'react-native'
 import { useTheme } from '../Styles/theme'
-import EventCard from '../Components/EventCard'
+import EventCard from '../Components/Event/EventCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchEvents } from '../Utilities/Redux/Actions/eventActions'
 import LoadingIndicator from '../Components/LoadingIndicator'
