@@ -12,7 +12,7 @@ export const loginAndSetUser = (email, password) => async dispatch => {
   }
 }
 
-export const checkAndSetUser = userId => async dispatch => {
+export const checkIfUserIsLoggedIn = userId => async dispatch => {
   try {
     const user = await getFullUserInfoByID(userId)
     if (user) {

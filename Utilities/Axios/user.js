@@ -1,5 +1,10 @@
 import baseInstance from './api'
-import { storeAccessToken, storeRefreshToken, storeUserID } from './storage'
+import {
+  resetUser,
+  storeAccessToken,
+  storeRefreshToken,
+  storeUserID,
+} from './storage'
 
 const userSuffix = '/users'
 
@@ -24,6 +29,9 @@ export const getFullUserInfoByID = async userId => {
     const response = await baseInstance.get(`${userSuffix}/${userId}`)
     return response.data
   } catch (error) {
+    if (error.response.status === '401') {
+      await resetUser()
+    }
     console.error('Get Information failed:', error)
   }
 }

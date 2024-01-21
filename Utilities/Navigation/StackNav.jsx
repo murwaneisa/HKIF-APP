@@ -4,9 +4,9 @@ import UserStack from './UserStack'
 import AdminStack from './AdminStack'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
-import { checkAndSetUser } from '../Redux/Actions/userActions'
+import { checkIfUserIsLoggedIn } from '../Redux/Actions/userActions'
 import { getAccessToken, getUserID } from '../Axios/storage'
-import { checkAndSetAdmin } from '../Redux/Actions/adminActions'
+import { checkIfAdminIsLoggedIn } from '../Redux/Actions/adminActions'
 
 export default function StackNav() {
   const user = useSelector(state => state.user.currentUser)
@@ -18,8 +18,8 @@ export default function StackNav() {
       const accessToken = await getAccessToken()
       if (accessToken) {
         const userId = await getUserID()
-        dispatch(checkAndSetUser(userId))
-        dispatch(checkAndSetAdmin(userId))
+        dispatch(checkIfUserIsLoggedIn(userId))
+        dispatch(checkIfAdminIsLoggedIn(userId))
       }
     }
     autoLogin()
