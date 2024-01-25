@@ -8,14 +8,16 @@ import {
   Dimensions,
 } from 'react-native'
 import { useTheme } from '../../Styles/theme'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import RenderRequests from '../../Components/Admin_comp/Users_comp/RenderRequests'
 import RenderMembers from '../../Components/Admin_comp/Users_comp/RenderMembers'
 import { Alert } from 'react-native'
 import { geUsersInfo } from '../../Utilities/Axios/user'
+import { addUsers } from '../../Utilities/Redux/Actions/userActions'
 
 const Users = () => {
   const windowWidth = Dimensions.get('window').width
+  const dispatch = useDispatch()
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
   const [activeList, setActiveList] = useState('members')
@@ -55,8 +57,7 @@ const Users = () => {
     const fetchUsers = async () => {
       try {
         const data = await geUsersInfo()
-        console.log('the data is the big data', data.data)
-        setUserData(data.data) // Store the data in state
+        dispatch(addUsers(data.data))
       } catch (error) {
         console.error('Error fetching users:', error)
       }
