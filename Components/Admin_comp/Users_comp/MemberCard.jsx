@@ -21,7 +21,6 @@ const MemberCard = ({ user, adminType }) => {
   const navigation = useNavigation()
 
   const [imageError, setImageError] = useState(false)
-  console.log('the admin type', adminType)
 
   const handleViewPress = () => {
     if (!adminType) {
@@ -36,7 +35,7 @@ const MemberCard = ({ user, adminType }) => {
       return null
     }
 
-    navigation.navigate('MemberDetails', { userId: user.id }) // Replace 'MemberDetails' with your actual route name
+    navigation.navigate('MemberDetails', { userId: user._id }) // Replace 'MemberDetails' with your actual route name
   }
   const iconSize = Math.min(55, 55)
   return (

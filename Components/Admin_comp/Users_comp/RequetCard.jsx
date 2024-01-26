@@ -7,25 +7,51 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { useTheme } from '../../../Styles/theme'
+import { FontAwesome } from '@expo/vector-icons'
 import { AntDesign } from '@expo/vector-icons'
+import {
+  convertToNormalWord,
+  formatDate,
+} from '../../../Utilities/Helper/fomatWord'
 
 const RequestCard = ({ user }) => {
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
+  const [imageError, setImageError] = useState(false)
   const styles = getStyles(theme, windowWidth)
+  const iconSize = Math.min(styles.image.width, styles.image.height)
+
+  const convertedMembType = convertToNormalWord(user.membershipType)
+
   return (
     <View style={styles.container}>
       <View style={styles.cardContainer}>
         <View>
-          <Image source={{ uri: user.image }} style={styles.image} />
+          {user.imageUrl && !imageError ? (
+            <Image
+              source={{ uri: user.imageUrl }}
+              style={styles.image}
+              onError={() => setImageError(true)}
+            />
+          ) : (
+            <View style={styles.image}>
+              <FontAwesome
+                name='user-circle'
+                size={iconSize}
+                color={theme.colors.text}
+              />
+            </View>
+          )}
         </View>
         <View style={styles.details}>
-          <Text style={styles.name}>{user.name}</Text>
-          <Text style={styles.text}>{user.membership}</Text>
-          <Text style={styles.text}>{user.phone}</Text>
-          <Text style={styles.text}>{user.date}</Text>
+          <Text
+            style={styles.name}
+          >{`${user.firstName} ${user.lastName}`}</Text>
+          <Text style={styles.text}>{convertedMembType}</Text>
+          <Text style={styles.text}>{user.phoneNumber}</Text>
+          <Text style={styles.text}>{formatDate(user.updatedAt)}</Text>
         </View>
         <View style={styles.actions}>
           <TouchableOpacity style={styles.actionButton}>
