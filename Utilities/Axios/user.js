@@ -48,3 +48,11 @@ export const geUsersInfo = async () => {
     console.error('Get Information failed:', error)
   }
 }
+
+export const editUserInfo = async (userId, updatedInfo) => {
+  try {
+    return await baseInstance.put(`${userSuffix}/${userId}`, updatedInfo)
+  } catch (error) {
+    console.error('Edit User Information failed:', error)
+  }
+}
