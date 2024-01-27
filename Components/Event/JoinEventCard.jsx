@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet, Platform, Pressable } from 'react-native'
-import { useTheme } from '../Styles/theme'
+import { useTheme } from '../../Styles/theme'
 
 const JoinEventCard = ({ title, buttonTitle, containerStyle, onPress }) => {
   const { theme } = useTheme()

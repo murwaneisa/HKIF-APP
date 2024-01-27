@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet, Platform } from 'react-native'
-import { useTheme } from '../Styles/theme'
+import { useTheme } from '../../Styles/theme'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { MaterialIcons } from '@expo/vector-icons'
 

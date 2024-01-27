@@ -7,7 +7,7 @@ import {
   Pressable,
   Dimensions,
 } from 'react-native'
-import { useTheme } from '../Styles/theme'
+import { useTheme } from '../../Styles/theme'
 import { Ionicons } from '@expo/vector-icons'
 import { MaterialIcons } from '@expo/vector-icons'
 
