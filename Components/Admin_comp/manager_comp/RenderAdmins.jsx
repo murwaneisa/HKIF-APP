@@ -10,71 +10,43 @@ import {
 import React from 'react'
 import { useTheme } from '../../../Styles/theme'
 import AdminCard from './AdminCard'
+import { useSelector } from 'react-redux'
+import LoadingIndicator from '../../LoadingIndicator'
 
 const RenderAdmins = () => {
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
+  const admins = useSelector(state => state.admin.adminList)
+  const admin = useSelector(state => state.admin.currentAdmin)
 
-  const admins = [
-    {
-      name: 'Elena Gilbert',
-      image: 'https://randomuser.me/api/portraits/women/1.jpg',
-      roles: ['Super admin'],
-      phone: '+1234567890',
-      email: 'elin323@gmail.com',
-    },
-    {
-      name: 'Damon-Salvatore',
-      image: 'https://randomuser.me/api/portraits/men/1.jpg',
-      roles: ['Activity leader'],
-      phone: '+1234567891',
-      email: 'Damon-Salvator@gmail.com',
-    },
-    {
-      name: 'Caroline Forbes',
-      image: 'https://randomuser.me/api/portraits/women/2.jpg',
-      roles: ['Event manager'],
-      phone: '+1234567892',
-      email: 'Damon-Salvator@gmail.com',
-    },
-    {
-      name: 'Stefan Salvatore',
-      image: 'https://randomuser.me/api/portraits/men/2.jpg',
-      roles: ['Super admin', 'Activity leader'],
-      phone: '+1234567893',
-      email: 'Damon-Salvator@gmail.com',
-    },
-    {
-      name: 'Klaus Mikaelson',
-      image: 'https://randomuser.me/api/portraits/men/3.jpg',
-      roles: ['Activity leader', 'Event manager', 'Super admin'],
-      phone: '+1234567895',
-      email: 'Damon-Salvator@gmail.com',
-    },
-    {
-      name: 'Rebekah Mikaelson',
-      image: 'https://randomuser.me/api/portraits/women/4.jpg',
-      roles: ['Super admin', 'Event manager'],
-      phone: '+1234567896',
-      email: 'Damon-Salvator@gmail.com',
-    },
-    // Add additional users if needed, with varying roles
-  ]
   const renderHeader = () => (
     <View style={styles.titleContainer}>
       <Text style={styles.header}>(5) activity leaders</Text>
     </View>
   )
 
+  if (!admins) {
+    console.log('the loader function')
+    return <LoadingIndicator />
+  }
+
   return (
     <>
       {Platform.OS === 'web' ? (
         <View style={styles.container}>
           {renderHeader()}
-          {admins.map((info, index) => (
-            <AdminCard key={index} info={info} />
-          ))}
+          {admins && admins.length > 0 ? (
+            admins.map((info, index) => (
+              <AdminCard
+                key={index}
+                info={info}
+                adminType={admin.role.includes('SUPERADMIN')}
+              />
+            ))
+          ) : (
+            <p>No admin data available.</p>
+          )}
         </View>
       ) : (
         <FlatList
@@ -82,7 +54,11 @@ const RenderAdmins = () => {
           ListHeaderComponent={renderHeader}
           data={admins}
           renderItem={({ item, index }) => (
-            <AdminCard key={index} info={item} />
+            <AdminCard
+              key={index}
+              info={item}
+              adminType={admin.role.includes('SUPERADMIN')}
+            />
           )}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={styles.container}

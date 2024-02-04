@@ -304,17 +304,17 @@ const AddAdmin = ({ route }) => {
                 onPress={handleSubmit}
               >
                 <Text style={styles.buttonText}>
-                  {leaderId ? 'Edit leader' : 'Add Leader'}
+                  {leaderId ? 'Edit Admin' : 'Add Admin'}
                 </Text>
               </TouchableOpacity>
-              {leaderId ? (
+              {AdminId ? (
                 <TouchableOpacity
                   style={[
                     styles.button,
                     { backgroundColor: theme.colors.error },
                   ]}
                 >
-                  <Text style={styles.buttonText}>Delete leader</Text>
+                  <Text style={styles.buttonText}>Delete Admin</Text>
                 </TouchableOpacity>
               ) : null}
             </View>

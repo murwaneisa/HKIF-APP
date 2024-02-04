@@ -27,3 +27,11 @@ export const getFullAdminInfoByID = async adminId => {
     console.error('Admin Get Information failed:', JSON.stringify(error))
   }
 }
+
+export const getAdmins = async () => {
+  try {
+    return await baseInstance.get(`${adminSuffix}`)
+  } catch (error) {
+    console.error('Get Information failed:', error)
+  }
+}

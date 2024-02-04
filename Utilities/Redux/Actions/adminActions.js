@@ -1,4 +1,4 @@
-import { logoutAdmin, setAdmin } from '../Slices/adminSlice'
+import { logoutAdmin, setAdmin, setAdmins } from '../Slices/adminSlice'
 import { loginAdmin, getFullAdminInfoByID } from '../../Axios/admin'
 import { resetUser } from '../../Axios/storage'
 
@@ -23,6 +23,16 @@ export const adminLogout = () => async dispatch => {
   try {
     await resetUser()
     dispatch(logoutAdmin())
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const addAdmins = data => async dispatch => {
+  try {
+    if (data) {
+      dispatch(setAdmins(data))
+    }
   } catch (error) {
     console.error(error)
   }
