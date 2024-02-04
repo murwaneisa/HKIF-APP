@@ -22,7 +22,6 @@ const RequestCard = ({ user }) => {
   const [imageError, setImageError] = useState(false)
   const styles = getStyles(theme, windowWidth)
   const iconSize = Math.min(styles.image.width, styles.image.height)
-
   const convertedMembType = convertToNormalWord(user.membershipType)
 
   return (

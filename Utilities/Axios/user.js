@@ -51,7 +51,11 @@ export const geUsersInfo = async () => {
 
 export const editUserInfo = async (userId, updatedInfo) => {
   try {
-    return await baseInstance.put(`${userSuffix}/${userId}`, updatedInfo)
+    const response = await baseInstance.put(
+      `${userSuffix}/edit/${userId}`,
+      updatedInfo
+    )
+    console.log('the user info response', response)
   } catch (error) {
     console.error('Edit User Information failed:', error)
   }
