@@ -10,70 +10,20 @@ import React from 'react'
 import RequestCard from './RequetCard'
 import { useTheme } from '../../../Styles/theme'
 import MemberCard from './MemberCard'
+import { useSelector } from 'react-redux'
 
 const RenderMembers = () => {
+  const userList = useSelector(state => state.user.usersList)
+  const adminType = useSelector(state => state.admin.currentAdmin)
+  const filteredUsers = userList.filter(
+    user => user.membershipType !== 'AWAITING_VERIFICATION'
+  )
+  console.log('the current admin  : ', adminType.role.includes('SUPERADMIN'))
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
+  /* image: 'https://randomuser.me/api/portraits/women/1.jpg', */
 
-  const users = [
-    {
-      name: 'Elena Gilbert',
-      image: 'https://randomuser.me/api/portraits/women/1.jpg',
-      membership: 'Full Membership',
-      phone: '+1234567890',
-      email: 'elin323@gmail.com',
-    },
-    {
-      name: 'Damon-Salvatore',
-      image: 'https://randomuser.me/api/portraits/men/1.jpg',
-      membership: 'Membership',
-      phone: '+1234567891',
-      email: 'Damon-Salvator@gmail.com',
-    },
-    {
-      name: 'Caroline Forbes',
-      image: 'https://randomuser.me/api/portraits/women/2.jpg',
-      membership: 'Full Membership',
-      phone: '+1234567892',
-      email: 'Damon-Salvator@gmail.com',
-    },
-    {
-      name: 'Stefan Salvatore',
-      image: 'https://randomuser.me/api/portraits/men/2.jpg',
-      membership: 'Membership',
-      phone: '+1234567893',
-      email: 'Damon-Salvator@gmail.com',
-    },
-    {
-      name: 'Klaus Mikaelson',
-      image: 'https://randomuser.me/api/portraits/men/3.jpg',
-      membership: 'Membership',
-      phone: '+1234567895',
-      email: 'Damon-Salvator@gmail.com',
-    },
-    {
-      name: 'Rebekah Mikaelson',
-      image: 'https://randomuser.me/api/portraits/women/4.jpg',
-      membership: 'Full Membership',
-      phone: '+1234567896',
-      email: 'Damon-Salvator@gmail.com',
-    },
-    {
-      name: 'Rebekah Mikaelson',
-      image: 'https://randomuser.me/api/portraits/women/4.jpg',
-      membership: 'Full Membership',
-      phone: '+1234567896',
-      email: 'Damon-Salvator@gmail.com',
-    },
-    {
-      name: 'Rebekah Mikaelson',
-      image: 'https://randomuser.me/api/portraits/women/4.jpg',
-      membership: 'Full Membership',
-      phone: '+1234567896',
-      email: 'Damon-Salvator@gmail.com',
-    },
-  ]
   return (
     <>
       <View style={styles.titleContainer}>
@@ -84,16 +34,24 @@ const RenderMembers = () => {
       </View>
       {Platform.OS == 'web' ? (
         <View style={styles.container}>
-          {users.map((user, index) => (
-            <MemberCard key={index} user={user} />
+          {filteredUsers.map((user, index) => (
+            <MemberCard
+              key={index}
+              user={user}
+              adminType={adminType.role.includes('SUPERADMIN')}
+            />
           ))}
         </View>
       ) : (
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={users}
+          data={filteredUsers}
           renderItem={({ item, index }) => (
-            <MemberCard key={index} user={item} />
+            <MemberCard
+              key={index}
+              user={item}
+              adminType={adminType.role.includes('SUPERADMIN')}
+            />
           )}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={styles.container}

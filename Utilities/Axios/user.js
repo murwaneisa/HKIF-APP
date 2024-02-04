@@ -40,3 +40,23 @@ export const getPublicUsersByID = async userIds => {
     console.error('Get Information failed:', error)
   }
 }
+
+export const geUsersInfo = async () => {
+  try {
+    return await baseInstance.get(`${userSuffix}`)
+  } catch (error) {
+    console.error('Get Information failed:', error)
+  }
+}
+
+export const editUserInfo = async (userId, updatedInfo) => {
+  try {
+    const response = await baseInstance.put(
+      `${userSuffix}/edit/${userId}`,
+      updatedInfo
+    )
+    console.log('the user info response', response)
+  } catch (error) {
+    console.error('Edit User Information failed:', error)
+  }
+}

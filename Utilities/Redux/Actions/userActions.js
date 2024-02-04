@@ -1,4 +1,4 @@
-import { logoutUser, setUser } from '../Slices/userSlice'
+import { logoutUser, setUser, setUsers } from '../Slices/userSlice'
 import { loginUser, getFullUserInfoByID } from '../../Axios/user'
 import { resetUser } from '../../Axios/storage'
 
@@ -27,6 +27,16 @@ export const userLogout = () => async dispatch => {
   try {
     await resetUser()
     dispatch(logoutUser())
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const addUsers = data => async dispatch => {
+  try {
+    if (data) {
+      dispatch(setUsers(data))
+    }
   } catch (error) {
     console.error(error)
   }

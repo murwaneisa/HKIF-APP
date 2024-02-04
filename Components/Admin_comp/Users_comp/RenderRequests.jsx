@@ -9,98 +9,17 @@ import {
 import React from 'react'
 import RequestCard from './RequetCard'
 import { useTheme } from '../../../Styles/theme'
+import { useSelector } from 'react-redux'
 
 const RenderRequests = () => {
+  const userList = useSelector(state => state.user.usersList)
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
+  const filteredUsers = userList.filter(
+    user => user.membershipType == 'AWAITING_VERIFICATION'
+  )
 
-  const users = [
-    {
-      name: 'Elena Gilbert',
-      image: 'https://randomuser.me/api/portraits/women/1.jpg',
-      membership: 'Full Membership',
-      phone: '+1234567890',
-      date: '2023-01-15',
-    },
-    {
-      name: 'Damon Salvatore',
-      image: 'https://randomuser.me/api/portraits/men/1.jpg',
-      membership: 'Membership',
-      phone: '+1234567891',
-      date: '2023-02-20',
-    },
-    {
-      name: 'Caroline Forbes',
-      image: 'https://randomuser.me/api/portraits/women/2.jpg',
-      membership: 'Full Membership',
-      phone: '+1234567892',
-      date: '2023-03-25',
-    },
-    {
-      name: 'Stefan Salvatore',
-      image: 'https://randomuser.me/api/portraits/men/2.jpg',
-      membership: 'Membership',
-      phone: '+1234567893',
-      date: '2023-04-30',
-    },
-    {
-      name: 'Klaus Mikaelson',
-      image: 'https://randomuser.me/api/portraits/men/3.jpg',
-      membership: 'Membership',
-      phone: '+1234567895',
-      date: '2023-06-10',
-    },
-    {
-      name: 'Rebekah Mikaelson',
-      image: 'https://randomuser.me/api/portraits/women/4.jpg',
-      membership: 'Full Membership',
-      phone: '+1234567896',
-      date: '2023-07-15',
-    },
-    {
-      name: 'Rebekah Mikaelson',
-      image: 'https://randomuser.me/api/portraits/women/4.jpg',
-      membership: 'Full Membership',
-      phone: '+1234567896',
-      date: '2023-07-15',
-    },
-    {
-      name: 'Rebekah Mikaelson',
-      image: 'https://randomuser.me/api/portraits/women/4.jpg',
-      membership: 'Full Membership',
-      phone: '+1234567896',
-      date: '2023-07-15',
-    },
-    {
-      name: 'Rebekah Mikaelson',
-      image: 'https://randomuser.me/api/portraits/women/4.jpg',
-      membership: 'Full Membership',
-      phone: '+1234567896',
-      date: '2023-07-15',
-    },
-    {
-      name: 'Rebekah Mikaelson',
-      image: 'https://randomuser.me/api/portraits/women/4.jpg',
-      membership: 'Full Membership',
-      phone: '+1234567896',
-      date: '2023-07-15',
-    },
-    {
-      name: 'Rebekah Mikaelson',
-      image: 'https://randomuser.me/api/portraits/women/4.jpg',
-      membership: 'Full Membership',
-      phone: '+1234567896',
-      date: '2023-07-15',
-    },
-    {
-      name: 'Rebekah Mikaelson',
-      image: 'https://randomuser.me/api/portraits/women/4.jpg',
-      membership: 'Full Membership',
-      phone: '+1234567896',
-      date: '2023-07-15',
-    },
-  ]
   return (
     <>
       <View style={styles.titleContainer}>
@@ -111,14 +30,14 @@ const RenderRequests = () => {
       </View>
       {Platform.OS == 'web' ? (
         <View style={styles.container}>
-          {users.map((user, index) => (
+          {filteredUsers.map((user, index) => (
             <RequestCard key={index} user={user} />
           ))}
         </View>
       ) : (
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={users}
+          data={filteredUsers}
           renderItem={({ item, index }) => (
             <RequestCard key={index} user={item} />
           )}
