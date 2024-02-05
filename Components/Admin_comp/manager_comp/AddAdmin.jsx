@@ -7,18 +7,53 @@ import {
   TextInput,
   KeyboardAvoidingView,
   ScrollView,
+  Pressable,
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTheme } from '../../../Styles/theme'
 import { Platform } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons'
 import DropdownRole from '../DropdownRole'
 import HKIFImagePicker from '../../../Utilities/Helper/HKIFImagePicker'
+import { getFullAdminInfoByID } from '../../../Utilities/Axios/admin'
 
 const AddAdmin = ({ route }) => {
   const { theme, isDarkMode } = useTheme()
-  const { leaderId } = route?.params || {}
+  const { adminId } = route?.params || {}
+
+  // 1. Setting up state for input validation
+  const [form, setForm] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    password: '',
+    roles: [],
+  })
+  const [selectedRoles, setSelectedRoles] = useState([])
+
+  useEffect(() => {
+    const getAdmin = async () => {
+      try {
+        const adminInfo = await getFullAdminInfoByID(adminId)
+        console.log('the admin data', adminInfo)
+        setForm({
+          firstName: adminInfo.firstName || '',
+          lastName: adminInfo.lastName || '',
+          email: adminInfo.email || '',
+          phone: '', // You can add the phone value from adminInfo if available
+          password: '', // You may not want to set the password in the form like this
+          roles: adminInfo.role || [],
+        })
+        handleSelectionChange('Event manager')
+      } catch (error) {
+        console.error('Error fetching admins info:', error)
+      }
+    }
+    getAdmin()
+  }, [adminId])
+
   const [image, setImage] = useState(null)
   const [isFormValid, setIsFormValid] = useState(false)
   console.log(image)
@@ -35,7 +70,7 @@ const AddAdmin = ({ route }) => {
   })
   // State to manage if the password is visible or not
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
-  const [selectedRoles, setSelectedRoles] = useState([])
+
   console.log('the selection role', selectedRoles)
 
   // Function to toggle password visibility
@@ -55,16 +90,6 @@ const AddAdmin = ({ route }) => {
       await HKIFImagePicker.uploadImageAsync(image)
     }
   }
-
-  // 1. Setting up state for input validation
-  const [form, setForm] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    password: '',
-    roles: [],
-  })
 
   const [formErrors, setFormErrors] = useState({
     firstName: '',
@@ -174,14 +199,8 @@ const AddAdmin = ({ route }) => {
     }
   }
   const data = [
-    { label: 'Soccer', value: '1' },
-    { label: 'Basketball', value: '2' },
-    { label: 'Tennis', value: '3' },
-    { label: 'Baseball', value: '4' },
-    { label: 'Volleyball', value: '5' },
-    { label: 'Swimming', value: '6' },
-    { label: 'Track and Field', value: '7' },
-    { label: 'Golf', value: '8' },
+    { label: 'Event manager', value: '1' },
+    { label: 'Activity manager', value: '2' },
   ]
 
   return (
@@ -195,10 +214,7 @@ const AddAdmin = ({ route }) => {
         contentContainerStyle={styles.ScrollContainer}
       >
         <View style={styles.container}>
-          <TouchableOpacity
-            style={styles.iconContainer}
-            onPress={handlePickImage}
-          >
+          <Pressable style={styles.iconContainer} onPress={handlePickImage}>
             {image ? (
               <Image
                 style={styles.image}
@@ -215,7 +231,7 @@ const AddAdmin = ({ route }) => {
             <View style={styles.plusIconContainer}>
               <Entypo name='plus' size={plusIcon} color='#ffffff' />
             </View>
-          </TouchableOpacity>
+          </Pressable>
 
           <View style={styles.inputContainer}>
             {!!formErrors.firstName && ( // Show error text if there's an error
@@ -242,7 +258,7 @@ const AddAdmin = ({ route }) => {
             )}
             <DropdownRole
               data={data}
-              placeholder={'Select Activity'}
+              placeholder={'Select admin'}
               onSelectionChange={handleSelectionChange}
             />
             {!!formErrors.email && ( // Show error text if there's an error
@@ -304,10 +320,10 @@ const AddAdmin = ({ route }) => {
                 onPress={handleSubmit}
               >
                 <Text style={styles.buttonText}>
-                  {leaderId ? 'Edit Admin' : 'Add Admin'}
+                  {adminId ? 'Edit Admin' : 'Add Admin'}
                 </Text>
               </TouchableOpacity>
-              {AdminId ? (
+              {adminId ? (
                 <TouchableOpacity
                   style={[
                     styles.button,

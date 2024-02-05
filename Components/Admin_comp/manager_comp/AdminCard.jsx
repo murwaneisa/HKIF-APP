@@ -21,7 +21,7 @@ const AdminCard = ({ info, adminType }) => {
   const navigation = useNavigation()
 
   // Access info properties safely here
-  const { firstName, lastName, role, phoneNumber, email } = info
+  const { firstName, lastName, role, phoneNumber, email, _id } = info
 
   const image = 'https://randomuser.me/api/portraits/women/4.jpg'
 
@@ -38,7 +38,7 @@ const AdminCard = ({ info, adminType }) => {
       return null
     }
 
-    navigation.navigate('AddAdmin', { leaderId: 'leader' }) // Replace 'MemberDetails' with your actual route name
+    navigation.navigate('AddAdmin', { adminId: _id }) // Replace 'MemberDetails' with your actual route name
   }
   return (
     <View style={styles.container}>
