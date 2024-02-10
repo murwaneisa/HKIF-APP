@@ -21,6 +21,11 @@ import { getFullAdminInfoByID } from '../../../Utilities/Axios/admin'
 const AddAdmin = ({ route }) => {
   const { theme, isDarkMode } = useTheme()
   const { adminId } = route?.params || {}
+  const data = [
+    { label: 'Super admin', value: 1 },
+    { label: 'Activity manager', value: 2 },
+    { label: 'Event manager', value: 3 },
+  ]
 
   // 1. Setting up state for input validation
   const [form, setForm] = useState({
@@ -30,6 +35,7 @@ const AddAdmin = ({ route }) => {
     phone: '',
     password: '',
     roles: [],
+    image: '',
   })
   const [selectedRoles, setSelectedRoles] = useState([])
 
@@ -38,15 +44,22 @@ const AddAdmin = ({ route }) => {
       try {
         const adminInfo = await getFullAdminInfoByID(adminId)
         console.log('the admin data', adminInfo)
+        adminInfo.role.map(role =>
+          role === 'SUPERADMIN'
+            ? setSelectedRoles(prevSelectedRoles => [...prevSelectedRoles, 1])
+            : role === 'ACTIVITY_MANAGER'
+            ? setSelectedRoles(prevSelectedRoles => [...prevSelectedRoles, 2])
+            : setSelectedRoles(prevSelectedRoles => [...prevSelectedRoles, 3])
+        )
         setForm({
           firstName: adminInfo.firstName || '',
           lastName: adminInfo.lastName || '',
           email: adminInfo.email || '',
-          phone: '', // You can add the phone value from adminInfo if available
-          password: '', // You may not want to set the password in the form like this
+          phone: adminInfo.phoneNumber || '', // You can add the phone value from adminInfo if available
+          password: adminInfo.password || '', // You may not want to set the password in the form like this
+          image: adminInfo.imageUrl || '',
           roles: adminInfo.role || [],
         })
-        handleSelectionChange('Event manager')
       } catch (error) {
         console.error('Error fetching admins info:', error)
       }
@@ -71,7 +84,7 @@ const AddAdmin = ({ route }) => {
   // State to manage if the password is visible or not
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
-  console.log('the selection role', selectedRoles)
+  console.log('the selection role is i the main function', selectedRoles)
 
   // Function to toggle password visibility
   const togglePasswordVisibility = () => {
@@ -142,6 +155,7 @@ const AddAdmin = ({ route }) => {
   }
 
   const handleSelectionChange = selectedItems => {
+    console.log('the selected items', selectedItems)
     setSelectedRoles(selectedItems)
     // Update form state with the new roles
     setForm(prevForm => ({ ...prevForm, roles: selectedItems }))
@@ -198,10 +212,6 @@ const AddAdmin = ({ route }) => {
       // Handle the error scenario, maybe inform the user to correct errors
     }
   }
-  const data = [
-    { label: 'Event manager', value: '1' },
-    { label: 'Activity manager', value: '2' },
-  ]
 
   return (
     <KeyboardAvoidingView
@@ -260,6 +270,8 @@ const AddAdmin = ({ route }) => {
               data={data}
               placeholder={'Select admin'}
               onSelectionChange={handleSelectionChange}
+              setSelectedRoles={setSelectedRoles}
+              selectedRoles={selectedRoles}
             />
             {!!formErrors.email && ( // Show error text if there's an error
               <Text style={styles.errorText}>{formErrors.email}</Text>
