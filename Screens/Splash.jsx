@@ -9,7 +9,7 @@ const Splash = ({ navigation }) => {
   useEffect(() => {
     if (fontsLoaded) {
       const timer = setTimeout(() => {
-        navigation.navigate('Login')
+        navigation.navigate('Welcome')
       }, 3000)
 
       return () => clearTimeout(timer)

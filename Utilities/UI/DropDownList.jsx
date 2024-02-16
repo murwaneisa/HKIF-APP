@@ -3,8 +3,7 @@ import { Platform, StyleSheet, Text, View } from 'react-native'
 import { useTheme } from '../../Styles/theme'
 import { Dropdown } from 'react-native-element-dropdown'
 
-const DropdownList = ({ label, placeholder, data }) => {
-  const [value, setValue] = useState(null)
+const DropdownList = ({ label, placeholder, value, handleChange, data }) => {
   const [isFocus, setIsFocus] = useState(false)
   const { theme } = useTheme()
   const styles = getStyles(theme)
@@ -35,7 +34,7 @@ const DropdownList = ({ label, placeholder, data }) => {
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             onChange={item => {
-              setValue(item.value)
+              handleChange(item.value)
               setIsFocus(false)
             }}
           />
@@ -56,7 +55,7 @@ const DropdownList = ({ label, placeholder, data }) => {
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             onChange={item => {
-              setValue(item.value)
+              handleChange(item.value)
               setIsFocus(false)
             }}
           />

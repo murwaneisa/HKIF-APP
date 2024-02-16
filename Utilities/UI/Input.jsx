@@ -1,32 +1,24 @@
 import React from 'react'
 import { Platform, StyleSheet, Text, TextInput, View } from 'react-native'
-import { Picker } from '@react-native-picker/picker'
-
 import { useTheme } from '../../Styles/theme'
 
-function Input({ label, textInputConfig, type, options }) {
+function Input({ label, value, onChangeText, textInputConfig, rightIcon }) {
   const { theme } = useTheme()
   const styles = getStyles(theme)
-  /* 
-  let inputElement = null
-
-  if (type === 'dropdown' && options) {
-    inputElement = (
-      <Picker style={styles.input} {...textInputConfig}>
-        {options.map((option, index) => (
-          <Picker.Item key={index} label={option.label} value={option.value} />
-        ))}
-      </Picker>
-    )
-  } else {
-    inputElement = 
-  } */
 
   return (
     <View style={styles.inputContainer}>
       {label ? <Text style={styles.label}>{label}</Text> : null}
 
-      <TextInput style={styles.input} {...textInputConfig} />
+      <View style={styles.inputWrapper}>
+        <TextInput
+          style={styles.input}
+          value={value}
+          onChangeText={onChangeText}
+          {...textInputConfig}
+        />
+        {rightIcon && <View style={styles.rightIcon}>{rightIcon}</View>}
+      </View>
     </View>
   )
 }
@@ -47,7 +39,11 @@ const getStyles = theme =>
       color: theme.colors.text,
       marginBottom: 5,
     },
+    inputWrapper: {
+      position: 'relative',
+    },
     input: {
+      flex: 1,
       backgroundColor: theme.colors.accent,
       color: theme.colors.text,
       padding: Platform.select({
@@ -57,6 +53,16 @@ const getStyles = theme =>
       }),
       borderRadius: 6,
       fontSize: 18,
+    },
+    rightIcon: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      bottom: 0,
+      padding: 10,
+      backgroundColor: theme.colors.accent,
+      borderTopRightRadius: 6,
+      borderBottomRightRadius: 6,
     },
   })
 

@@ -1,45 +1,62 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Dimensions,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   StyleSheet,
+  Text,
   View,
 } from 'react-native'
 
 import { useTheme } from '../Styles/theme'
 
-import { getFormatedDate } from 'react-native-modern-datepicker'
-import StepOne from '../Components/Register/StepOne'
-import StepTwo from '../Components/Register/StepTwo'
+import StegOne from '../Components/Register/StegOne'
+import StegTwo from '../Components/Register/StegTwo'
+import StegThree from '../Components/Register/StegThree'
+import StegFour from '../Components/Register/StegFour'
+import StegFive from '../Components/Register/StegFive'
+import { useDispatch, useSelector } from 'react-redux'
 
 function Register() {
   const screenWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, screenWidth)
-  const [passwordVisible, setPasswordVisible] = useState(false)
-  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false)
+
   const [currentStep, setCurrentStep] = useState(1)
-  const [date, setDate] = useState(new Date())
-  const [selectedDate, setSelectedDate] = useState('')
 
-  const [openStartDatePicker, setOpenStartDatePicker] = useState(false)
-  const today = new Date()
-  const startDate = getFormatedDate(
-    today.setDate(today.getDate() + 1),
-    'YYYY/MM/DD'
-  )
-  const [selectedStartDate, setSelectedStartDate] = useState('')
-  const [startedDate, setStartedDate] = useState('12/12/2023')
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    birthDate,
+    gender,
+    nationality,
+    phoneNumber,
+    address,
+    city,
+    zipCode,
+    role,
+  } = useSelector(state => state.registration)
 
-  function handleChangeStartDate(propDate) {
-    setStartedDate(propDate)
-  }
-
-  const handleOnPressStartDate = () => {
-    setOpenStartDatePicker(!openStartDatePicker)
-  }
+  useEffect(() => {
+    // The values will be updated in Redux state when firstName or lastName changes
+    console.log('Updated values:', {
+      firstName,
+      lastName,
+      email,
+      password,
+      birthDate,
+      gender,
+      nationality,
+      phoneNumber,
+      address,
+      city,
+      zipCode,
+      role,
+    })
+  })
 
   const goToNextStep = () => {
     if (currentStep < totalSteps) {
@@ -55,31 +72,41 @@ function Register() {
       setCurrentStep(currentStep - 1)
     }
   }
-  const totalSteps = 2
+  const totalSteps = 5
 
   const renderStep = () => {
     switch (currentStep) {
       case 1:
-        return (
-          <StepOne
-            styles={styles}
-            goToNextStep={goToNextStep}
-            passwordVisible={passwordVisible}
-            confirmPasswordVisible={confirmPasswordVisible}
-          />
-        )
+        return <StegOne styles={styles} goToNextStep={goToNextStep} />
       case 2:
         return (
-          <StepTwo
+          <StegTwo
             styles={styles}
             goToNextStep={goToNextStep}
-            handleOnPressStartDate={handleOnPressStartDate}
-            handleChangeStartDate={handleChangeStartDate}
-            selectedStartDate={selectedStartDate}
-            openStartDatePicker={openStartDatePicker}
-            startedDate={startedDate}
-            date={date}
-            setSelectedStartDate={setSelectedStartDate}
+            goToPreviousStep={goToPreviousStep}
+          />
+        )
+      case 3:
+        return (
+          <StegThree
+            styles={styles}
+            goToNextStep={goToNextStep}
+            goToPreviousStep={goToPreviousStep}
+          />
+        )
+      case 4:
+        return (
+          <StegFour
+            styles={styles}
+            goToNextStep={goToNextStep}
+            goToPreviousStep={goToPreviousStep}
+          />
+        )
+      case 5:
+        return (
+          <StegFive
+            styles={styles}
+            goToNextStep={goToNextStep}
             goToPreviousStep={goToPreviousStep}
           />
         )
@@ -95,11 +122,15 @@ function Register() {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
     >
       <ScrollView
-        style={{ flex: 1 }}
+        style={{ flex: 1, backgroundColor: theme.colors.backgroundPrimary }}
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps='handled' // This ensures taps are not dismissed when the keyboard is open
       >
         <View style={styles.container}>
+          <Text style={styles.headerText}>
+            <Text> Welcome to </Text>
+            <Text style={styles.hkifText}>HKIF</Text>
+          </Text>
           <View style={styles.inputContainer}>{renderStep()}</View>
         </View>
       </ScrollView>
