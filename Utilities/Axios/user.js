@@ -56,6 +56,7 @@ export const editUserInfo = async (userId, updatedInfo) => {
       updatedInfo
     )
     console.log('the user info response', response)
+    return response
   } catch (error) {
     console.error('Edit User Information failed:', error)
   }
