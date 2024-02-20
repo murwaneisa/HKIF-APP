@@ -7,13 +7,11 @@ import { useTheme } from '../../Styles/theme'
 const DropdownRole = ({
   data,
   placeholder,
-  onSelectionChange,
   selectedRoles,
-  setSelectedRoles,
+  setInitialFormValues,
 }) => {
   const { theme, isDarkMode } = useTheme()
   const styles = getStyles(theme, isDarkMode)
-  console.log('THE SELECTED ROLE IN THE dropdown', selectedRoles)
 
   return (
     <MultiSelect
@@ -30,9 +28,12 @@ const DropdownRole = ({
       placeholder={placeholder}
       searchPlaceholder='Search...'
       value={selectedRoles}
-      onChange={items => {
-        setSelectedRoles(items.map(item => item.value)) // Update the selectedRoles in parent component
-        if (onSelectionChange) onSelectionChange(items) // Notify parent component of the change
+      onChange={selectedItems => {
+        // Update the initialFormValue state with the selected items
+        setInitialFormValues(prevValues => ({
+          ...prevValues,
+          roles: selectedItems,
+        }))
       }}
       renderSelectedItem={(item, unSelect) => (
         <TouchableOpacity onPress={() => unSelect && unSelect(item)}>

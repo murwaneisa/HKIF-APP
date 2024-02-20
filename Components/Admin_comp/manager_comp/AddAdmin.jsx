@@ -17,7 +17,7 @@ import { Entypo } from '@expo/vector-icons'
 import DropdownRole from '../DropdownRole'
 import HKIFImagePicker from '../../../Utilities/Helper/HKIFImagePicker'
 import { getFullAdminInfoByID } from '../../../Utilities/Axios/admin'
-import { Formik } from 'formik'
+import { Formik, useFormikContext } from 'formik'
 import * as Yup from 'yup'
 
 const adminValidationSchema = Yup.object().shape({
@@ -38,15 +38,7 @@ const adminValidationSchema = Yup.object().shape({
 const AddAdmin = ({ route }) => {
   const { theme, isDarkMode } = useTheme()
   const { adminId } = route?.params || {}
-  console.log('the admin id is', adminId)
-  const data = [
-    { label: 'Super admin', value: 1 },
-    { label: 'Activity manager', value: 2 },
-    { label: 'Event manager', value: 3 },
-  ]
-
-  // 1. Setting up state for input validation
-  /*   const [form, setForm] = useState({
+  const [initialFormValues, setInitialFormValues] = useState({
     firstName: '',
     lastName: '',
     email: '',
@@ -54,32 +46,33 @@ const AddAdmin = ({ route }) => {
     password: '',
     roles: [],
     image: '',
-  }) */
-  const [selectedRoles, setSelectedRoles] = useState([])
+  })
+  const data = [
+    { label: 'Super admin', value: 'SUPERADMIN' },
+    { label: 'Activity manager', value: 'ACTIVITY_MANAGER' },
+    { label: 'Event manager', value: 'EVENT_MANAGER' },
+  ]
 
   useEffect(() => {
-    const getAdmin = async () => {
-      try {
-        const adminInfo = await getFullAdminInfoByID(adminId)
-        /*  console.log('the admin data', adminInfo) */
-        console.log(
-          'THE SELECTED ROLE IN THE EFFECT FUNCTION before',
-          selectedRoles
-        )
-        /*   setForm({
-          firstName: adminInfo.firstName || '',
-          lastName: adminInfo.lastName || '',
-          email: adminInfo.email || '',
-          phoneNumber: adminInfo.phoneNumber || '', // You can add the phone value from adminInfo if available
-          password: adminInfo.password || '', // You may not want to set the password in the form like this
-          image: adminInfo.imageUrl || '',
-          roles: selectedRoles || [],
-        }) */
-      } catch (error) {
-        console.error('Error fetching admins info:', error)
+    const fetchAdminInfo = async () => {
+      if (adminId) {
+        try {
+          const adminInfo = await getFullAdminInfoByID(adminId)
+          setInitialFormValues({
+            firstName: adminInfo.firstName || '',
+            lastName: adminInfo.lastName || '',
+            email: adminInfo.email || '',
+            phoneNumber: adminInfo.phoneNumber || '',
+            password: adminInfo.password || '', // Consider security implications
+            roles: adminInfo.role || [], // Adjust according to your roles data structure
+            image: adminInfo.imageUrl || '',
+          })
+        } catch (error) {
+          console.error('Error fetching admin info:', error)
+        }
       }
     }
-    getAdmin()
+    fetchAdminInfo()
   }, [adminId])
 
   const [image, setImage] = useState(null)
@@ -116,45 +109,19 @@ const AddAdmin = ({ route }) => {
     }
   }
 
-  const [formErrors, setFormErrors] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phoneNumber: '',
-    password: '',
-    roles: '',
-  })
-
-  const handleSelectionChange = selectedItems => {
-    console.log('the selected items', selectedItems)
-    setSelectedRoles(selectedItems)
-    // Update form state with the new roles
-    setForm(prevForm => ({ ...prevForm, roles: selectedItems }))
-    // Validate the roles field and update formErrors
-    const error = validateInput('roles', null, selectedItems)
-    setFormErrors(prevErrors => ({ ...prevErrors, roles: error }))
-    // Update form validation status
-    validateForm(
-      { ...form, roles: selectedItems },
-      { ...formErrors, roles: error }
-    )
-  }
-
   return (
     <Formik
-      initialValues={{
-        firstName: '',
-        lastName: '',
-        email: '',
-        phoneNumber: '',
-        password: '',
-        roles: [],
-        image: '',
-      }}
+      initialValues={initialFormValues}
+      enableReinitialize // Important to set this so formik resets initialValues when they change
       validationSchema={adminValidationSchema}
       onSubmit={values => {
         console.log('Form values:', values)
-        // Handle form submission
+        if (adminId) {
+          // Update admin logic
+        } else {
+          // Create new admin logic
+        }
+        setSubmitting(false)
       }}
     >
       {({
@@ -225,8 +192,8 @@ const AddAdmin = ({ route }) => {
                   onSelectionChange={selectedItems =>
                     setFieldValue('roles', selectedItems)
                   }
-                  setSelectedRoles={setSelectedRoles}
-                  selectedRoles={values.roles}
+                  selectedRoles={initialFormValues.roles}
+                  setInitialFormValues={setInitialFormValues``}
                 />
                 {/* Display errors */}
                 {errors.roles && touched.roles && (
