@@ -109,6 +109,8 @@ const AddAdmin = ({ route }) => {
     }
   }
 
+  console.log('the selected role ', initialFormValues.roles)
+
   return (
     <Formik
       initialValues={initialFormValues}
@@ -193,7 +195,7 @@ const AddAdmin = ({ route }) => {
                     setFieldValue('roles', selectedItems)
                   }
                   selectedRoles={initialFormValues.roles}
-                  setInitialFormValues={setInitialFormValues``}
+                  setInitialFormValues={setInitialFormValues}
                 />
                 {/* Display errors */}
                 {errors.roles && touched.roles && (
