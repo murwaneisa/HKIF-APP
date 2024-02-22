@@ -4,6 +4,7 @@ import Input from '../../Utilities/UI/Input'
 import PrimaryButton from '../../Utilities/UI/PrimaryButton'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateStepTwoData } from '../../Utilities/Redux/Slices/registrationSlice'
+import { Feather } from '@expo/vector-icons'
 
 const StegTwo = ({ styles, goToNextStep, goToPreviousStep }) => {
   const [passwordVisible, setPasswordVisible] = useState(false)
@@ -33,10 +34,10 @@ const StegTwo = ({ styles, goToNextStep, goToPreviousStep }) => {
     goToNextStep()
   }
 
-  const RightIcon = ({ icon, onPress }) => {
+  const RightIcon = ({ visible, onPress }) => {
     return (
       <TouchableOpacity onPress={onPress}>
-        <Text>{icon}</Text>
+        <Feather name={!visible ? 'eye' : 'eye-off'} size={18} color='black' />
       </TouchableOpacity>
     )
   }
@@ -73,7 +74,7 @@ const StegTwo = ({ styles, goToNextStep, goToPreviousStep }) => {
         }}
         rightIcon={
           <RightIcon
-            icon={passwordVisible ? 'Hide' : 'Show'}
+            visible={passwordVisible}
             onPress={() => setPasswordVisible(prev => !prev)}
           />
         }
@@ -95,7 +96,7 @@ const StegTwo = ({ styles, goToNextStep, goToPreviousStep }) => {
         }}
         rightIcon={
           <RightIcon
-            icon={confirmPasswordVisible ? 'Hide' : 'Show'}
+            visible={confirmPasswordVisible}
             onPress={() => setConfirmPasswordVisible(prev => !prev)}
           />
         }

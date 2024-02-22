@@ -44,7 +44,7 @@ const DatePickerInput = ({ label, value, handleChange }) => {
       ) : (
         <>
           <Pressable style={styles.inputBtn} onPress={toggleMode}>
-            <Text style={styles.placeholder}>
+            <Text style={styles.valueStyle}>
               {DateFormatter.formatDate(value)}
             </Text>
           </Pressable>
@@ -96,8 +96,9 @@ const getStyles = theme =>
       borderRadius: 6,
       fontSize: 18,
     },
-    placeholder: {
+    valueStyle: {
       fontSize: 16,
+      color: theme.colors.text,
     },
     doneButton: {
       backgroundColor: 'black',

@@ -69,8 +69,6 @@ export default DropdownList
 const getStyles = theme =>
   StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.accent,
-      backgroundColor: 'white',
       marginHorizontal: 4,
       marginVertical: 8,
       borderRadius: 6,
@@ -101,10 +99,11 @@ const getStyles = theme =>
     },
     placeholderStyle: {
       fontSize: 16,
-      color: theme.colors.sccent,
+      color: theme.colors.text,
     },
     selectedTextStyle: {
       fontSize: 16,
+      color: theme.colors.text,
     },
     iconStyle: {
       width: 20,
