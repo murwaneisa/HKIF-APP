@@ -24,9 +24,7 @@ function PrimaryButton({
         android_ripple={{ color: theme.colors.primary }}
         disabled={disabled}
       >
-        <Text style={[styles.buttonText, disabled && styles.disabled]}>
-          {children}
-        </Text>
+        <Text style={styles.buttonText}>{children}</Text>
       </Pressable>
     </View>
   )
@@ -54,7 +52,7 @@ const getStyles = (theme, paddingHorizontal, paddingVertical) => {
       opacity: 0.75,
     },
     disabled: {
-      color: theme.colors.backgroundPrimary,
+      color: theme.colors.text,
       backgroundColor: theme.colors.accent, // Add a disabled color to your theme or use a hardcoded color
       opacity: 0.5, // Optional: reduce opacity for disabled state
     },

@@ -78,7 +78,7 @@ function Login({ navigation }) {
                 value={email}
                 onChangeText={handleEmailChange}
                 placeholder='Email'
-                placeholderTextColor={theme.colors.accent}
+                placeholderTextColor={theme.colors.text}
                 keyboardType={
                   Platform.OS !== 'web' ? 'email-address' : undefined
                 }
