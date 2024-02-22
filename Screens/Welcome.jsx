@@ -30,7 +30,7 @@ function Welcome({ navigation }) {
           <PrimaryButton
             paddingVertical={98}
             paddingHorizontal={12}
-            onPress={() => navigation.navigate('Login Form')}
+            onPress={() => navigation.navigate('Login')}
           >
             Login
           </PrimaryButton>

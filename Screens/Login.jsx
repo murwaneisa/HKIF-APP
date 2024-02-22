@@ -18,7 +18,7 @@ import { useDispatch } from 'react-redux'
 import { loginAndSetUser } from '../Utilities/Redux/Actions/userActions'
 import { loginAndSetAdmin } from '../Utilities/Redux/Actions/adminActions'
 
-function LoginForm({ navigation }) {
+function Login({ navigation }) {
   const [showAdminButton, setShowAdminButton] = useState(false)
   const screenWidth = Dimensions.get('window').width
   const { theme } = useTheme()
@@ -223,4 +223,4 @@ const getStyles = (theme, screenWidth) =>
       marginTop: 5,
     },
   })
-export default LoginForm
+export default Login

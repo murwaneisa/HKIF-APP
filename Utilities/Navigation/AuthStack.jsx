@@ -2,35 +2,28 @@ import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import Splash from '../../Screens/Splash'
 import Welcome from '../../Screens/Welcome'
-import LoginForm from '../../Screens/LoginForm'
+import Login from '../../Screens/Login'
 import Register from '../../Screens/Register'
 import HeaderLeft from '../../Components/Navigation/HeaderLeft'
+import StackNavigator from '../../Components/Navigation/StackNavigator'
 
 const AuthStack = () => {
-  const AuthStack = createStackNavigator()
+  const Stack = createStackNavigator()
   return (
-    <AuthStack.Navigator initialRouteName='Splash'>
-      <AuthStack.Screen
+    <StackNavigator headerLeft={() => HeaderLeft()}>
+      <Stack.Screen
         name='Splash'
         component={Splash}
         options={{ headerShown: false }}
       />
-      <AuthStack.Screen
+      <Stack.Screen
         name='Welcome'
         component={Welcome}
         options={{ headerLeft: () => null, headerShown: false }}
       />
-      <AuthStack.Screen
-        name='Login Form'
-        component={LoginForm}
-        options={{ headerLeft: () => HeaderLeft() }}
-      />
-      <AuthStack.Screen
-        name='Register'
-        component={Register}
-        options={{ headerLeft: () => HeaderLeft() }}
-      />
-    </AuthStack.Navigator>
+      <Stack.Screen name='Login' component={Login} />
+      <Stack.Screen name='Register' component={Register} />
+    </StackNavigator>
   )
 }
 
