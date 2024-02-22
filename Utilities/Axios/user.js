@@ -8,6 +8,18 @@ import {
 
 const userSuffix = '/users'
 
+export const registerUser = async data => {
+  try {
+    const response = await baseInstance.post(`${userSuffix}/register`, {
+      ...data,
+      membershipType: 'UNPAID',
+    })
+    return response.status
+  } catch (error) {
+    console.error('Registration failed:', error.response.data)
+  }
+}
+
 export const loginUser = async (email, password) => {
   try {
     const response = await baseInstance.post(`${userSuffix}/login`, {

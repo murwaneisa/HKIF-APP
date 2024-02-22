@@ -26,6 +26,7 @@ const StegFive = ({ styles, goToNextStep, goToPreviousStep }) => {
         role: userInfo.role,
       })
     )
+    goToNextStep()
   }
 
   return (
@@ -34,9 +35,9 @@ const StegFive = ({ styles, goToNextStep, goToPreviousStep }) => {
         label='Role'
         placeholder='Select Role'
         data={[
-          { label: 'Activity Leader', value: 'Activity Leader' },
-          { label: 'Board Member', value: 'Board Member' },
-          { label: 'None of the above', value: 'None' },
+          { label: 'Activity Leader', value: 'ACTIVITY_LEADER' },
+          { label: 'Board Member', value: 'BOARD_MEMBER' },
+          { label: 'None of the above', value: 'NONE' },
         ]}
         value={userInfo.role}
         handleChange={e => setUserInfo({ role: e })}

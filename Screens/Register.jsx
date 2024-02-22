@@ -17,6 +17,7 @@ import StegThree from '../Components/Register/StegThree'
 import StegFour from '../Components/Register/StegFour'
 import StegFive from '../Components/Register/StegFive'
 import { useDispatch, useSelector } from 'react-redux'
+import { registerAndLoginUser } from '../Utilities/Redux/Actions/userActions'
 
 function Register() {
   const screenWidth = Dimensions.get('window').width
@@ -25,38 +26,8 @@ function Register() {
 
   const [currentStep, setCurrentStep] = useState(1)
 
-  const {
-    firstName,
-    lastName,
-    email,
-    password,
-    birthDate,
-    gender,
-    nationality,
-    phoneNumber,
-    address,
-    city,
-    zipCode,
-    role,
-  } = useSelector(state => state.registration)
-
-  useEffect(() => {
-    // The values will be updated in Redux state when firstName or lastName changes
-    console.log('Updated values:', {
-      firstName,
-      lastName,
-      email,
-      password,
-      birthDate,
-      gender,
-      nationality,
-      phoneNumber,
-      address,
-      city,
-      zipCode,
-      role,
-    })
-  })
+  const data = useSelector(state => state.registration)
+  const dispatch = useDispatch()
 
   const goToNextStep = () => {
     if (currentStep < totalSteps) {
@@ -64,6 +35,8 @@ function Register() {
     } else {
       // Handle the final submission
       console.log('Final Form Data:')
+      console.log(data)
+      dispatch(registerAndLoginUser(data))
       // navigate to another screen or perform the submission action
     }
   }
