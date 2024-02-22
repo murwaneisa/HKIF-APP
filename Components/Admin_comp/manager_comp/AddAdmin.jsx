@@ -109,8 +109,6 @@ const AddAdmin = ({ route }) => {
     }
   }
 
-  console.log('the selected role ', initialFormValues.roles)
-
   return (
     <Formik
       initialValues={initialFormValues}
@@ -215,7 +213,7 @@ const AddAdmin = ({ route }) => {
                   <Text style={styles.errorText}>{errors.email}</Text>
                 )}
                 <TextInput
-                  placeholder='phoneNumber*'
+                  placeholder='phone'
                   onBlur={handleBlur('phoneNumber')}
                   value={values.phoneNumber}
                   onChangeText={handleChange('phoneNumber')}
@@ -227,27 +225,29 @@ const AddAdmin = ({ route }) => {
                 {errors.phoneNumber && touched.phoneNumber && (
                   <Text style={styles.errorText}>{errors.phoneNumber}</Text>
                 )}
-                <View style={styles.passwordContainer}>
-                  <TextInput
-                    placeholder='Password*'
-                    onBlur={handleBlur('password')}
-                    value={values.password}
-                    onChangeText={handleChange('password')}
-                    placeholderTextColor={theme.colors.text}
-                    secureTextEntry={!isPasswordVisible}
-                    style={[styles.input, { marginVertical: 0 }]}
-                  />
-                  <TouchableOpacity
-                    style={styles.visibilityToggle}
-                    onPress={togglePasswordVisibility}
-                  >
-                    <Feather
-                      name={isPasswordVisible ? 'eye-off' : 'eye'}
-                      size={24}
-                      color={theme.colors.text}
+                {!adminId && (
+                  <View style={styles.passwordContainer}>
+                    <TextInput
+                      placeholder='Password*'
+                      onBlur={handleBlur('password')}
+                      value={values.password}
+                      onChangeText={handleChange('password')}
+                      placeholderTextColor={theme.colors.text}
+                      secureTextEntry={!isPasswordVisible}
+                      style={[styles.input, { marginVertical: 0 }]}
                     />
-                  </TouchableOpacity>
-                </View>
+                    <TouchableOpacity
+                      style={styles.visibilityToggle}
+                      onPress={togglePasswordVisibility}
+                    >
+                      <Feather
+                        name={isPasswordVisible ? 'eye-off' : 'eye'}
+                        size={24}
+                        color={theme.colors.text}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                )}
                 {/* Display errors */}
                 {errors.password && touched.password && (
                   <Text style={styles.errorText}>{errors.password}</Text>
