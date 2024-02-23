@@ -143,6 +143,7 @@ const AddAdmin = ({ route }) => {
   return (
     <Formik
       initialValues={initialFormValues}
+      enableReinitialize // Important to set this so formik resets initialValues when they change
       validationSchema={adminValidationSchema}
       onSubmit={handleFormSubmit}
     >
