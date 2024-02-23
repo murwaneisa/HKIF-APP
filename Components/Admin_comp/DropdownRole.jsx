@@ -12,7 +12,6 @@ const DropdownRole = ({
 }) => {
   const { theme, isDarkMode } = useTheme()
   const styles = getStyles(theme, isDarkMode)
-  console.log('the selected role in dropdown ', selectedRoles)
   return (
     <MultiSelect
       style={styles.dropdown}

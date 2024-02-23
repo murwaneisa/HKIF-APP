@@ -29,7 +29,6 @@ const adminValidationSchema = Yup.object().shape({
   phoneNumber: Yup.string()
     .matches(/^\d{10}$/, 'Please enter a valid 10-digit phone number')
     .required('Phone number is required'),
-  password: Yup.string().required('Please enter a password'),
   roles: Yup.array()
     .min(1, 'Please select at least one role')
     .required('Roles are required'),
@@ -38,12 +37,14 @@ const adminValidationSchema = Yup.object().shape({
 const AddAdmin = ({ route }) => {
   const { theme, isDarkMode } = useTheme()
   const { adminId } = route?.params || {}
+  const [password, setPassword] = useState('')
+  const [passwordError, setPasswordError] = useState(null)
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const [initialFormValues, setInitialFormValues] = useState({
     firstName: '',
     lastName: '',
     email: '',
     phoneNumber: '',
-    password: '',
     roles: [],
     image: '',
   })
@@ -63,7 +64,6 @@ const AddAdmin = ({ route }) => {
             lastName: adminInfo.lastName || '',
             email: adminInfo.email || '',
             phoneNumber: adminInfo.phoneNumber || '',
-            password: adminInfo.password || '', // Consider security implications
             roles: adminInfo.role || [], // Adjust according to your roles data structure
             image: adminInfo.imageUrl || '',
           })
@@ -88,8 +88,6 @@ const AddAdmin = ({ route }) => {
     android: 28,
     web: 45,
   })
-  // State to manage if the password is visible or not
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
   // Function to toggle password visibility
   const togglePasswordVisibility = () => {
@@ -109,20 +107,44 @@ const AddAdmin = ({ route }) => {
     }
   }
 
+  // Define a password validation function
+  function validatePassword(value) {
+    if (!value) {
+      return 'Password is required'
+    } else if (value.length < 8) {
+      return 'Password must be at least 8 characters long'
+    }
+    // Add any other password requirements here
+    return ''
+  }
+  // Function to handle password validation
+  const handlePasswordChange = value => {
+    setPassword(value)
+    const error = validatePassword(value)
+    setPasswordError(error)
+  }
+
+  const handleFormSubmit = async values => {
+    console.log('the form values', values)
+    let SUBMISSIONVALUES = { ...values }
+    try {
+      if (adminId) {
+      } else {
+        // Create new admin logic using values, including password validation
+        SUBMISSIONVALUES = { ...SUBMISSIONVALUES, password: password }
+        console.log('the form submission values ', SUBMISSIONVALUES)
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error)
+      // Handle form submission errors appropriately (e.g., display error message)
+    }
+  }
+
   return (
     <Formik
       initialValues={initialFormValues}
-      enableReinitialize // Important to set this so formik resets initialValues when they change
       validationSchema={adminValidationSchema}
-      onSubmit={values => {
-        console.log('Form values:', values)
-        if (adminId) {
-          // Update admin logic
-        } else {
-          // Create new admin logic
-        }
-        setSubmitting(false)
-      }}
+      onSubmit={handleFormSubmit}
     >
       {({
         handleChange,
@@ -132,6 +154,8 @@ const AddAdmin = ({ route }) => {
         values,
         errors,
         touched,
+        isValid,
+        dirty,
       }) => (
         <KeyboardAvoidingView
           style={{ flex: 1, backgroundColor: theme.colors.backgroundSecondary }}
@@ -229,9 +253,11 @@ const AddAdmin = ({ route }) => {
                   <View style={styles.passwordContainer}>
                     <TextInput
                       placeholder='Password*'
-                      onBlur={handleBlur('password')}
-                      value={values.password}
-                      onChangeText={handleChange('password')}
+                      value={password}
+                      onChangeText={handlePasswordChange}
+                      onBlur={() =>
+                        setPasswordError(validatePassword(password))
+                      }
                       placeholderTextColor={theme.colors.text}
                       secureTextEntry={!isPasswordVisible}
                       style={[styles.input, { marginVertical: 0 }]}
@@ -248,19 +274,21 @@ const AddAdmin = ({ route }) => {
                     </TouchableOpacity>
                   </View>
                 )}
-                {/* Display errors */}
-                {errors.password && touched.password && (
-                  <Text style={styles.errorText}>{errors.password}</Text>
-                )}
+
+                {passwordError ? (
+                  <Text style={styles.errorText}>{passwordError}</Text>
+                ) : null}
+
                 {/*buttons  */}
                 <View style={styles.buttonContainer}>
-                  <TouchableOpacity
+                  <Pressable
                     style={[
                       styles.button,
                       {
-                        backgroundColor: isFormValid
-                          ? theme.colors.primary
-                          : theme.colors.primary200,
+                        backgroundColor:
+                          isValid && dirty && passwordError !== null
+                            ? theme.colors.primary
+                            : theme.colors.primary200,
                       },
                     ]}
                     onPress={handleSubmit}
@@ -268,16 +296,16 @@ const AddAdmin = ({ route }) => {
                     <Text style={styles.buttonText}>
                       {adminId ? 'Edit Admin' : 'Add Admin'}
                     </Text>
-                  </TouchableOpacity>
+                  </Pressable>
                   {adminId ? (
-                    <TouchableOpacity
+                    <Pressable
                       style={[
                         styles.button,
                         { backgroundColor: theme.colors.error },
                       ]}
                     >
                       <Text style={styles.buttonText}>Delete Admin</Text>
-                    </TouchableOpacity>
+                    </Pressable>
                   ) : null}
                 </View>
               </View>
