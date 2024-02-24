@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   Pressable,
+  Linking,
   Platform,
 } from 'react-native'
 import React from 'react'
@@ -17,6 +18,44 @@ const Settings = () => {
   const windowWidth = Dimensions.get('window').width
   const styles = getStyles(theme, windowWidth)
 
+  const handleContactUsPress = () => {
+    const email = 'eisa.murwan@gmail.com'
+    const subject = encodeURIComponent('Support Request')
+    const mailtoURL = `mailto:${email}?subject=${subject}`
+
+    Linking.openURL(mailtoURL).catch(err =>
+      console.error('An error occurred', err)
+    )
+  }
+
+  const sendBugReportEmail = () => {
+    const email = 'eisa.murwan@gmail.com'
+    const subject = encodeURIComponent('Bug Report')
+    const body = encodeURIComponent(`Hello,
+  
+  I would like to report a bug that I encountered in the app. Here are the details:
+  
+  - What happened:
+  - What I expected to happen:
+  - Steps to reproduce the issue:
+  - Additional information (device model, app version, etc.):
+  
+  Thank you for looking into this issue.
+  
+  Best regards,
+  [Your Name]`)
+
+    const url = `mailto:${email}?subject=${subject}&body=${body}`
+
+    Linking.canOpenURL(url).then(supported => {
+      if (supported) {
+        Linking.openURL(url)
+      } else {
+        console.log("Don't know how to open this URL: " + url)
+      }
+    })
+  }
+
   return (
     <ScrollView style={styles.container}>
       <SettingsSection title={'ACCOUNT'}>
@@ -24,8 +63,14 @@ const Settings = () => {
       </SettingsSection>
 
       <SettingsSection title={'SUPPORT'}>
-        <SettingsOptionCard title={'Contact us'} onPress={() => {}} />
-        <SettingsOptionCard title={'Report a bug'} onPress={() => {}} />
+        <SettingsOptionCard
+          title={'Contact us'}
+          onPress={handleContactUsPress}
+        />
+        <SettingsOptionCard
+          title={'Report a bug'}
+          onPress={sendBugReportEmail}
+        />
         <SettingsOptionCard title={'Rate this app'} onPress={() => {}} />
       </SettingsSection>
 
