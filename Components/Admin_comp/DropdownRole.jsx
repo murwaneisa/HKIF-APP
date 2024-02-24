@@ -9,6 +9,7 @@ const DropdownRole = ({
   placeholder,
   selectedRoles,
   setInitialFormValues,
+  setFieldValue,
 }) => {
   const { theme, isDarkMode } = useTheme()
   const styles = getStyles(theme, isDarkMode)
@@ -28,11 +29,8 @@ const DropdownRole = ({
       searchPlaceholder='Search...'
       value={selectedRoles}
       onChange={selectedItems => {
-        // Update the initialFormValue state with the selected items
-        setInitialFormValues(prevValues => ({
-          ...prevValues,
-          roles: selectedItems,
-        }))
+        console.log('Selected items:', selectedItems)
+        setFieldValue('roles', selectedItems)
       }}
       renderSelectedItem={(item, unSelect) => (
         <TouchableOpacity onPress={() => unSelect && unSelect(item)}>

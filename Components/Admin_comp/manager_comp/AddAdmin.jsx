@@ -214,11 +214,9 @@ const AddAdmin = ({ route }) => {
                 <DropdownRole
                   data={data}
                   placeholder={'Select admin'}
-                  onSelectionChange={selectedItems =>
-                    setFieldValue('roles', selectedItems)
-                  }
-                  selectedRoles={initialFormValues.roles}
-                  setInitialFormValues={setInitialFormValues}
+                  selectedRoles={values.roles}
+                  setFieldValue={setFieldValue}
+                  /*  setInitialFormValues={setInitialFormValues} */
                 />
                 {/* Display errors */}
                 {errors.roles && touched.roles && (
@@ -287,7 +285,7 @@ const AddAdmin = ({ route }) => {
                       styles.button,
                       {
                         backgroundColor:
-                          isValid && dirty && passwordError !== null
+                          isValid && dirty && passwordError == null
                             ? theme.colors.primary
                             : theme.colors.primary200,
                       },
