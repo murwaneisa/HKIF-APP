@@ -38,3 +38,7 @@ yarn-error.*
 # dotenv environment variables file
 .env
 .env.*
+
+android
+ios
+build

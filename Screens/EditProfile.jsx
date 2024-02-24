@@ -7,7 +7,10 @@ import {
   Platform,
 } from 'react-native'
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { useTheme } from '../Styles/theme'
+import { useDispatch } from 'react-redux'
+import { updateAndSetUserInfo } from '../Utilities/Redux/Actions/userActions'
 import ProfileTextField from '../Components/Profile/ProfileTextField'
 
 const EditProfile = ({ route }) => {
@@ -15,15 +18,20 @@ const EditProfile = ({ route }) => {
   const windowWidth = Dimensions.get('window').width
   const styles = getStyles(theme, windowWidth)
   const { type } = route.params
+  const dispatch = useDispatch()
 
+  // Retrieve currentUser from Redux state
+  const currentUser = useSelector(state => state.user.currentUser)
+
+  // Initialize userInfo state with currentUser info if available
   const [userInfo, setUserInfo] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    address: '',
-    city: '',
-    zipCode: '',
-    phoneNumber: '',
+    firstName: currentUser?.firstName || '',
+    lastName: currentUser?.lastName || '',
+    email: currentUser?.email || '',
+    address: currentUser?.address || '',
+    city: currentUser?.city || '',
+    zipCode: currentUser?.zipCode || '',
+    phoneNumber: currentUser?.phoneNumber || '',
   })
 
   let inputComponents
@@ -97,6 +105,7 @@ const EditProfile = ({ route }) => {
 
   const handleSave = () => {
     console.log('Saving userInfo:', userInfo)
+    dispatch(updateAndSetUserInfo(currentUser._id, userInfo))
     if (type === 'Name') {
       if (userInfo.firstName.trim() === '' || userInfo.lastName.trim() === '') {
         console.log('field cannot be empty')

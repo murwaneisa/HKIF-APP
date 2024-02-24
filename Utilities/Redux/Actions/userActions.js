@@ -1,5 +1,5 @@
 import { logoutUser, setUser, setUsers } from '../Slices/userSlice'
-import { loginUser, getFullUserInfoByID } from '../../Axios/user'
+import { loginUser, getFullUserInfoByID, editUserInfo } from '../../Axios/user'
 import { resetUser } from '../../Axios/storage'
 
 export const loginAndSetUser = (email, password) => async dispatch => {
@@ -39,5 +39,14 @@ export const addUsers = data => async dispatch => {
     }
   } catch (error) {
     console.error(error)
+  }
+}
+
+export const updateAndSetUserInfo = (userId, updatedInfo) => async dispatch => {
+  try {
+    const response = await editUserInfo(userId, updatedInfo)
+    dispatch(setUser(response.data))
+  } catch (error) {
+    console.error('Failed to update user info:', error)
   }
 }
