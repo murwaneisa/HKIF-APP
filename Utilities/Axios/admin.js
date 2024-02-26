@@ -35,3 +35,14 @@ export const getAdmins = async () => {
     console.error('Get Information failed:', error)
   }
 }
+
+export const updateAdmin = async (id, updates) => {
+  try {
+    const response = await baseInstance.put(`${adminSuffix}/edit/${id}`, {
+      updates,
+    })
+    return response
+  } catch (error) {
+    console.error('Get Information failed:', error)
+  }
+}

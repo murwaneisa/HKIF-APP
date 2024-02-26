@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Pressable,
+  Alert,
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useTheme } from '../../../Styles/theme'
@@ -16,7 +17,10 @@ import { Feather } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons'
 import DropdownRole from '../DropdownRole'
 import HKIFImagePicker from '../../../Utilities/Helper/HKIFImagePicker'
-import { getFullAdminInfoByID } from '../../../Utilities/Axios/admin'
+import {
+  getFullAdminInfoByID,
+  updateAdmin,
+} from '../../../Utilities/Axios/admin'
 import { Formik, useFormikContext } from 'formik'
 import * as Yup from 'yup'
 
@@ -98,6 +102,7 @@ const AddAdmin = ({ route }) => {
     const uri = await HKIFImagePicker.pickImage()
     if (uri) {
       setImage(uri)
+      await handleUploadImage()
     }
   }
 
@@ -129,6 +134,14 @@ const AddAdmin = ({ route }) => {
     let SUBMISSIONVALUES = { ...values }
     try {
       if (adminId) {
+        const response = await updateAdmin(adminId, initialFormValues)
+        console.log('the response in the admin component', response)
+        if (response.status === 200) {
+          //the alert not working on the web
+          Alert.alert(`${response.data.message}`, [
+            { text: 'OK', onPress: () => console.log('OK Pressed') },
+          ])
+        }
       } else {
         // Create new admin logic using values, including password validation
         SUBMISSIONVALUES = { ...SUBMISSIONVALUES, password: password }

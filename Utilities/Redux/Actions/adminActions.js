@@ -27,7 +27,6 @@ export const adminLogout = () => async dispatch => {
     console.error(error)
   }
 }
-
 export const addAdmins = data => async dispatch => {
   try {
     if (data) {
