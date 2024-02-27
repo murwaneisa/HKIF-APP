@@ -2,7 +2,7 @@ import React from 'react'
 import { Platform, StyleSheet, Text, TextInput, View } from 'react-native'
 import { useTheme } from '../../Styles/theme'
 
-function Input({ label, value, onChangeText, textInputConfig, rightIcon }) {
+function Input({ label, value, onChangeText, rightIcon, ...textInputConfig }) {
   const { theme } = useTheme()
   const styles = getStyles(theme)
 

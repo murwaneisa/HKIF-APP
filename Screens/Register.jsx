@@ -231,6 +231,16 @@ const getStyles = theme =>
       shadowRadius: 4,
       elevation: 5,
     },
+    errorText: {
+      fontSize: Platform.select({
+        ios: 13,
+        android: 12,
+        web: 16,
+      }),
+      color: 'red',
+      paddingHorizontal: 4,
+      paddingTop: 4,
+    },
   })
 
 export default Register

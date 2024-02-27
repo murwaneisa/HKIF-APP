@@ -5,6 +5,13 @@ import PrimaryButton from '../../Utilities/UI/PrimaryButton'
 import GoogleButton from '../../Utilities/UI/GoogleButton'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateStepOneData } from '../../Utilities/Redux/Slices/registrationSlice'
+import { Formik } from 'formik'
+import * as Yup from 'yup'
+
+const validationSchema = Yup.object().shape({
+  firstName: Yup.string().required('Please enter a first name'),
+  lastName: Yup.string().required('Please enter a last name'),
+})
 
 const StegOne = ({ styles, goToNextStep }) => {
   const dispatch = useDispatch()
@@ -15,70 +22,77 @@ const StegOne = ({ styles, goToNextStep }) => {
   })
 
   useEffect(() => {
-    if (firstName.trim().length > 0 && lastName.trim().length > 0) {
-      setUserInfo({ firstName: firstName, lastName: lastName })
-    }
+    setUserInfo({ firstName: firstName || '', lastName: lastName || '' })
   }, [firstName, lastName])
 
-  const handleNext = () => {
-    dispatch(
-      updateStepOneData({
-        firstName: userInfo.firstName,
-        lastName: userInfo.lastName,
-      })
-    )
-    goToNextStep()
+  const handleFormSubmit = async values => {
+    try {
+      dispatch(updateStepOneData({ ...values }))
+      goToNextStep()
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   return (
-    <>
-      <Input
-        label='First Name'
-        value={userInfo.firstName}
-        onChangeText={e => {
-          setUserInfo({
-            ...userInfo,
-            firstName: e,
-          })
-        }}
-        textInputConfig={{
-          autoCorrect: false,
-          autoCapitalize: 'words',
-        }}
-      />
-      <Input
-        label='Last Name'
-        value={userInfo.lastName}
-        onChangeText={e => {
-          setUserInfo({
-            ...userInfo,
-            lastName: e,
-          })
-        }}
-        textInputConfig={{
-          autoCorrect: false,
-          autoCapitalize: 'words',
-        }}
-      />
-      <View style={styles.buttonsContainer}>
-        <View style={styles.buttonWrapper}>
-          <PrimaryButton
-            style={{ marginBottom: 10, width: '100%' }}
-            paddingVertical={40}
-            paddingHorizontal={12}
-            onPress={handleNext}
-          >
-            Continue
-          </PrimaryButton>
-        </View>
-        <Text style={styles.textStyle}>OR </Text>
-        <View style={styles.buttonWrapper}>
-          <GoogleButton paddingVertical={98} paddingHorizontal={12}>
-            Sign Up with Google
-          </GoogleButton>
-        </View>
-      </View>
-    </>
+    <Formik
+      initialValues={userInfo}
+      enableReinitialize
+      validationSchema={validationSchema}
+      onSubmit={handleFormSubmit}
+    >
+      {({
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        values,
+        errors,
+        touched,
+      }) => (
+        <>
+          <Input
+            label='First Name'
+            value={values.firstName}
+            onBlur={handleBlur('firstName')}
+            onChangeText={handleChange('firstName')}
+            autoCorrect={false}
+            autoCapitalize={'words'}
+          />
+          {errors.firstName && touched.firstName && (
+            <Text style={styles.errorText}>{errors.firstName}</Text>
+          )}
+          <Input
+            label='Last Name'
+            value={values.lastName}
+            onBlur={handleBlur('lastName')}
+            onChangeText={handleChange('lastName')}
+            autoCorrect={false}
+            autoCapitalize={'words'}
+          />
+          {errors.lastName && touched.lastName && (
+            <Text style={styles.errorText}>{errors.lastName}</Text>
+          )}
+          <View style={styles.buttonsContainer}>
+            <View style={styles.buttonWrapper}>
+              <PrimaryButton
+                style={{ marginBottom: 10, width: '100%' }}
+                paddingVertical={40}
+                paddingHorizontal={12}
+                onPress={handleSubmit}
+              >
+                Continue
+              </PrimaryButton>
+            </View>
+            <Text style={styles.textStyle}>OR </Text>
+            <View style={styles.buttonWrapper}>
+              <GoogleButton paddingVertical={98} paddingHorizontal={12}>
+                Sign Up with Google
+              </GoogleButton>
+            </View>
+          </View>
+        </>
+      )}
+    </Formik>
   )
 }
 
