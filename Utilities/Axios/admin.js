@@ -38,9 +38,30 @@ export const getAdmins = async () => {
 
 export const updateAdmin = async (id, updates) => {
   try {
-    const response = await baseInstance.put(`${adminSuffix}/edit/${id}`, {
-      updates,
-    })
+    const response = await baseInstance.put(
+      `${adminSuffix}/edit/${id}`,
+      updates
+    )
+    return response
+  } catch (error) {
+    console.error('Get Information failed:', error)
+  }
+}
+
+export const registerAdmin = async info => {
+  console.log('the admin information ', info)
+  try {
+    const response = await baseInstance.post(`${adminSuffix}/register`, info)
+    return response
+  } catch (error) {
+    console.error('Get Information failed:', error)
+  }
+}
+
+export const deleteAdmin = async adminId => {
+  try {
+    const response = await baseInstance.delete(`${adminSuffix}/${adminId}`)
+    console.log('deleted admin response:', response)
     return response
   } catch (error) {
     console.error('Get Information failed:', error)

@@ -18,7 +18,9 @@ import { Entypo } from '@expo/vector-icons'
 import DropdownRole from '../DropdownRole'
 import HKIFImagePicker from '../../../Utilities/Helper/HKIFImagePicker'
 import {
+  deleteAdmin,
   getFullAdminInfoByID,
+  registerAdmin,
   updateAdmin,
 } from '../../../Utilities/Axios/admin'
 import { Formik, useFormikContext } from 'formik'
@@ -33,7 +35,7 @@ const adminValidationSchema = Yup.object().shape({
   phoneNumber: Yup.string()
     .matches(/^\d{10}$/, 'Please enter a valid 10-digit phone number')
     .required('Phone number is required'),
-  roles: Yup.array()
+  role: Yup.array()
     .min(1, 'Please select at least one role')
     .required('Roles are required'),
 })
@@ -49,11 +51,10 @@ const AddAdmin = ({ route }) => {
     lastName: '',
     email: '',
     phoneNumber: '',
-    roles: [],
+    role: [],
     image: '',
   })
   const data = [
-    { label: 'Super admin', value: 'SUPERADMIN' },
     { label: 'Activity manager', value: 'ACTIVITY_MANAGER' },
     { label: 'Event manager', value: 'EVENT_MANAGER' },
   ]
@@ -68,7 +69,7 @@ const AddAdmin = ({ route }) => {
             lastName: adminInfo.lastName || '',
             email: adminInfo.email || '',
             phoneNumber: adminInfo.phoneNumber || '',
-            roles: adminInfo.role || [], // Adjust according to your roles data structure
+            role: adminInfo.role || [], // Adjust according to your roles data structure
             image: adminInfo.imageUrl || '',
           })
         } catch (error) {
@@ -135,24 +136,47 @@ const AddAdmin = ({ route }) => {
     try {
       if (adminId) {
         const response = await updateAdmin(adminId, initialFormValues)
-        console.log('the response in the admin component', response)
+        console.log(
+          'the response in the admin component',
+          response.data.message
+        )
+        console.log('the admin id ', adminId)
         if (response.status === 200) {
-          //the alert not working on the web
-          Alert.alert(`${response.data.message}`, [
-            { text: 'OK', onPress: () => console.log('OK Pressed') },
-          ])
+          setInitialFormValues({
+            firstName: '',
+            lastName: '',
+            email: '',
+            phoneNumber: '',
+            role: [],
+            image: '',
+          })
         }
       } else {
         // Create new admin logic using values, including password validation
         SUBMISSIONVALUES = { ...SUBMISSIONVALUES, password: password }
         console.log('the form submission values ', SUBMISSIONVALUES)
+        const registerResponse = await registerAdmin(SUBMISSIONVALUES)
+        console.log('the status code value ', registerResponse.status)
+        if (registerResponse.status === 201) {
+          setFieldValue({
+            firstName: '',
+            lastName: '',
+            email: '',
+            phoneNumber: '',
+            role: [],
+            image: '',
+          })
+        }
       }
     } catch (error) {
       console.error('Error submitting form:', error)
       // Handle form submission errors appropriately (e.g., display error message)
     }
   }
-
+  const handleDelete = async () => {
+    //To do: navigate the admin after you delete
+    const response = await deleteAdmin(adminId)
+  }
   return (
     <Formik
       initialValues={initialFormValues}
@@ -227,13 +251,13 @@ const AddAdmin = ({ route }) => {
                 <DropdownRole
                   data={data}
                   placeholder={'Select admin'}
-                  selectedRoles={values.roles}
+                  selectedRoles={values.role}
                   setFieldValue={setFieldValue}
                   /*  setInitialFormValues={setInitialFormValues} */
                 />
                 {/* Display errors */}
-                {errors.roles && touched.roles && (
-                  <Text style={styles.errorText}>{errors.roles}</Text>
+                {errors.role && touched.role && (
+                  <Text style={styles.errorText}>{errors.role}</Text>
                 )}
                 <TextInput
                   placeholder='Email *'
@@ -315,6 +339,7 @@ const AddAdmin = ({ route }) => {
                         styles.button,
                         { backgroundColor: theme.colors.error },
                       ]}
+                      onPress={handleDelete}
                     >
                       <Text style={styles.buttonText}>Delete Admin</Text>
                     </Pressable>
