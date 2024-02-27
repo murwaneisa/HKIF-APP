@@ -6,11 +6,11 @@ import GoogleButton from '../../Utilities/UI/GoogleButton'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateStepOneData } from '../../Utilities/Redux/Slices/registrationSlice'
 import { Formik } from 'formik'
-import * as Yup from 'yup'
+import * as yup from 'yup'
 
-const validationSchema = Yup.object().shape({
-  firstName: Yup.string().required('Please enter a first name'),
-  lastName: Yup.string().required('Please enter a last name'),
+const validationSchema = yup.object().shape({
+  firstName: yup.string().required('Please enter a first name'),
+  lastName: yup.string().required('Please enter a last name'),
 })
 
 const StegOne = ({ styles, goToNextStep }) => {

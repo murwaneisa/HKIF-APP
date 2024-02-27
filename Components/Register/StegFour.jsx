@@ -1,9 +1,21 @@
-import { View, Text, Pressable, Modal, TouchableOpacity } from 'react-native'
+import { Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Input from '../../Utilities/UI/Input'
 import PrimaryButton from '../../Utilities/UI/PrimaryButton'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateStepFourData } from '../../Utilities/Redux/Slices/registrationSlice'
+import * as yup from 'yup'
+import { Formik } from 'formik'
+
+const validationSchema = yup.object().shape({
+  phoneNumber: yup
+    .string()
+    .matches(/^\d{10}$/, 'Please enter a valid 10-digit phone number')
+    .required('Phone number is required'),
+  address: yup.string().required('Please enter an address'),
+  city: yup.string().required('Please enter a city'),
+  zipCode: yup.string().required('Please enter a zip-code'),
+})
 
 const StegFour = ({ styles, goToNextStep, goToPreviousStep }) => {
   const dispatch = useDispatch()
@@ -13,107 +25,106 @@ const StegFour = ({ styles, goToNextStep, goToPreviousStep }) => {
   const [userInfo, setUserInfo] = useState({})
 
   useEffect(() => {
-    if (address.trim().length > 0 && city.trim().length > 0) {
-      setUserInfo({
-        phoneNumber: phoneNumber,
-        address: address,
-        city: city,
-        zipCode: zipCode,
-      })
-    }
+    setUserInfo({
+      phoneNumber: phoneNumber || '',
+      address: address || '',
+      city: city || '',
+      zipCode: zipCode || '',
+    })
   }, [phoneNumber, address, city, zipCode])
 
-  const handleNext = () => {
-    dispatch(
-      updateStepFourData({
-        phoneNumber: userInfo.phoneNumber,
-        address: userInfo.address,
-        city: userInfo.city,
-        zipCode: userInfo.zipCode,
-      })
-    )
-    goToNextStep()
+  const handleFormSubmit = async values => {
+    try {
+      dispatch(updateStepFourData({ ...values }))
+      goToNextStep()
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   return (
-    <>
-      <Input
-        label='Phone Number'
-        value={userInfo.phoneNumber}
-        onChangeText={e => {
-          setUserInfo({
-            ...userInfo,
-            phoneNumber: e,
-          })
-        }}
-        textInputConfig={{
-          keyboardType: 'phone-pad',
-          autoCorrect: false,
-        }}
-      />
-      <Input
-        label='Address'
-        value={userInfo.address}
-        onChangeText={e => {
-          setUserInfo({
-            ...userInfo,
-            address: e,
-          })
-        }}
-        textInputConfig={{
-          autoCorrect: false,
-        }}
-      />
-      <Input
-        label='City'
-        value={userInfo.city}
-        onChangeText={e => {
-          setUserInfo({
-            ...userInfo,
-            city: e,
-          })
-        }}
-        textInputConfig={{
-          autoCorrect: false,
-        }}
-      />
-      <Input
-        label='Zip Code'
-        value={userInfo.zipCode}
-        onChangeText={e => {
-          setUserInfo({
-            ...userInfo,
-            zipCode: e,
-          })
-        }}
-        textInputConfig={{
-          keyboardType: 'phone-pad',
-          autoCorrect: false,
-        }}
-      />
-      <View style={[styles.buttonsContainer]}>
-        <View style={styles.buttonWrapper}>
-          <PrimaryButton
-            style={{ marginBottom: 10, width: '100%' }}
-            paddingVertical={40}
-            paddingHorizontal={12}
-            onPress={handleNext}
-          >
-            Continue
-          </PrimaryButton>
-        </View>
-        <View style={styles.buttonWrapper}>
-          <PrimaryButton
-            style={{ marginBottom: 10, width: '100%' }}
-            paddingVertical={40}
-            paddingHorizontal={12}
-            onPress={goToPreviousStep}
-          >
-            Previous
-          </PrimaryButton>
-        </View>
-      </View>
-    </>
+    <Formik
+      initialValues={userInfo}
+      enableReinitialize
+      validationSchema={validationSchema}
+      onSubmit={handleFormSubmit}
+    >
+      {({
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        values,
+        errors,
+        touched,
+      }) => (
+        <>
+          <Input
+            label='Phone Number'
+            value={values.phoneNumber}
+            onBlur={handleBlur('phoneNumber')}
+            onChangeText={handleChange('phoneNumber')}
+            keyboardType={'phone-pad'}
+            autoCorrect={false}
+          />
+          {errors.phoneNumber && touched.phoneNumber && (
+            <Text style={styles.errorText}>{errors.phoneNumber}</Text>
+          )}
+          <Input
+            label='Address'
+            value={values.address}
+            onBlur={handleBlur('address')}
+            onChangeText={handleChange('address')}
+            autoCorrect={false}
+          />
+          {errors.address && touched.address && (
+            <Text style={styles.errorText}>{errors.address}</Text>
+          )}
+          <Input
+            label='City'
+            value={values.city}
+            onBlur={handleBlur('city')}
+            onChangeText={handleChange('city')}
+            autoCorrect={false}
+          />
+          {errors.city && touched.city && (
+            <Text style={styles.errorText}>{errors.city}</Text>
+          )}
+          <Input
+            label='Zip Code'
+            value={values.zipCode}
+            onBlur={handleBlur('zipCode')}
+            onChangeText={handleChange('zipCode')}
+            keyboardType={'phone-pad'}
+            autoCorrect={false}
+          />
+          {errors.zipCode && touched.zipCode && (
+            <Text style={styles.errorText}>{errors.zipCode}</Text>
+          )}
+          <View style={[styles.buttonsContainer]}>
+            <View style={styles.buttonWrapper}>
+              <PrimaryButton
+                style={{ marginBottom: 10, width: '100%' }}
+                paddingVertical={40}
+                paddingHorizontal={12}
+                onPress={handleSubmit}
+              >
+                Continue
+              </PrimaryButton>
+            </View>
+            <View style={styles.buttonWrapper}>
+              <PrimaryButton
+                style={{ marginBottom: 10, width: '100%' }}
+                paddingVertical={40}
+                paddingHorizontal={12}
+                onPress={goToPreviousStep}
+              >
+                Previous
+              </PrimaryButton>
+            </View>
+          </View>
+        </>
+      )}
+    </Formik>
   )
 }
 
