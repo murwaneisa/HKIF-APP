@@ -9,30 +9,42 @@ import {
 } from 'react-native'
 import React from 'react'
 import { useTheme } from '../../../Styles/theme'
-import { useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+import { useDispatch } from 'react-redux'
+import { deleteExistingEvent } from '../../../Utilities/Redux/Actions/eventActions'
 
-const EventCard = ({ event, previous }) => {
+const EventCard = ({ event, previous = false }) => {
   const navigation = useNavigation()
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth, previous)
-  const [user, setUser] = useState({ role: 'superAdmin' })
+
+  const formatDate = dateString => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' }
+    return new Date(dateString).toLocaleDateString(undefined, options)
+  }
+
+  const formatTime = dateString => {
+    const options = { hour: '2-digit', minute: '2-digit' }
+    return new Date(dateString).toLocaleTimeString(undefined, options)
+  }
+
+  const handleDelete = id => {
+    dispatch(deleteExistingEvent(id))
+  }
+
   return (
     <View style={styles.cardContainer}>
-      <Image
-        source={{ uri: event.imageUrl }} // Replace with your image URL
-        style={styles.image}
-      />
+      <Image source={{ uri: event.imageUrl }} style={styles.image} />
       <View style={styles.textContainer}>
         <Text style={styles.title}>{event.title}</Text>
         <View style={styles.dateContainer}>
           <View style={[styles.dateItem, { marginRight: 5 }]}>
-            <Text style={styles.dateText}>{event.date}</Text>
+            <Text style={styles.dateText}>{formatDate(event.startTime)}</Text>
           </View>
           <View style={styles.dateItem}>
-            <Text style={styles.dateText}>{event.startTime}</Text>
+            <Text style={styles.dateText}>{formatTime(event.startTime)}</Text>
           </View>
         </View>
         <View style={[styles.dateContainer, { marginTop: 5 }]}>
@@ -47,15 +59,18 @@ const EventCard = ({ event, previous }) => {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate('AddEvent', { eventId: 'event.id' })
+            navigation.navigate('AddEvent', { eventId: event._id })
           }
           style={[styles.button, { backgroundColor: theme.colors.primary }]}
         >
           <Text style={styles.buttonText}>{previous ? 'Publish' : 'View'}</Text>
         </TouchableOpacity>
         {previous ? (
-          <TouchableOpacity style={[styles.button, { backgroundColor: 'red' }]}>
-            <Text style={styles.buttonText}>delete</Text>
+          <TouchableOpacity
+            onPress={() => handleDelete(event._id)}
+            style={[styles.button, { backgroundColor: 'red' }]}
+          >
+            <Text style={styles.buttonText}>Delete</Text>
           </TouchableOpacity>
         ) : null}
       </View>

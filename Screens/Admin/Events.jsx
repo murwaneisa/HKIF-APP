@@ -8,8 +8,6 @@ import {
   Dimensions,
 } from 'react-native'
 import { useTheme } from '../../Styles/theme'
-import RenderRequests from '../../Components/Admin_comp/Users_comp/RenderRequests'
-import RenderMembers from '../../Components/Admin_comp/Users_comp/RenderMembers'
 import RenderCurrent from '../../Components/Admin_comp/Event_comp/RenderCurrent'
 import RenderPrevious from '../../Components/Admin_comp/Event_comp/RenderPrevious'
 
@@ -35,7 +33,11 @@ const Events = () => {
 
   const handlePress = listName => {
     if (listName === 'previous' && user.role !== 'superAdmin') {
-      return // You can also use Alert.alert to inform the user they don't have permission
+      Alert.alert(
+        'Restricted Access',
+        "You don't have permission to view previous events."
+      )
+      return
     }
     setActiveList(listName)
   }

@@ -24,9 +24,11 @@
     "@reduxjs/toolkit": "^1.9.7",
     "axios": "^1.6.2",
     "expo": "~49.0.13",
+    "expo-checkbox": "~2.4.0",
     "expo-image-picker": "~14.3.2",
     "expo-status-bar": "~1.6.0",
     "firebase": "^10.7.1",
+    "formik": "^2.4.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.72.5",
@@ -42,7 +44,7 @@
     "react-native-web": "~0.19.6",
     "react-redux": "^8.1.3",
     "webpack-dev-server": "^4.15.1",
-    "expo-checkbox": "~2.4.0"
+    "yup": "^1.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

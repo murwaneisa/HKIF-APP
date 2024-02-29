@@ -88,8 +88,8 @@ function EventDetails({ navigation }) {
               </View>
 
               <View style={styles.benefitsList}>
-                {event.benefits.map(benefit => (
-                  <BenefitCard title={benefit} />
+                {event.benefits.map((benefit, index) => (
+                  <BenefitCard key={index} title={benefit} />
                 ))}
               </View>
             </View>
