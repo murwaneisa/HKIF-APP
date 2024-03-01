@@ -17,7 +17,8 @@ const RenderAdmins = () => {
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
-  const admins = useSelector(state => state.admin.adminList)
+  const admins = useSelector(state => state.admin.data)
+  const isLoading = useSelector(state => state.admin.loading)
   const admin = useSelector(state => state.admin.currentAdmin)
 
   const renderHeader = () => (

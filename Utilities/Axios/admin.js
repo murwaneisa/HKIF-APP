@@ -28,7 +28,7 @@ export const getFullAdminInfoByID = async adminId => {
   }
 }
 
-export const getAdmins = async () => {
+export const fetchAdmins = async () => {
   try {
     return await baseInstance.get(`${adminSuffix}`)
   } catch (error) {

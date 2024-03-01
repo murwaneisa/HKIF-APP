@@ -12,9 +12,9 @@ import { useTheme } from '../../Styles/theme'
 import { useNavigation } from '@react-navigation/native'
 import RenderAdmins from '../../Components/Admin_comp/manager_comp/RenderAdmins'
 import AddAdmin from '../../Components/Admin_comp/manager_comp/AddAdmin'
-import { getAdmins } from '../../Utilities/Axios/admin'
-import { addAdmins } from '../../Utilities/Redux/Actions/adminActions'
+
 import { useDispatch, useSelector } from 'react-redux'
+import { getAdmins } from '../../Utilities/Redux/Actions/adminActions'
 
 const Admins = () => {
   const windowWidth = Dimensions.get('window').width
@@ -55,15 +55,14 @@ const Admins = () => {
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
-        const data = await getAdmins()
-        dispatch(addAdmins(data.data))
+        dispatch(getAdmins())
       } catch (error) {
         console.error('Error fetching admins:', error)
       }
     }
 
     fetchAdmins()
-  }, []) // Empty dependency array means this effect runs once on mount
+  }, [])
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
