@@ -7,7 +7,7 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTheme } from '../../../Styles/theme'
 import AdminCard from './AdminCard'
 import { useSelector } from 'react-redux'

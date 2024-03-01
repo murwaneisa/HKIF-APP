@@ -1,4 +1,5 @@
 import baseInstance from './api'
+import { createAsyncThunk } from '@reduxjs/toolkit'
 import { storeAccessToken, storeRefreshToken, storeUserID } from './storage'
 
 const adminSuffix = '/admins'
@@ -48,20 +49,52 @@ export const updateAdmin = async (id, updates) => {
   }
 }
 
-export const registerAdmin = async info => {
-  console.log('the admin information ', info)
+export const deleteAdmin = async adminId => {
   try {
-    const response = await baseInstance.post(`${adminSuffix}/register`, info)
+    const response = await baseInstance.delete(`${adminSuffix}/${adminId}`)
+    console.log('deleted admin response:', response)
     return response
   } catch (error) {
     console.error('Get Information failed:', error)
   }
 }
 
-export const deleteAdmin = async adminId => {
+// Async thunk for updating an admin
+export const updateAdminThunk = createAsyncThunk(
+  'admins/updateStatus',
+  async ({ adminId, updates }, { rejectWithValue }) => {
+    try {
+      const response = await baseInstance.put(
+        `${adminSuffix}/edit/${adminId}`,
+        updates
+      )
+      return response.data // Assuming the updated admin data is returned
+    } catch (error) {
+      console.error('Updating admin failed:', error)
+      return rejectWithValue(error.response.data)
+    }
+  }
+)
+
+// Async thunk for deleting an admin
+export const deleteAdminThunk = createAsyncThunk(
+  'admins/deleteStatus',
+  async (adminId, { rejectWithValue }) => {
+    try {
+      const response = await baseInstance.delete(`${adminSuffix}/${adminId}`)
+      console.log('Deleted admin response:', response)
+      return adminId // Return the adminId to identify which admin was deleted
+    } catch (error) {
+      console.error('Deleting admin failed:', error)
+      return rejectWithValue(error.response.data)
+    }
+  }
+)
+
+export const registerAdmin = async info => {
+  console.log('the admin information ', info)
   try {
-    const response = await baseInstance.delete(`${adminSuffix}/${adminId}`)
-    console.log('deleted admin response:', response)
+    const response = await baseInstance.post(`${adminSuffix}/register`, info)
     return response
   } catch (error) {
     console.error('Get Information failed:', error)

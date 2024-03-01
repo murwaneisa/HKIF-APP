@@ -18,6 +18,7 @@ import { getAdmins } from '../../Utilities/Redux/Actions/adminActions'
 
 const Admins = () => {
   const windowWidth = Dimensions.get('window').width
+  const admins = useSelector(state => state.admin.data)
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
   const [activeList, setActiveList] = useState('admins')
@@ -53,6 +54,7 @@ const Admins = () => {
     setActiveList(listName)
   }
   useEffect(() => {
+    console.log('the use effect is invoked ')
     const fetchAdmins = async () => {
       try {
         dispatch(getAdmins())

@@ -19,12 +19,15 @@ import DropdownRole from '../DropdownRole'
 import HKIFImagePicker from '../../../Utilities/Helper/HKIFImagePicker'
 import {
   deleteAdmin,
+  deleteAdminThunk,
   getFullAdminInfoByID,
   registerAdmin,
   updateAdmin,
+  updateAdminThunk,
 } from '../../../Utilities/Axios/admin'
 import { Formik, useFormikContext } from 'formik'
 import * as Yup from 'yup'
+import { useDispatch, useSelector } from 'react-redux'
 
 const adminValidationSchema = Yup.object().shape({
   firstName: Yup.string().required('Please enter a first name'),
@@ -41,6 +44,9 @@ const adminValidationSchema = Yup.object().shape({
 })
 
 const AddAdmin = ({ route }) => {
+  const dispatch = useDispatch()
+  const admins = useSelector(state => state.admin.data)
+  console.log('the admins', admins)
   const { theme, isDarkMode } = useTheme()
   const { adminId } = route?.params || {}
   const [password, setPassword] = useState('')
@@ -135,21 +141,13 @@ const AddAdmin = ({ route }) => {
     let SUBMISSIONVALUES = { ...values }
     try {
       if (adminId) {
-        const response = await updateAdmin(adminId, initialFormValues)
-        console.log(
-          'the response in the admin component',
-          response.data.message
+        console.log('the initial form values', values)
+        const response = await dispatch(
+          updateAdminThunk({ adminId: adminId, updates: values })
         )
-        console.log('the admin id ', adminId)
-        if (response.status === 200) {
-          setInitialFormValues({
-            firstName: '',
-            lastName: '',
-            email: '',
-            phoneNumber: '',
-            role: [],
-            image: '',
-          })
+        console.log('the update response ', response)
+        if (response.payload.message === 'Admin updated successfully') {
+          console.log(response.payload.message)
         }
       } else {
         // Create new admin logic using values, including password validation
@@ -175,7 +173,11 @@ const AddAdmin = ({ route }) => {
   }
   const handleDelete = async () => {
     //To do: navigate the admin after you delete
-    const response = await deleteAdmin(adminId)
+    const response = await dispatch(deleteAdminThunk(adminId))
+    console.log(
+      'the response in handle delete function',
+      response.meta.requestStatus
+    )
   }
   return (
     <Formik

@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { deleteAdminThunk, updateAdminThunk } from '../../Axios/admin'
 
 const initialState = {
   data: [],
@@ -30,6 +31,21 @@ const adminSlice = createSlice({
     logoutAdmin: state => {
       state.currentAdmin = null
     },
+  },
+  extraReducers: builder => {
+    builder
+      .addCase(updateAdminThunk.fulfilled, (state, action) => {
+        const index = state.data.findIndex(
+          admin => admin._id === action.payload.id
+        )
+        if (index !== -1) {
+          state.data[index] = action.payload
+        }
+      })
+      .addCase(deleteAdminThunk.fulfilled, (state, action) => {
+        state.data = state.data.filter(admin => admin !== action.payload)
+      })
+    // You may also handle pending and rejected states for loading indicators or error messages
   },
 })
 
