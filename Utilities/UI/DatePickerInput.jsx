@@ -15,7 +15,7 @@ const DatePickerInput = ({ label, value, handleChange }) => {
       if (Platform.OS === 'android') {
         setShow(false)
       }
-      handleChange(selectedDate)
+      handleChange('birthDate', selectedDate)
     }
   }
 

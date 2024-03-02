@@ -1,9 +1,15 @@
-import { View } from 'react-native'
+import { Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import PrimaryButton from '../../Utilities/UI/PrimaryButton'
 import DropdownList from '../../Utilities/UI/DropDownList'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateStepFiveData } from '../../Utilities/Redux/Slices/registrationSlice'
+import { Formik } from 'formik'
+import * as yup from 'yup'
+
+const validationSchema = yup.object().shape({
+  role: yup.string().required('Role is required'),
+})
 
 const StegFive = ({ styles, goToNextStep, goToPreviousStep }) => {
   const dispatch = useDispatch()
@@ -13,11 +19,9 @@ const StegFive = ({ styles, goToNextStep, goToPreviousStep }) => {
   })
 
   useEffect(() => {
-    if (role.trim().length > 0) {
-      setUserInfo({
-        role: role,
-      })
-    }
+    setUserInfo({
+      role: role || '',
+    })
   }, [role])
 
   const handleNext = () => {
@@ -29,43 +33,63 @@ const StegFive = ({ styles, goToNextStep, goToPreviousStep }) => {
     goToNextStep()
   }
 
-  return (
-    <>
-      <DropdownList
-        label='Role'
-        placeholder='Select Role'
-        data={[
-          { label: 'Activity Leader', value: 'ACTIVITY_LEADER' },
-          { label: 'Board Member', value: 'BOARD_MEMBER' },
-          { label: 'None of the above', value: 'NONE' },
-        ]}
-        value={userInfo.role}
-        handleChange={e => setUserInfo({ role: e })}
-      />
+  const handleFormSubmit = async values => {
+    try {
+      dispatch(updateStepFiveData({ ...values }))
+      goToNextStep()
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
-      <View style={[styles.buttonsContainer]}>
-        <View style={styles.buttonWrapper}>
-          <PrimaryButton
-            style={{ marginBottom: 10, width: '100%' }}
-            paddingVertical={40}
-            paddingHorizontal={12}
-            onPress={handleNext}
-          >
-            Continue
-          </PrimaryButton>
-        </View>
-        <View style={styles.buttonWrapper}>
-          <PrimaryButton
-            style={{ marginBottom: 10, width: '100%' }}
-            paddingVertical={40}
-            paddingHorizontal={12}
-            onPress={goToPreviousStep}
-          >
-            Previous
-          </PrimaryButton>
-        </View>
-      </View>
-    </>
+  return (
+    <Formik
+      initialValues={userInfo}
+      enableReinitialize
+      validationSchema={validationSchema}
+      onSubmit={handleFormSubmit}
+    >
+      {({ handleChange, handleSubmit, values, errors, touched }) => (
+        <>
+          <DropdownList
+            label='Role'
+            placeholder='Select Role'
+            data={[
+              { label: 'Activity Leader', value: 'ACTIVITY_LEADER' },
+              { label: 'Board Member', value: 'BOARD_MEMBER' },
+              { label: 'None of the above', value: 'NONE' },
+            ]}
+            value={values.role}
+            handleChange={handleChange('role')}
+          />
+          {errors.role && touched.role && (
+            <Text style={styles.errorText}>{errors.role}</Text>
+          )}
+          <View style={[styles.buttonsContainer]}>
+            <View style={styles.buttonWrapper}>
+              <PrimaryButton
+                style={{ marginBottom: 10, width: '100%' }}
+                paddingVertical={40}
+                paddingHorizontal={12}
+                onPress={handleSubmit}
+              >
+                Continue
+              </PrimaryButton>
+            </View>
+            <View style={styles.buttonWrapper}>
+              <PrimaryButton
+                style={{ marginBottom: 10, width: '100%' }}
+                paddingVertical={40}
+                paddingHorizontal={12}
+                onPress={goToPreviousStep}
+              >
+                Previous
+              </PrimaryButton>
+            </View>
+          </View>
+        </>
+      )}
+    </Formik>
   )
 }
 
