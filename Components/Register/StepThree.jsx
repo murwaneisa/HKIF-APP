@@ -14,7 +14,7 @@ const validationSchema = yup.object().shape({
   nationality: yup.string().required('Nationality is required'),
 })
 
-const StegThree = ({ styles, goToNextStep, goToPreviousStep }) => {
+const StepThree = ({ styles, goToNextStep, goToPreviousStep }) => {
   const dispatch = useDispatch()
   const { birthDate, gender, nationality } = useSelector(
     state => state.registration
@@ -118,4 +118,4 @@ const StegThree = ({ styles, goToNextStep, goToPreviousStep }) => {
   )
 }
 
-export default StegThree
+export default StepThree

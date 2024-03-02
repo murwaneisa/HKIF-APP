@@ -17,7 +17,7 @@ const validationSchema = yup.object().shape({
   zipCode: yup.string().required('Please enter a zip-code'),
 })
 
-const StegFour = ({ styles, goToNextStep, goToPreviousStep }) => {
+const StepFour = ({ styles, goToNextStep, goToPreviousStep }) => {
   const dispatch = useDispatch()
   const { phoneNumber, address, city, zipCode } = useSelector(
     state => state.registration
@@ -128,4 +128,4 @@ const StegFour = ({ styles, goToNextStep, goToPreviousStep }) => {
   )
 }
 
-export default StegFour
+export default StepFour

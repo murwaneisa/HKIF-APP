@@ -11,7 +11,7 @@ const validationSchema = yup.object().shape({
   role: yup.string().required('Role is required'),
 })
 
-const StegFive = ({ styles, goToNextStep, goToPreviousStep }) => {
+const StepFive = ({ styles, goToNextStep, goToPreviousStep }) => {
   const dispatch = useDispatch()
   const { role } = useSelector(state => state.registration)
   const [userInfo, setUserInfo] = useState({
@@ -19,19 +19,8 @@ const StegFive = ({ styles, goToNextStep, goToPreviousStep }) => {
   })
 
   useEffect(() => {
-    setUserInfo({
-      role: role || '',
-    })
+    setUserInfo({ role: role || '' })
   }, [role])
-
-  const handleNext = () => {
-    dispatch(
-      updateStepFiveData({
-        role: userInfo.role,
-      })
-    )
-    goToNextStep()
-  }
 
   const handleFormSubmit = async values => {
     try {
@@ -93,4 +82,4 @@ const StegFive = ({ styles, goToNextStep, goToPreviousStep }) => {
   )
 }
 
-export default StegFive
+export default StepFive

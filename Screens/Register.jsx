@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
   Dimensions,
   KeyboardAvoidingView,
@@ -11,11 +11,11 @@ import {
 
 import { useTheme } from '../Styles/theme'
 
-import StegOne from '../Components/Register/StegOne'
-import StegTwo from '../Components/Register/StegTwo'
-import StegThree from '../Components/Register/StegThree'
-import StegFour from '../Components/Register/StegFour'
-import StegFive from '../Components/Register/StegFive'
+import StepOne from '../Components/Register/StepOne'
+import StepTwo from '../Components/Register/StepTwo'
+import StepThree from '../Components/Register/StepThree'
+import StepFour from '../Components/Register/StepFour'
+import StepFive from '../Components/Register/StepFive'
 import { useDispatch, useSelector } from 'react-redux'
 import { registerAndLoginUser } from '../Utilities/Redux/Actions/userActions'
 
@@ -40,6 +40,7 @@ function Register() {
       // navigate to another screen or perform the submission action
     }
   }
+
   const goToPreviousStep = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1)
@@ -50,10 +51,10 @@ function Register() {
   const renderStep = () => {
     switch (currentStep) {
       case 1:
-        return <StegOne styles={styles} goToNextStep={goToNextStep} />
+        return <StepOne styles={styles} goToNextStep={goToNextStep} />
       case 2:
         return (
-          <StegTwo
+          <StepTwo
             styles={styles}
             goToNextStep={goToNextStep}
             goToPreviousStep={goToPreviousStep}
@@ -61,7 +62,7 @@ function Register() {
         )
       case 3:
         return (
-          <StegThree
+          <StepThree
             styles={styles}
             goToNextStep={goToNextStep}
             goToPreviousStep={goToPreviousStep}
@@ -69,7 +70,7 @@ function Register() {
         )
       case 4:
         return (
-          <StegFour
+          <StepFour
             styles={styles}
             goToNextStep={goToNextStep}
             goToPreviousStep={goToPreviousStep}
@@ -77,7 +78,7 @@ function Register() {
         )
       case 5:
         return (
-          <StegFive
+          <StepFive
             styles={styles}
             goToNextStep={goToNextStep}
             goToPreviousStep={goToPreviousStep}
