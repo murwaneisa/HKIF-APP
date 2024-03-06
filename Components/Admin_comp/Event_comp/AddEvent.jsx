@@ -9,7 +9,7 @@ import {
   ScrollView,
   Pressable,
 } from 'react-native'
-import React, { useRef } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { useTheme } from '../../../Styles/theme'
 import DatePickerModal from '../../../Utilities/UI/Model'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
@@ -17,87 +17,170 @@ import { Entypo } from '@expo/vector-icons'
 import Checkbox from 'expo-checkbox'
 import { MaterialIcons } from '@expo/vector-icons'
 import { FontAwesome5 } from '@expo/vector-icons'
-import { createNewEvent } from '../../../Utilities/Redux/Actions/eventActions'
-import { useDispatch } from 'react-redux'
+import {
+  createNewEvent,
+  deleteExistingEvent,
+  fetchEventById,
+  updateExistingEvent,
+} from '../../../Utilities/Redux/Actions/eventActions'
+import { useDispatch, useSelector } from 'react-redux'
 import * as Yup from 'yup'
-
-const validationSchema = Yup.object().shape({
-  title: Yup.string().required('Title is required'),
-  description: Yup.string(),
-  imageUrl: Yup.string().url('Must be a valid URL'),
-  price: Yup.number()
-    .required('Price is required')
-    .positive('Price must be positive')
-    .integer(),
-  startTime: Yup.date().required('Start time is required'),
-  endTime: Yup.date()
-    .required('End time is required')
-    .min(Yup.ref('startTime'), 'End time must be after start time'),
-  attendeesIds: Yup.array().of(Yup.string()),
-  benefits: Yup.array()
-    .of(Yup.string().oneOf(['GAMES', 'FOOD', 'DRINK'], 'Invalid benefit'))
-    .required('At least one benefit is required'),
-  address: Yup.string().required('Address is required'),
-})
+import { Formik } from 'formik'
+import DateFormatter from '../../../Utilities/Helper/DateFormatter'
+import DateTimePickerInput from '../../../Utilities/UI/DateTimePickerInput'
 
 const AddEvent = ({ route, navigation }) => {
   const dispatch = useDispatch()
   const { theme } = useTheme()
+  const styles = getStyles(theme)
   const { eventId } = route.params || {}
-  const [eventInfo, setEventInfo] = useState({})
+  const [showInput, setShowInput] = useState(false)
+  // const [pickerType, setPickerType] = useState('date')
+  // const [openStartDatePicker, setOpenStartDatePicker] = useState(false)
 
-  console.log(eventInfo)
+  const eventInfo = eventId
+    ? useSelector(state => state.event.currentEvent)
+    : undefined
+  const isLoading = useSelector(state => state.event.loading)
 
-  const openDatePicker = () => {
-    setPickerType('date')
-    setOpenStartDatePicker(true)
-  }
+  const benefitOptions = [
+    { label: 'Food', value: 'FOOD' },
+    { label: 'Drinks', value: 'DRINK' },
+    { label: 'Games', value: 'GAMES' },
+  ]
 
-  const handleCloseModal = () => {
-    setOpenStartDatePicker(false)
-  }
-  function handleChangeStartDate(propDate) {
-    setStartedDate(propDate)
-  }
+  // const openDatePicker = () => {
+  //   setPickerType('date')
+  //   setOpenStartDatePicker(true)
+  // }
+
+  // const handleCloseModal = () => {
+  //   setOpenStartDatePicker(false)
+  // }
 
   const inputRefs = useRef({
     titleInput: null,
     locationInput: null,
     priceInput: null,
   })
+
   const focusInput = inputKey => {
     inputRefs.current[inputKey]?.focus()
   }
 
+  function combineDateTime(date, time) {
+    const year = date.getFullYear()
+    const month = date.getMonth()
+    const day = date.getDate()
+    const hours = time.getHours()
+    const minutes = time.getMinutes()
+    const localDateTime = new Date(year, month, day, hours, minutes)
+    return localDateTime.toISOString() // Convert to ISO string and keep the 'Z' to denote UTC
+  }
+  const handleDeleteEvent = () => {
+    // Confirmation dialog before deleting (optional)
+    if (window.confirm('Are you sure you want to delete this event?')) {
+      dispatch(deleteExistingEvent(eventId))
+    }
+    navigation.goBack()
+  }
+
   useEffect(() => {
     if (eventId) {
-      dispatch(fetchEventById(eventId)).then(action => {
-        if (action.payload) {
-          setEventInfo(action.payload)
-        }
-      })
+      dispatch(fetchEventById(eventId))
     }
   }, [dispatch, eventId])
 
-  return (
+  const validationSchema = Yup.object().shape({
+    title: Yup.string().required('Title is required'),
+    description: Yup.string(),
+    imageUrl: Yup.string().url('Must be a valid URL'),
+    price: Yup.number()
+      .required('Price is required')
+      .positive('Price must be positive')
+      .integer(),
+    startDate: Yup.date()
+      .required('Start date is required')
+      .max(Yup.ref('endDate'), 'Start date must be before end date'),
+    startTime: Yup.date()
+      .required('Start time is required')
+      .when('startDate', (startDate, schema) =>
+        schema.test(
+          'is-same-or-after-current-time',
+          'Start time must be later than the current time',
+          startTime => startTime >= new Date()
+        )
+      ),
+    endDate: Yup.date()
+      .required('End date is required')
+      .min(Yup.ref('startDate'), 'End date must be after start date'),
+    endTime: Yup.date()
+      .required('End time is required')
+      .test(
+        'is-after-start',
+        'End time must be after start time',
+        function (value) {
+          const { startDate, startTime } = this.parent
+          const startDateTime = combineDateTime(startDate, startTime)
+          const endDateTime = combineDateTime(this.parent.endDate, value)
+          return endDateTime > startDateTime
+        }
+      ),
+    attendeesIds: Yup.array().of(Yup.string()),
+    benefits: Yup.array()
+      .of(Yup.string().oneOf(['GAMES', 'FOOD', 'DRINK'], 'Invalid benefit'))
+      .required('At least one benefit is required'),
+    address: Yup.string().required('Address is required'),
+  })
+
+  return isLoading ? (
+    <View>
+      <Text>Loading...</Text>
+    </View>
+  ) : (
     <Formik
       initialValues={{
         title: eventInfo?.title || '',
         description: eventInfo?.description || '',
-        imageUrl: eventInfo?.imageUrl || '',
+        imageUrl:
+          eventInfo?.imageUrl ||
+          'https://plus.unsplash.com/premium_photo-1709311417346-0497456aef0e?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         price: eventInfo?.price || '',
-        startTime: eventInfo?.startTime || '',
-        endTime: eventInfo?.endTime || '',
+        startDate: eventInfo?.startTime
+          ? new Date(eventInfo.startTime)
+          : new Date(),
+        startTime: eventInfo?.startTime
+          ? new Date(eventInfo.startTime)
+          : new Date(),
+        endDate: eventInfo?.endTime ? new Date(eventInfo.endTime) : new Date(),
+        endTime: eventInfo?.endTime ? new Date(eventInfo.endTime) : new Date(),
         attendeesIds: eventInfo?.attendeesIds || [],
         benefits: eventInfo?.benefits || [],
         address: eventInfo?.address || '',
       }}
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
+        const combinedStartTime = combineDateTime(
+          values.startDate,
+          values.startTime
+        )
+        const combinedEndTime = combineDateTime(values.endDate, values.endTime)
+        delete values.startDate
+        delete values.startTime
+        delete values.endDate
+        delete values.endTime
+
+        const submissionValues = {
+          ...values,
+          startTime: combinedStartTime,
+          endTime: combinedEndTime,
+        }
+
+        console.log(submissionValues)
         if (eventId) {
-          dispatch(updateExistingEvent(eventId, values))
+          dispatch(updateExistingEvent(eventId, submissionValues))
         } else {
-          dispatch(createNewEvent(values))
+          dispatch(createNewEvent(submissionValues))
         }
         setSubmitting(false)
         navigation.goBack()
@@ -106,7 +189,9 @@ const AddEvent = ({ route, navigation }) => {
       {({
         handleChange,
         handleBlur,
+        setFieldTouched,
         handleSubmit,
+        setFieldValue,
         values,
         errors,
         touched,
@@ -120,6 +205,8 @@ const AddEvent = ({ route, navigation }) => {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.container}
           >
+            {/* <Text>{JSON.stringify(errors)}</Text>
+            <Text>{JSON.stringify(touched)}</Text> */}
             {/* title */}
             <TouchableOpacity
               style={[
@@ -132,6 +219,7 @@ const AddEvent = ({ route, navigation }) => {
                 <Text style={styles.sectionText}>Title</Text>
               </View>
               <TextInput
+                ref={el => (inputRefs.current.titleInput = el)}
                 onChangeText={handleChange('title')}
                 onBlur={handleBlur('title')}
                 value={values.title}
@@ -205,14 +293,16 @@ const AddEvent = ({ route, navigation }) => {
                     Starts
                   </Text>
                 </View>
+                {/* Start Date */}
                 <View style={[styles.dateField]}>
                   {Platform.OS === 'web' ? (
                     <TextInput
                       autoCorrect={false}
                       autoCapitalize='words'
-                      placeholder='Aug 21 2002'
-                      onChangeText={setSelectedStartDate}
-                      value={selectedStartDate}
+                      placeholder='2002-08-21'
+                      onChangeText={handleChange('startDate')}
+                      onBlur={handleBlur('startDate')}
+                      value={values.startDate}
                       placeholderTextColor={theme.colors.primary}
                       style={[
                         styles.input,
@@ -220,26 +310,36 @@ const AddEvent = ({ route, navigation }) => {
                       ]}
                     />
                   ) : (
-                    <Pressable
-                      onPress={
-                        Platform.select === 'web' ? undefine : openDatePicker
-                      }
-                      style={styles.pressable}
-                    >
-                      <Text style={styles.inputText}>
-                        {selectedStartDate || 'Aug 21 2002'}
-                      </Text>
-                    </Pressable>
+                    // <Pressable
+                    //   onPress={
+                    //     Platform.select === 'web' ? undefined : openDatePicker
+                    //   }
+                    //   style={styles.pressable}
+                    // >
+                    //   <Text style={styles.inputText}>{values.startDate}</Text>
+                    // </Pressable>
+                    <DateTimePickerInput
+                      value={values.startDate}
+                      fieldName={'startDate'}
+                      handleChange={setFieldValue}
+                      setFieldTouched={setFieldTouched}
+                    />
                   )}
                 </View>
+                {(touched.startDate || touched.startTime) &&
+                  errors.startDate && (
+                    <Text style={styles.errorText}>{errors.startDate}</Text>
+                  )}
+                {/* Start Time */}
                 <View style={styles.dateField}>
                   {Platform.OS === 'web' ? (
                     <TextInput
                       autoCorrect={false}
                       autoCapitalize='words'
                       placeholder='10:00'
-                      onChangeText={setSelectedStartDate}
-                      value={selectedStartDate}
+                      onChangeText={handleChange('startTime')}
+                      value={values.startTime}
+                      onBlur={handleBlur('startTime')}
                       placeholderTextColor={theme.colors.primary}
                       style={[
                         styles.input,
@@ -247,20 +347,19 @@ const AddEvent = ({ route, navigation }) => {
                       ]}
                     />
                   ) : (
-                    <Pressable
-                      onPress={
-                        Platform.select === 'web' ? undefine : openDatePicker
-                      }
-                      style={styles.pressable}
-                    >
-                      <View
-                        style={[styles.inputContainer, { borderRadius: 6 }]}
-                      >
-                        <Text style={styles.inputText}>{time || '10:00'}</Text>
-                      </View>
-                    </Pressable>
+                    <DateTimePickerInput
+                      value={values.startTime}
+                      fieldName={'startTime'}
+                      handleChange={setFieldValue}
+                      dateMode={false}
+                      setFieldTouched={setFieldTouched}
+                    />
                   )}
                 </View>
+                {(touched.startDate || touched.startTime) &&
+                  errors.startTime && (
+                    <Text style={styles.errorText}>{errors.startTime}</Text>
+                  )}
               </View>
               <View style={styles.startDate}>
                 <View style={styles.sectionTitle}>
@@ -273,14 +372,16 @@ const AddEvent = ({ route, navigation }) => {
                     Ends
                   </Text>
                 </View>
+                {/* End Date */}
                 <View style={styles.dateField}>
                   {Platform.OS === 'web' ? (
                     <TextInput
                       autoCorrect={false}
                       autoCapitalize='words'
-                      placeholder='Aug 21 2002'
-                      onChangeText={setSelectedStartDate}
-                      value={selectedStartDate}
+                      placeholder='2002-08-21'
+                      onChangeText={handleChange('endDate')}
+                      onBlur={handleBlur('endDate')}
+                      value={values.endDate}
                       placeholderTextColor={theme.colors.primary}
                       style={[
                         styles.input,
@@ -288,28 +389,27 @@ const AddEvent = ({ route, navigation }) => {
                       ]}
                     />
                   ) : (
-                    <Pressable
-                      onPress={
-                        Platform.select === 'web' ? undefine : openDatePicker
-                      }
-                      style={styles.pressable}
-                    >
-                      <View style={styles.inputContainer}>
-                        <Text style={styles.inputText}>
-                          {selectedStartDate || 'Aug 21 2002'}
-                        </Text>
-                      </View>
-                    </Pressable>
+                    <DateTimePickerInput
+                      value={values.endDate}
+                      fieldName={'endDate'}
+                      handleChange={setFieldValue}
+                      setFieldTouched={setFieldTouched}
+                    />
                   )}
                 </View>
+                {(touched.endDate || touched.endTime) && errors.endDate && (
+                  <Text style={styles.errorText}>{errors.endDate}</Text>
+                )}
+                {/* End Time */}
                 <View style={styles.dateField}>
                   {Platform.OS === 'web' ? (
                     <TextInput
                       autoCorrect={false}
                       autoCapitalize='words'
                       placeholder='10:00'
-                      onChangeText={setSelectedStartDate}
-                      value={selectedStartDate}
+                      onChangeText={handleChange('endTime')}
+                      onBlur={handleBlur('endTime')}
+                      value={values.endTime}
                       placeholderTextColor={theme.colors.primary}
                       style={[
                         styles.input,
@@ -317,23 +417,21 @@ const AddEvent = ({ route, navigation }) => {
                       ]}
                     />
                   ) : (
-                    <Pressable
-                      onPress={
-                        Platform.select === 'web' ? undefine : openDatePicker
-                      }
-                      style={styles.pressable}
-                    >
-                      <View
-                        style={[styles.inputContainer, { borderRadius: 6 }]}
-                      >
-                        <Text style={styles.inputText}>{time || '10:00'}</Text>
-                      </View>
-                    </Pressable>
+                    <DateTimePickerInput
+                      value={values.endTime}
+                      fieldName={'endTime'}
+                      handleChange={setFieldValue}
+                      dateMode={false}
+                      setFieldTouched={setFieldTouched}
+                    />
                   )}
                 </View>
+                {(touched.endDate || touched.endTime) && errors.endTime && (
+                  <Text style={styles.errorText}>{errors.endTime}</Text>
+                )}
               </View>
             </View>
-            {/* location */}
+            {/* address */}
             <TouchableOpacity
               onPress={() => focusInput('locationInput')}
               style={[
@@ -345,11 +443,17 @@ const AddEvent = ({ route, navigation }) => {
                 <Entypo name='location' size={24} color={theme.colors.text} />
               </View>
               <TextInput
+                onChangeText={handleChange('address')}
                 ref={el => (inputRefs.current.locationInput = el)}
-                placeholder='Add location'
+                onBlur={handleBlur('address')}
+                value={values.address}
+                placeholder='Add address'
                 placeholderTextColor={theme.colors.text}
                 style={styles.input}
               />
+              {touched.address && errors.address && (
+                <Text style={styles.errorText}>{errors.address}</Text>
+              )}
             </TouchableOpacity>
             {/* Price */}
             <TouchableOpacity
@@ -367,11 +471,17 @@ const AddEvent = ({ route, navigation }) => {
                 />
               </View>
               <TextInput
+                onChangeText={handleChange('price')}
                 ref={el => (inputRefs.current.priceInput = el)}
-                placeholder='Add price kr'
+                onBlur={handleBlur('price')}
+                value={values.price.toString()}
+                placeholder='Add price in SEK'
                 placeholderTextColor={theme.colors.text}
                 style={styles.input}
               />
+              {touched.price && errors.price && (
+                <Text style={styles.errorText}>{errors.price}</Text>
+              )}
             </TouchableOpacity>
             {/* description */}
             <View style={[styles.descriptionContainer]}>
@@ -388,6 +498,9 @@ const AddEvent = ({ route, navigation }) => {
                   style={styles.descriptionInput}
                   placeholderTextColor={theme.colors.text}
                   multiline
+                  onChangeText={handleChange('description')}
+                  onBlur={handleBlur('description')}
+                  value={values.description}
                   placeholder='Enter your description here...'
                 />
               )}
@@ -402,63 +515,50 @@ const AddEvent = ({ route, navigation }) => {
                   <Text style={styles.sectionText}>Includes</Text>
                 </View>
               </TouchableOpacity>
-              {showCheck && (
-                <View>
-                  <View style={styles.checkboxContainer}>
-                    <Checkbox
-                      style={styles.checkbox}
-                      value={isChecked}
-                      onValueChange={setChecked}
-                      color={isChecked ? theme.colors.primary : undefined}
-                    />
-                    <Text
-                      style={[
-                        styles.sectionText,
-                        { fontFamily: 'Inter-SemiBold' },
-                      ]}
-                    >
-                      Food
-                    </Text>
-                  </View>
-                  <View style={styles.checkboxContainer}>
-                    <Checkbox
-                      style={styles.checkbox}
-                      value={isChecked}
-                      onValueChange={setChecked}
-                      color={isChecked ? theme.colors.primary : undefined}
-                    />
-                    <Text
-                      style={[
-                        styles.sectionText,
-                        { fontFamily: 'Inter-SemiBold' },
-                      ]}
-                    >
-                      Drinks
-                    </Text>
-                  </View>
-                  <View style={styles.checkboxContainer}>
-                    <Checkbox
-                      style={styles.checkbox}
-                      value={isChecked}
-                      onValueChange={setChecked}
-                      color={isChecked ? theme.colors.primary : undefined}
-                    />
-                    <Text
-                      style={[
-                        styles.sectionText,
-                        { fontFamily: 'Inter-SemiBold' },
-                      ]}
-                    >
-                      Games
-                    </Text>
-                  </View>
+              {benefitOptions.map(option => (
+                <View key={option.value} style={styles.checkboxContainer}>
+                  <Checkbox
+                    style={styles.checkbox}
+                    value={values.benefits.includes(option.value)}
+                    onValueChange={isChecked => {
+                      // If the checkbox is checked, add the benefit to the array
+                      if (isChecked) {
+                        setFieldValue('benefits', [
+                          ...values.benefits,
+                          option.value,
+                        ])
+                      } else {
+                        // If the checkbox is unchecked, remove the benefit from the array
+                        setFieldValue(
+                          'benefits',
+                          values.benefits.filter(
+                            benefit => benefit !== option.value
+                          )
+                        )
+                      }
+                    }}
+                    color={
+                      values.benefits.includes(option.value)
+                        ? theme.colors.primary
+                        : undefined
+                    }
+                  />
+                  <Text
+                    style={[
+                      styles.sectionText,
+                      { fontFamily: 'Inter-SemiBold' },
+                    ]}
+                  >
+                    {option.label}
+                  </Text>
                 </View>
-              )}
+              ))}
             </View>
 
             {/*buttons  */}
             <View style={styles.buttonContainer}>
               <TouchableOpacity
+                onPress={handleSubmit}
                 style={[
                   styles.button,
                   { backgroundColor: theme.colors.primary },
@@ -470,7 +570,7 @@ const AddEvent = ({ route, navigation }) => {
               </TouchableOpacity>
               {eventId ? (
                 <TouchableOpacity
-                  onPress={handleSubmit}
+                  onPress={handleDeleteEvent}
                   style={[styles.button, { backgroundColor: 'red' }]}
                 >
                   <Text style={styles.buttonText}>Delete Event</Text>
@@ -479,15 +579,15 @@ const AddEvent = ({ route, navigation }) => {
             </View>
 
             {/* model */}
-            <DatePickerModal
-              startedDate={startedDate}
+            {/* <DatePickerModal
+              // startedDate={startedDate}
               isOpen={openStartDatePicker}
               onClose={handleCloseModal}
-              handleChangeStartDate={handleChangeStartDate}
-              onSelectedChange={date => setSelectedStartDate(date)}
-              selectedTime={selectedTime => setTime(selectedTime)}
+              // handleChangeStartDate={handleChangeStartDate}
+              // onSelectedChange={date => setSelectedStartDate(date)}
+              // selectedTime={selectedTime => setTime(selectedTime)}
               pickerType={pickerType}
-            ></DatePickerModal>
+            ></DatePickerModal> */}
           </ScrollView>
         </KeyboardAvoidingView>
       )}

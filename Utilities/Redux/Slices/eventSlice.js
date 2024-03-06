@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   data: [],
+  currentEvent: null,
   loading: false,
   error: null,
 }
@@ -24,14 +25,16 @@ const eventSlice = createSlice({
     },
     fetchEventByIdSuccess: (state, action) => {
       state.loading = false
+      console.log(action.payload._id)
       const index = state.data.findIndex(
-        event => event.id === action.payload.id
+        event => event._id === action.payload._id
       )
       if (index !== -1) {
         state.data[index] = action.payload
       } else {
         state.data.push(action.payload)
       }
+      state.currentEvent = action.payload
     },
     fetchEventByIdFailure: (state, action) => {
       state.loading = false
@@ -48,7 +51,7 @@ const eventSlice = createSlice({
     updateEventSuccess: (state, action) => {
       state.loading = false
       const index = state.data.findIndex(
-        event => event.id === action.payload.id
+        event => event._id === action.payload._id
       )
       if (index !== -1) {
         state.data[index] = action.payload
@@ -60,7 +63,7 @@ const eventSlice = createSlice({
     },
     deleteEventSuccess: (state, action) => {
       state.loading = false
-      state.data = state.data.filter(event => event.id !== action.payload)
+      state.data = state.data.filter(event => event._id !== action.payload)
     },
     deleteEventFailure: (state, action) => {
       state.loading = false

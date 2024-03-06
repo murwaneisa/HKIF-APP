@@ -2,6 +2,8 @@ import {
   fetchEventsRequest,
   fetchEventsSuccess,
   fetchEventsFailure,
+  addEventSuccess,
+  addEventFailure,
   updateEventSuccess,
   updateEventFailure,
   deleteEventSuccess,
@@ -55,7 +57,7 @@ export const updateExistingEvent = (id, eventData) => async dispatch => {
   try {
     dispatch(fetchEventsRequest())
     await updateEvent(id, eventData)
-    dispatch(updateEventSuccess(eventData))
+    dispatch(updateEventSuccess({ _id: id, ...eventData }))
   } catch (error) {
     dispatch(updateEventFailure(error.message))
   }

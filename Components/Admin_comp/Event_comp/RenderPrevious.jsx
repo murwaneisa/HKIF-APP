@@ -47,7 +47,7 @@ const RenderPrevious = () => {
         <View style={styles.container}>
           {renderHeader()}
           {events.map((event, index) => (
-            <EventCard key={index} event={event} />
+            <EventCard key={index} event={event} previous={true} />
           ))}
         </View>
       ) : (

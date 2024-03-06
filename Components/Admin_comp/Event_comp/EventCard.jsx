@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  Alert,
 } from 'react-native'
 import React from 'react'
 import { useTheme } from '../../../Styles/theme'
@@ -13,25 +14,42 @@ import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 import { deleteExistingEvent } from '../../../Utilities/Redux/Actions/eventActions'
+import DateFormatter from '../../../Utilities/Helper/DateFormatter'
 
 const EventCard = ({ event, previous = false }) => {
   const navigation = useNavigation()
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth, previous)
-
-  const formatDate = dateString => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' }
-    return new Date(dateString).toLocaleDateString(undefined, options)
-  }
-
-  const formatTime = dateString => {
-    const options = { hour: '2-digit', minute: '2-digit' }
-    return new Date(dateString).toLocaleTimeString(undefined, options)
-  }
+  const dispatch = useDispatch()
 
   const handleDelete = id => {
-    dispatch(deleteExistingEvent(id))
+    const deleteConfirmation = () => {
+      console.log('OK Pressed, delete event with ID:', id)
+      dispatch(deleteExistingEvent(id))
+    }
+
+    if (Platform.OS === 'web') {
+      if (window.confirm('Are you sure you want to delete this event?')) {
+        deleteConfirmation()
+      }
+    } else {
+      Alert.alert(
+        'Confirm Delete', // Title
+        'Are you sure you want to delete this event?', // Message
+        [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: deleteConfirmation,
+          },
+        ]
+      )
+    }
   }
 
   return (
@@ -41,10 +59,14 @@ const EventCard = ({ event, previous = false }) => {
         <Text style={styles.title}>{event.title}</Text>
         <View style={styles.dateContainer}>
           <View style={[styles.dateItem, { marginRight: 5 }]}>
-            <Text style={styles.dateText}>{formatDate(event.startTime)}</Text>
+            <Text style={styles.dateText}>
+              {DateFormatter.formatDate(event.startTime)}
+            </Text>
           </View>
           <View style={styles.dateItem}>
-            <Text style={styles.dateText}>{formatTime(event.startTime)}</Text>
+            <Text style={styles.dateText}>
+              {DateFormatter.formatTime(event.startTime)}
+            </Text>
           </View>
         </View>
         <View style={[styles.dateContainer, { marginTop: 5 }]}>
