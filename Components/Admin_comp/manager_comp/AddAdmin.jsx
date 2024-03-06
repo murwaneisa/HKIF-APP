@@ -22,6 +22,7 @@ import {
   deleteAdminThunk,
   getFullAdminInfoByID,
   registerAdmin,
+  registerAdminThunk,
   updateAdmin,
   updateAdminThunk,
 } from '../../../Utilities/Axios/admin'
@@ -29,28 +30,39 @@ import { Formik, useFormikContext } from 'formik'
 import * as Yup from 'yup'
 import { useDispatch, useSelector } from 'react-redux'
 
-const adminValidationSchema = Yup.object().shape({
-  firstName: Yup.string().required('Please enter a first name'),
-  lastName: Yup.string().required('Please enter a last name'),
-  email: Yup.string()
-    .email('Please enter a valid email')
-    .required('Email is required'),
-  phoneNumber: Yup.string()
-    .matches(/^\d{10}$/, 'Please enter a valid 10-digit phone number')
-    .required('Phone number is required'),
-  role: Yup.array()
-    .min(1, 'Please select at least one role')
-    .required('Roles are required'),
-})
+// Function to get dynamic validation schema
+const getAdminValidationSchema = adminId => {
+  let schemaFields = {
+    firstName: Yup.string().required('Please enter a first name'),
+    lastName: Yup.string().required('Please enter a last name'),
+    email: Yup.string()
+      .email('Please enter a valid email')
+      .required('Email is required'),
+    phoneNumber: Yup.string()
+      .matches(/^\d{10}$/, 'Please enter a valid 10-digit phone number')
+      .required('Phone number is required'),
+    role: Yup.array()
+      .min(1, 'Please select at least one role')
+      .required('Roles are required'),
+  }
 
-const AddAdmin = ({ route }) => {
+  // Add password validation only if there's no adminId (i.e., adding a new admin)
+  if (!adminId) {
+    schemaFields.password = Yup.string()
+      .required('Password is required')
+      .min(8, 'Password must be at least 8 characters long')
+  }
+
+  return Yup.object().shape(schemaFields)
+}
+
+const AddAdmin = ({ route, navigation }) => {
   const dispatch = useDispatch()
   const admins = useSelector(state => state.admin.data)
   console.log('the admins', admins)
   const { theme, isDarkMode } = useTheme()
   const { adminId } = route?.params || {}
-  const [password, setPassword] = useState('')
-  const [passwordError, setPasswordError] = useState(null)
+  const adminValidationSchema = getAdminValidationSchema(adminId)
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const [initialFormValues, setInitialFormValues] = useState({
     firstName: '',
@@ -59,6 +71,7 @@ const AddAdmin = ({ route }) => {
     phoneNumber: '',
     role: [],
     image: '',
+    _id: '',
   })
   const data = [
     { label: 'Activity manager', value: 'ACTIVITY_MANAGER' },
@@ -70,6 +83,7 @@ const AddAdmin = ({ route }) => {
       if (adminId) {
         try {
           const adminInfo = await getFullAdminInfoByID(adminId)
+          console.log('the admin info', adminInfo)
           setInitialFormValues({
             firstName: adminInfo.firstName || '',
             lastName: adminInfo.lastName || '',
@@ -77,10 +91,21 @@ const AddAdmin = ({ route }) => {
             phoneNumber: adminInfo.phoneNumber || '',
             role: adminInfo.role || [], // Adjust according to your roles data structure
             image: adminInfo.imageUrl || '',
+            _id: adminInfo._id || '',
           })
         } catch (error) {
           console.error('Error fetching admin info:', error)
         }
+      } else {
+        setInitialFormValues({
+          firstName: '',
+          lastName: '',
+          email: '',
+          phoneNumber: '',
+          role: [],
+          image: '',
+          password: '', // Add this line to include the password in the initial form values
+        })
       }
     }
     fetchAdminInfo()
@@ -119,66 +144,57 @@ const AddAdmin = ({ route }) => {
     }
   }
 
-  // Define a password validation function
-  function validatePassword(value) {
-    if (!value) {
-      return 'Password is required'
-    } else if (value.length < 8) {
-      return 'Password must be at least 8 characters long'
-    }
-    // Add any other password requirements here
-    return ''
-  }
-  // Function to handle password validation
-  const handlePasswordChange = value => {
-    setPassword(value)
-    const error = validatePassword(value)
-    setPasswordError(error)
-  }
-
-  const handleFormSubmit = async values => {
-    console.log('the form values', values)
-    let SUBMISSIONVALUES = { ...values }
+  const handleFormSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
       if (adminId) {
-        console.log('the initial form values', values)
+        // If adminId exists, update the admin
         const response = await dispatch(
           updateAdminThunk({ adminId: adminId, updates: values })
         )
-        console.log('the update response ', response)
-        if (response.payload.message === 'Admin updated successfully') {
+
+        console.log('the response', response.payload)
+        if (
+          response.payload &&
+          response.payload.message === 'Admin updated successfully'
+        ) {
           console.log(response.payload.message)
+          // Optionally reset form here if needed
         }
       } else {
-        // Create new admin logic using values, including password validation
-        SUBMISSIONVALUES = { ...SUBMISSIONVALUES, password: password }
-        console.log('the form submission values ', SUBMISSIONVALUES)
-        const registerResponse = await registerAdmin(SUBMISSIONVALUES)
-        console.log('the status code value ', registerResponse.status)
-        if (registerResponse.status === 201) {
-          setFieldValue({
-            firstName: '',
-            lastName: '',
-            email: '',
-            phoneNumber: '',
-            role: [],
-            image: '',
-          })
+        // If adminId does not exist, register a new admin
+        console.log('values in the create admin', registerResponse)
+        const registerResponse = await dispatch(registerAdminThunk(values))
+
+        // Check if the registration was successful
+        if (registerResponse.meta.requestStatus === 'fulfilled') {
+          // Reset the form fields to initial values after successful registration
+          resetForm()
+          // Optionally navigate away or provide feedback to the user
+          Alert.alert('Success', 'Admin registered successfully')
         }
       }
     } catch (error) {
       console.error('Error submitting form:', error)
       // Handle form submission errors appropriately (e.g., display error message)
+    } finally {
+      setSubmitting(false) // Ensure to stop the submission process
     }
   }
   const handleDelete = async () => {
     //To do: navigate the admin after you delete
     const response = await dispatch(deleteAdminThunk(adminId))
-    console.log(
-      'the response in handle delete function',
-      response.meta.requestStatus
-    )
+    Alert.alert('Success', 'Admin deleted successfully', [
+      { text: 'OK', onPress: () => navigation.goBack() },
+    ])
+    if (response.status === 200) {
+      console.log(
+        'the response in handle delete function',
+        response.meta.requestStatus
+      )
+    } else {
+    }
   }
+
   return (
     <Formik
       initialValues={initialFormValues}
@@ -288,35 +304,33 @@ const AddAdmin = ({ route }) => {
                   <Text style={styles.errorText}>{errors.phoneNumber}</Text>
                 )}
                 {!adminId && (
-                  <View style={styles.passwordContainer}>
-                    <TextInput
-                      placeholder='Password*'
-                      value={password}
-                      onChangeText={handlePasswordChange}
-                      onBlur={() =>
-                        setPasswordError(validatePassword(password))
-                      }
-                      placeholderTextColor={theme.colors.text}
-                      secureTextEntry={!isPasswordVisible}
-                      style={[styles.input, { marginVertical: 0 }]}
-                    />
-                    <TouchableOpacity
-                      style={styles.visibilityToggle}
-                      onPress={togglePasswordVisibility}
-                    >
-                      <Feather
-                        name={isPasswordVisible ? 'eye-off' : 'eye'}
-                        size={24}
-                        color={theme.colors.text}
+                  <>
+                    <View style={styles.passwordContainer}>
+                      <TextInput
+                        placeholder='Password*'
+                        value={values.password}
+                        onChangeText={handleChange('password')}
+                        onBlur={handleBlur('password')}
+                        placeholderTextColor={theme.colors.text}
+                        secureTextEntry={!isPasswordVisible}
+                        style={[styles.input, { marginVertical: 0 }]}
                       />
-                    </TouchableOpacity>
-                  </View>
+                      <TouchableOpacity
+                        style={styles.visibilityToggle}
+                        onPress={togglePasswordVisibility}
+                      >
+                        <Feather
+                          name={isPasswordVisible ? 'eye-off' : 'eye'}
+                          size={24}
+                          color={theme.colors.text}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                    {errors.password && touched.password && (
+                      <Text style={styles.errorText}>{errors.password}</Text>
+                    )}
+                  </>
                 )}
-
-                {passwordError ? (
-                  <Text style={styles.errorText}>{passwordError}</Text>
-                ) : null}
-
                 {/*buttons  */}
                 <View style={styles.buttonContainer}>
                   <Pressable
@@ -324,7 +338,7 @@ const AddAdmin = ({ route }) => {
                       styles.button,
                       {
                         backgroundColor:
-                          isValid && dirty && passwordError == null
+                          isValid && dirty
                             ? theme.colors.primary
                             : theme.colors.primary200,
                       },

@@ -68,6 +68,10 @@ export const updateAdminThunk = createAsyncThunk(
         `${adminSuffix}/edit/${adminId}`,
         updates
       )
+      console.log(
+        'the reponse data int eh create thunk function',
+        response.data
+      )
       return response.data // Assuming the updated admin data is returned
     } catch (error) {
       console.error('Updating admin failed:', error)
@@ -82,7 +86,6 @@ export const deleteAdminThunk = createAsyncThunk(
   async (adminId, { rejectWithValue }) => {
     try {
       const response = await baseInstance.delete(`${adminSuffix}/${adminId}`)
-      console.log('Deleted admin response:', response)
       return adminId // Return the adminId to identify which admin was deleted
     } catch (error) {
       console.error('Deleting admin failed:', error)
@@ -91,12 +94,17 @@ export const deleteAdminThunk = createAsyncThunk(
   }
 )
 
-export const registerAdmin = async info => {
-  console.log('the admin information ', info)
-  try {
-    const response = await baseInstance.post(`${adminSuffix}/register`, info)
-    return response
-  } catch (error) {
-    console.error('Get Information failed:', error)
+export const registerAdminThunk = createAsyncThunk(
+  'admin/registerStatus',
+  async (info, { rejectWithValue }) => {
+    try {
+      const response = await baseInstance.post(`${adminSuffix}/register`, info)
+      return response.data
+    } catch (error) {
+      console.error('register admin failed:', error)
+      return rejectWithValue(
+        error.response ? error.response.data : error.message
+      )
+    }
   }
-}
+)

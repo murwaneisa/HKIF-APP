@@ -52,7 +52,6 @@ export const getAdmin = id => async dispatch => {
   try {
     dispatch(fetchAdminRequest())
     const data = await fetchAdmin(id)
-    console.log('the admin data  in the action function', data.data)
     dispatch(fetchAdminsSuccess(data.data))
   } catch (error) {
     dispatch(fetchAdminFailure(error.message))

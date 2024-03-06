@@ -1,5 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { deleteAdminThunk, updateAdminThunk } from '../../Axios/admin'
+import {
+  deleteAdminThunk,
+  registerAdminThunk,
+  updateAdminThunk,
+} from '../../Axios/admin'
 
 const initialState = {
   data: [],
@@ -34,18 +38,32 @@ const adminSlice = createSlice({
   },
   extraReducers: builder => {
     builder
+      // case to update an admin
       .addCase(updateAdminThunk.fulfilled, (state, action) => {
         const index = state.data.findIndex(
-          admin => admin._id === action.payload.id
+          admin => admin._id === action.payload._id
         )
         if (index !== -1) {
           state.data[index] = action.payload
         }
       })
+      // delete case for delete an admin
       .addCase(deleteAdminThunk.fulfilled, (state, action) => {
-        state.data = state.data.filter(admin => admin !== action.payload)
+        state.data = state.data.filter(admin => admin._id !== action.payload)
       })
-    // You may also handle pending and rejected states for loading indicators or error messages
+      // Add cases for register an admin
+      .addCase(registerAdminThunk.pending, state => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(registerAdminThunk.fulfilled, (state, action) => {
+        state.loading = false
+        state.data.push(action.payload)
+      })
+      .addCase(registerAdminThunk.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload
+      })
   },
 })
 
