@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   View,
   Text,
@@ -6,19 +6,26 @@ import {
   StyleSheet,
   Platform,
   Dimensions,
+  Alert,
 } from 'react-native'
 import { useTheme } from '../../Styles/theme'
 import { useNavigation } from '@react-navigation/native'
 import RenderAdmins from '../../Components/Admin_comp/manager_comp/RenderAdmins'
 import AddAdmin from '../../Components/Admin_comp/manager_comp/AddAdmin'
 
+import { useDispatch, useSelector } from 'react-redux'
+import { getAdmins } from '../../Utilities/Redux/Actions/adminActions'
+
 const Admins = () => {
   const windowWidth = Dimensions.get('window').width
+  const admins = useSelector(state => state.admin.data)
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
   const [activeList, setActiveList] = useState('admins')
-  const [user, setUser] = useState({ role: 'superAdmin' })
   const navigation = useNavigation()
+  const dispatch = useDispatch()
+  const admin = useSelector(state => state.admin.currentAdmin)
+  const [user, setUser] = useState(admin.role.includes('SUPERADMIN'))
 
   const getButtonStyle = listName => ({
     flex: 1,
@@ -34,12 +41,30 @@ const Admins = () => {
   })
 
   const handlePress = listName => {
-    if (listName === 'createAdmin' && user.role !== 'superAdmin') {
-      return // You can also use Alert.alert to inform the user they don't have permission
+    if (listName === 'createAdmin' && !user) {
+      Alert.alert(
+        'Access Denied', // Title of the alert
+        'You do not have permission to view this section.', // Message of the alert
+        [
+          { text: 'OK', onPress: () => console.log('OK Pressed') }, // Button to dismiss the alert
+        ]
+      )
+      return
     }
     setActiveList(listName)
   }
+  useEffect(() => {
+    console.log('the use effect is invoked ')
+    const fetchAdmins = async () => {
+      try {
+        dispatch(getAdmins())
+      } catch (error) {
+        console.error('Error fetching admins:', error)
+      }
+    }
 
+    fetchAdmins()
+  }, [])
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
@@ -65,10 +90,10 @@ const Admins = () => {
         <Pressable
           style={({ pressed }) => [
             getButtonStyle('createAdmin'),
-            pressed && user.role === 'superAdmin' && styles.pressed,
+            pressed && user && styles.pressed,
           ]}
           onPress={() => handlePress('createAdmin')}
-          disabled={user.role !== 'superAdmin'} // Disable if not super admin
+          /*  disabled={!user} // Disable if not super admin */
         >
           {({ pressed }) => (
             <Text
