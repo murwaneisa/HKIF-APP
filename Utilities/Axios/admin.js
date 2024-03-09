@@ -1,6 +1,6 @@
 import baseInstance from './api'
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { storeAccessToken, storeRefreshToken, storeUserID } from './storage'
+import { resetUser, storeAccessToken, storeRefreshToken, storeUserID } from './storage'
 
 const adminSuffix = '/admins'
 
@@ -25,6 +25,9 @@ export const getFullAdminInfoByID = async adminId => {
     const response = await baseInstance.get(`${adminSuffix}/${adminId}`)
     return response.data
   } catch (error) {
+    if (error.response.status === '401') {
+      await resetUser()
+    }
     console.error('Admin Get Information failed:', JSON.stringify(error))
   }
 }

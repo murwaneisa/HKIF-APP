@@ -8,17 +8,16 @@ import {
   Dimensions,
 } from 'react-native'
 import { useTheme } from '../../Styles/theme'
-import RenderRequests from '../../Components/Admin_comp/Users_comp/RenderRequests'
-import RenderMembers from '../../Components/Admin_comp/Users_comp/RenderMembers'
 import RenderCurrent from '../../Components/Admin_comp/Event_comp/RenderCurrent'
 import RenderPrevious from '../../Components/Admin_comp/Event_comp/RenderPrevious'
+import { useSelector } from 'react-redux'
 
 const Events = () => {
+  const admin = useSelector(state => state.admin.currentAdmin)
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
   const [activeList, setActiveList] = useState('current')
-  const [user, setUser] = useState({ role: 'superAdmin' })
 
   const getButtonStyle = listName => ({
     flex: 1,
@@ -34,8 +33,16 @@ const Events = () => {
   })
 
   const handlePress = listName => {
-    if (listName === 'previous' && user.role !== 'superAdmin') {
-      return // You can also use Alert.alert to inform the user they don't have permission
+    if (
+      listName === 'previous' &&
+      !admin.role.includes('SUPERADMIN') &&
+      !admin.role.includes('EVENTMANAGER')
+    ) {
+      Alert.alert(
+        'Restricted Access',
+        "You don't have permission to view previous events."
+      )
+      return
     }
     setActiveList(listName)
   }
@@ -65,10 +72,10 @@ const Events = () => {
         <Pressable
           style={({ pressed }) => [
             getButtonStyle('previous'),
-            pressed && user.role === 'superAdmin' && styles.pressed,
+            pressed && admin.role.includes('SUPERADMIN') && styles.pressed,
           ]}
           onPress={() => handlePress('previous')}
-          disabled={user.role !== 'superAdmin'} // Disable if not super admin
+          disabled={!admin.role.includes('SUPERADMIN')} // Disable if not super admin
         >
           {({ pressed }) => (
             <Text

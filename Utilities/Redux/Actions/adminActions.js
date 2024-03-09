@@ -23,7 +23,7 @@ export const loginAndSetAdmin = (email, password) => async dispatch => {
   }
 }
 
-export const checkAndSetAdmin = adminId => async dispatch => {
+export const checkIfAdminIsLoggedIn = adminId => async dispatch => {
   const admin = await getFullAdminInfoByID(adminId)
   if (admin) {
     dispatch(setAdmin(admin))

@@ -3,8 +3,7 @@ import { Platform, StyleSheet, Text, View } from 'react-native'
 import { useTheme } from '../../Styles/theme'
 import { Dropdown } from 'react-native-element-dropdown'
 
-const DropdownList = ({ label, placeholder, data }) => {
-  const [value, setValue] = useState(null)
+const DropdownList = ({ label, placeholder, value, handleChange, data }) => {
   const [isFocus, setIsFocus] = useState(false)
   const { theme } = useTheme()
   const styles = getStyles(theme)
@@ -35,7 +34,7 @@ const DropdownList = ({ label, placeholder, data }) => {
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             onChange={item => {
-              setValue(item.value)
+              handleChange(item.value)
               setIsFocus(false)
             }}
           />
@@ -56,7 +55,7 @@ const DropdownList = ({ label, placeholder, data }) => {
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             onChange={item => {
-              setValue(item.value)
+              handleChange(item.value)
               setIsFocus(false)
             }}
           />
@@ -70,8 +69,6 @@ export default DropdownList
 const getStyles = theme =>
   StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.accent,
-      backgroundColor: 'white',
       marginHorizontal: 4,
       marginVertical: 8,
       borderRadius: 6,
@@ -102,10 +99,11 @@ const getStyles = theme =>
     },
     placeholderStyle: {
       fontSize: 16,
-      color: theme.colors.sccent,
+      color: theme.colors.text,
     },
     selectedTextStyle: {
       fontSize: 16,
+      color: theme.colors.text,
     },
     iconStyle: {
       width: 20,

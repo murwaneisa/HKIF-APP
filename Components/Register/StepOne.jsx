@@ -1,94 +1,99 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import Input from '../../Utilities/UI/Input'
 import PrimaryButton from '../../Utilities/UI/PrimaryButton'
 import GoogleButton from '../../Utilities/UI/GoogleButton'
+import { useDispatch, useSelector } from 'react-redux'
+import { updateStepOneData } from '../../Utilities/Redux/Slices/registrationSlice'
+import { Formik } from 'formik'
+import * as yup from 'yup'
 
-const StepOne = ({
-  styles,
-  goToNextStep,
-  passwordVisible,
-  confirmPasswordVisible,
-}) => {
+const validationSchema = yup.object().shape({
+  firstName: yup.string().required('Please enter a first name'),
+  lastName: yup.string().required('Please enter a last name'),
+})
+
+const stepOne = ({ styles, goToNextStep }) => {
+  const dispatch = useDispatch()
+  const { firstName, lastName } = useSelector(state => state.registration)
+  const [userInfo, setUserInfo] = useState({
+    firstName: '',
+    lastName: '',
+  })
+
+  useEffect(() => {
+    setUserInfo({ firstName: firstName || '', lastName: lastName || '' })
+  }, [firstName, lastName])
+
+  const handleFormSubmit = async values => {
+    try {
+      dispatch(updateStepOneData({ ...values }))
+      goToNextStep()
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
-    <>
-      <Text style={styles.headerText}>
-        <Text> Welcome to </Text>
-        <Text style={styles.hkifText}>HKIF</Text>
-      </Text>
-      <Input
-        label='First Name'
-        textInputConfig={{
-          autoCorrect: false,
-          autoCapitalize: 'words',
-        }}
-      />
-      <Input
-        label='Last Name'
-        textInputConfig={{
-          autoCorrect: false,
-          autoCapitalize: 'words',
-        }}
-      />
-      <Input
-        label='Email Address'
-        textInputConfig={{
-          autoCorrect: false,
-        }}
-      />
-      <Input
-        label='Password'
-        textInputConfig={{
-          secureTextEntry: !passwordVisible, // Hide the password by default
-          autoCapitalize: 'none', // Do not auto-capitalize any characters
-          autoCorrect: false, // Disable auto-correct
-          returnKeyType: 'done', // Set the return key to "done"
-        }}
-        // Add a right icon or button to toggle password visibility
-        rightIcon={
-          <TouchableOpacity onPress={() => setPasswordVisible(prev => !prev)}>
-            <Text>{passwordVisible ? 'Hide' : 'Show'}</Text>
-          </TouchableOpacity>
-        }
-      />
-      <Input
-        label='Confirm Password'
-        textInputConfig={{
-          secureTextEntry: !confirmPasswordVisible, // Hide the password by default
-          autoCapitalize: 'none', // Do not auto-capitalize any characters
-          autoCorrect: false, // Disable auto-correct
-          returnKeyType: 'done', // Set the return key to "done"
-        }}
-        // Add a right icon or button to toggle password visibility
-        rightIcon={
-          <TouchableOpacity
-            onPress={() => setConfirmPasswordVisible(prev => !prev)}
-          >
-            <Text>{confirmPasswordVisible ? 'Hide' : 'Show'}</Text>
-          </TouchableOpacity>
-        }
-      />
-      <View style={styles.buttonsContainer}>
-        <View style={styles.buttonWrapper}>
-          <PrimaryButton
-            style={{ marginBottom: 10, width: '100%' }}
-            paddingVertical={40}
-            paddingHorizontal={12}
-            onLongPress={() => setShowAdminButton(true)}
-            onPress={goToNextStep}
-          >
-            Continue
-          </PrimaryButton>
-        </View>
-        <Text style={styles.textStyle}>OR </Text>
-        <View style={styles.buttonWrapper}>
-          <GoogleButton paddingVertical={98} paddingHorizontal={12}>
-            Sign Up with Google
-          </GoogleButton>
-        </View>
-      </View>
-    </>
+    <Formik
+      initialValues={userInfo}
+      enableReinitialize
+      validationSchema={validationSchema}
+      onSubmit={handleFormSubmit}
+    >
+      {({
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        values,
+        errors,
+        touched,
+      }) => (
+        <>
+          <Input
+            label='First Name'
+            value={values.firstName}
+            onBlur={handleBlur('firstName')}
+            onChangeText={handleChange('firstName')}
+            autoCorrect={false}
+            autoCapitalize={'words'}
+          />
+          {errors.firstName && touched.firstName && (
+            <Text style={styles.errorText}>{errors.firstName}</Text>
+          )}
+          <Input
+            label='Last Name'
+            value={values.lastName}
+            onBlur={handleBlur('lastName')}
+            onChangeText={handleChange('lastName')}
+            autoCorrect={false}
+            autoCapitalize={'words'}
+          />
+          {errors.lastName && touched.lastName && (
+            <Text style={styles.errorText}>{errors.lastName}</Text>
+          )}
+          <View style={styles.buttonsContainer}>
+            <View style={styles.buttonWrapper}>
+              <PrimaryButton
+                style={{ marginBottom: 10, width: '100%' }}
+                paddingVertical={40}
+                paddingHorizontal={12}
+                onPress={handleSubmit}
+              >
+                Continue
+              </PrimaryButton>
+            </View>
+            <Text style={styles.textStyle}>OR </Text>
+            <View style={styles.buttonWrapper}>
+              <GoogleButton paddingVertical={98} paddingHorizontal={12}>
+                Sign Up with Google
+              </GoogleButton>
+            </View>
+          </View>
+        </>
+      )}
+    </Formik>
   )
 }
 
-export default StepOne
+export default stepOne

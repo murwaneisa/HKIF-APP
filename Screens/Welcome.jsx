@@ -1,34 +1,51 @@
-// WelcomeScreen.js
-import React, { useEffect, useContext } from 'react'
-import { View, Text, Image, StyleSheet } from 'react-native'
-import { FontLoadContext, useTheme } from '../Styles/theme'
+import React from 'react'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+  Image,
+  TouchableOpacity,
+} from 'react-native'
+import { useTheme } from '../Styles/theme'
+import PrimaryButton from '../Utilities/UI/PrimaryButton'
 
-const Welcome = ({ navigation }) => {
-  const fontsLoaded = useContext(FontLoadContext)
+function Welcome({ navigation }) {
   const { theme } = useTheme()
-
-  useEffect(() => {
-    if (fontsLoaded) {
-      const timer = setTimeout(() => {
-        navigation.navigate('Login')
-      }, 3000) // 3 seconds
-
-      return () => clearTimeout(timer) // Cleanup the timer
-    }
-  }, [fontsLoaded, navigation])
-
   const styles = getStyles(theme)
-
+  const handleGuestLogin = () => {
+    navigation.navigate('Home')
+  }
   return (
     <View style={styles.container}>
-      <Image
-        style={styles.logo}
-        source={require('../Assets/images/icon.png')}
-      />
-      <Text style={styles.welcomeText}>
-        Högskolan Kristianstads idrottsförening
-      </Text>
-      {/* Optionally add a button to navigate to the main app */}
+      <View style={styles.imageContainer}>
+        <Image
+          style={{ width: '100%', height: '100%' }}
+          source={require('../Assets/images/sports_icon.png')}
+          resizeMode='contain'
+        />
+      </View>
+      <View styles={styles.buttonsContainer}>
+        <View style={styles.buttonWrapper}>
+          <PrimaryButton
+            paddingVertical={98}
+            paddingHorizontal={12}
+            onPress={() => navigation.navigate('Login')}
+          >
+            Login
+          </PrimaryButton>
+        </View>
+        <PrimaryButton
+          paddingVertical={88}
+          paddingHorizontal={12}
+          onPress={() => navigation.navigate('Register')}
+        >
+          Register
+        </PrimaryButton>
+        <TouchableOpacity onPress={handleGuestLogin}>
+          <Text style={styles.textStyle}>Login as Guest</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   )
 }
@@ -37,21 +54,32 @@ const getStyles = theme =>
   StyleSheet.create({
     container: {
       flex: 1,
+      backgroundColor: theme.colors.backgroundPrimary,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: theme.colors.primary,
     },
-    logo: {
-      maxWidth: '70%',
-      maxHeight: '70%',
+    imageContainer: {
+      height: '60%',
+      width: '100%',
+      padding: '5%',
     },
-    welcomeText: {
-      color: theme.colors.text,
-      marginTop: 20,
-      fontSize: 24,
-      fontWeight: 'bold',
+    buttonsContainer: {
+      backgroundColor: theme.colors.backgroundPrimary,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    buttonWrapper: {
+      marginBottom: 10,
+    },
+    textStyle: {
+      fontFamily: 'Inter-SemiBold',
+      paddingTop: '6%',
+      color: theme.colors.primary,
       textAlign: 'center',
+      fontSize: Platform.select({
+        ios: 15,
+        android: 15,
+      }),
     },
   })
-
 export default Welcome
