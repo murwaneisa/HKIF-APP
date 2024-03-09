@@ -6,33 +6,67 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  Alert,
 } from 'react-native'
 import React from 'react'
 import { useTheme } from '../../../Styles/theme'
-import { useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+import { useDispatch } from 'react-redux'
+import { deleteExistingEvent } from '../../../Utilities/Redux/Actions/eventActions'
+import DateFormatter from '../../../Utilities/Helper/DateFormatter'
 
-const EventCard = ({ event, previous }) => {
+const EventCard = ({ event, previous = false }) => {
   const navigation = useNavigation()
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth, previous)
-  const [user, setUser] = useState({ role: 'superAdmin' })
+  const dispatch = useDispatch()
+
+  const handleDelete = id => {
+    const deleteConfirmation = () => {
+      console.log('OK Pressed, delete event with ID:', id)
+      dispatch(deleteExistingEvent(id))
+    }
+
+    if (Platform.OS === 'web') {
+      if (window.confirm('Are you sure you want to delete this event?')) {
+        deleteConfirmation()
+      }
+    } else {
+      Alert.alert(
+        'Confirm Delete', // Title
+        'Are you sure you want to delete this event?', // Message
+        [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: deleteConfirmation,
+          },
+        ]
+      )
+    }
+  }
+
   return (
     <View style={styles.cardContainer}>
-      <Image
-        source={{ uri: event.imageUrl }} // Replace with your image URL
-        style={styles.image}
-      />
+      <Image source={{ uri: event.imageUrl }} style={styles.image} />
       <View style={styles.textContainer}>
         <Text style={styles.title}>{event.title}</Text>
         <View style={styles.dateContainer}>
           <View style={[styles.dateItem, { marginRight: 5 }]}>
-            <Text style={styles.dateText}>{event.date}</Text>
+            <Text style={styles.dateText}>
+              {DateFormatter.formatDate(event.startTime)}
+            </Text>
           </View>
           <View style={styles.dateItem}>
-            <Text style={styles.dateText}>{event.startTime}</Text>
+            <Text style={styles.dateText}>
+              {DateFormatter.formatTime(event.startTime)}
+            </Text>
           </View>
         </View>
         <View style={[styles.dateContainer, { marginTop: 5 }]}>
@@ -47,15 +81,18 @@ const EventCard = ({ event, previous }) => {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate('AddEvent', { eventId: 'event.id' })
+            navigation.navigate('AddEvent', { eventId: event._id })
           }
           style={[styles.button, { backgroundColor: theme.colors.primary }]}
         >
           <Text style={styles.buttonText}>{previous ? 'Publish' : 'View'}</Text>
         </TouchableOpacity>
         {previous ? (
-          <TouchableOpacity style={[styles.button, { backgroundColor: 'red' }]}>
-            <Text style={styles.buttonText}>delete</Text>
+          <TouchableOpacity
+            onPress={() => handleDelete(event._id)}
+            style={[styles.button, { backgroundColor: 'red' }]}
+          >
+            <Text style={styles.buttonText}>Delete</Text>
           </TouchableOpacity>
         ) : null}
       </View>
