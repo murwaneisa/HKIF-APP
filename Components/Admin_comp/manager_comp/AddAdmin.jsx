@@ -7,21 +7,112 @@ import {
   TextInput,
   KeyboardAvoidingView,
   ScrollView,
+  Pressable,
+  Alert,
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTheme } from '../../../Styles/theme'
 import { Platform } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons'
 import DropdownRole from '../DropdownRole'
 import HKIFImagePicker from '../../../Utilities/Helper/HKIFImagePicker'
+import {
+  deleteAdmin,
+  deleteAdminThunk,
+  getFullAdminInfoByID,
+  registerAdmin,
+  registerAdminThunk,
+  updateAdmin,
+  updateAdminThunk,
+} from '../../../Utilities/Axios/admin'
+import { Formik, useFormikContext } from 'formik'
+import * as Yup from 'yup'
+import { useDispatch, useSelector } from 'react-redux'
 
-const AddAdmin = ({ route }) => {
+// Function to get dynamic validation schema
+const getAdminValidationSchema = adminId => {
+  let schemaFields = {
+    firstName: Yup.string().required('Please enter a first name'),
+    lastName: Yup.string().required('Please enter a last name'),
+    email: Yup.string()
+      .email('Please enter a valid email')
+      .required('Email is required'),
+    phoneNumber: Yup.string()
+      .matches(/^\d{10}$/, 'Please enter a valid 10-digit phone number')
+      .required('Phone number is required'),
+    role: Yup.array()
+      .min(1, 'Please select at least one role')
+      .required('Roles are required'),
+  }
+
+  // Add password validation only if there's no adminId (i.e., adding a new admin)
+  if (!adminId) {
+    schemaFields.password = Yup.string()
+      .required('Password is required')
+      .min(8, 'Password must be at least 8 characters long')
+  }
+
+  return Yup.object().shape(schemaFields)
+}
+
+const AddAdmin = ({ route, navigation }) => {
+  const dispatch = useDispatch()
+  const admins = useSelector(state => state.admin.data)
+  console.log('the admins', admins)
   const { theme, isDarkMode } = useTheme()
-  const { leaderId } = route?.params || {}
+  const { adminId } = route?.params || {}
+  const adminValidationSchema = getAdminValidationSchema(adminId)
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+  const [initialFormValues, setInitialFormValues] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    role: [],
+    image: '',
+    _id: '',
+  })
+  const data = [
+    { label: 'Activity manager', value: 'ACTIVITY_MANAGER' },
+    { label: 'Event manager', value: 'EVENT_MANAGER' },
+  ]
+
+  useEffect(() => {
+    const fetchAdminInfo = async () => {
+      if (adminId) {
+        try {
+          const adminInfo = await getFullAdminInfoByID(adminId)
+          console.log('the admin info', adminInfo)
+          setInitialFormValues({
+            firstName: adminInfo.firstName || '',
+            lastName: adminInfo.lastName || '',
+            email: adminInfo.email || '',
+            phoneNumber: adminInfo.phoneNumber || '',
+            role: adminInfo.role || [], // Adjust according to your roles data structure
+            image: adminInfo.imageUrl || '',
+            _id: adminInfo._id || '',
+          })
+        } catch (error) {
+          console.error('Error fetching admin info:', error)
+        }
+      } else {
+        setInitialFormValues({
+          firstName: '',
+          lastName: '',
+          email: '',
+          phoneNumber: '',
+          role: [],
+          image: '',
+          password: '', // Add this line to include the password in the initial form values
+        })
+      }
+    }
+    fetchAdminInfo()
+  }, [adminId])
+
   const [image, setImage] = useState(null)
   const [isFormValid, setIsFormValid] = useState(false)
-  console.log(image)
   const styles = getStyles(theme, isDarkMode)
   const userIcon = Platform.select({
     ios: 50,
@@ -33,10 +124,6 @@ const AddAdmin = ({ route }) => {
     android: 28,
     web: 45,
   })
-  // State to manage if the password is visible or not
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
-  const [selectedRoles, setSelectedRoles] = useState([])
-  console.log('the selection role', selectedRoles)
 
   // Function to toggle password visibility
   const togglePasswordVisibility = () => {
@@ -47,6 +134,7 @@ const AddAdmin = ({ route }) => {
     const uri = await HKIFImagePicker.pickImage()
     if (uri) {
       setImage(uri)
+      await handleUploadImage()
     }
   }
 
@@ -56,272 +144,229 @@ const AddAdmin = ({ route }) => {
     }
   }
 
-  // 1. Setting up state for input validation
-  const [form, setForm] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    password: '',
-    roles: [],
-  })
+  const handleFormSubmit = async (values, { setSubmitting, resetForm }) => {
+    try {
+      if (adminId) {
+        // If adminId exists, update the admin
+        const response = await dispatch(
+          updateAdminThunk({ adminId: adminId, updates: values })
+        )
 
-  const [formErrors, setFormErrors] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    password: '',
-    roles: '',
-  })
+        console.log('the response', response.payload)
+        if (
+          response.payload &&
+          response.payload.message === 'Admin updated successfully'
+        ) {
+          console.log(response.payload.message)
+          // Optionally reset form here if needed
+        }
+      } else {
+        // If adminId does not exist, register a new admin
+        console.log('values in the create admin', registerResponse)
+        const registerResponse = await dispatch(registerAdminThunk(values))
 
-  const validateInput = (name, value, selectedRoles) => {
-    // Add your validation logic here for different fields
-    let error = ''
-    switch (name) {
-      case 'firstName':
-        if (value === '') {
-          error = 'Please enter a first name'
+        // Check if the registration was successful
+        if (registerResponse.meta.requestStatus === 'fulfilled') {
+          // Reset the form fields to initial values after successful registration
+          resetForm()
+          // Optionally navigate away or provide feedback to the user
+          Alert.alert('Success', 'Admin registered successfully')
         }
-        break
-      case 'lastName':
-        if (value === '') {
-          error = 'Please enter a last name'
-        }
-        break
-      case 'email':
-        // simple email regex, you might want a better one
-        if (!/\S+@\S+\.\S+/.test(value)) {
-          error = 'Please enter a valid email'
-        }
-        break
-      case 'phone':
-        if (!/^\d{10}$/.test(value)) {
-          // Example for US numbers
-          error = 'Please enter a valid 10-digit phone number'
-        }
-        break
-      case 'password':
-        if (value === '') {
-          error = 'Please enter a password'
-        }
-        break
-      case 'roles':
-        if (!selectedRoles || selectedRoles.length === 0) {
-          error = 'Please select an activity'
-        }
-        break
-      // ... add other case checks as needed
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error)
+      // Handle form submission errors appropriately (e.g., display error message)
+    } finally {
+      setSubmitting(false) // Ensure to stop the submission process
     }
-    return error
   }
-
-  const handleSelectionChange = selectedItems => {
-    setSelectedRoles(selectedItems)
-    // Update form state with the new roles
-    setForm(prevForm => ({ ...prevForm, roles: selectedItems }))
-    // Validate the roles field and update formErrors
-    const error = validateInput('roles', null, selectedItems)
-    setFormErrors(prevErrors => ({ ...prevErrors, roles: error }))
-    // Update form validation status
-    validateForm(
-      { ...form, roles: selectedItems },
-      { ...formErrors, roles: error }
-    )
-  }
-
-  const handleInputChange = (name, value) => {
-    // Update the form state and validate in sequence
-    const newFormState = { ...form, [name]: value }
-    const error = validateInput(name, value)
-    const newErrors = { ...formErrors, [name]: error }
-
-    setForm(newFormState)
-    setFormErrors(newErrors)
-    // Now validate form with updated values
-    validateForm(newFormState, newErrors)
-  }
-
-  const validateForm = (formValues, errors) => {
-    const allFieldsFilled = !Object.values(formValues).some(
-      x => !x || (Array.isArray(x) && x.length === 0)
-    )
-    const noErrors = !Object.values(errors).some(x => x)
-    setIsFormValid(allFieldsFilled && noErrors)
-  }
-
-  // Function to handle the form submission
-  const handleSubmit = () => {
-    // Validate all fields
-    const newErrors = Object.keys(form).reduce((acc, fieldName) => {
-      acc[fieldName] = validateInput(fieldName, form[fieldName], selectedRoles)
-      return acc
-    }, {})
-
-    setFormErrors(newErrors) // Update the form errors state
-
-    // Check if there are any errors
-    const isValid = !Object.values(newErrors).some(error => error)
-    setIsFormValid(isValid)
-
-    if (isValid) {
-      // Proceed with the form submission actions (e.g., API call)
-      console.log('Form is valid, submit data: ', form)
-      // Add your form submission logic here
+  const handleDelete = async () => {
+    //To do: navigate the admin after you delete
+    const response = await dispatch(deleteAdminThunk(adminId))
+    Alert.alert('Success', 'Admin deleted successfully', [
+      { text: 'OK', onPress: () => navigation.goBack() },
+    ])
+    if (response.status === 200) {
+      console.log(
+        'the response in handle delete function',
+        response.meta.requestStatus
+      )
     } else {
-      console.log('Form has errors: ', newErrors)
-      // Handle the error scenario, maybe inform the user to correct errors
     }
   }
-  const data = [
-    { label: 'Soccer', value: '1' },
-    { label: 'Basketball', value: '2' },
-    { label: 'Tennis', value: '3' },
-    { label: 'Baseball', value: '4' },
-    { label: 'Volleyball', value: '5' },
-    { label: 'Swimming', value: '6' },
-    { label: 'Track and Field', value: '7' },
-    { label: 'Golf', value: '8' },
-  ]
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1, backgroundColor: theme.colors.backgroundSecondary }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 80}
+    <Formik
+      initialValues={initialFormValues}
+      enableReinitialize // Important to set this so formik resets initialValues when they change
+      validationSchema={adminValidationSchema}
+      onSubmit={handleFormSubmit}
     >
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.ScrollContainer}
-      >
-        <View style={styles.container}>
-          <TouchableOpacity
-            style={styles.iconContainer}
-            onPress={handlePickImage}
+      {({
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        setFieldValue,
+        values,
+        errors,
+        touched,
+        isValid,
+        dirty,
+      }) => (
+        <KeyboardAvoidingView
+          style={{ flex: 1, backgroundColor: theme.colors.backgroundSecondary }}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 80}
+        >
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.ScrollContainer}
           >
-            {image ? (
-              <Image
-                style={styles.image}
-                source={{
-                  uri: image,
-                }}
-                resizeMode='cover'
-              />
-            ) : (
-              <Feather name='user' size={userIcon} color='#C4C4C4' />
-            )}
+            <View style={styles.container}>
+              <Pressable style={styles.iconContainer} onPress={handlePickImage}>
+                {image ? (
+                  <Image
+                    style={styles.image}
+                    source={{
+                      uri: image,
+                    }}
+                    resizeMode='cover'
+                  />
+                ) : (
+                  <Feather name='user' size={userIcon} color='#C4C4C4' />
+                )}
 
-            {/* Plus icon in the bottom right corner */}
-            <View style={styles.plusIconContainer}>
-              <Entypo name='plus' size={plusIcon} color='#ffffff' />
-            </View>
-          </TouchableOpacity>
+                {/* Plus icon in the bottom right corner */}
+                <View style={styles.plusIconContainer}>
+                  <Entypo name='plus' size={plusIcon} color='#ffffff' />
+                </View>
+              </Pressable>
 
-          <View style={styles.inputContainer}>
-            {!!formErrors.firstName && ( // Show error text if there's an error
-              <Text style={styles.errorText}>{formErrors.firstName}</Text>
-            )}
-            <TextInput
-              placeholder='First Name*'
-              value={form.firstName}
-              onChangeText={value => handleInputChange('firstName', value)}
-              style={styles.input}
-            />
-            {!!formErrors.lastName && ( // Show error text if there's an error
-              <Text style={styles.errorText}>{formErrors.lastName}</Text>
-            )}
-            <TextInput
-              placeholder='Last Name*'
-              value={form.lastName}
-              onChangeText={value => handleInputChange('lastName', value)}
-              placeholderTextColor={theme.colors.text}
-              style={styles.input}
-            />
-            {!!formErrors.roles && ( // Show error text if there's an error
-              <Text style={styles.errorText}>{formErrors.roles}</Text>
-            )}
-            <DropdownRole
-              data={data}
-              placeholder={'Select Activity'}
-              onSelectionChange={handleSelectionChange}
-            />
-            {!!formErrors.email && ( // Show error text if there's an error
-              <Text style={styles.errorText}>{formErrors.email}</Text>
-            )}
-            <TextInput
-              placeholder='Email *'
-              value={form.email}
-              onChangeText={value => handleInputChange('email', value)}
-              placeholderTextColor={theme.colors.text}
-              keyboardType='email-address'
-              style={styles.input}
-            />
-            {!!formErrors.phone && ( // Show error text if there's an error
-              <Text style={styles.errorText}>{formErrors.phone}</Text>
-            )}
-            <TextInput
-              placeholder='Phone*'
-              value={form.phone}
-              onChangeText={value => handleInputChange('phone', value)}
-              placeholderTextColor={theme.colors.text}
-              keyboardType='phone-pad'
-              style={styles.input}
-            />
-            {!!formErrors.password && ( // Show error text if there's an error
-              <Text style={styles.errorText}>{formErrors.password}</Text>
-            )}
-            <View style={styles.passwordContainer}>
-              <TextInput
-                placeholder='Password*'
-                value={form.password}
-                onChangeText={value => handleInputChange('password', value)}
-                placeholderTextColor={theme.colors.text}
-                secureTextEntry={!isPasswordVisible}
-                style={[styles.input, { marginVertical: 0 }]}
-              />
-              <TouchableOpacity
-                style={styles.visibilityToggle}
-                onPress={togglePasswordVisibility}
-              >
-                <Feather
-                  name={isPasswordVisible ? 'eye-off' : 'eye'}
-                  size={24}
-                  color={theme.colors.text}
+              <View style={styles.inputContainer}>
+                <TextInput
+                  placeholder='First Name*'
+                  onBlur={handleBlur('firstName')}
+                  value={values.firstName}
+                  onChangeText={handleChange('firstName')}
+                  style={styles.input}
                 />
-              </TouchableOpacity>
+                {/* Display errors */}
+                {errors.firstName && touched.firstName && (
+                  <Text style={styles.errorText}>{errors.firstName}</Text>
+                )}
+                <TextInput
+                  placeholder='Last Name*'
+                  onBlur={handleBlur('lastName')}
+                  value={values.lastName}
+                  onChangeText={handleChange('lastName')}
+                  placeholderTextColor={theme.colors.text}
+                  style={styles.input}
+                />
+                {/* Display errors */}
+                {errors.lastName && touched.lastName && (
+                  <Text style={styles.errorText}>{errors.lastName}</Text>
+                )}
+                <DropdownRole
+                  data={data}
+                  placeholder={'Select admin'}
+                  selectedRoles={values.role}
+                  setFieldValue={setFieldValue}
+                  /*  setInitialFormValues={setInitialFormValues} */
+                />
+                {/* Display errors */}
+                {errors.role && touched.role && (
+                  <Text style={styles.errorText}>{errors.role}</Text>
+                )}
+                <TextInput
+                  placeholder='Email *'
+                  onBlur={handleBlur('email')}
+                  value={values.email}
+                  onChangeText={handleChange('email')}
+                  placeholderTextColor={theme.colors.text}
+                  keyboardType='email-address'
+                  style={styles.input}
+                />
+                {/* Display errors */}
+                {errors.email && touched.email && (
+                  <Text style={styles.errorText}>{errors.email}</Text>
+                )}
+                <TextInput
+                  placeholder='phone'
+                  onBlur={handleBlur('phoneNumber')}
+                  value={values.phoneNumber}
+                  onChangeText={handleChange('phoneNumber')}
+                  placeholderTextColor={theme.colors.text}
+                  keyboardType='phone-pad'
+                  style={styles.input}
+                />
+                {/* Display errors */}
+                {errors.phoneNumber && touched.phoneNumber && (
+                  <Text style={styles.errorText}>{errors.phoneNumber}</Text>
+                )}
+                {!adminId && (
+                  <>
+                    <View style={styles.passwordContainer}>
+                      <TextInput
+                        placeholder='Password*'
+                        value={values.password}
+                        onChangeText={handleChange('password')}
+                        onBlur={handleBlur('password')}
+                        placeholderTextColor={theme.colors.text}
+                        secureTextEntry={!isPasswordVisible}
+                        style={[styles.input, { marginVertical: 0 }]}
+                      />
+                      <TouchableOpacity
+                        style={styles.visibilityToggle}
+                        onPress={togglePasswordVisibility}
+                      >
+                        <Feather
+                          name={isPasswordVisible ? 'eye-off' : 'eye'}
+                          size={24}
+                          color={theme.colors.text}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                    {errors.password && touched.password && (
+                      <Text style={styles.errorText}>{errors.password}</Text>
+                    )}
+                  </>
+                )}
+                {/*buttons  */}
+                <View style={styles.buttonContainer}>
+                  <Pressable
+                    style={[
+                      styles.button,
+                      {
+                        backgroundColor:
+                          isValid && dirty
+                            ? theme.colors.primary
+                            : theme.colors.primary200,
+                      },
+                    ]}
+                    onPress={handleSubmit}
+                  >
+                    <Text style={styles.buttonText}>
+                      {adminId ? 'Edit Admin' : 'Add Admin'}
+                    </Text>
+                  </Pressable>
+                  {adminId ? (
+                    <Pressable
+                      style={[
+                        styles.button,
+                        { backgroundColor: theme.colors.error },
+                      ]}
+                      onPress={handleDelete}
+                    >
+                      <Text style={styles.buttonText}>Delete Admin</Text>
+                    </Pressable>
+                  ) : null}
+                </View>
+              </View>
             </View>
-            {/*buttons  */}
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={[
-                  styles.button,
-                  {
-                    backgroundColor: isFormValid
-                      ? theme.colors.primary
-                      : theme.colors.primary200,
-                  },
-                ]}
-                onPress={handleSubmit}
-              >
-                <Text style={styles.buttonText}>
-                  {leaderId ? 'Edit leader' : 'Add Leader'}
-                </Text>
-              </TouchableOpacity>
-              {leaderId ? (
-                <TouchableOpacity
-                  style={[
-                    styles.button,
-                    { backgroundColor: theme.colors.error },
-                  ]}
-                >
-                  <Text style={styles.buttonText}>Delete leader</Text>
-                </TouchableOpacity>
-              ) : null}
-            </View>
-          </View>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      )}
+    </Formik>
   )
 }
 

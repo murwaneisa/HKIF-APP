@@ -12,11 +12,20 @@ function Events({ navigation }) {
 
   const events = useSelector(state => state.event.data || [])
   const loadingEvents = useSelector(state => state.event.loading)
+  const error = useSelector(state => state.event.error)
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(fetchEvents())
   }, [dispatch])
+
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.errorText}>Error: {error}</Text>
+      </View>
+    )
+  }
 
   return (
     <>

@@ -11,32 +11,60 @@ import React, { useState } from 'react'
 import { useTheme } from '../../../Styles/theme'
 import { AntDesign } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+import { FontAwesome } from '@expo/vector-icons'
+import { Alert } from 'react-native'
 
-const MemberCard = ({ user }) => {
+const MemberCard = ({ user, adminType }) => {
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
   const navigation = useNavigation()
-  const [admin, setAdmin] = useState('Superadmin')
+
+  const [imageError, setImageError] = useState(false)
 
   const handleViewPress = () => {
-    if (admin !== 'Superadmin') {
+    if (!adminType) {
       //alert your not  a super admin
-      return
+      Alert.alert(
+        'Access Denied', // Title of the alert
+        'You do not have permission to view this section.', // Message of the alert
+        [
+          { text: 'OK', onPress: () => console.log('OK Pressed') }, // Button to dismiss the alert
+        ]
+      )
+      return null
     }
 
-    navigation.navigate('MemberDetails', { userId: user.id }) // Replace 'MemberDetails' with your actual route name
+    navigation.navigate('MemberDetails', { userId: user._id }) // Replace 'MemberDetails' with your actual route name
   }
+  const iconSize = Math.min(55, 55)
   return (
     <View style={styles.container}>
       <View style={styles.cardContainer}>
         <View>
-          <Image source={{ uri: user.image }} style={styles.image} />
+          {user.imageUrl && !imageError ? (
+            <Image
+              source={{ uri: user.imageUrl }}
+              style={styles.image}
+              onError={() => setImageError(true)}
+            />
+          ) : (
+            <View style={styles.image}>
+              <FontAwesome
+                name='user-circle'
+                size={iconSize}
+                color={theme.colors.text}
+              />
+            </View>
+          )}
         </View>
         <View style={styles.details}>
-          <Text style={styles.name}>{user.name}</Text>
-          <Text style={styles.text}>{user.membership}</Text>
-          <Text style={styles.text}>{user.phone}</Text>
+          <Text
+            style={styles.name}
+          >{`${user.firstName} ${user.lastName}`}</Text>
+
+          <Text style={styles.text}>{user.membershipType}</Text>
+          <Text style={styles.text}>{user.phoneNumber}</Text>
           <Text style={styles.text}>{user.email}</Text>
         </View>
         <View style={styles.actions}>

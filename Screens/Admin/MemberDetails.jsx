@@ -7,28 +7,76 @@ import {
   Image,
   ScrollView,
 } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useTheme } from '../../Styles/theme'
+import { getFullUserInfoByID } from '../../Utilities/Axios/user'
+import { FontAwesome } from '@expo/vector-icons'
+import LoadingIndicator from '../../Components/LoadingIndicator'
+import {
+  convertToNormalWord,
+  formatDate,
+} from '../../Utilities/Helper/fomatWord'
 
-const MemberDetails = () => {
+const MemberDetails = ({ route }) => {
+  const { userId } = route.params
+  const [user, setUser] = useState(null)
+  const [imageError, setImageError] = useState(false)
   const navigation = useNavigation()
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const fetchedUser = await getFullUserInfoByID(userId)
+        console.log('user details', fetchedUser)
+        setUser(fetchedUser)
+      } catch (error) {
+        console.error('Error fetching user data:', error)
+      }
+    }
+
+    fetchUserData()
+  }, [userId])
+  const iconSize = Math.min(styles.image.width, styles.image.height)
+
+  if (!user) {
+    return <LoadingIndicator />
+  }
+
+  // Example usage
+  const convertedRole = convertToNormalWord(user.role)
+  const convertedMembType = convertToNormalWord(user.membershipType)
+
   return (
     <ScrollView style={styles.scrollContainer}>
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <Image
-            source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }}
-            style={styles.image}
-          />
           <View>
-            <Text style={styles.name}>Zach Brown</Text>
-            <Text style={styles.text}>Board Member </Text>
-            <Text style={styles.text}>Full Membership </Text>
+            {user.imageUrl && !imageError ? (
+              <Image
+                source={{ uri: user.imageUrl }}
+                style={styles.image}
+                onError={() => setImageError(true)}
+              />
+            ) : (
+              <View style={styles.image}>
+                <FontAwesome
+                  name='user-circle'
+                  size={iconSize}
+                  color={theme.colors.text}
+                />
+              </View>
+            )}
+          </View>
+          <View>
+            <Text style={styles.name}>
+              {`${user.firstName} ${user.lastName}`}
+            </Text>
+            <Text style={styles.text}>{convertedRole} </Text>
+            <Text style={styles.text}>{convertedMembType}</Text>
           </View>
         </View>
         <View style={styles.infoContainer}>
@@ -36,55 +84,57 @@ const MemberDetails = () => {
             <View style={styles.label}>
               <Text style={styles.labelName}>First name</Text>
             </View>
-            <Text style={styles.infoItemText}>Zach</Text>
+            <Text style={styles.infoItemText}>{user.firstName}</Text>
           </View>
           <View style={styles.infoItem}>
             <View style={styles.label}>
               <Text style={styles.labelName}>Last name </Text>
             </View>
-            <Text style={styles.infoItemText}>Brown</Text>
+            <Text style={styles.infoItemText}>{user.lastName}</Text>
           </View>
           <View style={styles.infoItem}>
             <View style={styles.label}>
               <Text style={styles.labelName}>Email</Text>
             </View>
-            <Text style={styles.infoItemText}>Zach.Brown@gmail.com</Text>
+            <Text style={styles.infoItemText}>{user.email}</Text>
           </View>
           <View style={styles.infoItem}>
             <View style={styles.label}>
               <Text style={styles.labelName}>Phone</Text>
             </View>
-            <Text style={styles.infoItemText}>+46765627016</Text>
+            <Text style={styles.infoItemText}>{user.phoneNumber}</Text>
           </View>
           <View style={styles.infoItem}>
             <View style={styles.label}>
               <Text style={styles.labelName}>Birth date</Text>
             </View>
-            <Text style={styles.infoItemText}>23 Mars 1999</Text>
+            <Text style={styles.infoItemText}>
+              {formatDate(user.birthDate)}
+            </Text>
           </View>
           <View style={styles.infoItem}>
             <View style={styles.label}>
               <Text style={styles.labelName}>Gender</Text>
             </View>
-            <Text style={styles.infoItemText}>Man</Text>
+            <Text style={styles.infoItemText}>{user.gender}</Text>
           </View>
           <View style={styles.infoItem}>
             <View style={styles.label}>
               <Text style={styles.labelName}>Role</Text>
             </View>
-            <Text style={styles.infoItemText}>Board member</Text>
+            <Text style={styles.infoItemText}>{convertedRole}</Text>
           </View>
           <View style={styles.infoItem}>
             <View style={styles.label}>
               <Text style={styles.labelName}>Nationality</Text>
             </View>
-            <Text style={styles.infoItemText}>Swedish</Text>
+            <Text style={styles.infoItemText}>{user.nationality}</Text>
           </View>
           <View style={[styles.infoItem, { borderBottomWidth: 0 }]}>
             <View style={styles.label}>
               <Text style={styles.labelName}>City</Text>
             </View>
-            <Text style={styles.infoItemText}>Kristianstad</Text>
+            <Text style={styles.infoItemText}>{user.address}</Text>
           </View>
         </View>
         <View style={styles.headerContainer}>

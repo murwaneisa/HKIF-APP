@@ -12,12 +12,14 @@ import { useTheme } from '../Styles/theme'
 import { Feather } from '@expo/vector-icons'
 import UserInfoCard from '../Components/Profile/UserInfoCard'
 import HKIFImagePicker from '../Utilities/Helper/HKIFImagePicker'
+import { useSelector } from 'react-redux'
 
 const Profile = ({ navigation }) => {
   const { theme } = useTheme()
   const windowWidth = Dimensions.get('window').width
   const styles = getStyles(theme, windowWidth)
   const [image, setImage] = useState(null)
+  const currentUser = useSelector(state => state.user.currentUser)
 
   const handlePickImage = async () => {
     const uri = await HKIFImagePicker.pickImage()
@@ -47,33 +49,35 @@ const Profile = ({ navigation }) => {
             <Feather name='edit' style={styles.editIcon} />
           </View>
         </Pressable>
-        <Text style={styles.title}>Ahmed Mohammed</Text>
+        <Text style={styles.title}>
+          {currentUser?.firstName} {currentUser?.lastName}
+        </Text>
       </View>
       <View style={styles.contentSection}>
         <UserInfoCard
           iconName={'user'}
-          text={'Ahmed Mohammed'}
+          text={`${currentUser?.firstName} ${currentUser?.lastName}`}
           onPress={() => {
             navigation.navigate('EditProfile', { type: 'Name' })
           }}
         />
         <UserInfoCard
           iconName={'mail'}
-          text={'a23134@gmail.com'}
+          text={currentUser?.email}
           onPress={() => {
             navigation.navigate('EditProfile', { type: 'Email' })
           }}
         />
         <UserInfoCard
           iconName={'map-pin'}
-          text={'Olastorpsvägen 38, 391 29, Kristianstad asdfdsaf'}
+          text={currentUser?.address}
           onPress={() => {
             navigation.navigate('EditProfile', { type: 'Address' })
           }}
         />
         <UserInfoCard
           iconName={'phone'}
-          text={'070022442214'}
+          text={currentUser?.phoneNumber}
           onPress={() => {
             navigation.navigate('EditProfile', { type: 'Phone' })
           }}

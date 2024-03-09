@@ -1,5 +1,16 @@
-import { logoutAdmin, setAdmin } from '../Slices/adminSlice'
-import { loginAdmin, getFullAdminInfoByID } from '../../Axios/admin'
+import {
+  logoutAdmin,
+  setAdmin,
+  fetchAdminsSuccess,
+  fetchAdminRequest,
+  fetchAdminFailure,
+  fetchAdmin,
+} from '../Slices/adminSlice'
+import {
+  loginAdmin,
+  getFullAdminInfoByID,
+  fetchAdmins,
+} from '../../Axios/admin'
 import { resetUser } from '../../Axios/storage'
 
 export const loginAndSetAdmin = (email, password) => async dispatch => {
@@ -25,5 +36,24 @@ export const adminLogout = () => async dispatch => {
     dispatch(logoutAdmin())
   } catch (error) {
     console.error(error)
+  }
+}
+export const getAdmins = () => async dispatch => {
+  try {
+    dispatch(fetchAdminRequest())
+    const data = await fetchAdmins()
+    dispatch(fetchAdminsSuccess(data.data))
+  } catch (error) {
+    dispatch(fetchAdminFailure(error.message))
+  }
+}
+
+export const getAdmin = id => async dispatch => {
+  try {
+    dispatch(fetchAdminRequest())
+    const data = await fetchAdmin(id)
+    dispatch(fetchAdminsSuccess(data.data))
+  } catch (error) {
+    dispatch(fetchAdminFailure(error.message))
   }
 }

@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import { logoutUser, setUser } from '../Slices/userSlice'
 import { loginUser, getFullUserInfoByID, registerUser } from '../../Axios/user'
+=======
+import { logoutUser, setUser, setUsers } from '../Slices/userSlice'
+import { loginUser, getFullUserInfoByID, editUserInfo } from '../../Axios/user'
+>>>>>>> main
 import { resetUser } from '../../Axios/storage'
 
 export const registerAndLoginUser = data => async dispatch => {
@@ -42,5 +47,24 @@ export const userLogout = () => async dispatch => {
     dispatch(logoutUser())
   } catch (error) {
     console.error(error)
+  }
+}
+
+export const addUsers = data => async dispatch => {
+  try {
+    if (data) {
+      dispatch(setUsers(data))
+    }
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const updateAndSetUserInfo = (userId, updatedInfo) => async dispatch => {
+  try {
+    const response = await editUserInfo(userId, updatedInfo)
+    dispatch(setUser(response.data))
+  } catch (error) {
+    console.error('Failed to update user info:', error)
   }
 }

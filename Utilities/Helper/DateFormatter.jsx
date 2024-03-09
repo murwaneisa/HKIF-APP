@@ -44,9 +44,9 @@ class DateFormatter {
   static formatDate = dateString => {
     return new Date(dateString).toLocaleDateString('en-SE', {
       year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      timeZone: 'UTC',
+      month: '2-digit',
+      day: '2-digit',
+      timeZone: 'Europe/Stockholm',
     })
   }
 
@@ -54,7 +54,7 @@ class DateFormatter {
     return new Date(dataString).toLocaleTimeString('en-SE', {
       hour: '2-digit',
       minute: '2-digit',
-      timeZone: 'UTC',
+      timeZone: 'Europe/Stockholm',
     })
   }
 }
