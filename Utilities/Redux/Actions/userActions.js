@@ -1,10 +1,10 @@
-<<<<<<< HEAD
-import { logoutUser, setUser } from '../Slices/userSlice'
-import { loginUser, getFullUserInfoByID, registerUser } from '../../Axios/user'
-=======
+import {
+  loginUser,
+  getFullUserInfoByID,
+  registerUser,
+  editUserInfo,
+} from '../../Axios/user'
 import { logoutUser, setUser, setUsers } from '../Slices/userSlice'
-import { loginUser, getFullUserInfoByID, editUserInfo } from '../../Axios/user'
->>>>>>> main
 import { resetUser } from '../../Axios/storage'
 
 export const registerAndLoginUser = data => async dispatch => {
