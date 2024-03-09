@@ -6,44 +6,57 @@ import {
   Platform,
   Image,
   TouchableOpacity,
+  Alert,
 } from 'react-native'
 import React, { useState } from 'react'
 import { useTheme } from '../../../Styles/theme'
 import { AntDesign } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
 
-const AdminCard = ({ info }) => {
+const AdminCard = ({ info, adminType }) => {
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
   const navigation = useNavigation()
-  const [admin, setAdmin] = useState('Superadmin')
+
+  // Access info properties safely here
+  const { firstName, lastName, role, phoneNumber, email, _id } = info
+
+  const image = 'https://randomuser.me/api/portraits/women/4.jpg'
 
   const handleViewPress = () => {
-    if (admin !== 'Superadmin') {
+    if (!adminType) {
       //alert your not  a super admin
-      return
+      Alert.alert(
+        'Access Denied', // Title of the alert
+        'You do not have permission to view this section.', // Message of the alert
+        [
+          { text: 'OK', onPress: () => console.log('OK Pressed') }, // Button to dismiss the alert
+        ]
+      )
+      return null
     }
 
-    navigation.navigate('AddAdmin', { leaderId: 'leader' }) // Replace 'MemberDetails' with your actual route name
+    navigation.navigate('AddAdmin', { adminId: _id }) // Replace 'MemberDetails' with your actual route name
   }
   return (
     <View style={styles.container}>
       <View style={styles.cardContainer}>
         <View>
-          <Image source={{ uri: info.image }} style={styles.image} />
+          <Image source={{ uri: image }} style={styles.image} />
         </View>
         <View style={styles.details}>
-          <Text style={styles.name}>{info.name}</Text>
+          <Text style={styles.name}> {`${firstName} ${lastName}`}</Text>
           <View style={styles.rolesContainer}>
-            {info.roles.map(role => (
+            {role.map(role => (
               <Text key={role} style={styles.text}>
                 {role}
               </Text>
             ))}
           </View>
-          <Text style={styles.text}>{info.phone}</Text>
-          <Text style={styles.text}>{info.email}</Text>
+          <Text style={styles.text}>{phoneNumber}</Text>
+          <Text style={styles.text}>{email}</Text>
         </View>
         <View style={styles.actions}>
           <TouchableOpacity

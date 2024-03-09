@@ -42,7 +42,7 @@ class HKIFImagePicker {
     await uploadBytes(fileRef, blob)
 
     blob.close()
-
+    console.log('firebase ', fileRef)
     return await getDownloadURL(fileRef)
   }
 }

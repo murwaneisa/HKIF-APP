@@ -4,12 +4,9 @@ import { MultiSelect } from 'react-native-element-dropdown'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import { useTheme } from '../../Styles/theme'
 
-const DropdownRole = ({ data, placeholder, onSelectionChange }) => {
+const DropdownRole = ({ data, placeholder, selectedRoles, setFieldValue }) => {
   const { theme, isDarkMode } = useTheme()
   const styles = getStyles(theme, isDarkMode)
-  const [selected, setSelected] = useState([])
-  console.log('selected', selected)
-
   return (
     <MultiSelect
       style={styles.dropdown}
@@ -24,10 +21,9 @@ const DropdownRole = ({ data, placeholder, onSelectionChange }) => {
       valueField='value'
       placeholder={placeholder}
       searchPlaceholder='Search...'
-      value={selected}
-      onChange={item => {
-        setSelected(item)
-        onSelectionChange && onSelectionChange(item)
+      value={selectedRoles}
+      onChange={selectedItems => {
+        setFieldValue('role', selectedItems)
       }}
       renderSelectedItem={(item, unSelect) => (
         <TouchableOpacity onPress={() => unSelect && unSelect(item)}>
