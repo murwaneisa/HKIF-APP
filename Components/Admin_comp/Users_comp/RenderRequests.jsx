@@ -12,12 +12,14 @@ import { useTheme } from '../../../Styles/theme'
 import { useSelector } from 'react-redux'
 
 const RenderRequests = () => {
-  const userList = useSelector(state => state.user.usersList)
+  const userList = useSelector(state => state.user.data)
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
   const filteredUsers = userList.filter(
-    user => user.membershipType == 'AWAITING_VERIFICATION'
+    user =>
+      user.membershipType == 'AWAITING_VERIFICATION_BASIC_MEMBERSHIP' ||
+      user.membershipType == 'AWAITING_VERIFICATION_FULL_MEMBERSHIP'
   )
 
   return (
