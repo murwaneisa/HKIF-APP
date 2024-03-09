@@ -5,41 +5,29 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
+  Text,
   View,
 } from 'react-native'
 
 import { useTheme } from '../Styles/theme'
 
-import { getFormatedDate } from 'react-native-modern-datepicker'
 import StepOne from '../Components/Register/StepOne'
 import StepTwo from '../Components/Register/StepTwo'
+import StepThree from '../Components/Register/StepThree'
+import StepFour from '../Components/Register/StepFour'
+import StepFive from '../Components/Register/StepFive'
+import { useDispatch, useSelector } from 'react-redux'
+import { registerAndLoginUser } from '../Utilities/Redux/Actions/userActions'
 
 function Register() {
   const screenWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, screenWidth)
-  const [passwordVisible, setPasswordVisible] = useState(false)
-  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false)
+
   const [currentStep, setCurrentStep] = useState(1)
-  const [date, setDate] = useState(new Date())
-  const [selectedDate, setSelectedDate] = useState('')
 
-  const [openStartDatePicker, setOpenStartDatePicker] = useState(false)
-  const today = new Date()
-  const startDate = getFormatedDate(
-    today.setDate(today.getDate() + 1),
-    'YYYY/MM/DD'
-  )
-  const [selectedStartDate, setSelectedStartDate] = useState('')
-  const [startedDate, setStartedDate] = useState('12/12/2023')
-
-  function handleChangeStartDate(propDate) {
-    setStartedDate(propDate)
-  }
-
-  const handleOnPressStartDate = () => {
-    setOpenStartDatePicker(!openStartDatePicker)
-  }
+  const data = useSelector(state => state.registration)
+  const dispatch = useDispatch()
 
   const goToNextStep = () => {
     if (currentStep < totalSteps) {
@@ -47,39 +35,52 @@ function Register() {
     } else {
       // Handle the final submission
       console.log('Final Form Data:')
+      console.log(data)
+      dispatch(registerAndLoginUser(data))
       // navigate to another screen or perform the submission action
     }
   }
+
   const goToPreviousStep = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1)
     }
   }
-  const totalSteps = 2
+  const totalSteps = 5
 
   const renderStep = () => {
     switch (currentStep) {
       case 1:
-        return (
-          <StepOne
-            styles={styles}
-            goToNextStep={goToNextStep}
-            passwordVisible={passwordVisible}
-            confirmPasswordVisible={confirmPasswordVisible}
-          />
-        )
+        return <StepOne styles={styles} goToNextStep={goToNextStep} />
       case 2:
         return (
           <StepTwo
             styles={styles}
             goToNextStep={goToNextStep}
-            handleOnPressStartDate={handleOnPressStartDate}
-            handleChangeStartDate={handleChangeStartDate}
-            selectedStartDate={selectedStartDate}
-            openStartDatePicker={openStartDatePicker}
-            startedDate={startedDate}
-            date={date}
-            setSelectedStartDate={setSelectedStartDate}
+            goToPreviousStep={goToPreviousStep}
+          />
+        )
+      case 3:
+        return (
+          <StepThree
+            styles={styles}
+            goToNextStep={goToNextStep}
+            goToPreviousStep={goToPreviousStep}
+          />
+        )
+      case 4:
+        return (
+          <StepFour
+            styles={styles}
+            goToNextStep={goToNextStep}
+            goToPreviousStep={goToPreviousStep}
+          />
+        )
+      case 5:
+        return (
+          <StepFive
+            styles={styles}
+            goToNextStep={goToNextStep}
             goToPreviousStep={goToPreviousStep}
           />
         )
@@ -95,11 +96,15 @@ function Register() {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
     >
       <ScrollView
-        style={{ flex: 1 }}
+        style={{ flex: 1, backgroundColor: theme.colors.backgroundPrimary }}
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps='handled' // This ensures taps are not dismissed when the keyboard is open
       >
         <View style={styles.container}>
+          <Text style={styles.headerText}>
+            <Text> Welcome to </Text>
+            <Text style={styles.hkifText}>HKIF</Text>
+          </Text>
           <View style={styles.inputContainer}>{renderStep()}</View>
         </View>
       </ScrollView>
@@ -226,6 +231,16 @@ const getStyles = theme =>
       shadowOpacity: 0.25,
       shadowRadius: 4,
       elevation: 5,
+    },
+    errorText: {
+      fontSize: Platform.select({
+        ios: 13,
+        android: 12,
+        web: 16,
+      }),
+      color: 'red',
+      paddingHorizontal: 4,
+      paddingTop: 4,
     },
   })
 

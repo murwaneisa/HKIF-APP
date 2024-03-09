@@ -1,6 +1,24 @@
+<<<<<<< HEAD
+import { logoutUser, setUser } from '../Slices/userSlice'
+import { loginUser, getFullUserInfoByID, registerUser } from '../../Axios/user'
+=======
 import { logoutUser, setUser, setUsers } from '../Slices/userSlice'
 import { loginUser, getFullUserInfoByID, editUserInfo } from '../../Axios/user'
+>>>>>>> main
 import { resetUser } from '../../Axios/storage'
+
+export const registerAndLoginUser = data => async dispatch => {
+  try {
+    const status = await registerUser(data)
+    if (status === 201) {
+      const userId = await loginUser(data.email, data.password)
+      const user = await getFullUserInfoByID(userId)
+      dispatch(setUser(user))
+    }
+  } catch (error) {
+    console.error('Executing registration failed:' + error)
+  }
+}
 
 export const loginAndSetUser = (email, password) => async dispatch => {
   try {
@@ -12,7 +30,7 @@ export const loginAndSetUser = (email, password) => async dispatch => {
   }
 }
 
-export const checkAndSetUser = userId => async dispatch => {
+export const checkIfUserIsLoggedIn = userId => async dispatch => {
   try {
     const user = await getFullUserInfoByID(userId)
     if (user) {

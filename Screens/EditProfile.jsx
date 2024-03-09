@@ -9,8 +9,11 @@ import {
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useTheme } from '../Styles/theme'
+<<<<<<< HEAD
+=======
 import { useDispatch } from 'react-redux'
 import { updateAndSetUserInfo } from '../Utilities/Redux/Actions/userActions'
+>>>>>>> main
 import ProfileTextField from '../Components/Profile/ProfileTextField'
 
 const EditProfile = ({ route }) => {

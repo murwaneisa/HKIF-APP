@@ -1,7 +1,24 @@
 import baseInstance from './api'
-import { storeAccessToken, storeRefreshToken, storeUserID } from './storage'
+import {
+  resetUser,
+  storeAccessToken,
+  storeRefreshToken,
+  storeUserID,
+} from './storage'
 
 const userSuffix = '/users'
+
+export const registerUser = async data => {
+  try {
+    const response = await baseInstance.post(`${userSuffix}/register`, {
+      ...data,
+      membershipType: 'UNPAID',
+    })
+    return response.status
+  } catch (error) {
+    console.error('Registration failed:', error.response.data)
+  }
+}
 
 export const loginUser = async (email, password) => {
   try {
@@ -24,6 +41,9 @@ export const getFullUserInfoByID = async userId => {
     const response = await baseInstance.get(`${userSuffix}/${userId}`)
     return response.data
   } catch (error) {
+    if (error.response.status === '401') {
+      await resetUser()
+    }
     console.error('Get Information failed:', error)
   }
 }
