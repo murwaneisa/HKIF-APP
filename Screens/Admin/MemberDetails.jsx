@@ -6,19 +6,24 @@ import {
   Platform,
   Image,
   ScrollView,
+  Alert,
+  Pressable,
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useTheme } from '../../Styles/theme'
-import { getFullUserInfoByID } from '../../Utilities/Axios/user'
+import { deleteUser, getFullUserInfoByID } from '../../Utilities/Axios/user'
 import { FontAwesome } from '@expo/vector-icons'
 import LoadingIndicator from '../../Components/LoadingIndicator'
 import {
   convertToNormalWord,
   formatDate,
 } from '../../Utilities/Helper/fomatWord'
+import { deleteUserThunk } from '../../Utilities/Redux/Actions/userActions'
+import { useDispatch } from 'react-redux'
 
 const MemberDetails = ({ route }) => {
+  const dispatch = useDispatch()
   const { userId } = route.params
   const [user, setUser] = useState(null)
   const [imageError, setImageError] = useState(false)
@@ -49,6 +54,38 @@ const MemberDetails = ({ route }) => {
   // Example usage
   const convertedRole = convertToNormalWord(user.role)
   const convertedMembType = convertToNormalWord(user.membershipType)
+
+  const handleDeleteUser = () => {
+    // Show confirmation dialog
+    Alert.alert(
+      'Delete User', // Alert Title
+      'Are you sure you want to delete this user?', // Alert Message
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('User deletion cancelled'),
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: async () => {
+            // Make this function async
+            try {
+              // Dispatch the thunk and wait for the promise to resolve
+              const response = await dispatch(deleteUserThunk(userId)).unwrap()
+              console.log('User delete user ID:', response)
+              // Navigate or update UI as needed after successful deletion
+              navigation.goBack() // For example, go back to the previous screen
+            } catch (error) {
+              console.error('Error deleting user:', error)
+              // Optionally handle error, show a message, etc.
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    )
+  }
 
   return (
     <ScrollView style={styles.scrollContainer}>
@@ -138,12 +175,13 @@ const MemberDetails = ({ route }) => {
           </View>
         </View>
         <View style={styles.headerContainer}>
-          <View
+          <Pressable
             style={{
               width: '100%',
               height: 30,
               justifyContent: 'center',
             }}
+            onPress={handleDeleteUser}
           >
             <Text
               style={{
@@ -158,7 +196,7 @@ const MemberDetails = ({ route }) => {
             >
               Delete user
             </Text>
-          </View>
+          </Pressable>
         </View>
       </View>
     </ScrollView>

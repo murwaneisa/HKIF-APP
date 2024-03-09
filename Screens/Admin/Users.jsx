@@ -57,6 +57,7 @@ const Users = () => {
     const fetchUsers = async () => {
       try {
         const data = await geUsersInfo()
+        console.log('the data ', data)
         dispatch(addUsers(data.data))
       } catch (error) {
         console.error('Error fetching users:', error)

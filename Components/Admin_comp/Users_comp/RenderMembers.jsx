@@ -13,10 +13,12 @@ import MemberCard from './MemberCard'
 import { useSelector } from 'react-redux'
 
 const RenderMembers = () => {
-  const userList = useSelector(state => state.user.usersList)
+  const userList = useSelector(state => state.user.data)
   const adminType = useSelector(state => state.admin.currentAdmin)
   const filteredUsers = userList.filter(
-    user => user.membershipType !== 'AWAITING_VERIFICATION'
+    user =>
+      user.membershipType !== 'AWAITING_VERIFICATION_BASIC_MEMBERSHIP' &&
+      user.membershipType !== 'AWAITING_VERIFICATION_FULL_MEMBERSHIP'
   )
   console.log('the current admin  : ', adminType.role.includes('SUPERADMIN'))
   const windowWidth = Dimensions.get('window').width

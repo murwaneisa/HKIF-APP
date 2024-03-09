@@ -81,3 +81,11 @@ export const editUserInfo = async (userId, updatedInfo) => {
     console.error('Edit User Information failed:', error)
   }
 }
+
+export const deleteUser = async userId => {
+  try {
+    return await baseInstance.delete(`${userSuffix}/${userId}`)
+  } catch (error) {
+    console.error('Get Information failed:', error)
+  }
+}

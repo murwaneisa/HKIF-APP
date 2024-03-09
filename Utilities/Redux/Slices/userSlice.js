@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { deleteUserThunk } from '../Actions/userActions'
 
 const initialState = {
   currentUser: null,
-  usersList: [],
+  data: [],
 }
 
 const userSlice = createSlice({
@@ -16,8 +17,24 @@ const userSlice = createSlice({
       state.currentUser = null
     },
     setUsers: (state, action) => {
-      state.usersList = action.payload
+      state.data = action.payload
     },
+  },
+  extraReducers: builder => {
+    builder
+      // delete case for delete an user
+      .addCase(deleteUserThunk.fulfilled, (state, action) => {
+        console.log('the user id in the slicer', action.payload)
+        state.data = state.data.filter(user => user._id !== action.payload)
+      })
+      .addCase(deleteUserThunk.pending, state => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(deleteUserThunk.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload
+      })
   },
 })
 
