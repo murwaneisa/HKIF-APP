@@ -16,7 +16,7 @@ import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchEvents } from '../../../Utilities/Redux/Actions/eventActions'
 
-const RenderCurrent = () => {
+const RenderCurrent = ({ isEligible }) => {
   const navigation = useNavigation()
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
@@ -39,7 +39,13 @@ const RenderCurrent = () => {
       <Text style={styles.header}>({events.length}) Current Event</Text>
       <TouchableOpacity
         style={styles.subtitleContainer}
-        onPress={() => navigation.navigate('AddEvent')}
+        onPress={() => {
+          if (!isEligible) {
+            alert('You are not authorized to create events')
+            return
+          }
+          navigation.navigate('AddEvent')
+        }}
       >
         <AntDesign name='pluscircleo' size={22} color={theme.colors.primary} />
         <Text style={styles.subHeader}>Add Event</Text>
@@ -53,7 +59,7 @@ const RenderCurrent = () => {
         <View style={styles.container}>
           {renderHeader()}
           {events.map((event, index) => (
-            <EventCard key={index} event={event} />
+            <EventCard key={index} event={event} isEligible={isEligible} />
           ))}
         </View>
       ) : (
@@ -62,7 +68,7 @@ const RenderCurrent = () => {
           ListHeaderComponent={renderHeader}
           data={events}
           renderItem={({ item, index }) => (
-            <EventCard key={index} event={item} />
+            <EventCard key={index} event={item} isEligible={isEligible} />
           )}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={styles.container}

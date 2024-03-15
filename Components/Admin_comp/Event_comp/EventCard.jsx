@@ -13,10 +13,13 @@ import { useTheme } from '../../../Styles/theme'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
-import { deleteExistingEvent } from '../../../Utilities/Redux/Actions/eventActions'
+import {
+  deleteExistingEvent,
+  fetchEventById,
+} from '../../../Utilities/Redux/Actions/eventActions'
 import DateFormatter from '../../../Utilities/Helper/DateFormatter'
 
-const EventCard = ({ event, previous = false }) => {
+const EventCard = ({ event, previous = false, isEligible }) => {
   const navigation = useNavigation()
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
@@ -24,6 +27,10 @@ const EventCard = ({ event, previous = false }) => {
   const dispatch = useDispatch()
 
   const handleDelete = id => {
+    if (!isEligible) {
+      alert('You are not authorized to delete events')
+      return
+    }
     const deleteConfirmation = () => {
       console.log('OK Pressed, delete event with ID:', id)
       dispatch(deleteExistingEvent(id))
@@ -80,9 +87,15 @@ const EventCard = ({ event, previous = false }) => {
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          onPress={() =>
+          onPress={async () => {
+            if (!isEligible) {
+              navigation.navigate('EventDetails', {
+                event: event,
+              })
+              return
+            }
             navigation.navigate('AddEvent', { eventId: event._id })
-          }
+          }}
           style={[styles.button, { backgroundColor: theme.colors.primary }]}
         >
           <Text style={styles.buttonText}>{previous ? 'Publish' : 'View'}</Text>

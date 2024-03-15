@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchEvents } from '../../../Utilities/Redux/Actions/eventActions'
 import { AntDesign } from '@expo/vector-icons'
 
-const RenderPrevious = () => {
+const RenderPrevious = ({ isEligible }) => {
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
@@ -47,7 +47,12 @@ const RenderPrevious = () => {
         <View style={styles.container}>
           {renderHeader()}
           {events.map((event, index) => (
-            <EventCard key={index} event={event} previous={true} />
+            <EventCard
+              key={index}
+              event={event}
+              previous={true}
+              isEligible={isEligible}
+            />
           ))}
         </View>
       ) : (
@@ -56,7 +61,12 @@ const RenderPrevious = () => {
           ListHeaderComponent={renderHeader}
           data={events}
           renderItem={({ item, index }) => (
-            <EventCard key={index} event={item} previous={true} />
+            <EventCard
+              key={index}
+              event={item}
+              previous={true}
+              isEligible={isEligible}
+            />
           )}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={styles.container}
