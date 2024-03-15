@@ -51,7 +51,7 @@ export const getFullUserInfoByID = async userId => {
 export const getPublicUsersByID = async userIds => {
   try {
     let users = []
-    for (uid of userIds) {
+    for (let uid of userIds) {
       const response = await baseInstance.get(`${userSuffix}/public/${uid}`)
       users.push(response.data)
     }

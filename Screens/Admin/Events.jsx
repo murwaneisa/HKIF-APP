@@ -19,6 +19,9 @@ const Events = () => {
   const styles = getStyles(theme, windowWidth)
   const [activeList, setActiveList] = useState('current')
 
+  const isEligible =
+    admin.role.includes('SUPERADMIN') || admin.role.includes('EVENT_MANAGER')
+
   const getButtonStyle = listName => ({
     flex: 1,
     backgroundColor:
@@ -33,11 +36,7 @@ const Events = () => {
   })
 
   const handlePress = listName => {
-    if (
-      listName === 'previous' &&
-      !admin.role.includes('SUPERADMIN') &&
-      !admin.role.includes('EVENTMANAGER')
-    ) {
+    if (listName === 'previous' && !isEligible) {
       Alert.alert(
         'Restricted Access',
         "You don't have permission to view previous events."
@@ -72,10 +71,10 @@ const Events = () => {
         <Pressable
           style={({ pressed }) => [
             getButtonStyle('previous'),
-            pressed && admin.role.includes('SUPERADMIN') && styles.pressed,
+            pressed && isEligible && styles.pressed,
           ]}
           onPress={() => handlePress('previous')}
-          disabled={!admin.role.includes('SUPERADMIN')} // Disable if not super admin
+          disabled={!isEligible}
         >
           {({ pressed }) => (
             <Text
@@ -92,10 +91,10 @@ const Events = () => {
       </View>
 
       {activeList === 'current' ? (
-        <RenderCurrent />
+        <RenderCurrent isEligible={isEligible} />
       ) : (
         // ... render your members list component here
-        <RenderPrevious />
+        <RenderPrevious isEligible={isEligible} />
         // ... render your requests list component here
       )}
     </View>
