@@ -19,6 +19,7 @@ import {
 } from '../Utilities/Redux/Actions/activityActions'
 import { fetchEvents } from '../Utilities/Redux/Actions/eventActions'
 import LoadingIndicator from '../Components/LoadingIndicator'
+import { fetchActivitiesLeaders } from '../Utilities/Redux/Actions/leaderActionl'
 
 function Home({ navigation }) {
   const { theme } = useTheme()
@@ -35,6 +36,7 @@ function Home({ navigation }) {
   useEffect(() => {
     dispatch(fetchActivities())
     dispatch(fetchEvents())
+    dispatch(fetchActivitiesLeaders())
   }, [dispatch])
 
   const handleFavoriteActivity = activity => {

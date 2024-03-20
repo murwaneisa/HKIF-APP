@@ -12,6 +12,7 @@ import { useTheme } from '../../../Styles/theme'
 import { useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+import { findActivityLeaders } from '../../../Utilities/Helper/findactivityLeaders'
 
 const ActivityCard = ({ activity }) => {
   const navigation = useNavigation()
@@ -19,6 +20,8 @@ const ActivityCard = ({ activity }) => {
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
   const [user, setUser] = useState({ role: 'superAdmin' })
+  const activityLeaders = findActivityLeaders(activity.leadersIds)
+  console.log('the leaders found', activityLeaders)
   return (
     <View style={styles.cardContainer}>
       <Image
@@ -47,18 +50,18 @@ const ActivityCard = ({ activity }) => {
           <Text style={[styles.location, { fontWeight: 'bold' }]}>
             Coach |{' '}
           </Text>
-          {activity.coach.length > 0 && (
+          {activity.leadersIds.length > 0 && (
             <View style={styles.coachItem}>
               <Image
                 source={{ uri: 'https://source.unsplash.com/featured/?person' }} // Replace with first coach's image URL
                 style={styles.coachImage}
               />
-              <Text style={styles.coachName}>{activity.coach[0]}</Text>
+              <Text style={styles.coachName}>{activity.leadersIds[0]}</Text>
             </View>
           )}
-          {activity.coach.length > 1 && (
+          {activity.leadersIds.length > 1 && (
             <Text style={styles.additionalCoaches}>
-              +{activity.coach.length - 1} more
+              +{activity.leadersIds.length - 1} more
             </Text>
           )}
         </View>

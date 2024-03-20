@@ -13,9 +13,13 @@ import { useTheme } from '../../../Styles/theme'
 import { AntDesign } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import ActivityCard from '../Activity_comp/ActivityCard'
+import { useSelector } from 'react-redux'
+import { getActivityLeaders } from '../../../Utilities/Axios/activityleader'
 
 const RenderActivities = () => {
   const navigation = useNavigation()
+  const activities = useSelector(state => state.activity.data)
+  console.log('the activities', activities)
   const windowWidth = Dimensions.get('window').width
   const { theme } = useTheme()
   const styles = getStyles(theme, windowWidth)
@@ -67,7 +71,7 @@ const RenderActivities = () => {
       imageUrl: 'https://source.unsplash.com/featured/?golf',
     },
   ]
-
+  getActivityLeaders()
   const renderHeader = () => (
     <View style={styles.titleContainer}>
       <Text style={styles.header}>(5) Current Activities</Text>
@@ -86,7 +90,7 @@ const RenderActivities = () => {
       {Platform.OS === 'web' ? (
         <View style={styles.container}>
           {renderHeader()}
-          {activeList.map((activity, index) => (
+          {activities.map((activity, index) => (
             <ActivityCard key={index} activity={activity} />
           ))}
         </View>
@@ -94,7 +98,7 @@ const RenderActivities = () => {
         <FlatList
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={renderHeader}
-          data={activeList}
+          data={activities}
           renderItem={({ item, index }) => (
             <ActivityCard key={index} activity={item} />
           )}
