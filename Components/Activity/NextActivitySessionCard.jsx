@@ -23,7 +23,7 @@ const NextActivitySessionCard = ({ sessionInfo }) => {
         </View>
         <View style={styles.content}>
           <Text style={styles.contentHeader}>
-            {sessionInfo.session.day},{' '}
+            {DateFormatter.daysOfWeek[sessionInfo.session.day]},{' '}
             {DateFormatter.formatDate(sessionInfo.date)}
           </Text>
           <Text style={styles.contentText}>
