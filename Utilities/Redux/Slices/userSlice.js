@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { deleteUserThunk } from '../Actions/userActions'
+import { deleteUserThunk, registerAndLoginUser } from '../Actions/userActions'
 
 const initialState = {
   currentUser: null,
@@ -33,6 +33,18 @@ const userSlice = createSlice({
       })
       .addCase(deleteUserThunk.rejected, (state, action) => {
         state.loading = false
+        state.error = action.payload
+      })
+      .addCase(registerAndLoginUser.pending, state => {
+        state.isLoading = true
+      })
+      .addCase(registerAndLoginUser.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.userInfo = action.payload
+        state.error = null
+      })
+      .addCase(registerAndLoginUser.rejected, (state, action) => {
+        state.isLoading = false
         state.error = action.payload
       })
   },

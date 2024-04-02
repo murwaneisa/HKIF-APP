@@ -26,18 +26,13 @@ function Register() {
 
   const [currentStep, setCurrentStep] = useState(1)
 
-  const data = useSelector(state => state.registration)
   const dispatch = useDispatch()
 
   const goToNextStep = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1)
     } else {
-      // Handle the final submission
-      console.log('Final Form Data:')
-      console.log(data)
-      dispatch(registerAndLoginUser(data))
-      // navigate to another screen or perform the submission action
+      dispatch(registerAndLoginUser())
     }
   }
 
