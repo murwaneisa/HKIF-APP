@@ -62,7 +62,7 @@ const StepFive = ({ styles, goToNextStep, goToPreviousStep }) => {
                 paddingHorizontal={12}
                 onPress={handleSubmit}
               >
-                Continue
+                Submit
               </PrimaryButton>
             </View>
             <View style={styles.buttonWrapper}>

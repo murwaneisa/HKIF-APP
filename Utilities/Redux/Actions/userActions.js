@@ -9,18 +9,26 @@ import { logoutUser, setUser, setUsers } from '../Slices/userSlice'
 import { resetUser } from '../../Axios/storage'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
-export const registerAndLoginUser = data => async dispatch => {
-  try {
-    const status = await registerUser(data)
-    if (status === 201) {
-      const userId = await loginUser(data.email, data.password)
-      const user = await getFullUserInfoByID(userId)
-      dispatch(setUser(user))
+export const registerAndLoginUser = createAsyncThunk(
+  'user/registerAndLoginUser',
+  async (_, thunkAPI) => {
+    try {
+      const data = thunkAPI.getState().registration
+      console.log(data)
+      const status = await registerUser(data)
+      if (status === 201) {
+        const userId = await loginUser(data.email, data.password)
+        const user = await getFullUserInfoByID(userId)
+        return user
+      } else {
+        return thunkAPI.rejectWithValue('Registration failed')
+      }
+    } catch (error) {
+      console.error('Executing registration failed: ' + error)
+      return thunkAPI.rejectWithValue(error.message)
     }
-  } catch (error) {
-    console.error('Executing registration failed:' + error)
   }
-}
+)
 
 export const loginAndSetUser = (email, password) => async dispatch => {
   try {
