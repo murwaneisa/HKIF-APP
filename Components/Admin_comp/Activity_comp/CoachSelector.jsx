@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { StyleSheet, View, TouchableOpacity, Text, Image } from 'react-native'
 import { MultiSelect } from 'react-native-element-dropdown'
 import AntDesign from '@expo/vector-icons/AntDesign'
+import Feather from '@expo/vector-icons/Feather'
 import { useTheme } from '../../../Styles/theme'
 
 const data = [
@@ -54,10 +55,10 @@ const CoachSelector = () => {
           setSelected(item)
         }}
         renderLeftIcon={() => (
-          <AntDesign
+          <Feather
             style={styles.icon}
             color={theme.colors.text}
-            name='Safety'
+            name='user-plus'
             size={24}
           />
         )}

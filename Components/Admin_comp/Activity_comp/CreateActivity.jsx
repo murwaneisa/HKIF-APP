@@ -12,37 +12,33 @@ import {
 import React, { useRef } from 'react'
 import { useTheme } from '../../../Styles/theme'
 import { useState } from 'react'
-import DatePickerModal from '../../../Utilities/UI/Model'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { Entypo } from '@expo/vector-icons'
 import Checkbox from 'expo-checkbox'
-import { MaterialIcons } from '@expo/vector-icons'
-import { FontAwesome5 } from '@expo/vector-icons'
+import {
+  MaterialIcons,
+  MaterialCommunityIcons,
+  FontAwesome5,
+  Entypo,
+  Feather,
+} from '@expo/vector-icons'
 import CoachSelector from './CoachSelector'
+import DatePickerModal from '../../../Utilities/UI/AddSchedule'
+import AddSchedule from '../../../Utilities/UI/AddSchedule'
+import { Formik } from 'formik'
+import * as Yup from 'yup'
 
+const validationSchema = Yup.object().shape({
+  title: Yup.string().required('Title is required'),
+  location: Yup.string().required('Location is required'),
+  description: Yup.string().required('Description is required'),
+})
 const CreateActivity = ({ route, navigation }) => {
   const { theme } = useTheme()
   const { activityId } = route?.params || {}
-  console.log(activityId)
   const [openStartDatePicker, setOpenStartDatePicker] = useState(false)
   const [pickerType, setPickerType] = useState('time') // New state for picker type
-  const [startedDate, setStartedDate] = useState('12/12/2023')
-  const [selectedStartDate, setSelectedStartDate] = useState('')
-  const [time, setTime] = useState('')
   const [showInput, setShowInput] = useState(false)
-  const [showCheck, setCheck] = useState(true)
-  const [isChecked, setChecked] = useState(false)
-  const styles = getStyles(theme)
   const [selectedDays, setSelectedDays] = useState({})
-  const weekdays = [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday',
-  ]
+  const styles = getStyles(theme)
 
   const openDatePicker = () => {
     setPickerType('time')
@@ -52,34 +48,19 @@ const CreateActivity = ({ route, navigation }) => {
   const handleCloseModal = () => {
     setOpenStartDatePicker(false)
   }
-  function handleChangeStartDate(propDate) {
-    setStartedDate(propDate)
-  }
 
-  const inputRefs = useRef({
-    titleInput: null,
-    locationInput: null,
-    priceInput: null,
-  })
-  const focusInput = inputKey => {
-    inputRefs.current[inputKey]?.focus()
-  }
-  // Function to toggle day selection
   const toggleDaySelection = day => {
     setSelectedDays(prevSelectedDays => ({
       ...prevSelectedDays,
       [day]: !prevSelectedDays[day],
     }))
   }
-
-  // Function to handle start time selection
-  const handleStartTimeChange = (day, time) => {
-    // Logic to update start time for a specific day
-  }
-
-  // Function to handle end time selection
-  const handleEndTimeChange = (day, time) => {
-    // Logic to update end time for a specific day
+  const inputRefs = useRef({
+    titleInput: null,
+    locationInput: null,
+  })
+  const focusInput = inputKey => {
+    inputRefs.current[inputKey]?.focus()
   }
   return (
     <KeyboardAvoidingView
@@ -91,260 +72,196 @@ const CreateActivity = ({ route, navigation }) => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.container}
       >
-        {/* title */}
-        <TouchableOpacity
-          style={[
-            styles.sectionContainer,
-            { backgroundColor: theme.colors.accent2 },
-          ]}
-          onPress={() => focusInput('titleInput')}
+        <Formik
+          initialValues={{
+            title: '',
+            location: '',
+            description: '',
+          }}
+          validationSchema={validationSchema}
+          onSubmit={values => {
+            // Handle form submission
+            console.log(values)
+          }}
         >
-          <View style={styles.sectionTitle}>
-            <Text style={styles.sectionText}>Title</Text>
-          </View>
-          <TextInput
-            ref={el => (inputRefs.current.titleInput = el)}
-            placeholderTextColor={theme.colors.text}
-            style={styles.input}
-          />
-        </TouchableOpacity>
-        {/* image */}
-        <View
-          style={[
-            styles.descriptionInput,
-            {
-              backgroundColor: theme.colors.accent2,
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderWidth: 0,
-              borderColor: theme.colors.text,
-              shadowOpacity: 0.2,
-              shadowRadius: 1.41,
-              elevation: 2,
-            },
-          ]}
-        >
-          <MaterialIcons
-            name='add-a-photo'
-            size={28}
-            color={theme.colors.text}
-          />
-          <Text style={[styles.sectionText, { marginTop: 8 }]}>
-            Upload event image
-          </Text>
-        </View>
-        {/* location */}
-        <TouchableOpacity
-          onPress={() => focusInput('locationInput')}
-          style={[
-            styles.sectionContainer,
-            { backgroundColor: theme.colors.accent2 },
-          ]}
-        >
-          <View style={styles.sectionTitle}>
-            <Entypo name='location' size={24} color={theme.colors.text} />
-          </View>
-          <TextInput
-            ref={el => (inputRefs.current.locationInput = el)}
-            placeholder='Add location'
-            placeholderTextColor={theme.colors.text}
-            style={styles.input}
-          />
-        </TouchableOpacity>
-        {/* Price */}
-        <TouchableOpacity
-          onPress={() => focusInput('priceInput')}
-          style={[
-            styles.sectionContainer,
-            { backgroundColor: theme.colors.accent2 },
-          ]}
-        >
-          <View style={styles.sectionTitle}>
-            <FontAwesome5
-              name='dollar-sign'
-              size={24}
-              color={theme.colors.text}
-            />
-          </View>
-          <TextInput
-            ref={el => (inputRefs.current.priceInput = el)}
-            placeholder='Add price kr'
-            placeholderTextColor={theme.colors.text}
-            style={styles.input}
-          />
-        </TouchableOpacity>
-        {/* select coach */}
-        {<CoachSelector />}
-        {/* description */}
-        <View style={[styles.descriptionContainer]}>
-          <TouchableOpacity
-            style={[styles.descriptionTitle]}
-            onPress={() => setShowInput(true)}
-          >
-            <View>
-              <Text style={styles.sectionText}>Description</Text>
-            </View>
-          </TouchableOpacity>
-          {showInput && (
-            <TextInput
-              style={styles.descriptionInput}
-              placeholderTextColor={theme.colors.text}
-              multiline
-              placeholder='Enter your description here...'
-            />
-          )}
-        </View>
-        {/* day and time section */}
-        <View style={styles.dateTimeContainer}>
-          <View
-            style={[
-              styles.sectionContainer,
-              {
-                borderBottomWidth: 1,
-                borderBottomColor: theme.colors.text,
-                paddingHorizontal: 0,
-                paddingBottom: 10,
-                marginVertical: 0,
-                marginBottom: 10,
-                borderRadius: 0,
-                shadowOpacity: 0,
-                shadowRadius: 0,
-                elevation: 0,
-              },
-            ]}
-          >
-            <MaterialCommunityIcons
-              name='calendar-clock'
-              size={24}
-              color={theme.colors.text}
-            />
-            <Text
-              style={[
-                styles.sectionText,
-                { marginLeft: 10, fontFamily: 'Inter-Bold' },
-              ]}
-            >
-              Activity day & time
-            </Text>
-          </View>
-          {/* render week days */}
-          {weekdays.map(day => (
-            <View key={day} style={styles.checkboxContainer}>
-              <Checkbox
-                style={styles.checkbox}
-                value={isChecked}
-                onValueChange={setChecked}
-                color={isChecked ? theme.colors.primary : undefined}
-              />
-              <Text
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <>
+              {/* Title */}
+              <TouchableOpacity
                 style={[
-                  styles.sectionText,
+                  styles.sectionContainer,
+                  { backgroundColor: theme.colors.accent2 },
+                ]}
+                onPress={() => focusInput('titleInput')}
+              >
+                <View style={styles.sectionTitle}>
+                  <Text style={styles.sectionText}>Title</Text>
+                </View>
+                <TextInput
+                  placeholderTextColor={theme.colors.text}
+                  style={styles.input}
+                  onChangeText={handleChange('title')}
+                  onBlur={handleBlur('title')}
+                  value={values.title}
+                />
+              </TouchableOpacity>
+              {errors.title && touched.title && (
+                <Text style={{ color: 'red' }}>{errors.title}</Text>
+              )}
+              {/* Image Upload */}
+              <View
+                style={[
+                  styles.descriptionInput,
                   {
-                    fontFamily: 'Inter-SemiBold',
-
-                    width: '28%',
+                    backgroundColor: theme.colors.accent2,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderWidth: 0,
+                    borderColor: theme.colors.text,
+                    shadowOpacity: 0.2,
+                    shadowRadius: 1.41,
+                    elevation: 2,
                   },
                 ]}
               >
-                {day}
-              </Text>
-              <View style={styles.timePickerContainer}>
-                {/* start time  picker */}
-                <View style={styles.dateField}>
-                  {Platform.OS === 'web' ? (
-                    <TextInput
-                      autoCorrect={false}
-                      autoCapitalize='words'
-                      placeholder='10:00'
-                      onChangeText={setSelectedStartDate}
-                      value={selectedStartDate}
-                      placeholderTextColor={theme.colors.primary}
-                      style={[
-                        styles.input,
-                        { backgroundColor: theme.colors.accent },
-                      ]}
-                    />
-                  ) : (
-                    <Pressable
-                      onPress={
-                        Platform.select === 'web' ? undefine : openDatePicker
-                      }
-                      style={styles.pressable}
-                    >
-                      <View
-                        style={[styles.inputContainer, { borderRadius: 6 }]}
-                      >
-                        <Text style={styles.inputText}>{time || '00:00'}</Text>
-                      </View>
-                    </Pressable>
-                  )}
+                <MaterialIcons
+                  name='add-a-photo'
+                  size={28}
+                  color={theme.colors.text}
+                />
+                <Text style={[styles.sectionText, { marginTop: 8 }]}>
+                  Upload event image
+                </Text>
+              </View>
+
+              {/* Location */}
+              <TouchableOpacity
+                onPress={() => focusInput('locationInput')}
+                style={[
+                  styles.sectionContainer,
+                  { backgroundColor: theme.colors.accent2 },
+                ]}
+              >
+                <View style={styles.sectionTitle}>
+                  <Entypo name='location' size={24} color={theme.colors.text} />
                 </View>
-
-                {/* end time picker */}
-
-                <View style={styles.dateField}>
-                  {Platform.OS === 'web' ? (
-                    <TextInput
-                      autoCorrect={false}
-                      autoCapitalize='words'
-                      placeholder='10:00'
-                      onChangeText={setSelectedStartDate}
-                      value={selectedStartDate}
-                      placeholderTextColor={theme.colors.primary}
-                      style={[
-                        styles.input,
-                        { backgroundColor: theme.colors.accent },
-                      ]}
-                    />
-                  ) : (
-                    <Pressable
-                      onPress={
-                        Platform.select === 'web' ? undefine : openDatePicker
-                      }
-                      style={styles.pressable}
-                    >
-                      <View
-                        style={[styles.inputContainer, { borderRadius: 6 }]}
-                      >
-                        <Text style={styles.inputText}>{time || '00:00'}</Text>
-                      </View>
-                    </Pressable>
-                  )}
+                <TextInput
+                  placeholder='Add location'
+                  placeholderTextColor={theme.colors.text}
+                  style={styles.input}
+                  onChangeText={handleChange('location')}
+                  onBlur={handleBlur('location')}
+                  value={values.location}
+                />
+              </TouchableOpacity>
+              {errors.location && touched.location && (
+                <Text style={{ color: 'red' }}>{errors.location}</Text>
+              )}
+              {/* Coach Selector */}
+              <CoachSelector />
+              {/* Description */}
+              <View style={[styles.descriptionContainer]}>
+                <TouchableOpacity
+                  style={[styles.descriptionTitle]}
+                  onPress={() => setShowInput(true)}
+                >
+                  <View>
+                    <Text style={styles.sectionText}>Description</Text>
+                  </View>
+                </TouchableOpacity>
+                {showInput && (
+                  <TextInput
+                    style={styles.descriptionInput}
+                    placeholderTextColor={theme.colors.text}
+                    multiline
+                    placeholder='Enter your description here...'
+                    onChangeText={handleChange('description')}
+                    onBlur={handleBlur('description')}
+                    value={values.description}
+                  />
+                )}
+              </View>
+              {errors.description && touched.description && (
+                <Text style={{ color: 'red' }}>{errors.description}</Text>
+              )}
+              {/* Day and Time Section */}
+              <View style={styles.dateTimeContainer}>
+                <View
+                  style={[
+                    styles.sectionContainer,
+                    {
+                      borderBottomWidth: 1,
+                      borderBottomColor: theme.colors.text,
+                      paddingHorizontal: 0,
+                      paddingBottom: 10,
+                      marginVertical: 0,
+                      marginBottom: 10,
+                      borderRadius: 0,
+                      shadowOpacity: 0,
+                      shadowRadius: 0,
+                      elevation: 0,
+                    },
+                  ]}
+                >
+                  <MaterialCommunityIcons
+                    name='calendar-clock'
+                    size={24}
+                    color={theme.colors.text}
+                  />
+                  <Text
+                    style={[
+                      styles.sectionText,
+                      { marginLeft: 10, fontFamily: 'Inter-Bold' },
+                    ]}
+                  >
+                    Activity day & time
+                  </Text>
+                  <Pressable
+                    onPress={() => setOpenStartDatePicker(true)}
+                    style={styles.addDate}
+                  >
+                    <Entypo name='plus' size={24} color={theme.colors.text} />
+                  </Pressable>
                 </View>
               </View>
-            </View>
-          ))}
-          {/* end of render week days */}
-        </View>
 
-        {/*buttons  */}
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={[styles.button, { backgroundColor: theme.colors.primary }]}
-          >
-            <Text style={styles.buttonText}>
-              {activityId ? 'Edit Event' : 'Create Event'}
-            </Text>
-          </TouchableOpacity>
-          {activityId ? (
-            <TouchableOpacity
-              style={[styles.button, { backgroundColor: 'red' }]}
-            >
-              <Text style={styles.buttonText}>Delete Event</Text>
-            </TouchableOpacity>
-          ) : null}
-        </View>
+              {/* Buttons */}
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={[
+                    styles.button,
+                    { backgroundColor: theme.colors.primary },
+                  ]}
+                  onPress={handleSubmit}
+                >
+                  <Text style={styles.buttonText}>
+                    {activityId ? 'Edit Event' : 'Create Event'}
+                  </Text>
+                </TouchableOpacity>
+                {activityId ? (
+                  <TouchableOpacity
+                    style={[styles.button, { backgroundColor: 'red' }]}
+                  >
+                    <Text style={styles.buttonText}>Delete Event</Text>
+                  </TouchableOpacity>
+                ) : null}
+              </View>
 
-        {/* model */}
-        <DatePickerModal
-          startedDate={startedDate}
-          isOpen={openStartDatePicker}
-          onClose={handleCloseModal}
-          handleChangeStartDate={handleChangeStartDate}
-          onSelectedChange={date => setSelectedStartDate(date)}
-          selectedTime={selectedTime => setTime(selectedTime)}
-          pickerType={pickerType}
-        ></DatePickerModal>
+              {/* Date Picker Modal */}
+              <AddSchedule
+                isOpen={openStartDatePicker}
+                onClose={handleCloseModal}
+              />
+            </>
+          )}
+        </Formik>
       </ScrollView>
     </KeyboardAvoidingView>
   )
@@ -508,6 +425,9 @@ const getStyles = theme => {
     timePickerContainer: {
       flexDirection: 'row',
       marginLeft: 10,
+    },
+    addDate: {
+      marginLeft: 100,
     },
   })
 }

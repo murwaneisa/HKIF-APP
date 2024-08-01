@@ -11,7 +11,7 @@ import { useState } from 'react'
 import { useTheme } from '../../Styles/theme'
 import DatePicker from 'react-native-modern-datepicker'
 
-const DatePickerModal = ({
+const AddSchedule = ({
   isOpen,
   onClose,
   children,
@@ -28,39 +28,6 @@ const DatePickerModal = ({
     <Modal animationType='fade' transparent={true} visible={isOpen}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          {pickerType === 'date' && (
-            <DatePicker
-              mode='calendar'
-              selected={startedDate}
-              onDateChanged={handleChangeStartDate}
-              onSelectedChange={onSelectedChange}
-              options={{
-                backgroundColor: '#080516',
-                textHeaderColor: theme.colors.primary,
-                textDefaultColor: '#FFFFFF',
-                selectedTextColor: '#FFF',
-                mainColor: theme.colors.primary,
-                textSecondaryColor: '#FFFFFF',
-                borderColor: 'rgba(122, 146, 165, 0.1)',
-              }}
-            />
-          )}
-          {pickerType === 'time' && (
-            <DatePicker
-              mode='time'
-              minuteInterval={3}
-              onTimeChange={selectedTime}
-              options={{
-                backgroundColor: '#080516',
-                textHeaderColor: theme.colors.primary,
-                textDefaultColor: '#FFFFFF',
-                selectedTextColor: '#FFF',
-                mainColor: theme.colors.primary,
-                textSecondaryColor: '#FFFFFF',
-                borderColor: 'rgba(122, 146, 165, 0.1)',
-              }}
-            />
-          )}
           <TouchableOpacity onPress={onClose}>
             <Text style={{ color: theme.colors.primary }}>Close</Text>
           </TouchableOpacity>
@@ -106,4 +73,4 @@ const getStyles = theme => {
   })
 }
 
-export default DatePickerModal
+export default AddSchedule

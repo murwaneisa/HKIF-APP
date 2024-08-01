@@ -11,7 +11,7 @@ import {
 } from 'react-native'
 import React, { useRef, useState, useEffect } from 'react'
 import { useTheme } from '../../../Styles/theme'
-import DatePickerModal from '../../../Utilities/UI/Model'
+import DatePickerModal from '../../../Utilities/UI/AddSchedule'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons'
 import Checkbox from 'expo-checkbox'
