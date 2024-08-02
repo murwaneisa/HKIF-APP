@@ -26,10 +26,34 @@ import AddSchedule from '../../../Utilities/UI/AddSchedule'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 
+// Validation Schema for Formik
 const validationSchema = Yup.object().shape({
   title: Yup.string().required('Title is required'),
   location: Yup.string().required('Location is required'),
   description: Yup.string().required('Description is required'),
+  date: Yup.date().required('Date is required').nullable(),
+  startTime: Yup.date().required('Start time is required').nullable(),
+  endTime: Yup.date()
+    .required('End time is required')
+    .nullable()
+    .when('startTime', (startTime, schema) => {
+      return startTime
+        ? schema.min(startTime, "End time can't be before start time")
+        : schema
+    }),
+  frequency: Yup.string().required('Frequency is required'),
+  interval: Yup.number().when('frequency', {
+    is: 'recurring',
+    then: Yup.number()
+      .min(1, 'Interval must be at least 1')
+      .required('Interval is required'),
+  }),
+  occurrences: Yup.number().when('frequency', {
+    is: 'recurring',
+    then: Yup.number()
+      .min(1, 'Occurrences must be at least 1')
+      .required('Occurrences are required'),
+  }),
 })
 const CreateActivity = ({ route, navigation }) => {
   const { theme } = useTheme()
@@ -77,6 +101,12 @@ const CreateActivity = ({ route, navigation }) => {
             title: '',
             location: '',
             description: '',
+            date: null,
+            startTime: null,
+            endTime: null,
+            frequency: 'once',
+            interval: 1,
+            occurrences: 1,
           }}
           validationSchema={validationSchema}
           onSubmit={values => {
@@ -91,6 +121,7 @@ const CreateActivity = ({ route, navigation }) => {
             values,
             errors,
             touched,
+            setFieldValue,
           }) => (
             <>
               {/* Title */}
@@ -105,6 +136,7 @@ const CreateActivity = ({ route, navigation }) => {
                   <Text style={styles.sectionText}>Title</Text>
                 </View>
                 <TextInput
+                  ref={el => (inputRefs.current.titleInput = el)}
                   placeholderTextColor={theme.colors.text}
                   style={styles.input}
                   onChangeText={handleChange('title')}
@@ -115,7 +147,7 @@ const CreateActivity = ({ route, navigation }) => {
               {errors.title && touched.title && (
                 <Text style={{ color: 'red' }}>{errors.title}</Text>
               )}
-              {/* Image Upload */}
+              {/* image */}
               <View
                 style={[
                   styles.descriptionInput,
@@ -153,6 +185,7 @@ const CreateActivity = ({ route, navigation }) => {
                   <Entypo name='location' size={24} color={theme.colors.text} />
                 </View>
                 <TextInput
+                  ref={el => (inputRefs.current.locationInput = el)}
                   placeholder='Add location'
                   placeholderTextColor={theme.colors.text}
                   style={styles.input}
@@ -164,8 +197,7 @@ const CreateActivity = ({ route, navigation }) => {
               {errors.location && touched.location && (
                 <Text style={{ color: 'red' }}>{errors.location}</Text>
               )}
-              {/* Coach Selector */}
-              <CoachSelector />
+
               {/* Description */}
               <View style={[styles.descriptionContainer]}>
                 <TouchableOpacity
@@ -191,6 +223,7 @@ const CreateActivity = ({ route, navigation }) => {
               {errors.description && touched.description && (
                 <Text style={{ color: 'red' }}>{errors.description}</Text>
               )}
+
               {/* Day and Time Section */}
               <View style={styles.dateTimeContainer}>
                 <View
@@ -223,14 +256,23 @@ const CreateActivity = ({ route, navigation }) => {
                   >
                     Activity day & time
                   </Text>
-                  <Pressable
-                    onPress={() => setOpenStartDatePicker(true)}
-                    style={styles.addDate}
-                  >
+                  <Pressable onPress={openDatePicker} style={styles.addDate}>
                     <Entypo name='plus' size={24} color={theme.colors.text} />
                   </Pressable>
                 </View>
               </View>
+
+              {/* AddSchedule Modal */}
+              <AddSchedule
+                isOpen={openStartDatePicker}
+                onClose={handleCloseModal}
+                formikProps={{
+                  values,
+                  setFieldValue,
+                  errors,
+                  touched,
+                }}
+              />
 
               {/* Buttons */}
               <View style={styles.buttonContainer}>
@@ -253,12 +295,6 @@ const CreateActivity = ({ route, navigation }) => {
                   </TouchableOpacity>
                 ) : null}
               </View>
-
-              {/* Date Picker Modal */}
-              <AddSchedule
-                isOpen={openStartDatePicker}
-                onClose={handleCloseModal}
-              />
             </>
           )}
         </Formik>
