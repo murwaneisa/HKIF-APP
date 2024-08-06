@@ -107,6 +107,7 @@ const CreateActivity = ({ route, navigation }) => {
             frequency: 'once',
             interval: 1,
             occurrences: 1,
+            timeSlots: [],
           }}
           validationSchema={validationSchema}
           onSubmit={values => {

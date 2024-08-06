@@ -8,6 +8,7 @@ import {
   StyleSheet,
   TextInput,
   FlatList,
+  ScrollView,
 } from 'react-native'
 import { useTheme } from '../../Styles/theme'
 import DatePicker from 'react-native-modern-datepicker'
@@ -21,9 +22,10 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
   const [showEndTimePicker, setShowEndTimePicker] = useState(false)
 
   const { values, setFieldValue, errors, touched } = formikProps
-
+  console.log('setFieldValue', values)
+  // Add new time slot ensuring values are valid Date objects
   const addTimeSlot = () => {
-    if (values.startTime && values.endTime) {
+    if (values.startTime instanceof Date && values.endTime instanceof Date) {
       setFieldValue('timeSlots', [
         ...values.timeSlots,
         { start: values.startTime, end: values.endTime },
@@ -31,12 +33,21 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
       // Reset times after adding
       setFieldValue('startTime', null)
       setFieldValue('endTime', null)
+    } else {
+      console.log('Invalid time values') // Debugging line
     }
   }
 
   const removeTimeSlot = index => {
     const updatedTimeSlots = values.timeSlots.filter((_, i) => i !== index)
     setFieldValue('timeSlots', updatedTimeSlots)
+  }
+
+  const localTime = time => {
+    return time.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    })
   }
 
   return (
@@ -46,8 +57,7 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
           {/* Date Picker */}
           <DatePicker
             mode='calendar'
-            selected={values.date}
-            onDateChange={date => setFieldValue('date', new Date(date))}
+            onDateChange={date => setFieldValue('date', date)}
             style={styles.datePicker}
           />
           {errors.date && touched.date && (
@@ -62,12 +72,7 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
               style={styles.timeButton}
             >
               <Text style={styles.timeText}>
-                {values.startTime
-                  ? values.startTime.toLocaleTimeString([], {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })
-                  : 'Select Time'}
+                {values.startTime ? localTime(values.startTime) : 'Select Time'}
               </Text>
             </TouchableOpacity>
             <Text style={styles.label}>To:</Text>
@@ -76,12 +81,7 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
               style={styles.timeButton}
             >
               <Text style={styles.timeText}>
-                {values.endTime
-                  ? values.endTime.toLocaleTimeString([], {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })
-                  : 'Select Time'}
+                {values.endTime ? localTime(values.endTime) : 'Select End Time'}
               </Text>
             </TouchableOpacity>
           </View>
@@ -118,29 +118,6 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
           {errors.endTime && touched.endTime && (
             <Text style={styles.errorText}>{errors.endTime}</Text>
           )}
-          {/* Time Slots List */}
-          <FlatList
-            data={values.timeSlots}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item, index }) => (
-              <View style={styles.timeSlotItem}>
-                <Text style={styles.timeSlotText}>
-                  {item.start.toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}{' '}
-                  -{' '}
-                  {item.end.toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
-                </Text>
-                <TouchableOpacity onPress={() => removeTimeSlot(index)}>
-                  <Text style={styles.removeText}>Remove</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          />
           {/* Frequency Section */}
           <View style={styles.frequencySection}>
             <Text style={styles.label}>Frequency:</Text>
@@ -205,31 +182,24 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
           </TouchableOpacity>
 
           {/* Time Slots List */}
-          <FlatList
-            data={values.timeSlots}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item, index }) => (
-              <View style={styles.timeSlotItem}>
-                <Text style={styles.timeSlotText}>
-                  {item.start.toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}{' '}
-                  -{' '}
-                  {item.end.toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
-                </Text>
-                <TouchableOpacity onPress={() => removeTimeSlot(index)}>
-                  <Text style={styles.removeText}>Remove</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          />
-
+          <ScrollView style={styles.scrollView}>
+            <FlatList
+              data={values.timeSlots}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item, index }) => (
+                <View style={styles.timeSlotItem}>
+                  <Text style={styles.timeSlotText}>
+                    {localTime(item.start)} - {localTime(item.end)}
+                  </Text>
+                  <TouchableOpacity onPress={() => removeTimeSlot(index)}>
+                    <Text style={styles.removeText}>Remove</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            />
+          </ScrollView>
           {/* Close Button */}
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+          <TouchableOpacity onPress={onClose}>
             <Text style={styles.closeText}>Close</Text>
           </TouchableOpacity>
         </View>
@@ -267,13 +237,13 @@ const getStyles = theme => {
     },
     datePicker: {
       width: '100%',
-      marginBottom: 20,
+      marginBottom: 2,
     },
     timePickerRow: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-around',
-      marginBottom: 20,
+      marginBottom: 15,
     },
     timeButton: {
       padding: 10,
@@ -330,11 +300,28 @@ const getStyles = theme => {
     addTimeText: {
       color: '#ffffff',
     },
+    timeSlotText: {
+      color: theme.colors.text,
+    },
+    flatList: {
+      maxHeight: 100, // Constrain height for scrolling
+    },
+    scrollView: {
+      flexGrow: 0, // Ensures the ScrollView takes minimal height when there are few items
+      maxHeight: 100, // Constrain height for better usability within modal
+      marginBottom: 10,
+      paddingHorizontal: 10,
+    },
     timeSlotItem: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
       padding: 10,
+    },
+    closeText: {
+      fontFamily: 'Inter-Bold',
+      textAlign: 'center',
+      color: theme.colors.primary,
     },
   })
 }
