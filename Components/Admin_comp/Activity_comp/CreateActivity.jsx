@@ -31,29 +31,6 @@ const validationSchema = Yup.object().shape({
   title: Yup.string().required('Title is required'),
   location: Yup.string().required('Location is required'),
   description: Yup.string().required('Description is required'),
-  date: Yup.date().required('Date is required').nullable(),
-  startTime: Yup.date().required('Start time is required').nullable(),
-  endTime: Yup.date()
-    .required('End time is required')
-    .nullable()
-    .when('startTime', (startTime, schema) => {
-      return startTime
-        ? schema.min(startTime, "End time can't be before start time")
-        : schema
-    }),
-  frequency: Yup.string().required('Frequency is required'),
-  interval: Yup.number().when('frequency', {
-    is: 'recurring',
-    then: Yup.number()
-      .min(1, 'Interval must be at least 1')
-      .required('Interval is required'),
-  }),
-  occurrences: Yup.number().when('frequency', {
-    is: 'recurring',
-    then: Yup.number()
-      .min(1, 'Occurrences must be at least 1')
-      .required('Occurrences are required'),
-  }),
 })
 const CreateActivity = ({ route, navigation }) => {
   const { theme } = useTheme()
@@ -101,13 +78,6 @@ const CreateActivity = ({ route, navigation }) => {
             title: '',
             location: '',
             description: '',
-            date: null,
-            startTime: null,
-            endTime: null,
-            frequency: 'once',
-            interval: 1,
-            occurrences: 1,
-            timeSlots: [],
           }}
           validationSchema={validationSchema}
           onSubmit={values => {
