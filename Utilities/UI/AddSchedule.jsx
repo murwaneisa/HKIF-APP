@@ -9,49 +9,49 @@ import {
   TextInput,
   FlatList,
   ScrollView,
+  Pressable,
 } from 'react-native'
 import { useTheme } from '../../Styles/theme'
 import DatePicker from 'react-native-modern-datepicker'
 import TimePicker from '@react-native-community/datetimepicker'
-import { Formik, FieldArray } from 'formik'
+import { Formik, FieldArray, Form } from 'formik'
 import * as Yup from 'yup'
 import moment from 'moment'
 
 // Schedule validation schema
 const scheduleValidationSchema = Yup.object().shape({
   date: Yup.date().required('Date is required').nullable(),
-  timeSlots: Yup.array()
-    .of(
-      Yup.object().shape({
-        start: Yup.date().required('Start time is required').nullable(),
-        end: Yup.date()
-          .required('End time is required')
-          .nullable()
-          .when('start', (start, schema) => {
-            return start
-              ? schema.min(start, "End time can't be before start time")
-              : schema
-          }),
-      })
-    )
-    .min(1, 'At least one time slot is required'), // Ensure at least one time slot is present
+  startTime: Yup.date().required('Start time is required').nullable(),
+  endTime: Yup.date()
+    .required('End time is required')
+    .nullable()
+    .test(
+      'is-after-start',
+      'End time must be after start time',
+      function (value) {
+        const { startTime } = this.parent
+        return value && startTime ? value > startTime : true
+      }
+    ),
+  timeSlots: Yup.array().min(1, 'At least one time slot is required'), // Ensure at least one time slot is present
   frequency: Yup.string().required('Frequency is required'),
-  interval: Yup.number()
-    .when('frequency', {
-      is: 'recurring',
-      then: Yup.number()
+  interval: Yup.number().when('frequency', {
+    is: 'recurring',
+    then: schema =>
+      schema
         .min(1, 'Interval must be at least 1')
         .required('Interval is required'),
-    })
-    .nullable(),
-  occurrences: Yup.number()
-    .when('frequency', {
-      is: 'recurring',
-      then: Yup.number()
+    otherwise: schema => schema.nullable(), // Optional when not recurring
+  }),
+
+  occurrences: Yup.number().when('frequency', {
+    is: 'recurring',
+    then: schema =>
+      schema
         .min(1, 'Occurrences must be at least 1')
         .required('Occurrences are required'),
-    })
-    .nullable(),
+    otherwise: schema => schema.nullable(), // Optional when not recurring
+  }),
 })
 
 const AddSchedule = ({ isOpen, onClose, formikProps }) => {
@@ -63,28 +63,31 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
 
   const initialScheduleValues = {
     date: null,
+    startTime: null,
+    endTime: null,
     timeSlots: [],
     frequency: 'once',
     interval: 1,
     occurrences: 1,
   }
 
-  const handleTimeChange = (fieldName, selectedTime, scheduleFormik) => {
-    if (selectedTime) {
-      const updatedTime = new Date()
-      updatedTime.setHours(selectedTime.getHours())
-      updatedTime.setMinutes(selectedTime.getMinutes())
-      updatedTime.setSeconds(0)
-      updatedTime.setMilliseconds(0)
-      scheduleFormik.setFieldValue(fieldName, updatedTime)
-    }
-  }
-  console.log(initialScheduleValues)
   const localTime = time => {
     return time.toLocaleTimeString([], {
       hour: '2-digit',
       minute: '2-digit',
     })
+  }
+
+  const addTimeSlot = () => {
+    if (values.startTime && values.endTime) {
+      setFieldValue('timeSlots', [
+        ...values.timeSlots,
+        { start: values.startTime, end: values.endTime },
+      ])
+      // Reset times after adding
+      setFieldValue('startTime', null)
+      setFieldValue('endTime', null)
+    }
   }
 
   return (
@@ -94,37 +97,48 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
           <Formik
             initialValues={initialScheduleValues}
             validationSchema={scheduleValidationSchema}
-            onSubmit={(scheduleValues, { resetForm }) => {
-              if (!scheduleFormik.isValid) {
+            onSubmit={values => {
+              console.log('schedule values', values)
+              /*   if (!scheduleFormik.isValid) {
                 console.log('Form is invalid:', scheduleFormik.errors)
                 return // Exit early if the form is not valid
-              }
+              } */
               // Add the validated schedule to parent
               //addSchedule(scheduleValues)
               //resetForm() // Reset form to initial values after submission
-              onClose()
+              // onClose()
             }}
           >
-            {scheduleFormik => (
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              setFieldValue,
+              setErrors,
+              setTouched,
+              values,
+              errors,
+              touched,
+              isValid,
+              dirty,
+            }) => (
               <>
                 {/* Date Picker */}
                 <DatePicker
                   mode='calendar'
-                  selected={scheduleFormik.values.date || new Date()}
+                  selected={values.date || new Date()}
                   onDateChange={date => {
                     // Use Date constructor to parse the date
                     const parsedDate = new Date(date.replace(/\//g, '-')) // Replace slashes with dashes for consistency
                     if (!isNaN(parsedDate.getTime())) {
                       console.log('Parsed date:', parsedDate)
-                      scheduleFormik.setFieldValue('date', parsedDate)
+                      setFieldValue('date', parsedDate)
                     }
                   }}
                   style={styles.datePicker}
                 />
-                {scheduleFormik.errors.date && scheduleFormik.touched.date && (
-                  <Text style={styles.errorText}>
-                    {scheduleFormik.errors.date}
-                  </Text>
+                {errors.date && touched.date && (
+                  <Text style={styles.errorText}>{errors.date}</Text>
                 )}
 
                 {/* Time Pickers */}
@@ -135,8 +149,8 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
                     style={styles.timeButton}
                   >
                     <Text style={styles.timeText}>
-                      {scheduleFormik.values.startTime
-                        ? localTime(scheduleFormik.values.startTime)
+                      {values.startTime
+                        ? localTime(values.startTime)
                         : 'Select Time'}
                     </Text>
                   </TouchableOpacity>
@@ -146,8 +160,8 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
                     style={styles.timeButton}
                   >
                     <Text style={styles.timeText}>
-                      {scheduleFormik.values.endTime
-                        ? localTime(scheduleFormik.values.endTime)
+                      {values.endTime
+                        ? localTime(values.endTime)
                         : 'Select Time'}
                     </Text>
                   </TouchableOpacity>
@@ -155,53 +169,43 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
 
                 {showStartTimePicker && (
                   <TimePicker
-                    value={scheduleFormik.values.startTime || new Date()}
+                    value={values.startTime || new Date()}
                     mode='time'
                     is24Hour={true}
                     display='default'
                     onChange={(event, selectedTime) => {
                       setShowStartTimePicker(false)
-                      handleTimeChange(
-                        'startTime',
-                        selectedTime,
-                        scheduleFormik
-                      )
+                      setFieldValue('startTime', selectedTime)
                     }}
                   />
                 )}
 
                 {showEndTimePicker && (
                   <TimePicker
-                    value={scheduleFormik.values.endTime || new Date()}
+                    value={values.endTime || new Date()}
                     mode='time'
                     is24Hour={true}
                     display='default'
                     onChange={(event, selectedTime) => {
                       setShowEndTimePicker(false)
-                      handleTimeChange('endTime', selectedTime, scheduleFormik)
+                      setFieldValue('endTime', selectedTime)
                     }}
                   />
                 )}
 
-                {scheduleFormik.errors.startTime &&
-                  scheduleFormik.touched.startTime && (
-                    <Text style={styles.errorText}>
-                      {scheduleFormik.errors.start}
-                    </Text>
-                  )}
-                {scheduleFormik.errors.endTime &&
-                  scheduleFormik.touched.endTime && (
-                    <Text style={styles.errorText}>
-                      {scheduleFormik.errors.end}
-                    </Text>
-                  )}
+                {errors.startTime && touched.startTime && (
+                  <Text style={styles.errorText}>{errors.startTime}</Text>
+                )}
+                {errors.endTime && touched.endTime && (
+                  <Text style={styles.errorText}>{errors.endTime}</Text>
+                )}
 
                 {/* Time Slots List */}
                 <FieldArray name='timeSlots'>
                   {({ push, remove }) => (
                     <>
                       <FlatList
-                        data={scheduleFormik.values.timeSlots}
+                        data={values.timeSlots}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item, index }) => (
                           <View style={styles.timeSlotItem}>
@@ -217,17 +221,44 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
                       />
                       <TouchableOpacity
                         onPress={() => {
-                          if (
-                            scheduleFormik.values.startTime &&
-                            scheduleFormik.values.endTime
-                          ) {
-                            push({
-                              start: scheduleFormik.values.startTime,
-                              end: scheduleFormik.values.endTime,
+                          // Perform validation before adding the time slot
+                          if (!values.startTime || !values.endTime) {
+                            setErrors({
+                              ...errors,
+                              startTime: !values.startTime
+                                ? 'Start time is required'
+                                : undefined,
+                              endTime: !values.endTime
+                                ? 'End time is required'
+                                : undefined,
                             })
-                            scheduleFormik.setFieldValue('startTime', null)
-                            scheduleFormik.setFieldValue('endTime', null)
+                            setTouched({
+                              ...touched,
+                              startTime: true,
+                              endTime: true,
+                            })
+                            return
                           }
+
+                          if (values.endTime <= values.startTime) {
+                            setErrors({
+                              ...errors,
+                              endTime: 'End time must be after start time',
+                            })
+                            setTouched({
+                              ...touched,
+                              endTime: true,
+                            })
+                            return
+                          }
+
+                          // Add the time slot if valid
+                          push({
+                            start: values.startTime,
+                            end: values.endTime,
+                          })
+                          setFieldValue('startTime', null)
+                          setFieldValue('endTime', null)
                         }}
                         style={styles.addTimeButton}
                       >
@@ -242,14 +273,12 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
                   <Text style={styles.label}>Frequency:</Text>
                   <View style={styles.frequencyOptions}>
                     <TouchableOpacity
-                      onPress={() =>
-                        scheduleFormik.setFieldValue('frequency', 'once')
-                      }
+                      onPress={() => setFieldValue('frequency', 'once')}
                       style={styles.frequencyOption}
                     >
                       <Text
                         style={
-                          scheduleFormik.values.frequency === 'once'
+                          values.frequency === 'once'
                             ? styles.selectedOption
                             : styles.option
                         }
@@ -258,14 +287,12 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={() =>
-                        scheduleFormik.setFieldValue('frequency', 'recurring')
-                      }
+                      onPress={() => setFieldValue('frequency', 'recurring')}
                       style={styles.frequencyOption}
                     >
                       <Text
                         style={
-                          scheduleFormik.values.frequency === 'recurring'
+                          values.frequency === 'recurring'
                             ? styles.selectedOption
                             : styles.option
                         }
@@ -275,29 +302,23 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
                     </TouchableOpacity>
                   </View>
 
-                  {scheduleFormik.values.frequency === 'recurring' && (
+                  {values.frequency === 'recurring' && (
                     <View style={styles.recurringOptions}>
                       <TextInput
                         style={styles.input}
                         keyboardType='numeric'
-                        value={String(scheduleFormik.values.interval)}
+                        value={String(values.interval)}
                         onChangeText={value =>
-                          scheduleFormik.setFieldValue(
-                            'interval',
-                            Number(value)
-                          )
+                          setFieldValue('interval', Number(value))
                         }
                       />
                       <Text style={styles.label}>weeks</Text>
                       <TextInput
                         style={styles.input}
                         keyboardType='numeric'
-                        value={String(scheduleFormik.values.occurrences)}
+                        value={String(values.occurrences)}
                         onChangeText={value =>
-                          scheduleFormik.setFieldValue(
-                            'occurrences',
-                            Number(value)
-                          )
+                          setFieldValue('occurrences', Number(value))
                         }
                       />
                       <Text style={styles.label}>occurrences</Text>
@@ -306,12 +327,9 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
                 </View>
 
                 {/* Save Button */}
-                <TouchableOpacity
-                  onPress={scheduleFormik.handleSubmit}
-                  style={styles.saveButton}
-                >
+                <Pressable onPress={handleSubmit} style={styles.saveButton}>
                   <Text style={styles.saveText}>Save Schedule</Text>
-                </TouchableOpacity>
+                </Pressable>
 
                 {/* Close Button */}
                 <TouchableOpacity onPress={onClose} style={styles.closeButton}>
