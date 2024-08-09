@@ -25,6 +25,7 @@ import DatePickerModal from '../../../Utilities/UI/AddSchedule'
 import AddSchedule from '../../../Utilities/UI/AddSchedule'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
+import ScheduleCard from './ScheduleCard'
 
 // Validation Schema for Formik
 const validationSchema = Yup.object().shape({
@@ -59,6 +60,7 @@ const CreateActivity = ({ route, navigation }) => {
   const inputRefs = useRef({
     titleInput: null,
     locationInput: null,
+    descriptionInput: null,
   })
   const focusInput = inputKey => {
     inputRefs.current[inputKey]?.focus()
@@ -78,11 +80,13 @@ const CreateActivity = ({ route, navigation }) => {
             title: '',
             location: '',
             description: '',
+            schedule: [],
           }}
           validationSchema={validationSchema}
           onSubmit={values => {
             // Handle form submission
-            console.log(values)
+
+            console.log(JSON.stringify(values, null, 2))
           }}
         >
           {({
@@ -173,7 +177,9 @@ const CreateActivity = ({ route, navigation }) => {
               <View style={[styles.descriptionContainer]}>
                 <TouchableOpacity
                   style={[styles.descriptionTitle]}
-                  onPress={() => setShowInput(true)}
+                  onPress={() => {
+                    focusInput('description'), setShowInput(true)
+                  }}
                 >
                   <View>
                     <Text style={styles.sectionText}>Description</Text>
@@ -181,6 +187,7 @@ const CreateActivity = ({ route, navigation }) => {
                 </TouchableOpacity>
                 {showInput && (
                   <TextInput
+                    ref={el => (inputRefs.current.description = el)}
                     style={styles.descriptionInput}
                     placeholderTextColor={theme.colors.text}
                     multiline
@@ -231,6 +238,32 @@ const CreateActivity = ({ route, navigation }) => {
                     <Entypo name='plus' size={24} color={theme.colors.text} />
                   </Pressable>
                 </View>
+                {/* Render ScheduleCards */}
+                {Array.isArray(values.schedule) &&
+                values.schedule.length > 0 ? (
+                  values.schedule.map((schedule, index) => (
+                    <ScheduleCard
+                      key={index}
+                      schedule={schedule}
+                      onToggle={(idx, value) => {
+                        const updatedSchedule = [...values.schedule]
+                        updatedSchedule[idx].enabled = value
+                        setFieldValue('schedule', updatedSchedule)
+                      }}
+                      onDelete={idx => {
+                        const updatedSchedule = values.schedule.filter(
+                          (_, i) => i !== idx
+                        )
+                        setFieldValue('schedule', updatedSchedule)
+                      }}
+                      index={index}
+                    />
+                  ))
+                ) : (
+                  <Text style={styles.noScheduleText}>
+                    No schedule added yet.
+                  </Text>
+                )}
               </View>
 
               {/* AddSchedule Modal */}
@@ -435,6 +468,12 @@ const getStyles = theme => {
     },
     addDate: {
       marginLeft: 100,
+    },
+    noScheduleText: {
+      color: theme.colors.text,
+      fontStyle: 'italic',
+      textAlign: 'center',
+      marginVertical: 10,
     },
   })
 }

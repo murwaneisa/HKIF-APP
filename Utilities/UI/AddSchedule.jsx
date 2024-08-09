@@ -17,10 +17,11 @@ import TimePicker from '@react-native-community/datetimepicker'
 import { Formik, FieldArray, Form } from 'formik'
 import * as Yup from 'yup'
 import moment from 'moment'
+import DateFormatter from '../Helper/DateFormatter'
 
 // Schedule validation schema
 const scheduleValidationSchema = Yup.object().shape({
-  date: Yup.date().required('Date is required').nullable(),
+  date: Yup.date().required('Date is required'),
   startTime: Yup.date().required('Start time is required').nullable(),
   endTime: Yup.date()
     .required('End time is required')
@@ -54,7 +55,7 @@ const scheduleValidationSchema = Yup.object().shape({
   }),
 })
 
-const AddSchedule = ({ isOpen, onClose, formikProps }) => {
+const AddSchedule = ({ isOpen, onClose, formikProps, addSchedule }) => {
   const { theme } = useTheme()
   const styles = getStyles(theme)
 
@@ -71,25 +72,6 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
     occurrences: 1,
   }
 
-  const localTime = time => {
-    return time.toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-    })
-  }
-
-  const addTimeSlot = () => {
-    if (values.startTime && values.endTime) {
-      setFieldValue('timeSlots', [
-        ...values.timeSlots,
-        { start: values.startTime, end: values.endTime },
-      ])
-      // Reset times after adding
-      setFieldValue('startTime', null)
-      setFieldValue('endTime', null)
-    }
-  }
-
   return (
     <Modal animationType='fade' transparent={true} visible={isOpen}>
       <View style={styles.centeredView}>
@@ -97,16 +79,11 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
           <Formik
             initialValues={initialScheduleValues}
             validationSchema={scheduleValidationSchema}
-            onSubmit={values => {
-              console.log('schedule values', values)
-              /*   if (!scheduleFormik.isValid) {
-                console.log('Form is invalid:', scheduleFormik.errors)
-                return // Exit early if the form is not valid
-              } */
-              // Add the validated schedule to parent
-              //addSchedule(scheduleValues)
-              //resetForm() // Reset form to initial values after submission
-              // onClose()
+            onSubmit={(values, { resetForm }) => {
+              console.log(JSON.stringify(values, null, 2))
+              formikProps.values.schedule.push(values)
+              resetForm()
+              onClose()
             }}
           >
             {({
@@ -128,10 +105,8 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
                   mode='calendar'
                   selected={values.date || new Date()}
                   onDateChange={date => {
-                    // Use Date constructor to parse the date
-                    const parsedDate = new Date(date.replace(/\//g, '-')) // Replace slashes with dashes for consistency
+                    const parsedDate = new Date(date.replace(/\//g, '-'))
                     if (!isNaN(parsedDate.getTime())) {
-                      console.log('Parsed date:', parsedDate)
                       setFieldValue('date', parsedDate)
                     }
                   }}
@@ -150,7 +125,7 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
                   >
                     <Text style={styles.timeText}>
                       {values.startTime
-                        ? localTime(values.startTime)
+                        ? DateFormatter.formatTime(values.startTime)
                         : 'Select Time'}
                     </Text>
                   </TouchableOpacity>
@@ -161,7 +136,7 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
                   >
                     <Text style={styles.timeText}>
                       {values.endTime
-                        ? localTime(values.endTime)
+                        ? DateFormatter.formatTime(values.endTime)
                         : 'Select Time'}
                     </Text>
                   </TouchableOpacity>
@@ -199,6 +174,9 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
                 {errors.endTime && touched.endTime && (
                   <Text style={styles.errorText}>{errors.endTime}</Text>
                 )}
+                {errors.timeSlots && touched.timeSlots && (
+                  <Text style={styles.errorText}>{errors.timeSlots}</Text>
+                )}
 
                 {/* Time Slots List */}
                 <FieldArray name='timeSlots'>
@@ -210,7 +188,8 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
                         renderItem={({ item, index }) => (
                           <View style={styles.timeSlotItem}>
                             <Text style={styles.timeSlotText}>
-                              {localTime(item.start)} - {localTime(item.end)}
+                              {DateFormatter.formatTime(item.start)} -{' '}
+                              {DateFormatter.formatTime(item.end)}
                             </Text>
                             <TouchableOpacity onPress={() => remove(index)}>
                               <Text style={styles.removeText}>Remove</Text>
@@ -262,7 +241,7 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
                         }}
                         style={styles.addTimeButton}
                       >
-                        <Text style={styles.addTimeText}>Add Time Slot</Text>
+                        <Text style={styles.buttonText}>Add Time Slot</Text>
                       </TouchableOpacity>
                     </>
                   )}
@@ -325,16 +304,52 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
                     </View>
                   )}
                 </View>
+                {errors.interval && touched.interval && (
+                  <Text style={styles.errorText}>{errors.interval}</Text>
+                )}
+                {errors.occurrences && touched.occurrences && (
+                  <Text style={styles.errorText}>{errors.occurrences}</Text>
+                )}
 
-                {/* Save Button */}
-                <Pressable onPress={handleSubmit} style={styles.saveButton}>
-                  <Text style={styles.saveText}>Save Schedule</Text>
-                </Pressable>
+                <View style={styles.buttonContainer}>
+                  {/* Save Button */}
+                  <Pressable
+                    onPress={() => {
+                      if (!values.date) {
+                        setErrors({
+                          ...errors,
+                          date: 'Date is required',
+                        })
+                        setTouched({
+                          ...touched,
+                          date: true,
+                        })
+                        return
+                      }
+                      if (values.timeSlots.length === 0) {
+                        setErrors({
+                          ...errors,
+                          timeSlots: 'At least one time slot is required',
+                        })
+                        setTouched({
+                          ...touched,
+                          timeSlots: true,
+                        })
+                        return
+                      }
 
-                {/* Close Button */}
-                <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                  <Text style={styles.closeText}>Close</Text>
-                </TouchableOpacity>
+                      handleSubmit()
+                    }}
+                    style={styles.saveButton}
+                  >
+                    <Text style={styles.buttonText}>Save</Text>
+                  </Pressable>
+
+                  {/* Close Button */}
+                  <Pressable onPress={onClose} style={styles.closeButton}>
+                    <Text style={styles.buttonText}>Close</Text>
+                  </Pressable>
+                </View>
               </>
             )}
           </Formik>
@@ -433,9 +448,7 @@ const getStyles = theme => {
       marginBottom: 20,
       alignItems: 'center',
     },
-    addTimeText: {
-      color: '#ffffff',
-    },
+
     timeSlotText: {
       color: theme.colors.text,
     },
@@ -454,10 +467,35 @@ const getStyles = theme => {
       alignItems: 'center',
       padding: 10,
     },
-    closeText: {
-      fontFamily: 'Inter-Bold',
+    buttonContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    errorText: {
+      color: theme.colors.error,
       textAlign: 'center',
-      color: theme.colors.primary,
+    },
+
+    closeButton: {
+      backgroundColor: theme.colors.error,
+      padding: 10,
+      borderRadius: 5,
+      marginBottom: 1,
+      fontFamily: 'Inter-Bold',
+      color: '#FFFFFF',
+    },
+    saveButton: {
+      backgroundColor: theme.colors.primary,
+      padding: 10,
+      borderRadius: 5,
+      marginBottom: 1,
+      textAlign: 'center',
+      color: '#FFFFFF',
+    },
+    buttonText: {
+      fontFamily: 'Inter-Bold',
+      color: '#FFFFFF',
     },
   })
 }
