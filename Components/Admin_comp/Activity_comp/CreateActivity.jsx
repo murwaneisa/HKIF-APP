@@ -191,7 +191,7 @@ const CreateActivity = ({ route, navigation }) => {
                     style={styles.descriptionInput}
                     placeholderTextColor={theme.colors.text}
                     multiline
-                    placeholder='Enter your description here...'
+                    placeholder='Type your description here...'
                     onChangeText={handleChange('description')}
                     onBlur={handleBlur('description')}
                     value={values.description}
@@ -232,7 +232,7 @@ const CreateActivity = ({ route, navigation }) => {
                       { marginLeft: 10, fontFamily: 'Inter-Bold' },
                     ]}
                   >
-                    Activity day & time
+                    Activity dates & time
                   </Text>
                   <Pressable onPress={openDatePicker} style={styles.addDate}>
                     <Entypo name='plus' size={24} color={theme.colors.text} />
@@ -373,7 +373,6 @@ const getStyles = theme => {
     },
     inputText: {
       color: theme.colors.text,
-
       fontSize: 18,
     },
     DatePickerButton: {
@@ -399,6 +398,7 @@ const getStyles = theme => {
         android: 150,
         web: 250,
       }), // Adjust the height as needed
+      color: theme.colors.text,
       width: '100%', // Adjust the width as needed
       borderColor: theme.colors.text,
       borderRadius: 8,

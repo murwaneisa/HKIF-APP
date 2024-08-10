@@ -18,6 +18,7 @@ import { Formik, FieldArray, Form } from 'formik'
 import * as Yup from 'yup'
 import moment from 'moment'
 import DateFormatter from '../Helper/DateFormatter'
+import AntDesign from '@expo/vector-icons/AntDesign'
 
 // Schedule validation schema
 const scheduleValidationSchema = Yup.object().shape({
@@ -50,7 +51,16 @@ const scheduleValidationSchema = Yup.object().shape({
     then: schema =>
       schema
         .min(1, 'Occurrences must be at least 1')
-        .required('Occurrences are required'),
+        .required('Occurrences are required')
+        .test(
+          'is-at-least-twice-interval',
+          'Occurrences must be at least twice weeks value.',
+          function (value) {
+            const { interval } = this.parent
+            // Check if occurrences are at least twice the interval
+            return value >= 2 * interval
+          }
+        ),
     otherwise: schema => schema.nullable(), // Optional when not recurring
   }),
 })
@@ -69,7 +79,7 @@ const AddSchedule = ({ isOpen, onClose, formikProps, addSchedule }) => {
     timeSlots: [],
     frequency: 'once',
     interval: 1,
-    occurrences: 1,
+    occurrences: 2,
   }
 
   return (
@@ -83,7 +93,7 @@ const AddSchedule = ({ isOpen, onClose, formikProps, addSchedule }) => {
               console.log(JSON.stringify(values, null, 2))
               formikProps.values.schedule.push(values)
               resetForm()
-              onClose()
+              /*  onClose() */
             }}
           >
             {({
@@ -192,13 +202,18 @@ const AddSchedule = ({ isOpen, onClose, formikProps, addSchedule }) => {
                               {DateFormatter.formatTime(item.end)}
                             </Text>
                             <TouchableOpacity onPress={() => remove(index)}>
-                              <Text style={styles.removeText}>Remove</Text>
+                              {/*   <Text style={styles.removeText}>Remove</Text> */}
+                              <AntDesign
+                                name='delete'
+                                size={20}
+                                color={theme.colors.error}
+                              />
                             </TouchableOpacity>
                           </View>
                         )}
                         style={styles.flatList} // Ensure the FlatList is styled correctly for scrolling
                       />
-                      <TouchableOpacity
+                      <Pressable
                         onPress={() => {
                           // Perform validation before adding the time slot
                           if (!values.startTime || !values.endTime) {
@@ -242,7 +257,7 @@ const AddSchedule = ({ isOpen, onClose, formikProps, addSchedule }) => {
                         style={styles.addTimeButton}
                       >
                         <Text style={styles.buttonText}>Add Time Slot</Text>
-                      </TouchableOpacity>
+                      </Pressable>
                     </>
                   )}
                 </FieldArray>
@@ -451,6 +466,9 @@ const getStyles = theme => {
 
     timeSlotText: {
       color: theme.colors.text,
+    },
+    removeText: {
+      color: theme.colors.error,
     },
     flatList: {
       maxHeight: 100, // Constrain height for scrolling
