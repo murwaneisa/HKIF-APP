@@ -59,7 +59,7 @@ const getAdminValidationSchema = adminId => {
 const AddAdmin = ({ route, navigation }) => {
   const dispatch = useDispatch()
   const admins = useSelector(state => state.admin.data)
-  console.log('the admins', admins)
+
   const { theme, isDarkMode } = useTheme()
   const { adminId } = route?.params || {}
   const adminValidationSchema = getAdminValidationSchema(adminId)
@@ -129,18 +129,21 @@ const AddAdmin = ({ route, navigation }) => {
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible)
   }
-
-  const handlePickImage = async () => {
-    const uri = await HKIFImagePicker.pickImage()
-    if (uri) {
-      setImage(uri)
-      await handleUploadImage()
+  const handleUploadImage = async () => {
+    console.log('image', image)
+    if (image) {
+      const firebaseUrl = await HKIFImagePicker.uploadImageToDB(image)
+      console.log('firebaseUrl: ', firebaseUrl)
     }
   }
 
-  const handleUploadImage = async () => {
-    if (image) {
-      await HKIFImagePicker.uploadImageAsync(image)
+  const handlePickImage = async () => {
+    const uri = await HKIFImagePicker.pickImage()
+    console.log('the url: ', uri)
+    if (uri) {
+      setImage(uri)
+      console.log('image2', image)
+      await handleUploadImage()
     }
   }
 

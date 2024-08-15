@@ -8,8 +8,9 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Pressable,
+  Image,
 } from 'react-native'
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useTheme } from '../../../Styles/theme'
 import { useState } from 'react'
 import Checkbox from 'expo-checkbox'
@@ -26,12 +27,16 @@ import AddSchedule from '../../../Utilities/UI/AddSchedule'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import ScheduleCard from './ScheduleCard'
+import HKIFImagePicker from '../../../Utilities/Helper/HKIFImagePicker'
 
 // Validation Schema for Formik
 const validationSchema = Yup.object().shape({
   title: Yup.string().required('Title is required'),
   location: Yup.string().required('Location is required'),
   description: Yup.string().required('Description is required'),
+  schedule: Yup.array()
+    .min(1, 'At least one schedule is required')
+    .required('Schedule is required'),
 })
 const CreateActivity = ({ route, navigation }) => {
   const { theme } = useTheme()
@@ -40,6 +45,7 @@ const CreateActivity = ({ route, navigation }) => {
   const [pickerType, setPickerType] = useState('time') // New state for picker type
   const [showInput, setShowInput] = useState(false)
   const [selectedDays, setSelectedDays] = useState({})
+  const [image, setImage] = useState('')
   const styles = getStyles(theme)
 
   const openDatePicker = () => {
@@ -51,12 +57,6 @@ const CreateActivity = ({ route, navigation }) => {
     setOpenStartDatePicker(false)
   }
 
-  const toggleDaySelection = day => {
-    setSelectedDays(prevSelectedDays => ({
-      ...prevSelectedDays,
-      [day]: !prevSelectedDays[day],
-    }))
-  }
   const inputRefs = useRef({
     titleInput: null,
     locationInput: null,
@@ -65,6 +65,14 @@ const CreateActivity = ({ route, navigation }) => {
   const focusInput = inputKey => {
     inputRefs.current[inputKey]?.focus()
   }
+
+  const handlePickImage = async () => {
+    const uri = await HKIFImagePicker.pickImage()
+    if (uri) {
+      setImage(uri)
+    }
+  }
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: theme.colors.backgroundSecondary }}
@@ -123,29 +131,37 @@ const CreateActivity = ({ route, navigation }) => {
                 <Text style={{ color: 'red' }}>{errors.title}</Text>
               )}
               {/* image */}
-              <View
-                style={[
-                  styles.descriptionInput,
-                  {
-                    backgroundColor: theme.colors.accent2,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderWidth: 0,
-                    borderColor: theme.colors.text,
-                    shadowOpacity: 0.2,
-                    shadowRadius: 1.41,
-                    elevation: 2,
-                  },
-                ]}
-              >
-                <MaterialIcons
-                  name='add-a-photo'
-                  size={28}
-                  color={theme.colors.text}
-                />
-                <Text style={[styles.sectionText, { marginTop: 8 }]}>
-                  Upload event image
-                </Text>
+              <View>
+                <Pressable onPress={handlePickImage}>
+                  {image ? (
+                    <Image style={styles.image} source={{ uri: image }} />
+                  ) : (
+                    <View
+                      style={[
+                        styles.descriptionInput,
+                        {
+                          backgroundColor: theme.colors.accent2,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          borderWidth: 0,
+                          borderColor: theme.colors.text,
+                          shadowOpacity: 0.2,
+                          shadowRadius: 1.41,
+                          elevation: 2,
+                        },
+                      ]}
+                    >
+                      <MaterialIcons
+                        name='add-a-photo'
+                        size={28}
+                        color={theme.colors.text}
+                      />
+                      <Text style={[styles.sectionText, { marginTop: 8 }]}>
+                        Upload event image
+                      </Text>
+                    </View>
+                  )}
+                </Pressable>
               </View>
 
               {/* Location */}
@@ -238,6 +254,7 @@ const CreateActivity = ({ route, navigation }) => {
                     <Entypo name='plus' size={24} color={theme.colors.text} />
                   </Pressable>
                 </View>
+
                 {/* Render ScheduleCards */}
                 {Array.isArray(values.schedule) &&
                 values.schedule.length > 0 ? (
@@ -265,7 +282,9 @@ const CreateActivity = ({ route, navigation }) => {
                   </Text>
                 )}
               </View>
-
+              {errors.schedule && touched.schedule && (
+                <Text style={{ color: 'red' }}>{errors.schedule}</Text>
+              )}
               {/* AddSchedule Modal */}
               <AddSchedule
                 isOpen={openStartDatePicker}
@@ -317,6 +336,21 @@ const getStyles = theme => {
         web: '5%',
       }),
     },
+
+    image: {
+      width: '100%',
+      height: Platform.select({
+        ios: 200,
+        android: 150,
+        web: 250,
+      }),
+      shadowOpacity: 0.2,
+      shadowRadius: 1.41,
+      elevation: 2,
+      borderRadius: 6, // Border radius as a percentage of the size to create a circular shape
+      resizeMode: 'cover',
+    },
+
     dateTimeContainer: {
       backgroundColor: theme.colors.accent2,
       marginVertical: 10,
