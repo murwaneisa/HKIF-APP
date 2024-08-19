@@ -347,7 +347,7 @@ const getStyles = theme => {
       shadowOpacity: 0.2,
       shadowRadius: 1.41,
       elevation: 2,
-      borderRadius: 6, // Border radius as a percentage of the size to create a circular shape
+      borderRadius: 6,
       resizeMode: 'cover',
     },
 
