@@ -91,6 +91,8 @@ const AddSchedule = ({ isOpen, onClose, formikProps, addSchedule }) => {
             validationSchema={scheduleValidationSchema}
             onSubmit={(values, { resetForm }) => {
               console.log(JSON.stringify(values, null, 2))
+              delete values.startTime
+              delete values.endTime
               formikProps.values.schedule.push(values)
               resetForm()
               /*  onClose() */
