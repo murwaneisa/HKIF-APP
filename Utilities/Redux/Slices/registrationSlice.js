@@ -12,6 +12,7 @@ const initialState = {
   city: '',
   zipCode: '',
   phoneNumber: '',
+  countryCode: '',
   role: '',
 }
 
@@ -36,6 +37,7 @@ const registrationSlice = createSlice({
       state.address = action.payload.address
       state.city = action.payload.city
       state.zipCode = action.payload.zipCode
+      state.countryCode = action.payload.countryCode
       state.phoneNumber = action.payload.phoneNumber
     },
     updateStepFiveData: (state, action) => {

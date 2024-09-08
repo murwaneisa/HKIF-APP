@@ -52,7 +52,7 @@ const AddLeader = ({ route }) => {
 
   const handleUploadImage = async () => {
     if (image) {
-      await HKIFImagePicker.uploadImageAsync(image)
+      await HKIFImagePicker.uploadImageToDB(image)
     }
   }
 

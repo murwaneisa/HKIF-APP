@@ -6,12 +6,24 @@ import { useDispatch, useSelector } from 'react-redux'
 import { updateStepFourData } from '../../Utilities/Redux/Slices/registrationSlice'
 import * as yup from 'yup'
 import { Formik } from 'formik'
+import { fetchCountryData } from '../../Utilities/Axios/country'
+import { isValidPhoneNumber } from 'libphonenumber-js'
+import CountryPicker from './CountryPicker'
 
 const validationSchema = yup.object().shape({
+  countryCode: yup.string().required('Country code is required'),
   phoneNumber: yup
-    .string()
-    .matches(/^\d{10}$/, 'Please enter a valid 10-digit phone number')
-    .required('Phone number is required'),
+    .number()
+    .required('Phone number is required')
+    .test(
+      'is-valid-phone-number',
+      'Please enter a valid phone number with country code',
+      function (value) {
+        const { countryCode } = this.parent
+        const fullPhoneNumber = `${countryCode}${value}`
+        return isValidPhoneNumber(fullPhoneNumber)
+      }
+    ),
   address: yup.string().required('Please enter an address'),
   city: yup.string().required('Please enter a city'),
   zipCode: yup.string().required('Please enter a zip-code'),
@@ -19,10 +31,20 @@ const validationSchema = yup.object().shape({
 
 const StepFour = ({ styles, goToNextStep, goToPreviousStep }) => {
   const dispatch = useDispatch()
-  const { phoneNumber, address, city, zipCode } = useSelector(
+  const { phoneNumber, address, city, zipCode, countryCode } = useSelector(
     state => state.registration
   )
   const [userInfo, setUserInfo] = useState({})
+
+  const [countryData, setCountryData] = useState([])
+
+  useEffect(() => {
+    const loadCountryData = async () => {
+      const data = await fetchCountryData()
+      setCountryData(data)
+    }
+    loadCountryData()
+  }, [])
 
   useEffect(() => {
     setUserInfo({
@@ -30,6 +52,7 @@ const StepFour = ({ styles, goToNextStep, goToPreviousStep }) => {
       address: address || '',
       city: city || '',
       zipCode: zipCode || '',
+      countryCode: countryCode || '+46',
     })
   }, [phoneNumber, address, city, zipCode])
 
@@ -58,6 +81,11 @@ const StepFour = ({ styles, goToNextStep, goToPreviousStep }) => {
         touched,
       }) => (
         <>
+          <CountryPicker
+            data={countryData}
+            selectedValue={values.countryCode}
+            onValueChange={handleChange('countryCode')}
+          />
           <Input
             label='Phone Number'
             value={values.phoneNumber}
