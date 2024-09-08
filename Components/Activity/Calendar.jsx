@@ -12,7 +12,7 @@ const Calendar = ({ startDate, schedules }) => {
       <View style={styles.itemRow}>
         {DateFormatter.getDaysOfWeek(startDate).map((item, dateIndex) => {
           const hasSchedule = schedules.some(
-            schedule => schedule.day === DateFormatter.getWeekday(item)
+            schedule => schedule.day === item.getDay()
           )
           return (
             <View

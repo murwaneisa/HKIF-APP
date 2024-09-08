@@ -33,19 +33,6 @@ function Activity({ navigation }) {
   const [members, setMembers] = useState([])
   const [loadingMembers, setLoadingMembers] = useState(false)
 
-  const schedules = [
-    {
-      day: 'Tuesday',
-      startTime: '16:00',
-      endTime: '18:00',
-    },
-    {
-      day: 'Thursday',
-      startTime: '18:00',
-      endTime: '20:00',
-    },
-  ]
-
   useEffect(() => {
     const fetchData = async () => {
       setLoadingMembers(true)
@@ -79,7 +66,7 @@ function Activity({ navigation }) {
 
         <View style={{ marginBottom: 20 }}>
           <NextActivitySessionCard
-            sessionInfo={ActivitySession.getNextSession(schedules)}
+            sessionInfo={ActivitySession.getNextSession(activity.schedules)}
           />
         </View>
 
@@ -94,10 +81,10 @@ function Activity({ navigation }) {
               {DateFormatter.getWeeksArray((len = 4)).map((item, index) => (
                 <View style={styles.slide} key={index}>
                   <Text style={styles.sectionTitle}>
-                    Schedule -{' '}
+                    Schedule -
                     {`Week ${DateFormatter.getWeekNumber((date = item))}`}
                   </Text>
-                  <Calendar startDate={item} schedules={schedules} />
+                  <Calendar startDate={item} schedules={activity.schedules} />
                 </View>
               ))}
             </Swiper>

@@ -13,7 +13,7 @@ import { useTheme } from '../Styles/theme'
 import SettingsOptionCard from '../Components/Settings/SettingsOptionCard'
 import SettingsSection from '../Components/Settings/SettingsSection'
 
-const Settings = () => {
+const Settings = ({ navigation }) => {
   const { theme } = useTheme()
   const windowWidth = Dimensions.get('window').width
   const styles = getStyles(theme, windowWidth)
@@ -59,7 +59,12 @@ const Settings = () => {
   return (
     <ScrollView style={styles.container}>
       <SettingsSection title={'ACCOUNT'}>
-        <SettingsOptionCard title={'Change Password'} onPress={() => {}} />
+        <SettingsOptionCard
+          title={'Change Password'}
+          onPress={() => {
+            navigation.navigate('ChangePassword')
+          }}
+        />
       </SettingsSection>
 
       <SettingsSection title={'SUPPORT'}>
