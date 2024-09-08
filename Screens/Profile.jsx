@@ -25,12 +25,14 @@ const Profile = ({ navigation }) => {
     const uri = await HKIFImagePicker.pickImage()
     if (uri) {
       setImage(uri)
+      // await handleUploadImage()
     }
   }
 
   const handleUploadImage = async () => {
     if (image) {
-      await HKIFImagePicker.uploadImageAsync(image)
+      const URL = await HKIFImagePicker.uploadImageToDB(image)
+      console.log(URL)
     }
   }
 

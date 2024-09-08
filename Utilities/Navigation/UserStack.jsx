@@ -18,6 +18,7 @@ import HeaderLeft from '../../Components/Navigation/HeaderLeft'
 import HeaderRight from '../../Components/Navigation/HeaderRight'
 import DrawerNavigator from '../../Components/Navigation/DrawerNavigator'
 import StackNavigator from '../../Components/Navigation/StackNavigator'
+import ChangePassword from '../../Screens/ChangePassword'
 
 const Stack = createStackNavigator()
 const Drawer = createDrawerNavigator()
@@ -53,6 +54,13 @@ const UserStack = () => {
         options={({ route }) => ({
           headerTitle: `Edit ${route.params?.type}` || 'Edit Profile',
         })}
+      />
+      <Stack.Screen
+        name='ChangePassword'
+        component={ChangePassword}
+        options={{
+          headerTitle: 'Change Password',
+        }}
       />
       <Stack.Screen
         name='Events'
