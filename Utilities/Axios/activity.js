@@ -10,3 +10,14 @@ export const getActivities = async () => {
     console.error('Error fetching activities:', JSON.stringify(error))
   }
 }
+
+export const toggleActivityMember = async (activityId, memberId) => {
+  try {
+    const response = await baseInstance.put(
+      `${activitySuffix}/${activityId}/member/${memberId}`
+    )
+    return response.status
+  } catch (error) {
+    console.error('Error favoriting activity:', JSON.stringify(error))
+  }
+}

@@ -66,20 +66,20 @@ function EventDetails({ navigation }) {
               <View style={styles.headerInfoWrapper}>
                 <Text style={styles.title}>{event.title}</Text>
                 <View style={styles.textWrapper}>
-                  <Ionicons name='location-outline' style={styles.icon} />
+                  <Ionicons name='location' style={styles.icon} />
                   <Text style={styles.addressText}>Högskolan Kristianstad</Text>
                 </View>
               </View>
 
               <View style={styles.dateInfoWrapper}>
                 <View style={styles.textWrapper}>
-                  <Ionicons name='calendar-outline' style={styles.icon} />
+                  <Ionicons name='calendar' style={styles.icon} />
                   <Text style={styles.dateText}>
                     {DateFormatter.formatDate(event.startTime)}
                   </Text>
                 </View>
                 <View style={styles.textWrapper}>
-                  <Ionicons name='time-outline' style={styles.icon} />
+                  <Ionicons name='time' style={styles.icon} />
                   <Text style={styles.dateText}>
                     {DateFormatter.formatTime(event.startTime)} -{' '}
                     {DateFormatter.formatTime(event.endTime)}
@@ -185,6 +185,7 @@ const getStyles = (theme, windowWidth, windowHeight) => {
     },
     textWrapper: {
       flexDirection: 'row',
+      alignItems: 'center',
     },
     icon: {
       color: theme.colors.primary,

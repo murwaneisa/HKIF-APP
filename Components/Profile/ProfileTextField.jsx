@@ -9,7 +9,8 @@ const ProfileTextField = ({
   placeholder,
   iconName,
   onChangeText,
-  keyboardType,
+  rightIcon,
+  ...textInputConfig
 }) => {
   const { theme } = useTheme()
   const styles = getStyles(theme)
@@ -24,8 +25,9 @@ const ProfileTextField = ({
           placeholderTextColor={theme.colors.text}
           value={value}
           onChangeText={onChangeText}
-          keyboardType={keyboardType}
+          {...textInputConfig}
         />
+        {rightIcon && <View style={styles.rightIcon}>{rightIcon}</View>}
       </View>
     </View>
   )
@@ -56,6 +58,9 @@ const getStyles = theme =>
       fontFamily: 'Inter-SemiBold',
       fontSize: 15,
       paddingVertical: 20,
+    },
+    rightIcon: {
+      marginRight: 20,
     },
   })
 

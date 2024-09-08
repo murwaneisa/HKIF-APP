@@ -4,7 +4,7 @@ import {
   fetchActivitiesFailure,
   updateActivityFavorite,
 } from '../Slices/activitySlice'
-import { getActivities } from '../../Axios/activity'
+import { getActivities, toggleActivityMember } from '../../Axios/activity'
 
 export const fetchActivities = () => async dispatch => {
   try {
@@ -16,6 +16,14 @@ export const fetchActivities = () => async dispatch => {
   }
 }
 
-export const toggleActivityFavorite = (activityId, userId) => dispatch => {
-  dispatch(updateActivityFavorite({ _id: activityId, userId }))
-}
+export const toggleActivityFavorite =
+  (activityId, userId) => async dispatch => {
+    try {
+      const status = await toggleActivityMember(activityId, userId)
+      if (status === 200) {
+        dispatch(updateActivityFavorite({ _id: activityId, userId }))
+      }
+    } catch (error) {
+      console.error('Error updating activity member:', error)
+    }
+  }

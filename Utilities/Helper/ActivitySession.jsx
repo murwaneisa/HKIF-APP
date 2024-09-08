@@ -1,13 +1,12 @@
-import DateFormatter from './DateFormatter'
-
 class ActivitySession {
   static getNextSession = schedules => {
     const currentDate = new Date()
     const currentDayIndex = currentDate.getDay()
     for (let i = 0; i < 7; i++) {
       const nextDayIndex = (currentDayIndex + i) % 7
-      const nextDay = DateFormatter.daysOfWeek[nextDayIndex]
-      const nextSession = schedules.find(session => session.day === nextDay)
+      const nextSession = schedules.find(
+        session => session.day === nextDayIndex
+      )
 
       if (nextSession) {
         if (
