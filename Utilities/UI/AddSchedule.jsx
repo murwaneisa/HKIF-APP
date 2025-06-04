@@ -65,7 +65,7 @@ const scheduleValidationSchema = Yup.object().shape({
   }),
 })
 
-const AddSchedule = ({ isOpen, onClose, formikProps, addSchedule }) => {
+const AddSchedule = ({ isOpen, onClose, formikProps }) => {
   const { theme } = useTheme()
   const styles = getStyles(theme)
 
@@ -73,13 +73,18 @@ const AddSchedule = ({ isOpen, onClose, formikProps, addSchedule }) => {
   const [showEndTimePicker, setShowEndTimePicker] = useState(false)
 
   const initialScheduleValues = {
-    date: null,
-    startTime: null,
-    endTime: null,
+    date: new Date(),
+    startTime: new Date(),
+    endTime: new Date(),
     timeSlots: [],
     frequency: 'once',
     interval: 1,
     occurrences: 2,
+  }
+
+  if (!formikProps || !formikProps.values || !formikProps.setFieldValue) {
+    console.warn('AddSchedule: Missing required formikProps');
+    return null;
   }
 
   return (
@@ -90,10 +95,15 @@ const AddSchedule = ({ isOpen, onClose, formikProps, addSchedule }) => {
             initialValues={initialScheduleValues}
             validationSchema={scheduleValidationSchema}
             onSubmit={(values, { resetForm }) => {
-              console.log(JSON.stringify(values, null, 2))
-              formikProps.values.schedule.push(values)
-              resetForm()
-              /*  onClose() */
+              try {
+                const currentSchedule = [...formikProps.values.schedule];
+                currentSchedule.push(values);
+                formikProps.setFieldValue('schedule', currentSchedule);
+                resetForm();
+                onClose();
+              } catch (error) {
+                console.warn('Error saving schedule:', error);
+              }
             }}
           >
             {({
@@ -113,11 +123,15 @@ const AddSchedule = ({ isOpen, onClose, formikProps, addSchedule }) => {
                 {/* Date Picker */}
                 <DatePicker
                   mode='calendar'
-                  selected={values.date || new Date()}
+                  selected={values.date ? DateFormatter.formatDate(values.date) : DateFormatter.formatDate(new Date())}
                   onDateChange={date => {
-                    const parsedDate = new Date(date.replace(/\//g, '-'))
-                    if (!isNaN(parsedDate.getTime())) {
-                      setFieldValue('date', parsedDate)
+                    try {
+                      const parsedDate = new Date(date.replace(/\//g, '-'))
+                      if (!isNaN(parsedDate.getTime())) {
+                        setFieldValue('date', parsedDate)
+                      }
+                    } catch (error) {
+                      console.warn('Error parsing date:', error)
                     }
                   }}
                   style={styles.datePicker}
@@ -159,8 +173,12 @@ const AddSchedule = ({ isOpen, onClose, formikProps, addSchedule }) => {
                     is24Hour={true}
                     display='default'
                     onChange={(event, selectedTime) => {
-                      setShowStartTimePicker(false)
-                      setFieldValue('startTime', selectedTime)
+                      if (Platform.OS === 'android') {
+                        setShowStartTimePicker(false);
+                      }
+                      if (event.type === 'set' && selectedTime) {
+                        setFieldValue('startTime', selectedTime);
+                      }
                     }}
                   />
                 )}
@@ -172,8 +190,12 @@ const AddSchedule = ({ isOpen, onClose, formikProps, addSchedule }) => {
                     is24Hour={true}
                     display='default'
                     onChange={(event, selectedTime) => {
-                      setShowEndTimePicker(false)
-                      setFieldValue('endTime', selectedTime)
+                      if (Platform.OS === 'android') {
+                        setShowEndTimePicker(false);
+                      }
+                      if (event.type === 'set' && selectedTime) {
+                        setFieldValue('endTime', selectedTime);
+                      }
                     }}
                   />
                 )}

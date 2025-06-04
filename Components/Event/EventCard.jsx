@@ -41,13 +41,13 @@ const EventCard = ({ data, onPress, webWidth, marginBottom }) => {
         <View>
           <Text style={styles.title}>{data.title}</Text>
           <View style={styles.textContainer}>
-            <Ionicons name='ios-location' style={styles.icon} />
+            <Ionicons name='location' style={styles.icon} />
             <Text style={styles.text}>Högskolan Kristianstad</Text>
           </View>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={styles.textContainer}>
-            <Ionicons name='ios-calendar' style={styles.icon} />
+            <Ionicons name='calendar' style={styles.icon} />
             <Text style={styles.text}>
               {DateFormatter.formatDate(data.startTime)}
             </Text>

@@ -26,21 +26,17 @@ const DateTimePickerInput = ({
   const [show, setShow] = useState(false)
 
   const onChange = (event, selectedDate) => {
-    if (
-      event.type === 'set' ||
-      event.type === 'dismissed' ||
-      event.type === 'neutralButtonPressed '
-    ) {
-      if (Platform.OS === 'android') {
-        setShow(false)
-      }
+    const currentDate = selectedDate || value;
+    if (Platform.OS === 'android') {
+      setShow(false)
+    }
+    if (event.type === 'set') {
       setFieldTouched(fieldName, true)
-      handleChange(fieldName, selectedDate)
+      handleChange(fieldName, currentDate)
     }
   }
 
   const toggleMode = () => {
-    console.log(show)
     setShow(!show)
   }
 
@@ -56,7 +52,7 @@ const DateTimePickerInput = ({
         >
           <RNDateTimePicker
             style={{ marginLeft: -18 }}
-            value={value}
+            value={value || new Date()}
             mode={dateMode ? 'date' : 'time'}
             onChange={onChange}
             is24Hour={true}
@@ -67,13 +63,13 @@ const DateTimePickerInput = ({
           <Pressable style={styles.inputBtn} onPress={toggleMode}>
             <Text style={styles.valueStyle}>
               {dateMode
-                ? DateFormatter.formatDate(value)
-                : DateFormatter.formatTime(value)}
+                ? DateFormatter.formatDate(value || new Date())
+                : DateFormatter.formatTime(value || new Date())}
             </Text>
           </Pressable>
           {show && (
             <RNDateTimePicker
-              value={value}
+              value={value || new Date()}
               mode={dateMode ? 'date' : 'time'}
               onChange={onChange}
               is24Hour={true}

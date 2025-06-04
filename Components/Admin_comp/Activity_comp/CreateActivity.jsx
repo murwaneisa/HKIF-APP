@@ -105,6 +105,7 @@ const CreateActivity = ({ route, navigation }) => {
             errors,
             touched,
             setFieldValue,
+            setTouched,
           }) => (
             <>
               {/* Title */}
@@ -288,12 +289,16 @@ const CreateActivity = ({ route, navigation }) => {
               {/* AddSchedule Modal */}
               <AddSchedule
                 isOpen={openStartDatePicker}
-                onClose={handleCloseModal}
+                onClose={() => {
+                  setOpenStartDatePicker(false);
+                  handleCloseModal();
+                }}
                 formikProps={{
                   values,
                   setFieldValue,
                   errors,
                   touched,
+                  setFieldTouched: setTouched,
                 }}
               />
 
