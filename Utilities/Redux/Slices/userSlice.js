@@ -1,5 +1,19 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { deleteUserThunk } from '../Actions/userActions'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { deleteUser } from '../../Axios/user'
+
+// Move the thunk here instead of importing it
+export const deleteUserThunk = createAsyncThunk(
+  'users/deleteStatus',
+  async (userId, { rejectWithValue }) => {
+    try {
+      await deleteUser(userId)
+      return userId
+    } catch (error) {
+      console.error('Deleting user failed:', error)
+      return rejectWithValue(error.response.data)
+    }
+  }
+)
 
 const initialState = {
   currentUser: null,

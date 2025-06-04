@@ -2,59 +2,93 @@ import React from 'react'
 import {
   View,
   Text,
-  StyleSheet,
   Image,
   Pressable,
   Platform,
-  Dimensions,
 } from 'react-native'
-import { useTheme } from '../../Styles/theme'
 import { Ionicons } from '@expo/vector-icons'
 import DateFormatter from '../../Utilities/Helper/DateFormatter'
 
 const EventCard = ({ data, onPress, webWidth, marginBottom }) => {
-  const { theme } = useTheme()
-  const windowWidth = Dimensions.get('window').width
-  const styles = getStyles(theme, windowWidth)
-
   return (
     <Pressable
       onPress={onPress}
-      style={[
-        styles.container,
-        {
-          marginBottom: marginBottom,
-          width: Platform.select({ web: webWidth }),
-        },
-      ]}
+      className="w-full bg-primary flex-row p-2.5 web:p-5 h-[125px] web:h-[180px] rounded-2xl shadow-sm"
+      style={{ marginBottom }}
     >
-      <View style={styles.imageContainer}>
+      <View className="
+        bg-black/20
+        w-[33%] android:w-[35%] web:w-[40%]
+        h-full rounded-2xl
+        mr-2.5 web:mr-4
+      ">
         <Image
-          style={styles.image}
+          className="w-full h-full rounded-2xl"
           source={{
             uri: data.imageUrl,
           }}
           resizeMode='cover'
         />
       </View>
-      <View style={styles.content}>
+      <View className="flex-1 justify-between">
         <View>
-          <Text style={styles.title}>{data.title}</Text>
-          <View style={styles.textContainer}>
-            <Ionicons name='location' style={styles.icon} />
-            <Text style={styles.text}>Högskolan Kristianstad</Text>
+          <Text className="
+            font-['Inter-SemiBold'] font-bold
+            text-[17px] web:text-[22px]
+            mb-1.5 text-white
+          ">
+            {data.title}
+          </Text>
+          <View className="flex-row items-center mb-1.5">
+            <Ionicons 
+              name='location'
+              className="
+                text-white/80
+                text-[16px] web:text-[18px]
+                mr-1
+              "
+            />
+            <Text className="
+              font-['Inter-Regular']
+              text-[14px] android:text-[14px] web:text-[18px]
+              text-white
+            ">
+              Högskolan Kristianstad
+            </Text>
           </View>
         </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <View style={styles.textContainer}>
-            <Ionicons name='calendar' style={styles.icon} />
-            <Text style={styles.text}>
+        <View className="flex-row justify-between">
+          <View className="flex-row items-center mb-1.5">
+            <Ionicons 
+              name='calendar'
+              className="
+                text-white/80
+                text-[16px] web:text-[18px]
+                mr-1
+              "
+            />
+            <Text className="
+              font-['Inter-Regular']
+              text-[14px] android:text-[14px] web:text-[18px]
+              text-white
+            ">
               {DateFormatter.formatDate(data.startTime)}
             </Text>
           </View>
-          <View style={styles.textContainer}>
-            <Ionicons name='time' style={styles.icon} />
-            <Text style={styles.text}>
+          <View className="flex-row items-center mb-1.5">
+            <Ionicons 
+              name='time'
+              className="
+                text-white/80
+                text-[16px] web:text-[18px]
+                mr-1
+              "
+            />
+            <Text className="
+              font-['Inter-Regular']
+              text-[14px] android:text-[14px] web:text-[18px]
+              text-white
+            ">
               kl {DateFormatter.formatTime(data.startTime)}
             </Text>
           </View>
@@ -63,90 +97,5 @@ const EventCard = ({ data, onPress, webWidth, marginBottom }) => {
     </Pressable>
   )
 }
-
-const getStyles = (theme, windowWidth) =>
-  StyleSheet.create({
-    container: {
-      width: Platform.select({
-        ios: '100%',
-        android: '100%',
-      }),
-      backgroundColor: theme.colors.primary,
-      flexDirection: 'row',
-      padding: Platform.select({
-        ios: 10,
-        android: 10,
-        web: 20,
-      }),
-      height: Platform.select({
-        ios: 125,
-        android: 125,
-        web: 180,
-      }),
-      borderRadius: 15,
-      shadowColor: 'black',
-      shadowOpacity: 0.1,
-      shadowOffset: { width: 0, height: 0 },
-      shadowRadius: 8,
-    },
-    imageContainer: {
-      backgroundColor: 'rgba(0,0,0,0.2)',
-      width: Platform.select({
-        ios: '33%',
-        android: '35%',
-        web: '40%',
-      }),
-      height: '100%',
-      borderRadius: 15,
-      marginRight: Platform.select({
-        ios: 10,
-        android: 10,
-        web: 15,
-      }),
-    },
-    image: {
-      width: '100%',
-      height: '100%',
-      borderRadius: 15,
-    },
-    content: {
-      flex: 1,
-      justifyContent: 'space-between',
-    },
-    title: {
-      fontFamily: 'Inter-SemiBold',
-      fontWeight: 'bold',
-      fontSize: Platform.select({
-        ios: 17,
-        android: 17,
-        web: 22,
-      }),
-      marginBottom: 5,
-      color: 'white',
-    },
-    textContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginBottom: 5,
-    },
-    text: {
-      fontFamily: 'Inter-Regular',
-      fontSize: Platform.select({
-        ios: 15,
-        android: 14,
-        web: 18,
-      }),
-      color: 'white',
-    },
-    icon: {
-      color: 'rgba(255,255,255,0.8)',
-      fontSize: Platform.select({
-        ios: 18,
-        android: 16,
-        web: 18,
-      }),
-      marginRight: 4,
-    },
-  })
 
 export default EventCard

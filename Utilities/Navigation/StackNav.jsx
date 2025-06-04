@@ -1,4 +1,3 @@
-import { NavigationContainer } from '@react-navigation/native'
 import AuthStack from './AuthStack'
 import UserStack from './UserStack'
 import AdminStack from './AdminStack'
@@ -35,5 +34,5 @@ export default function StackNav() {
     stackToRender = <AuthStack />
   }
 
-  return <NavigationContainer>{stackToRender}</NavigationContainer>
+  return stackToRender
 }

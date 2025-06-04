@@ -3,11 +3,9 @@ import {
   getFullUserInfoByID,
   registerUser,
   editUserInfo,
-  deleteUser,
 } from '../../Axios/user'
-import { logoutUser, setUser, setUsers } from '../Slices/userSlice'
+import { logoutUser, setUser, setUsers, deleteUserThunk } from '../Slices/userSlice'
 import { resetUser } from '../../Axios/storage'
-import { createAsyncThunk } from '@reduxjs/toolkit'
 
 export const registerAndLoginUser = data => async dispatch => {
   try {
@@ -71,16 +69,5 @@ export const updateAndSetUserInfo = (userId, updatedInfo) => async dispatch => {
   }
 }
 
-// Async thunk for deleting an admin
-export const deleteUserThunk = createAsyncThunk(
-  'users/deleteStatus',
-  async (userId, { rejectWithValue }) => {
-    try {
-      await deleteUser(userId)
-      return userId // Return the user ID to identify which user was deleted
-    } catch (error) {
-      console.error('Deleting user failed:', error)
-      return rejectWithValue(error.response.data)
-    }
-  }
-)
+// Re-export the thunk
+export { deleteUserThunk } from '../Slices/userSlice'
