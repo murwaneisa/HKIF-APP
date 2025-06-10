@@ -8,15 +8,15 @@ import {
 } from 'react-native'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useTheme } from '../Styles/theme'
+
 import { useDispatch } from 'react-redux'
 import { updateAndSetUserInfo } from '../Utilities/Redux/Actions/userActions'
 import ProfileTextField from '../Components/Profile/ProfileTextField'
 
 const EditProfile = ({ route }) => {
-  const { theme } = useTheme()
+ 
   const windowWidth = Dimensions.get('window').width
-  const styles = getStyles(theme, windowWidth)
+  const styles = getStyles( windowWidth)
   const { type } = route.params
   const dispatch = useDispatch()
 
@@ -159,7 +159,7 @@ const getStyles = (theme, windowWidth) => {
 
   return StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.backgroundPrimary,
+      backgroundColor: 'green',
       flex: 1,
       paddingHorizontal: Platform.select({
         ios: 0,
@@ -172,7 +172,7 @@ const getStyles = (theme, windowWidth) => {
       paddingHorizontal: 20,
     },
     saveButton: {
-      backgroundColor: theme.colors.primary200,
+      backgroundColor: 'green',
       padding: 18,
       borderRadius: 15,
     },

@@ -1,49 +1,37 @@
 import React from 'react'
-import { useTheme } from '../../Styles/theme'
-import { StyleSheet } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 
 const Stack = createStackNavigator()
 
 const StackNavigator = ({ headerLeft, children }) => {
-  const { theme } = useTheme()
-  const styles = getStyles(theme)
-
   return (
     <Stack.Navigator
       screenOptions={{
         headerLeft: headerLeft,
-        headerStyle: styles.headerStyle,
-        headerTitleStyle: styles.headerTitleStyle,
+        headerStyle: {
+          backgroundColor: '#F5F5F5', // accent color
+        },
+        headerTitleStyle: {
+          color: '#6B6B6B', // text-primary color
+          fontFamily: 'Inter-Medium',
+        },
         headerTitleAlign: 'center',
-        drawerActiveBackgroundColor: theme.colors.primary200,
-        drawerActiveTintColor: theme.colors.primary900,
-        drawerInactiveTintColor: theme.colors.text,
-        drawerLabelStyle: styles.drawerLabelStyle,
-        drawerStyle: styles.drawerStyle,
+        drawerActiveBackgroundColor: '#A9CAA1', // primary-200
+        drawerActiveTintColor: '#466C3D', // primary-900
+        drawerInactiveTintColor: '#6B6B6B', // text-primary
+        drawerLabelStyle: {
+          marginLeft: -25,
+          fontFamily: 'Inter-Medium',
+          fontSize: 15,
+        },
+        drawerStyle: {
+          backgroundColor: '#FFFFFF', // background-primary
+        },
       }}
     >
       {children}
     </Stack.Navigator>
   )
 }
-
-const getStyles = theme =>
-  StyleSheet.create({
-    headerStyle: {
-      backgroundColor: theme.colors.accent,
-    },
-    headerTitleStyle: {
-      color: theme.colors.text,
-    },
-    drawerLabelStyle: {
-      marginLeft: -25,
-      fontFamily: 'Inter-Medium',
-      fontSize: 15,
-    },
-    drawerStyle: {
-      backgroundColor: theme.colors.backgroundPrimary,
-    },
-  })
 
 export default StackNavigator

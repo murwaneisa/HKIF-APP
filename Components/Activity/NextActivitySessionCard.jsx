@@ -1,11 +1,11 @@
 import React from 'react'
 import { View, Text, StyleSheet, Image } from 'react-native'
-import { useTheme } from '../../Styles/theme'
+
 import DateFormatter from '../../Utilities/Helper/DateFormatter'
 
 const NextActivitySessionCard = ({ sessionInfo }) => {
-  const { theme } = useTheme()
-  const styles = getStyles(theme)
+ 
+   const styles = getStyles()
 
   return (
     <View style={styles.container}>
@@ -34,10 +34,10 @@ const NextActivitySessionCard = ({ sessionInfo }) => {
     </View>
   )
 }
-const getStyles = theme =>
+const getStyles =()=>
   StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.primary,
+      backgroundColor: 'green',
       borderRadius: 12,
       padding: 15,
     },

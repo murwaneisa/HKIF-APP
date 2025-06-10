@@ -11,7 +11,7 @@ import {
   Alert,
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { useTheme } from '../../../Styles/theme'
+
 import { Platform } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons'
@@ -60,7 +60,7 @@ const AddAdmin = ({ route, navigation }) => {
   const dispatch = useDispatch()
   const admins = useSelector(state => state.admin.data)
 
-  const { theme, isDarkMode } = useTheme()
+ 
   const { adminId } = route?.params || {}
   const adminValidationSchema = getAdminValidationSchema(adminId)
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
@@ -113,7 +113,7 @@ const AddAdmin = ({ route, navigation }) => {
 
   const [image, setImage] = useState(null)
   const [isFormValid, setIsFormValid] = useState(false)
-  const styles = getStyles(theme, isDarkMode)
+  const styles = getStyles( isDarkMode)
   const userIcon = Platform.select({
     ios: 50,
     android: 50,
@@ -217,7 +217,7 @@ const AddAdmin = ({ route, navigation }) => {
         dirty,
       }) => (
         <KeyboardAvoidingView
-          style={{ flex: 1, backgroundColor: theme.colors.backgroundSecondary }}
+          style={{ flex: 1, backgroundColor: 'green' }}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 80}
         >
@@ -262,7 +262,7 @@ const AddAdmin = ({ route, navigation }) => {
                   onBlur={handleBlur('lastName')}
                   value={values.lastName}
                   onChangeText={handleChange('lastName')}
-                  placeholderTextColor={theme.colors.text}
+                  placeholderTextColor={'#6B6B6B'}
                   style={styles.input}
                 />
                 {/* Display errors */}
@@ -285,7 +285,7 @@ const AddAdmin = ({ route, navigation }) => {
                   onBlur={handleBlur('email')}
                   value={values.email}
                   onChangeText={handleChange('email')}
-                  placeholderTextColor={theme.colors.text}
+                  placeholderTextColor={'#6B6B6B'}
                   keyboardType='email-address'
                   style={styles.input}
                 />
@@ -298,7 +298,7 @@ const AddAdmin = ({ route, navigation }) => {
                   onBlur={handleBlur('phoneNumber')}
                   value={values.phoneNumber}
                   onChangeText={handleChange('phoneNumber')}
-                  placeholderTextColor={theme.colors.text}
+                  placeholderTextColor={'#6B6B6B'}
                   keyboardType='phone-pad'
                   style={styles.input}
                 />
@@ -314,7 +314,7 @@ const AddAdmin = ({ route, navigation }) => {
                         value={values.password}
                         onChangeText={handleChange('password')}
                         onBlur={handleBlur('password')}
-                        placeholderTextColor={theme.colors.text}
+                        placeholderTextColor={'#6B6B6B'}
                         secureTextEntry={!isPasswordVisible}
                         style={[styles.input, { marginVertical: 0 }]}
                       />
@@ -325,7 +325,7 @@ const AddAdmin = ({ route, navigation }) => {
                         <Feather
                           name={isPasswordVisible ? 'eye-off' : 'eye'}
                           size={24}
-                          color={theme.colors.text}
+                          color={'#6B6B6B'}
                         />
                       </TouchableOpacity>
                     </View>
@@ -342,8 +342,8 @@ const AddAdmin = ({ route, navigation }) => {
                       {
                         backgroundColor:
                           isValid && dirty
-                            ? theme.colors.primary
-                            : theme.colors.primary200,
+                            ? 'green'
+                            : 'green',
                       },
                     ]}
                     onPress={handleSubmit}
@@ -356,7 +356,7 @@ const AddAdmin = ({ route, navigation }) => {
                     <Pressable
                       style={[
                         styles.button,
-                        { backgroundColor: theme.colors.error },
+                        { backgroundColor: 'green' },
                       ]}
                       onPress={handleDelete}
                     >
@@ -373,11 +373,11 @@ const AddAdmin = ({ route, navigation }) => {
   )
 }
 
-const getStyles = (theme, isDarkMode) => {
+const getStyles = ( isDarkMode) => {
   return StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.colors.backgroundSecondary,
+      backgroundColor: 'green',
       alignItems: 'center',
       padding: Platform.select({
         android: '2%',
@@ -386,7 +386,7 @@ const getStyles = (theme, isDarkMode) => {
       }),
     },
     ScrollContainer: {
-      backgroundColor: theme.colors.backgroundSecondary,
+      backgroundColor: 'green',
     },
     icon: {
       width: 48, // Slightly smaller than the container to create a border effect
@@ -414,10 +414,10 @@ const getStyles = (theme, isDarkMode) => {
       alignItems: 'center',
       position: 'relative',
       borderWidth: 4,
-      borderColor: isDarkMode ? theme.colors.accent : '#C4C4C4',
+      borderColor: isDarkMode ? 'gray' : '#C4C4C4',
     },
     plusIconContainer: {
-      backgroundColor: isDarkMode ? theme.colors.accent : '#C4C4C4',
+      backgroundColor: isDarkMode ? 'gray' : '#C4C4C4',
       position: 'absolute',
       bottom: -4,
       right: -6,
@@ -453,14 +453,14 @@ const getStyles = (theme, isDarkMode) => {
       width: '100%',
       marginVertical: 10,
       borderWidth: 1,
-      borderColor: theme.colors.accent2,
+      borderColor: 'gray',
       padding: 10,
       borderRadius: 10,
       fontSize: 16,
-      backgroundColor: theme.colors.accent2,
+      backgroundColor: 'gray',
     },
     passwordContainer: {
-      backgroundColor: theme.colors.accent2,
+      backgroundColor: 'gray',
       borderRadius: 10,
       marginVertical: 10,
       flexDirection: 'row',

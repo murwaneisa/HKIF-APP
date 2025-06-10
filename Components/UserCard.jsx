@@ -1,10 +1,10 @@
 import React from 'react'
 import { View, Text, StyleSheet, Image, Platform } from 'react-native'
-import { useTheme } from '../Styles/theme'
+
 
 const UserCard = ({ user }) => {
-  const { theme } = useTheme()
-  const styles = getStyles(theme)
+ 
+   const styles = getStyles()
 
   return (
     <View style={styles.container}>
@@ -24,7 +24,7 @@ const UserCard = ({ user }) => {
   )
 }
 
-const getStyles = theme =>
+const getStyles =()=>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
@@ -37,7 +37,7 @@ const getStyles = theme =>
       alignItems: 'center',
       marginBottom: 5,
       borderBottomWidth: 1,
-      borderBottomColor: theme.colors.border,
+      borderBottomColor: 'green',
     },
     imageContainer: {
       width: 42,
@@ -56,7 +56,7 @@ const getStyles = theme =>
     title: {
       fontFamily: 'Inter-SemiBold',
       fontSize: 16,
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
   })
 

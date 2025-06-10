@@ -3,9 +3,9 @@ import { View, Text, Button, StyleSheet, Platform } from 'react-native'
 import { ColorTheme, useTheme } from '../Styles/theme'
 
 function Details({ navigation }) {
-  const { theme } = useTheme()
+ 
 
-  const styles = getStyles(theme)
+   const styles = getStyles()
 
   return (
     <View style={styles.container}>
@@ -15,11 +15,11 @@ function Details({ navigation }) {
   )
 }
 
-const getStyles = theme =>
+const getStyles =()=>
   StyleSheet.create({
     textStyle: {
       fontFamily: 'Inter-SemiBold',
-      color: theme.colors.text,
+      color: '#6B6B6B',
       fontSize: Platform.select({
         ios: 16,
         android: 18,
@@ -27,7 +27,7 @@ const getStyles = theme =>
     },
     container: {
       flex: 1,
-      backgroundColor: theme.colors.backgroundPrimary,
+      backgroundColor: 'green',
       alignItems: 'center',
       justifyContent: 'center',
     },

@@ -11,7 +11,7 @@ import {
   Image,
 } from 'react-native'
 import React, { useEffect, useRef } from 'react'
-import { useTheme } from '../../../Styles/theme'
+
 import { useState } from 'react'
 import Checkbox from 'expo-checkbox'
 import {
@@ -39,14 +39,14 @@ const validationSchema = Yup.object().shape({
     .required('Schedule is required'),
 })
 const CreateActivity = ({ route, navigation }) => {
-  const { theme } = useTheme()
+ 
   const { activityId } = route?.params || {}
   const [openStartDatePicker, setOpenStartDatePicker] = useState(false)
   const [pickerType, setPickerType] = useState('time') // New state for picker type
   const [showInput, setShowInput] = useState(false)
   const [selectedDays, setSelectedDays] = useState({})
   const [image, setImage] = useState('')
-  const styles = getStyles(theme)
+   const styles = getStyles()
 
   const openDatePicker = () => {
     setPickerType('time')
@@ -75,7 +75,7 @@ const CreateActivity = ({ route, navigation }) => {
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1, backgroundColor: theme.colors.backgroundSecondary }}
+      style={{ flex: 1, backgroundColor: 'green' }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
     >
@@ -112,7 +112,7 @@ const CreateActivity = ({ route, navigation }) => {
               <TouchableOpacity
                 style={[
                   styles.sectionContainer,
-                  { backgroundColor: theme.colors.accent2 },
+                  { backgroundColor: 'gray' },
                 ]}
                 onPress={() => focusInput('titleInput')}
               >
@@ -121,7 +121,7 @@ const CreateActivity = ({ route, navigation }) => {
                 </View>
                 <TextInput
                   ref={el => (inputRefs.current.titleInput = el)}
-                  placeholderTextColor={theme.colors.text}
+                  placeholderTextColor={'#6B6B6B'}
                   style={styles.input}
                   onChangeText={handleChange('title')}
                   onBlur={handleBlur('title')}
@@ -141,11 +141,11 @@ const CreateActivity = ({ route, navigation }) => {
                       style={[
                         styles.descriptionInput,
                         {
-                          backgroundColor: theme.colors.accent2,
+                          backgroundColor: 'gray',
                           justifyContent: 'center',
                           alignItems: 'center',
                           borderWidth: 0,
-                          borderColor: theme.colors.text,
+                          borderColor: '#6B6B6B',
                           shadowOpacity: 0.2,
                           shadowRadius: 1.41,
                           elevation: 2,
@@ -155,7 +155,7 @@ const CreateActivity = ({ route, navigation }) => {
                       <MaterialIcons
                         name='add-a-photo'
                         size={28}
-                        color={theme.colors.text}
+                        color={'#6B6B6B'}
                       />
                       <Text style={[styles.sectionText, { marginTop: 8 }]}>
                         Upload event image
@@ -170,16 +170,16 @@ const CreateActivity = ({ route, navigation }) => {
                 onPress={() => focusInput('locationInput')}
                 style={[
                   styles.sectionContainer,
-                  { backgroundColor: theme.colors.accent2 },
+                  { backgroundColor: 'gray' },
                 ]}
               >
                 <View style={styles.sectionTitle}>
-                  <Entypo name='location' size={24} color={theme.colors.text} />
+                  <Entypo name='location' size={24} color={'#6B6B6B'} />
                 </View>
                 <TextInput
                   ref={el => (inputRefs.current.locationInput = el)}
                   placeholder='Add location'
-                  placeholderTextColor={theme.colors.text}
+                  placeholderTextColor={'#6B6B6B'}
                   style={styles.input}
                   onChangeText={handleChange('location')}
                   onBlur={handleBlur('location')}
@@ -206,7 +206,7 @@ const CreateActivity = ({ route, navigation }) => {
                   <TextInput
                     ref={el => (inputRefs.current.description = el)}
                     style={styles.descriptionInput}
-                    placeholderTextColor={theme.colors.text}
+                    placeholderTextColor={'#6B6B6B'}
                     multiline
                     placeholder='Type your description here...'
                     onChangeText={handleChange('description')}
@@ -226,7 +226,7 @@ const CreateActivity = ({ route, navigation }) => {
                     styles.sectionContainer,
                     {
                       borderBottomWidth: 1,
-                      borderBottomColor: theme.colors.text,
+                      borderBottomColor: '#6B6B6B',
                       paddingHorizontal: 0,
                       paddingBottom: 10,
                       marginVertical: 0,
@@ -241,7 +241,7 @@ const CreateActivity = ({ route, navigation }) => {
                   <MaterialCommunityIcons
                     name='calendar-clock'
                     size={24}
-                    color={theme.colors.text}
+                    color={'#6B6B6B'}
                   />
                   <Text
                     style={[
@@ -252,7 +252,7 @@ const CreateActivity = ({ route, navigation }) => {
                     Activity dates & time
                   </Text>
                   <Pressable onPress={openDatePicker} style={styles.addDate}>
-                    <Entypo name='plus' size={24} color={theme.colors.text} />
+                    <Entypo name='plus' size={24} color={'#6B6B6B'} />
                   </Pressable>
                 </View>
 
@@ -307,7 +307,7 @@ const CreateActivity = ({ route, navigation }) => {
                 <TouchableOpacity
                   style={[
                     styles.button,
-                    { backgroundColor: theme.colors.primary },
+                    { backgroundColor: 'green' },
                   ]}
                   onPress={handleSubmit}
                 >
@@ -331,10 +331,10 @@ const CreateActivity = ({ route, navigation }) => {
   )
 }
 
-const getStyles = theme => {
+const getStyles =()=> {
   return StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.backgroundSecondary,
+      backgroundColor: 'green',
       padding: Platform.select({
         ios: '2%',
         android: '5%',
@@ -357,7 +357,7 @@ const getStyles = theme => {
     },
 
     dateTimeContainer: {
-      backgroundColor: theme.colors.accent2,
+      backgroundColor: 'gray',
       marginVertical: 10,
       borderRadius: 6,
       padding: 12,
@@ -382,11 +382,11 @@ const getStyles = theme => {
     },
     sectionText: {
       fontFamily: 'Inter-Bold',
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
     pressable: {
       borderRadius: 6,
-      backgroundColor: theme.colors.accent,
+      backgroundColor: 'gray',
       padding: Platform.select({
         ios: 10,
         android: 6,
@@ -398,11 +398,11 @@ const getStyles = theme => {
     },
     input: {
       height: 50,
-      backgroundColor: theme.colors.accent2,
+      backgroundColor: 'gray',
       width: Platform.select({
         web: ' 100%',
       }),
-      color: theme.colors.text,
+      color: '#6B6B6B',
       padding: Platform.select({
         ios: 10,
         android: 6,
@@ -411,7 +411,7 @@ const getStyles = theme => {
       fontSize: 18,
     },
     inputText: {
-      color: theme.colors.text,
+      color: '#6B6B6B',
       fontSize: 18,
     },
     DatePickerButton: {
@@ -420,7 +420,7 @@ const getStyles = theme => {
       marginBottom: 20,
     },
     descriptionContainer: {
-      backgroundColor: theme.colors.accent2,
+      backgroundColor: 'gray',
       flexDirection: 'column',
       alignItems: 'flex-start',
       marginVertical: 10,
@@ -437,9 +437,9 @@ const getStyles = theme => {
         android: 150,
         web: 250,
       }), // Adjust the height as needed
-      color: theme.colors.text,
+      color: '#6B6B6B',
       width: '100%', // Adjust the width as needed
-      borderColor: theme.colors.text,
+      borderColor: '#6B6B6B',
       borderRadius: 8,
       borderWidth: 1,
       padding: 10,
@@ -509,7 +509,7 @@ const getStyles = theme => {
       marginLeft: 100,
     },
     noScheduleText: {
-      color: theme.colors.text,
+      color: '#6B6B6B',
       fontStyle: 'italic',
       textAlign: 'center',
       marginVertical: 10,

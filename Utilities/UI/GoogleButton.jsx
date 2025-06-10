@@ -1,5 +1,5 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native'
-import { useTheme } from '../../Styles/theme'
+
 import Svg, { Path } from 'react-native-svg'
 
 function GoogleButton({
@@ -8,7 +8,7 @@ function GoogleButton({
   paddingVertical,
   paddingHorizontal,
 }) {
-  const { theme } = useTheme()
+ 
   const styles = getStyles(theme, paddingVertical, paddingHorizontal)
   return (
     <View style={styles.buttonOuterContainer}>
@@ -19,7 +19,7 @@ function GoogleButton({
             : styles.buttonInnerContainer
         }
         onPress={onPress}
-        android_ripple={{ color: theme.colors.primary }}
+        android_ripple={{ color: 'green' }}
       >
         <Svg width='30' height='30' viewBox='0 0 48 48'>
           <Path
@@ -48,7 +48,7 @@ function GoogleButton({
 const getStyles = (theme, paddingHorizontal, paddingVertical) => {
   return StyleSheet.create({
     buttonOuterContainer: {
-      borderColor: theme.colors.primary,
+      borderColor: 'green',
       borderRadius: 28,
       overflow: 'hidden',
       justifyContent: 'flex-start',
@@ -65,7 +65,7 @@ const getStyles = (theme, paddingHorizontal, paddingVertical) => {
     },
     buttonText: {
       fontFamily: 'Inter-SemiBold',
-      color: theme.colors.text,
+      color: '#6B6B6B',
       paddingLeft: '4%',
     },
     pressed: {

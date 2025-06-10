@@ -1,11 +1,11 @@
 import React from 'react'
 import { View, Text, StyleSheet, Platform, Pressable } from 'react-native'
-import { useTheme } from '../../Styles/theme'
+
 import { Feather } from '@expo/vector-icons'
 
 const UserInfoCard = ({ iconName, text, onPress }) => {
-  const { theme } = useTheme()
-  const styles = getStyles(theme)
+ 
+   const styles = getStyles()
 
   return (
     <Pressable style={styles.container} onPress={onPress}>
@@ -20,10 +20,10 @@ const UserInfoCard = ({ iconName, text, onPress }) => {
   )
 }
 
-const getStyles = theme =>
+const getStyles =()=>
   StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.accent,
+      backgroundColor: 'gray',
       flexDirection: 'row',
       padding: 20,
       borderRadius: 15,
@@ -35,12 +35,12 @@ const getStyles = theme =>
       flex: 1,
     },
     icon: {
-      color: theme.colors.primary,
+      color: 'green',
       fontSize: 16,
       marginRight: 8,
     },
     text: {
-      color: theme.colors.text,
+      color: '#6B6B6B',
       fontFamily: 'Inter-SemiBold',
       fontSize: 15,
       marginRight: 40,
@@ -50,7 +50,7 @@ const getStyles = theme =>
     },
     editIcon: {
       fontSize: 16,
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
   })
 

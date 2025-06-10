@@ -7,19 +7,19 @@ import {
   Platform,
   Dimensions,
 } from 'react-native'
-import { useTheme } from '../../Styles/theme'
+
 import { useDispatch, useSelector } from 'react-redux'
 import RenderRequests from '../../Components/Admin_comp/Users_comp/RenderRequests'
 import RenderMembers from '../../Components/Admin_comp/Users_comp/RenderMembers'
 import { Alert } from 'react-native'
-import { geUsersInfo } from '../../Utilities/Axios/user'
+import { getUsersInfo } from '../../Utilities/Axios/user'
 import { addUsers } from '../../Utilities/Redux/Actions/userActions'
 
 const Users = () => {
   const windowWidth = Dimensions.get('window').width
   const dispatch = useDispatch()
-  const { theme } = useTheme()
-  const styles = getStyles(theme, windowWidth)
+ 
+  const styles = getStyles(windowWidth)
   const [activeList, setActiveList] = useState('members')
   const admin = useSelector(state => state.admin.currentAdmin)
   const [user, setUser] = useState(admin.role.includes('SUPERADMIN'))
@@ -27,14 +27,14 @@ const Users = () => {
   const getButtonStyle = listName => ({
     flex: 1,
     backgroundColor:
-      activeList === listName ? theme.colors.primary : theme.colors.accent2,
+      activeList === listName ? 'green' : 'gray',
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
   })
 
   const getButtonTextStyle = listName => ({
-    color: activeList === listName ? 'white' : theme.colors.text,
+    color: activeList === listName ? 'white' : '#6B6B6B',
   })
 
   const handlePress = listName => {
@@ -56,7 +56,7 @@ const Users = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const data = await geUsersInfo()
+        const data = await getUsersInfo()
         console.log('the data ', data)
         dispatch(addUsers(data.data))
       } catch (error) {
@@ -121,18 +121,18 @@ const Users = () => {
   )
 }
 
-const getStyles = (theme, windowWidth) => {
+const getStyles = windowWidth => {
   const tabletHeight = windowWidth >= 720 ? '5%' : '8%'
   const webWidth = windowWidth >= 900 ? '60%' : '85%'
   return StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.colors.backgroundSecondary,
+      backgroundColor: 'green',
       alignItems: 'center',
     },
     buttonContainer: {
       flexDirection: 'row',
-      backgroundColor: theme.colors.accent2,
+      backgroundColor: 'gray',
       borderRadius: 8,
       width: Platform.select({
         ios: '90%',
@@ -147,7 +147,7 @@ const getStyles = (theme, windowWidth) => {
       marginVertical: 20,
     },
     buttonText: {
-      color: theme.colors.text,
+      color: '#6B6B6B',
       fontFamily: 'Inter-SemiBold',
     },
     pressed: {

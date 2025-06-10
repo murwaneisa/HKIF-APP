@@ -2,13 +2,10 @@ import React, { useEffect } from 'react'
 import {
   View,
   Text,
-  StyleSheet,
   Platform,
   ScrollView,
-  Dimensions,
   Pressable,
 } from 'react-native'
-import { useTheme } from '../Styles/theme'
 import EventCard from '../Components/Event/EventCard'
 import ActivityCard from '../Components/Activity/ActivityCard'
 import AnnouncementCard from '../Components/AnnouncementCard'
@@ -22,10 +19,6 @@ import LoadingIndicator from '../Components/LoadingIndicator'
 import { fetchActivitiesLeaders } from '../Utilities/Redux/Actions/leaderActionl'
 
 function Home({ navigation }) {
-  const { theme } = useTheme()
-  const windowWidth = Dimensions.get('window').width
-  const styles = getStyles(theme, windowWidth)
-
   const currentUser = '6573c82961a72b4119925725'
   const events = useSelector(state => state.event.data || [])
   const activities = useSelector(state => state.activity.data || [])
@@ -49,24 +42,28 @@ function Home({ navigation }) {
         <LoadingIndicator />
       ) : (
         <ScrollView
-          style={styles.container}
+          className="bg-background-primary px-5 pt-5 web:px-[20%] web:pt-10"
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.announcementWrapper}>
+          <View className="mb-4 web:mb-6">
             <AnnouncementCard
               message={'Swimming is canceled today the fox is in the forest'}
             />
           </View>
 
           {events.length === 0 ? null : (
-            <View style={styles.sectionContainer}>
-              <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>Upcoming Events</Text>
+            <View className="mb-4 web:mb-6">
+              <View className="flex-row justify-between items-center mb-4 web:mb-[17px]">
+                <Text className="font-['Inter-Bold'] text-lg android:text-lg web:text-[22px] text-text-title">
+                  Upcoming Events
+                </Text>
                 <Pressable onPress={() => navigation.navigate('Events')}>
-                  <Text style={styles.viewAll}>View all</Text>
+                  <Text className="font-['Inter-SemiBold'] text-sm web:text-lg text-primary">
+                    View all
+                  </Text>
                 </Pressable>
               </View>
-              <View style={styles.events}>
+              <View className="web:flex-row web:justify-between w-full">
                 {Platform.OS === 'web'
                   ? events.slice(0, 2).map(event => (
                       <EventCard
@@ -97,9 +94,11 @@ function Home({ navigation }) {
 
           {activities.filter(act => act.membersIds.includes(currentUser))
             .length === 0 ? null : (
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitleFavorites}>Favorites</Text>
-              <View style={styles.activities}>
+            <View className="mb-4 web:mb-6">
+              <Text className="font-['Inter-Bold'] text-lg android:text-lg web:text-[22px] text-text-title px-5">
+                Favorites
+              </Text>
+              <View className="flex-row flex-wrap mx-4">
                 {activities
                   .filter(act => act.membersIds.includes(currentUser))
                   .map(activity => (
@@ -120,9 +119,11 @@ function Home({ navigation }) {
 
           {activities.filter(act => !act.membersIds.includes(currentUser))
             .length === 0 ? null : (
-            <View style={[styles.sectionContainer, { marginBottom: 60 }]}>
-              <Text style={styles.sectionTitleFavorites}>Activities</Text>
-              <View style={styles.activities}>
+            <View className="mb-[60px]">
+              <Text className="font-['Inter-Bold'] text-lg android:text-lg web:text-[22px] text-text-title px-5">
+                Activities
+              </Text>
+              <View className="flex-row flex-wrap mx-4">
                 {activities
                   .filter(act => !act.membersIds.includes(currentUser))
                   .map(activity => (
@@ -144,101 +145,6 @@ function Home({ navigation }) {
       )}
     </>
   )
-}
-
-const getStyles = (theme, windowWidth) => {
-  const tabletHeight = windowWidth >= 720 ? '5%' : '8%'
-  const tabletPadding = windowWidth >= 720 ? '10%' : '5%'
-  const webWidth = windowWidth >= 900 ? '60%' : '85%'
-
-  return StyleSheet.create({
-    container: {
-      backgroundColor: theme.colors.backgroundPrimary,
-      paddingHorizontal: Platform.select({
-        ios: 0,
-        android: 0,
-        web: '20%',
-      }),
-      paddingTop: Platform.select({
-        ios: 20,
-        android: 20,
-        web: 40,
-      }),
-    },
-    announcementWrapper: {
-      marginHorizontal: 20,
-      marginBottom: Platform.select({
-        ios: 15,
-        android: 15,
-        web: 25,
-      }),
-    },
-    sectionContainer: {
-      marginBottom: Platform.select({
-        ios: 15,
-        android: 13,
-        web: 25,
-      }),
-    },
-    sectionHeader: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginHorizontal: 20,
-      marginBottom: Platform.select({
-        ios: 15,
-        android: 15,
-        web: 17,
-      }),
-    },
-    sectionTitle: {
-      fontFamily: 'Inter-Bold',
-      fontSize: Platform.select({
-        ios: 20,
-        android: 18,
-        web: 22,
-      }),
-      color: theme.colors.text,
-    },
-    viewAll: {
-      color: theme.colors.primary,
-      fontFamily: 'Inter-SemiBold',
-      fontSize: Platform.select({
-        ios: 14,
-        android: 14,
-        web: 18,
-      }),
-    },
-    sectionTitleFavorites: {
-      fontFamily: 'Inter-Bold',
-      fontSize: Platform.select({
-        ios: 20,
-        android: 18,
-        web: 22,
-      }),
-      paddingHorizontal: 20,
-      color: theme.colors.text,
-    },
-    events: {
-      flexDirection: Platform.select({
-        web: 'row',
-      }),
-      justifyContent: Platform.select({
-        web: 'space-between',
-      }),
-      width: '100%',
-      paddingHorizontal: 20,
-    },
-    activities: {
-      marginHorizontal: Platform.select({
-        ios: 15,
-        android: 15,
-        web: 10,
-      }),
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-    },
-  })
 }
 
 export default Home

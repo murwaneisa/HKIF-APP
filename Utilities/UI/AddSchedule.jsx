@@ -11,7 +11,7 @@ import {
   ScrollView,
   Pressable,
 } from 'react-native'
-import { useTheme } from '../../Styles/theme'
+
 import DatePicker from 'react-native-modern-datepicker'
 import TimePicker from '@react-native-community/datetimepicker'
 import { Formik, FieldArray, Form } from 'formik'
@@ -66,8 +66,8 @@ const scheduleValidationSchema = Yup.object().shape({
 })
 
 const AddSchedule = ({ isOpen, onClose, formikProps }) => {
-  const { theme } = useTheme()
-  const styles = getStyles(theme)
+ 
+   const styles = getStyles()
 
   const [showStartTimePicker, setShowStartTimePicker] = useState(false)
   const [showEndTimePicker, setShowEndTimePicker] = useState(false)
@@ -228,7 +228,7 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
                               <AntDesign
                                 name='delete'
                                 size={20}
-                                color={theme.colors.error}
+                                color={'red'}
                               />
                             </TouchableOpacity>
                           </View>
@@ -397,7 +397,7 @@ const AddSchedule = ({ isOpen, onClose, formikProps }) => {
 }
 
 export default AddSchedule
-const getStyles = theme => {
+const getStyles =()=> {
   return StyleSheet.create({
     centeredView: {
       flex: 1,
@@ -406,7 +406,7 @@ const getStyles = theme => {
     },
     modalView: {
       margin: 5,
-      backgroundColor: theme.colors.backgroundPrimary,
+      backgroundColor: '#A9CAA1',
       borderRadius: 20,
       padding: '3%',
       width: Platform.select({
@@ -435,14 +435,14 @@ const getStyles = theme => {
     },
     timeButton: {
       padding: 10,
-      backgroundColor: theme.colors.accent2,
+      backgroundColor: 'gray',
       borderRadius: 5,
     },
     timeText: {
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
     label: {
-      color: theme.colors.text,
+      color: '#6B6B6B',
       fontWeight: 'bold',
     },
     frequencySection: {
@@ -458,10 +458,10 @@ const getStyles = theme => {
       borderRadius: 5,
     },
     option: {
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
     selectedOption: {
-      color: theme.colors.primary,
+      color: '#466C3D',
       fontWeight: 'bold',
     },
     recurringOptions: {
@@ -472,14 +472,14 @@ const getStyles = theme => {
     input: {
       width: 40,
       height: 40,
-      borderColor: theme.colors.border,
+      borderColor: 'green',
       borderWidth: 1,
       borderRadius: 5,
       textAlign: 'center',
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
     addTimeButton: {
-      backgroundColor: theme.colors.primary,
+      backgroundColor: '#A9CAA1',
       padding: 10,
       borderRadius: 5,
       marginBottom: 20,
@@ -487,10 +487,10 @@ const getStyles = theme => {
     },
 
     timeSlotText: {
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
     removeText: {
-      color: theme.colors.error,
+      color: 'red',
     },
     flatList: {
       maxHeight: 100, // Constrain height for scrolling
@@ -513,12 +513,12 @@ const getStyles = theme => {
       alignItems: 'center',
     },
     errorText: {
-      color: theme.colors.error,
+      color: 'red',
       textAlign: 'center',
     },
 
     closeButton: {
-      backgroundColor: theme.colors.error,
+      backgroundColor: 'red',
       padding: 10,
       borderRadius: 5,
       marginBottom: 1,
@@ -526,7 +526,7 @@ const getStyles = theme => {
       color: '#FFFFFF',
     },
     saveButton: {
-      backgroundColor: theme.colors.primary,
+      backgroundColor: '#A9CAA1',
       padding: 10,
       borderRadius: 5,
       marginBottom: 1,

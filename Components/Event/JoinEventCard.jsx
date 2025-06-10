@@ -1,10 +1,10 @@
 import React from 'react'
 import { View, Text, StyleSheet, Platform, Pressable } from 'react-native'
-import { useTheme } from '../../Styles/theme'
+
 
 const JoinEventCard = ({ title, buttonTitle, containerStyle, onPress }) => {
-  const { theme } = useTheme()
-  const styles = getStyles(theme)
+ 
+   const styles = getStyles()
 
   return (
     <View style={[styles.basic, containerStyle]}>
@@ -16,10 +16,10 @@ const JoinEventCard = ({ title, buttonTitle, containerStyle, onPress }) => {
   )
 }
 
-const getStyles = theme =>
+const getStyles =()=>
   StyleSheet.create({
     basic: {
-      backgroundColor: theme.colors.backgroundPrimary,
+      backgroundColor: 'green',
       paddingHorizontal: 15,
       paddingVertical: 13,
       height: Platform.select({
@@ -32,7 +32,7 @@ const getStyles = theme =>
       alignItems: 'center',
       borderRadius: 15,
       borderWidth: 1,
-      borderColor: theme.colors.border,
+      borderColor: 'green',
     },
     title: {
       fontFamily: 'Inter-SemiBold',
@@ -41,10 +41,10 @@ const getStyles = theme =>
         android: 16,
         web: 20,
       }),
-      color: theme.colors.title,
+      color: 'black',
     },
     button: {
-      backgroundColor: theme.colors.primary,
+      backgroundColor: 'green',
       height: '100%',
       width: '48%',
       alignItems: 'center',

@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { Platform, StyleSheet, Text, View } from 'react-native'
-import { useTheme } from '../../Styles/theme'
+
 import { Dropdown } from 'react-native-element-dropdown'
 
 const DropdownList = ({ label, placeholder, value, handleChange, data }) => {
   const [isFocus, setIsFocus] = useState(false)
-  const { theme } = useTheme()
-  const styles = getStyles(theme)
+ 
+   const styles = getStyles()
   let isSearch = false
   if (data.length > 5) {
     isSearch = true
@@ -66,7 +66,7 @@ const DropdownList = ({ label, placeholder, value, handleChange, data }) => {
 }
 
 export default DropdownList
-const getStyles = theme =>
+const getStyles =()=>
   StyleSheet.create({
     container: {
       marginHorizontal: 4,
@@ -74,8 +74,8 @@ const getStyles = theme =>
       borderRadius: 6,
     },
     dropdown: {
-      backgroundColor: theme.colors.accent,
-      color: theme.colors.text,
+      backgroundColor: 'gray',
+      color: '#6B6B6B',
       padding: Platform.select({
         ios: 10,
         android: 6,
@@ -94,16 +94,16 @@ const getStyles = theme =>
         android: 12,
         web: 18,
       }),
-      color: theme.colors.text,
+      color: '#6B6B6B',
       marginBottom: 5,
     },
     placeholderStyle: {
       fontSize: 16,
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
     selectedTextStyle: {
       fontSize: 16,
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
     iconStyle: {
       width: 20,

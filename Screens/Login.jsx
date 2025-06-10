@@ -10,7 +10,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
 } from 'react-native'
-import { useTheme } from '../Styles/theme'
+
 import PrimaryButton from '../Utilities/UI/PrimaryButton'
 import GoogleButton from '../Utilities/UI/GoogleButton'
 import { validateEmail, dismissKeyboard } from '../Utilities/UI/Form'
@@ -21,7 +21,7 @@ import { loginAndSetAdmin } from '../Utilities/Redux/Actions/adminActions'
 function Login({ navigation }) {
   const [showAdminButton, setShowAdminButton] = useState(false)
   const screenWidth = Dimensions.get('window').width
-  const { theme } = useTheme()
+ 
 
   const styles = getStyles(theme, screenWidth)
 
@@ -78,7 +78,7 @@ function Login({ navigation }) {
                 value={email}
                 onChangeText={handleEmailChange}
                 placeholder='Email'
-                placeholderTextColor={theme.colors.text}
+                placeholderTextColor={'#6B6B6B'}
                 keyboardType={
                   Platform.OS !== 'web' ? 'email-address' : undefined
                 }
@@ -94,7 +94,7 @@ function Login({ navigation }) {
                 onChangeText={handlePasswordChange}
                 secureTextEntry
                 placeholder='Password'
-                placeholderTextColor={theme.colors.text}
+                placeholderTextColor={'#6B6B6B'}
               />
             </View>
           </View>
@@ -164,7 +164,7 @@ const getStyles = (theme, screenWidth) =>
       flex: 1,
       alignItems: 'center', // This will horizontally center the child elements
       justifyContent: 'center',
-      backgroundColor: theme.colors.backgroundPrimary,
+      backgroundColor: 'green',
     },
     imageContainer: {
       height: '48%', // This sets the height to 60% of the parent container
@@ -184,8 +184,8 @@ const getStyles = (theme, screenWidth) =>
     },
     inputText: {
       width: '100%',
-      color: theme.colors.text,
-      borderColor: theme.colors.accent,
+      color: '#6B6B6B',
+      borderColor: 'gray',
       borderWidth: 1,
       borderRadius: 25,
       justifyContent: 'center',
@@ -207,7 +207,7 @@ const getStyles = (theme, screenWidth) =>
     textStyle: {
       fontFamily: 'Inter-SemiBold',
       paddingTop: '6%',
-      color: theme.colors.primary,
+      color: 'green',
       textAlign: 'center',
       fontSize: Platform.select({
         ios: 15,

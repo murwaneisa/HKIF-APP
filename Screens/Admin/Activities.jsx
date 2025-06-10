@@ -7,7 +7,7 @@ import {
   Platform,
   Dimensions,
 } from 'react-native'
-import { useTheme } from '../../Styles/theme'
+
 import RenderPrevious from '../../Components/Admin_comp/Event_comp/RenderPrevious'
 import RenderActivities from '../../Components/Admin_comp/Activity_comp/RenderActivities'
 import CreateActivity from '../../Components/Admin_comp/Activity_comp/CreateActivity'
@@ -16,8 +16,8 @@ import RenderLeaders from '../../Components/Admin_comp/Activity_comp/Renderleade
 
 const Activities = () => {
   const windowWidth = Dimensions.get('window').width
-  const { theme } = useTheme()
-  const styles = getStyles(theme, windowWidth)
+ 
+  const styles = getStyles(windowWidth)
   const [activeList, setActiveList] = useState('Activities')
   const [user, setUser] = useState({ role: 'superAdmin' })
   const navigation = useNavigation()
@@ -25,14 +25,14 @@ const Activities = () => {
   const getButtonStyle = listName => ({
     flex: 1,
     backgroundColor:
-      activeList === listName ? theme.colors.primary : theme.colors.accent2,
+      activeList === listName ? 'green' : 'gray',
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
   })
 
   const getButtonTextStyle = listName => ({
-    color: activeList === listName ? 'white' : theme.colors.text,
+    color: activeList === listName ? 'white' : '#6B6B6B',
   })
 
   const handlePress = listName => {
@@ -97,14 +97,14 @@ const Activities = () => {
   )
 }
 
-const getStyles = (theme, windowWidth) => {
+const getStyles = windowWidth => {
   const tabletHeight = windowWidth >= 720 ? '5%' : '8%'
   const tabletPadding = windowWidth >= 720 ? '10%' : '5%'
   const webWidth = windowWidth >= 900 ? '60%' : '85%'
   return StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.colors.backgroundSecondary,
+      backgroundColor: 'green',
       paddingHorizontal: Platform.select({
         ios: tabletPadding,
         android: tabletPadding,
@@ -114,7 +114,7 @@ const getStyles = (theme, windowWidth) => {
 
     buttonContainer: {
       flexDirection: 'row',
-      backgroundColor: theme.colors.accent2,
+      backgroundColor: 'gray',
       borderRadius: 8,
 
       height: Platform.select({
@@ -125,7 +125,7 @@ const getStyles = (theme, windowWidth) => {
       marginVertical: 20,
     },
     buttonText: {
-      color: theme.colors.text,
+      color: '#6B6B6B',
       fontFamily: 'Inter-SemiBold',
     },
     pressed: {

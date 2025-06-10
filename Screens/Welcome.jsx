@@ -7,12 +7,12 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native'
-import { useTheme } from '../Styles/theme'
+
 import PrimaryButton from '../Utilities/UI/PrimaryButton'
 
 function Welcome({ navigation }) {
-  const { theme } = useTheme()
-  const styles = getStyles(theme)
+ 
+   const styles = getStyles()
   const handleGuestLogin = () => {
     navigation.navigate('Home')
   }
@@ -50,11 +50,11 @@ function Welcome({ navigation }) {
   )
 }
 
-const getStyles = theme =>
+const getStyles =()=>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.colors.backgroundPrimary,
+      backgroundColor: 'green',
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -64,7 +64,7 @@ const getStyles = theme =>
       padding: '5%',
     },
     buttonsContainer: {
-      backgroundColor: theme.colors.backgroundPrimary,
+      backgroundColor: 'green',
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -74,7 +74,7 @@ const getStyles = theme =>
     textStyle: {
       fontFamily: 'Inter-SemiBold',
       paddingTop: '6%',
-      color: theme.colors.primary,
+      color: 'green',
       textAlign: 'center',
       fontSize: Platform.select({
         ios: 15,

@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { MultiSelect } from 'react-native-element-dropdown'
 import AntDesign from '@expo/vector-icons/AntDesign'
-import { useTheme } from '../../Styles/theme'
+
 
 const DropdownRole = ({ data, placeholder, selectedRoles, setFieldValue }) => {
-  const { theme, isDarkMode } = useTheme()
-  const styles = getStyles(theme, isDarkMode)
+ 
+  const styles = getStyles( isDarkMode)
   return (
     <MultiSelect
       style={styles.dropdown}
@@ -31,7 +31,7 @@ const DropdownRole = ({ data, placeholder, selectedRoles, setFieldValue }) => {
             <View style={styles.coachItem}>
               <Text style={styles.coachName}>{item.label}</Text>
             </View>
-            <AntDesign color={theme.colors.text} name='delete' size={17} />
+            <AntDesign color={'#6B6B6B'} name='delete' size={17} />
           </View>
         </TouchableOpacity>
       )}
@@ -41,12 +41,12 @@ const DropdownRole = ({ data, placeholder, selectedRoles, setFieldValue }) => {
 
 export default DropdownRole
 
-const getStyles = (theme, isDarkMode) => {
+const getStyles = ( isDarkMode) => {
   return StyleSheet.create({
     dropdown: {
       height: 50,
       marginVertical: 10,
-      backgroundColor: theme.colors.accent2,
+      backgroundColor: 'green',
       padding: 10,
       borderRadius: 10,
     },
@@ -54,7 +54,7 @@ const getStyles = (theme, isDarkMode) => {
       marginRight: 5,
     },
     placeholderStyle: {
-      color: theme.colors.text,
+      color: '#6B6B6B',
       fontSize: 16,
     },
     selectedTextStyle: {
@@ -73,7 +73,7 @@ const getStyles = (theme, isDarkMode) => {
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 14,
-      backgroundColor: theme.colors.accent2,
+      backgroundColor: 'gray',
       shadowColor: '#000',
       marginTop: 8,
       marginRight: 12,
@@ -95,7 +95,7 @@ const getStyles = (theme, isDarkMode) => {
     },
     coachName: {
       marginHorizontal: 5,
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
   })
 }

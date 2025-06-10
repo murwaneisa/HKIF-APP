@@ -18,16 +18,11 @@ export const FontLoader = ({ children }) => {
         'Inter-SemiBold': require('../Assets/fonts/Inter-SemiBold.ttf'),
         'Inter-Regular': require('../Assets/fonts/Inter-Regular.ttf'),
         'Inter-Thin': require('../Assets/fonts/Inter-Thin.ttf'),
-        // ... other fonts
       })
       setFontsLoaded(true)
     }
     loadFonts()
   }, [])
-
-  /*   if (!fontsLoaded) {
-    return <Text>Loading...</Text>
-  } */
 
   return (
     <FontLoadContext.Provider value={fontsLoaded}>
@@ -35,8 +30,7 @@ export const FontLoader = ({ children }) => {
     </FontLoadContext.Provider>
   )
 }
-
-export const ThemeContext = createContext()
+/* export const ThemeContext = createContext()
 const lightTheme = {
   colors: {
     primary: '#669D58', //actions buttons and text
@@ -113,3 +107,5 @@ export const useTheme = () => {
   }
   return context
 }
+ */
+

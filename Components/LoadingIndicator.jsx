@@ -1,23 +1,22 @@
 import React from 'react'
 import { View, ActivityIndicator, StyleSheet } from 'react-native'
-import { useTheme } from '../Styles/theme'
+
 
 const LoadingIndicator = () => {
-  const { theme } = useTheme()
-  const styles = getStyles(theme)
+  const styles = getStyles()
   return (
     <View style={styles.container}>
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size='small' color={theme.colors.primary} />
+        <ActivityIndicator size='small' color={'#466C3D'} />
       </View>
     </View>
   )
 }
 
-const getStyles = theme =>
+const getStyles = () =>
   StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.backgroundPrimary,
+      backgroundColor: '#A9CAA1',
       width: '100%',
       height: '100%',
       paddingTop: 25,

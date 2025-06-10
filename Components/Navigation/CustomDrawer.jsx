@@ -5,8 +5,6 @@ import {
   Image,
   TouchableOpacity,
   Platform,
-  Dimensions,
-  StyleSheet,
 } from 'react-native'
 import {
   DrawerContentScrollView,
@@ -14,9 +12,7 @@ import {
 } from '@react-navigation/drawer'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { useNavigation } from '@react-navigation/native'
-import { useTheme } from '../../Styles/theme'
 import Badge from '../../Utilities/UI/Badge'
 import DarkLightSwitch from '../../Utilities/UI/DarkLightButton'
 import { userLogout } from '../../Utilities/Redux/Actions/userActions'
@@ -25,16 +21,15 @@ import { adminLogout } from '../../Utilities/Redux/Actions/adminActions'
 
 const Profile = () => {
   const navigation = useNavigation()
-  const { theme } = useTheme()
-  const styles = getStyles(theme)
+
   return (
-    <View style={{}}>
+    <View>
       <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
         <Image
           source={{
             uri: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZmFjZXxlbnwwfHwwfHx8MA%3D%3D',
           }}
-          style={styles.image}
+          className="h-20 w-20 mr-2.5 rounded-[45px] border-3 border-primary-900"
         />
       </TouchableOpacity>
     </View>
@@ -42,9 +37,6 @@ const Profile = () => {
 }
 
 const CustomDrawer = props => {
-  const { theme } = useTheme()
-  const windowWidth = Dimensions.get('window').width
-  const styles = getStyles(theme)
   const dispatch = useDispatch()
   const user = useSelector(state => state.user.currentUser)
   const admin = useSelector(state => state.admin.currentAdmin)
@@ -58,143 +50,57 @@ const CustomDrawer = props => {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View className="flex-1">
       <DrawerContentScrollView
         {...props}
-        contentContainerStyle={{ backgroundColor: theme.colors.primary }}
+        contentContainerStyle={{ backgroundColor: '#669D58' }}
       >
-        <View style={styles.container}>
+        <View className="flex-col ios:py-5 android:py-2 web:py-5 ios:px-5 android:px-4 web:px-5">
           {Profile()}
-          {/*       <Image
-            source={require('../Assets/images/sports_icon.png')}
-            style={{
-              height: 80,
-              width: 80,
-              borderRadius: 40,
-              marginBottom: 10,
-            }}
-          /> */}
           <View>
-            <Text
-              style={{
-                color: '#fff',
-                fontSize: 18,
-                fontFamily: 'Roboto-Medium',
-                marginBottom: 5,
-              }}
-            >
+            <Text className="text-white text-lg font-['Roboto-Medium'] mb-1.5">
               John Doe
             </Text>
-            <View style={{ flexDirection: 'row' }}>
+            <View className="flex-row">
               <Badge>Full Membership</Badge>
             </View>
           </View>
         </View>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: theme.colors.backgroundPrimary,
-            paddingTop: Platform.select({
-              ios: 10,
-              android: 8,
-              web: 10,
-            }),
-          }}
-        >
+        <View className="flex-1 bg-background-primary ios:pt-2.5 android:pt-2 web:pt-2.5">
           <DrawerItemList {...props} />
         </View>
       </DrawerContentScrollView>
-      <View style={styles.bottomContainer}>
+      <View className="ios:px-5 android:px-5 web:px-7 ios:pt-5 android:pt-2.5 web:pt-7 ios:pb-5 android:pb-5 web:pb-7 border-t border-[#ccc]">
         <DarkLightSwitch />
-        <TouchableOpacity onPress={() => {}} style={styles.bottomTouchable}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <TouchableOpacity onPress={() => {}} className="py-2.5">
+          <View className="flex-row items-center">
             <Ionicons
-              name='share-social-outline'
+              name="share-social-outline"
               size={22}
-              color={theme.colors.text}
+              color="#6B6B6B"
+              className="dark:text-[#C4C4C4]"
             />
-            <Text style={styles.bottomItemText}>Share the app</Text>
+            <Text className="font-['Inter-Medium'] ios:text-base android:text-sm web:text-xl ml-1.5 text-text-primary">
+              Share the app
+            </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleLogout} style={styles.bottomTouchable}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Ionicons name='exit-outline' size={22} color={theme.colors.text} />
-            <Text style={styles.bottomItemText}>Sign Out</Text>
+        <TouchableOpacity onPress={handleLogout} className="py-2.5">
+          <View className="flex-row items-center">
+            <Ionicons
+              name="exit-outline"
+              size={22}
+              color="#6B6B6B"
+              className="dark:text-[#C4C4C4]"
+            />
+            <Text className="font-['Inter-Medium'] ios:text-base android:text-sm web:text-xl ml-1.5 text-text-primary">
+              Sign Out
+            </Text>
           </View>
         </TouchableOpacity>
       </View>
     </View>
   )
-}
-
-const getStyles = (theme, windowWidth) => {
-  const tabletPadding = windowWidth >= 720 ? 15 : 0
-  const webWidth = windowWidth >= 900 ? '60%' : '85%'
-  return StyleSheet.create({
-    container: {
-      flexDirection: Platform.select({
-        ios: 'column',
-        android: 'column',
-        web: 'column',
-      }),
-      paddingVertical: Platform.select({
-        ios: 20,
-        android: 8,
-        web: 20,
-      }),
-      paddingHorizontal: Platform.select({
-        ios: 20,
-        android: 17,
-        web: 20,
-      }),
-      /*     paddingTop: Platform.select({
-        android: 70,
-      }),
-      paddingBottom: Platform.select({
-        android: 7,
-      }), */
-    },
-    image: {
-      height: 80,
-      width: 80,
-      marginRight: 10,
-      borderRadius: 45, // Half of the new width and height
-      borderWidth: 3, // Width of the border
-      borderColor: theme.colors.primary900, // Color of the border
-    },
-    bottomContainer: {
-      paddingHorizontal: Platform.select({
-        ios: 20,
-        android: 20,
-        web: 30,
-      }),
-      paddingTop: Platform.select({
-        ios: 20,
-        android: 10,
-        web: 30,
-      }),
-      paddingBottom: Platform.select({
-        ios: 20,
-        android: 20,
-        web: 30,
-      }),
-      borderTopWidth: 1,
-      borderTopColor: '#ccc',
-    },
-    bottomItemText: {
-      fontFamily: 'Inter-Medium',
-      fontSize: Platform.select({
-        ios: 16,
-        android: 14,
-        wed: 20,
-      }),
-      marginLeft: 5,
-      color: theme.colors.text,
-    },
-    bottomTouchable: {
-      paddingVertical: 10,
-    },
-  })
 }
 
 export default CustomDrawer

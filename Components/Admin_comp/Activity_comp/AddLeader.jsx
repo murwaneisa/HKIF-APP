@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from 'react-native'
 import React, { useState } from 'react'
-import { useTheme } from '../../../Styles/theme'
+
 import { Platform } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons'
@@ -17,12 +17,12 @@ import DropdownRole from '../DropdownRole'
 import HKIFImagePicker from '../../../Utilities/Helper/HKIFImagePicker'
 
 const AddLeader = ({ route }) => {
-  const { theme, isDarkMode } = useTheme()
+ 
   const { leaderId } = route?.params || {}
   const [image, setImage] = useState(null)
   const [isFormValid, setIsFormValid] = useState(false)
   console.log(image)
-  const styles = getStyles(theme, isDarkMode)
+  const styles = getStyles( isDarkMode)
   const userIcon = Platform.select({
     ios: 50,
     android: 50,
@@ -179,7 +179,7 @@ const AddLeader = ({ route }) => {
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1, backgroundColor: theme.colors.backgroundSecondary }}
+      style={{ flex: 1, backgroundColor: 'green' }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 80}
     >
@@ -218,7 +218,7 @@ const AddLeader = ({ route }) => {
               placeholder='First Name*'
               value={form.firstName}
               onChangeText={value => handleInputChange('firstName', value)}
-              placeholderTextColor={theme.colors.text}
+              placeholderTextColor={'#6B6B6B'}
               style={styles.input}
             />
             {!!formErrors.lastName && ( // Show error text if there's an error
@@ -228,7 +228,7 @@ const AddLeader = ({ route }) => {
               placeholder='Last Name*'
               value={form.lastName}
               onChangeText={value => handleInputChange('lastName', value)}
-              placeholderTextColor={theme.colors.text}
+              placeholderTextColor={'#6B6B6B'}
               style={styles.input}
             />
             {!!formErrors.roles && ( // Show error text if there's an error
@@ -246,7 +246,7 @@ const AddLeader = ({ route }) => {
               placeholder='Email *'
               value={form.email}
               onChangeText={value => handleInputChange('email', value)}
-              placeholderTextColor={theme.colors.text}
+              placeholderTextColor={'#6B6B6B'}
               keyboardType='email-address'
               style={styles.input}
             />
@@ -257,7 +257,7 @@ const AddLeader = ({ route }) => {
               placeholder='Phone*'
               value={form.phone}
               onChangeText={value => handleInputChange('phone', value)}
-              placeholderTextColor={theme.colors.text}
+              placeholderTextColor={'#6B6B6B'}
               keyboardType='phone-pad'
               style={styles.input}
             />
@@ -271,8 +271,8 @@ const AddLeader = ({ route }) => {
                   styles.button,
                   {
                     backgroundColor: isFormValid
-                      ? theme.colors.primary
-                      : theme.colors.primary200,
+                      ? 'green'
+                      : 'green',
                   },
                 ]}
                 onPress={handleSubmit}
@@ -285,7 +285,7 @@ const AddLeader = ({ route }) => {
                 <TouchableOpacity
                   style={[
                     styles.button,
-                    { backgroundColor: theme.colors.error },
+                    { backgroundColor: 'green' },
                   ]}
                 >
                   <Text style={styles.buttonText}>Delete leader</Text>
@@ -299,11 +299,11 @@ const AddLeader = ({ route }) => {
   )
 }
 
-const getStyles = (theme, isDarkMode) => {
+const getStyles = ( isDarkMode) => {
   return StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.colors.backgroundSecondary,
+      backgroundColor: 'green',
       alignItems: 'center',
       padding: Platform.select({
         android: '2%',
@@ -312,7 +312,7 @@ const getStyles = (theme, isDarkMode) => {
       }),
     },
     ScrollContainer: {
-      backgroundColor: theme.colors.backgroundSecondary,
+      backgroundColor: 'green',
     },
     icon: {
       width: 48, // Slightly smaller than the container to create a border effect
@@ -340,10 +340,10 @@ const getStyles = (theme, isDarkMode) => {
       alignItems: 'center',
       position: 'relative',
       borderWidth: 4,
-      borderColor: isDarkMode ? theme.colors.accent : '#C4C4C4',
+      borderColor: isDarkMode ? 'gray' : '#C4C4C4',
     },
     plusIconContainer: {
-      backgroundColor: isDarkMode ? theme.colors.accent : '#C4C4C4',
+      backgroundColor: isDarkMode ? 'gray' : '#C4C4C4',
       position: 'absolute',
       bottom: -4,
       right: -6,
@@ -379,12 +379,12 @@ const getStyles = (theme, isDarkMode) => {
       width: '100%',
       marginVertical: 10,
       borderWidth: 1,
-      borderColor: theme.colors.accent2,
+      borderColor: 'gray',
       padding: 10,
       borderRadius: 10,
       fontSize: 16,
-      backgroundColor: theme.colors.accent2,
-      color: theme.colors.text,
+      backgroundColor: 'gray',
+      color: '#6B6B6B',
     },
 
     buttonContainer: {

@@ -17,14 +17,17 @@ import EventDetails from '../../Screens/EventDetails'
 import HeaderLeft from '../../Components/Navigation/HeaderLeft'
 import HeaderRight from '../../Components/Navigation/HeaderRight'
 import DrawerNavigator from '../../Components/Navigation/DrawerNavigator'
-import StackNavigator from '../../Components/Navigation/StackNavigator'
 
 const Stack = createStackNavigator()
 const Drawer = createDrawerNavigator()
 
 const UserStack = () => {
   return (
-    <StackNavigator headerLeft={() => HeaderLeft()}>
+    <Stack.Navigator
+      screenOptions={{
+        headerLeft: () => <HeaderLeft />,
+      }}
+    >
       <Stack.Screen
         name='HomeMenu'
         options={{
@@ -61,7 +64,7 @@ const UserStack = () => {
           headerTitle: 'Upcoming Events',
         }}
       />
-    </StackNavigator>
+    </Stack.Navigator>
   )
 }
 

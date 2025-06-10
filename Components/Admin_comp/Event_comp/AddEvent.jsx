@@ -10,7 +10,7 @@ import {
   Pressable,
 } from 'react-native'
 import React, { useRef, useState, useEffect } from 'react'
-import { useTheme } from '../../../Styles/theme'
+
 import DatePickerModal from '../../../Utilities/UI/AddSchedule'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons'
@@ -31,8 +31,8 @@ import DateTimePickerInput from '../../../Utilities/UI/DateTimePickerInput'
 
 const AddEvent = ({ route, navigation }) => {
   const dispatch = useDispatch()
-  const { theme } = useTheme()
-  const styles = getStyles(theme)
+ 
+   const styles = getStyles()
   const { eventId } = route.params || {}
   const [showInput, setShowInput] = useState(false)
   // const [pickerType, setPickerType] = useState('date')
@@ -197,7 +197,7 @@ const AddEvent = ({ route, navigation }) => {
         touched,
       }) => (
         <KeyboardAvoidingView
-          style={{ flex: 1, backgroundColor: theme.colors.backgroundSecondary }}
+          style={{ flex: 1, backgroundColor: 'green' }}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
         >
@@ -211,7 +211,7 @@ const AddEvent = ({ route, navigation }) => {
             <TouchableOpacity
               style={[
                 styles.sectionContainer,
-                { backgroundColor: theme.colors.accent2 },
+                { backgroundColor: 'gray' },
               ]}
               onPress={() => focusInput('titleInput')}
             >
@@ -235,18 +235,18 @@ const AddEvent = ({ route, navigation }) => {
               style={[
                 styles.descriptionInput,
                 {
-                  backgroundColor: theme.colors.accent2,
+                  backgroundColor: 'gray',
                   justifyContent: 'center',
                   alignItems: 'center',
                   borderWidth: 0,
-                  borderColor: theme.colors.text,
+                  borderColor: '#6B6B6B',
                 },
               ]}
             >
               <MaterialIcons
                 name='add-a-photo'
                 size={28}
-                color={theme.colors.text}
+                color={'#6B6B6B'}
               />
               <Text style={[styles.sectionText, { marginTop: 8 }]}>
                 Upload event image
@@ -259,7 +259,7 @@ const AddEvent = ({ route, navigation }) => {
                   styles.sectionContainer,
                   {
                     borderBottomWidth: 1,
-                    borderBottomColor: theme.colors.text,
+                    borderBottomColor: '#6B6B6B',
                     paddingHorizontal: 0,
                     paddingBottom: 10,
                     marginVertical: 0,
@@ -271,7 +271,7 @@ const AddEvent = ({ route, navigation }) => {
                 <MaterialCommunityIcons
                   name='calendar-clock'
                   size={24}
-                  color={theme.colors.text}
+                  color={'#6B6B6B'}
                 />
                 <Text
                   style={[
@@ -303,10 +303,10 @@ const AddEvent = ({ route, navigation }) => {
                       onChangeText={handleChange('startDate')}
                       onBlur={handleBlur('startDate')}
                       value={values.startDate}
-                      placeholderTextColor={theme.colors.primary}
+                      placeholderTextColor={'green'}
                       style={[
                         styles.input,
-                        { backgroundColor: theme.colors.accent },
+                        { backgroundColor: 'gray' },
                       ]}
                     />
                   ) : (
@@ -340,10 +340,10 @@ const AddEvent = ({ route, navigation }) => {
                       onChangeText={handleChange('startTime')}
                       value={values.startTime}
                       onBlur={handleBlur('startTime')}
-                      placeholderTextColor={theme.colors.primary}
+                      placeholderTextColor={'green'}
                       style={[
                         styles.input,
-                        { backgroundColor: theme.colors.accent },
+                        { backgroundColor: 'gray' },
                       ]}
                     />
                   ) : (
@@ -382,10 +382,10 @@ const AddEvent = ({ route, navigation }) => {
                       onChangeText={handleChange('endDate')}
                       onBlur={handleBlur('endDate')}
                       value={values.endDate}
-                      placeholderTextColor={theme.colors.primary}
+                      placeholderTextColor={'green'}
                       style={[
                         styles.input,
-                        { backgroundColor: theme.colors.accent },
+                        { backgroundColor: 'gray' },
                       ]}
                     />
                   ) : (
@@ -410,10 +410,10 @@ const AddEvent = ({ route, navigation }) => {
                       onChangeText={handleChange('endTime')}
                       onBlur={handleBlur('endTime')}
                       value={values.endTime}
-                      placeholderTextColor={theme.colors.primary}
+                      placeholderTextColor={'green'}
                       style={[
                         styles.input,
-                        { backgroundColor: theme.colors.accent },
+                        { backgroundColor: 'gray' },
                       ]}
                     />
                   ) : (
@@ -436,11 +436,11 @@ const AddEvent = ({ route, navigation }) => {
               onPress={() => focusInput('locationInput')}
               style={[
                 styles.sectionContainer,
-                { backgroundColor: theme.colors.accent2 },
+                { backgroundColor: 'gray' },
               ]}
             >
               <View style={styles.sectionTitle}>
-                <Entypo name='location' size={24} color={theme.colors.text} />
+                <Entypo name='location' size={24} color={'#6B6B6B'} />
               </View>
               <TextInput
                 onChangeText={handleChange('address')}
@@ -448,7 +448,7 @@ const AddEvent = ({ route, navigation }) => {
                 onBlur={handleBlur('address')}
                 value={values.address}
                 placeholder='Add address'
-                placeholderTextColor={theme.colors.text}
+                placeholderTextColor={'#6B6B6B'}
                 style={styles.input}
               />
               {touched.address && errors.address && (
@@ -460,14 +460,14 @@ const AddEvent = ({ route, navigation }) => {
               onPress={() => focusInput('priceInput')}
               style={[
                 styles.sectionContainer,
-                { backgroundColor: theme.colors.accent2 },
+                { backgroundColor: 'gray' },
               ]}
             >
               <View style={styles.sectionTitle}>
                 <FontAwesome5
                   name='dollar-sign'
                   size={24}
-                  color={theme.colors.text}
+                  color={'#6B6B6B'}
                 />
               </View>
               <TextInput
@@ -476,7 +476,7 @@ const AddEvent = ({ route, navigation }) => {
                 onBlur={handleBlur('price')}
                 value={values.price.toString()}
                 placeholder='Add price in SEK'
-                placeholderTextColor={theme.colors.text}
+                placeholderTextColor={'#6B6B6B'}
                 style={styles.input}
               />
               {touched.price && errors.price && (
@@ -496,7 +496,7 @@ const AddEvent = ({ route, navigation }) => {
               {showInput && (
                 <TextInput
                   style={styles.descriptionInput}
-                  placeholderTextColor={theme.colors.text}
+                  placeholderTextColor={'#6B6B6B'}
                   multiline
                   onChangeText={handleChange('description')}
                   onBlur={handleBlur('description')}
@@ -539,7 +539,7 @@ const AddEvent = ({ route, navigation }) => {
                     }}
                     color={
                       values.benefits.includes(option.value)
-                        ? theme.colors.primary
+                        ? 'green'
                         : undefined
                     }
                   />
@@ -561,7 +561,7 @@ const AddEvent = ({ route, navigation }) => {
                 onPress={handleSubmit}
                 style={[
                   styles.button,
-                  { backgroundColor: theme.colors.primary },
+                  { backgroundColor: 'green' },
                 ]}
               >
                 <Text style={styles.buttonText}>
@@ -595,10 +595,10 @@ const AddEvent = ({ route, navigation }) => {
   )
 }
 
-const getStyles = theme => {
+const getStyles =()=> {
   return StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.backgroundSecondary,
+      backgroundColor: 'green',
       paddingHorizontal: Platform.select({
         ios: '5%',
         android: '5%',
@@ -611,7 +611,7 @@ const getStyles = theme => {
       }),
     },
     dateTimeContainer: {
-      backgroundColor: theme.colors.accent2,
+      backgroundColor: 'gray',
       marginVertical: 10,
       borderRadius: 6,
       padding: 12,
@@ -633,11 +633,11 @@ const getStyles = theme => {
     },
     sectionText: {
       fontFamily: 'Inter-Bold',
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
     pressable: {
       borderRadius: 6,
-      backgroundColor: theme.colors.accent,
+      backgroundColor: 'gray',
       padding: Platform.select({
         ios: 10,
         android: 6,
@@ -648,11 +648,11 @@ const getStyles = theme => {
       marginHorizontal: 8,
     },
     input: {
-      backgroundColor: theme.colors.accent2,
+      backgroundColor: 'gray',
       width: Platform.select({
         web: ' 100%',
       }),
-      color: theme.colors.text,
+      color: '#6B6B6B',
       padding: Platform.select({
         ios: 10,
         android: 6,
@@ -661,7 +661,7 @@ const getStyles = theme => {
       fontSize: 18,
     },
     inputText: {
-      color: theme.colors.text,
+      color: '#6B6B6B',
 
       fontSize: 18,
     },
@@ -671,7 +671,7 @@ const getStyles = theme => {
       marginBottom: 20,
     },
     descriptionContainer: {
-      backgroundColor: theme.colors.accent2,
+      backgroundColor: 'gray',
       flexDirection: 'column',
       alignItems: 'flex-start',
       marginVertical: 10,
@@ -686,7 +686,7 @@ const getStyles = theme => {
         web: 250,
       }), // Adjust the height as needed
       width: '100%', // Adjust the width as needed
-      borderColor: theme.colors.text,
+      borderColor: '#6B6B6B',
       borderRadius: 8,
       borderWidth: 1,
       padding: 10,

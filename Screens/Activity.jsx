@@ -8,7 +8,7 @@ import {
   Platform,
   Dimensions,
 } from 'react-native'
-import { useTheme } from '../Styles/theme'
+
 import Calendar from '../Components/Activity/Calendar'
 import NextActivitySessionCard from '../Components/Activity/NextActivitySessionCard'
 import BottomSheet, {
@@ -24,9 +24,9 @@ import ActivitySession from '../Utilities/Helper/ActivitySession'
 
 function Activity({ navigation }) {
   const sheetRef = useRef(null)
-  const { theme } = useTheme()
+ 
   const windowWidth = Dimensions.get('window').width
-  const styles = getStyles(theme, windowWidth)
+  const styles = getStyles( windowWidth)
 
   const route = useRoute()
   const activity = route.params.activity
@@ -88,8 +88,8 @@ function Activity({ navigation }) {
             <Swiper
               style={styles.swiper}
               paginationStyle={styles.pagination}
-              activeDotColor={theme.colors.primary}
-              dotColor={theme.colors.secondary}
+              activeDotColor={'green'}
+              dotColor={'gray'}
             >
               {DateFormatter.getWeeksArray((len = 4)).map((item, index) => (
                 <View style={styles.slide} key={index}>
@@ -146,7 +146,7 @@ const getStyles = (theme, windowWidth) => {
 
   return StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.backgroundPrimary,
+      backgroundColor: 'green',
       flex: 1,
       paddingHorizontal: Platform.select({
         ios: 20,
@@ -158,7 +158,7 @@ const getStyles = (theme, windowWidth) => {
       fontFamily: 'Inter-Bold',
       fontSize: 18,
       marginBottom: 15,
-      color: theme.colors.title,
+      color: 'black',
     },
     imageContainer: {
       backgroundColor: 'rgba(0,0,0,0.2)',
@@ -190,7 +190,7 @@ const getStyles = (theme, windowWidth) => {
     },
     descriptionText: {
       fontFamily: 'Inter-Regular',
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
     bottomSheetTitle: {
       fontFamily: 'Inter-Bold',
@@ -198,13 +198,13 @@ const getStyles = (theme, windowWidth) => {
       marginBottom: 15,
       paddingHorizontal: 20,
       paddingTop: 10,
-      color: theme.colors.title,
+      color: 'black',
     },
     bottomSheetContainer: {
-      backgroundColor: theme.colors.accent,
+      backgroundColor: 'gray',
     },
     bottomSheetIndicator: {
-      backgroundColor: theme.colors.title,
+      backgroundColor: 'black'
     },
     emptyBSView: {
       flex: 1,
@@ -217,7 +217,7 @@ const getStyles = (theme, windowWidth) => {
         ios: 17,
         android: 16,
       }),
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
   })
 }

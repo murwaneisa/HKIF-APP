@@ -3,7 +3,7 @@ import { StyleSheet, View, TouchableOpacity, Text, Image } from 'react-native'
 import { MultiSelect } from 'react-native-element-dropdown'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import Feather from '@expo/vector-icons/Feather'
-import { useTheme } from '../../../Styles/theme'
+
 
 const data = [
   { label: 'John Doe', value: '1' },
@@ -17,8 +17,8 @@ const data = [
 ]
 
 const CoachSelector = () => {
-  const { theme, isDarkMode } = useTheme()
-  const styles = getStyles(theme, isDarkMode)
+ 
+  const styles = getStyles( isDarkMode)
   const [selected, setSelected] = useState([])
 
   const renderItem = item => {
@@ -57,7 +57,7 @@ const CoachSelector = () => {
         renderLeftIcon={() => (
           <Feather
             style={styles.icon}
-            color={theme.colors.text}
+            color={'#6B6B6B'}
             name='user-plus'
             size={24}
           />
@@ -75,7 +75,7 @@ const CoachSelector = () => {
                 />
                 <Text style={styles.coachName}>{item.label}</Text>
               </View>
-              <AntDesign color={theme.colors.text} name='delete' size={17} />
+              <AntDesign color={'#6B6B6B'} name='delete' size={17} />
             </View>
           </TouchableOpacity>
         )}
@@ -86,12 +86,12 @@ const CoachSelector = () => {
 
 export default CoachSelector
 
-const getStyles = theme => {
+const getStyles =()=> {
   return StyleSheet.create({
     container: { padding: 0 },
     dropdown: {
       height: 50,
-      backgroundColor: theme.colors.accent2,
+      backgroundColor: 'gray',
       borderRadius: 6,
       padding: 12,
       shadowColor: '#000',
@@ -105,7 +105,7 @@ const getStyles = theme => {
     },
     placeholderStyle: {
       fontFamily: 'Inter-Bold',
-      color: theme.colors.text,
+      color: '#6B6B6B',
       fontSize: 14,
     },
     selectedTextStyle: {
@@ -133,7 +133,7 @@ const getStyles = theme => {
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 14,
-      backgroundColor: theme.colors.accent2,
+      backgroundColor: 'gray',
       shadowColor: '#000',
       marginTop: 8,
       marginRight: 12,
@@ -164,10 +164,10 @@ const getStyles = theme => {
     },
     coachName: {
       marginHorizontal: 5,
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
     listStyle: {
-      backgroundColor: theme.colors.accent2, // Set your desired color
+      backgroundColor: 'gray', // Set your desired color
       // Add other styling properties as needed
     },
   })

@@ -6,29 +6,29 @@ import {
   StyleSheet,
   Pressable,
 } from 'react-native'
-import { useTheme } from '../../../Styles/theme'
+
 import { MaterialIcons, Entypo } from '@expo/vector-icons'
 import DateFormatter from '../../../Utilities/Helper/DateFormatter'
 
 const ScheduleCard = ({ schedule, onDelete, index }) => {
-  const { theme } = useTheme()
-  const styles = getStyles(theme)
+ 
+   const styles = getStyles()
   const [showTimeSlots, setShowTimeSlots] = useState(false)
 
   return (
-    <View style={[styles.cardContainer, { borderColor: theme.colors.primary }]}>
+    <View style={[styles.cardContainer, { borderColor: 'green' }]}>
       <View style={styles.header}>
         {schedule.frequency === 'once' ? (
           <MaterialIcons
             name='calendar-month'
             size={24}
-            color={theme.colors.text}
+            color={'#6B6B6B'}
           />
         ) : (
           <MaterialIcons
             name='rotate-right'
             size={24}
-            color={theme.colors.text}
+            color={'#6B6B6B'}
           />
         )}
 
@@ -39,9 +39,9 @@ const ScheduleCard = ({ schedule, onDelete, index }) => {
         </Text>
         <Pressable onPress={() => setShowTimeSlots(!showTimeSlots)}>
           {!showTimeSlots ? (
-            <Entypo name='chevron-down' size={24} color={theme.colors.text} />
+            <Entypo name='chevron-down' size={24} color={'#6B6B6B'} />
           ) : (
-            <Entypo name='chevron-up' size={24} color={theme.colors.text} />
+            <Entypo name='chevron-up' size={24} color={'#6B6B6B'} />
           )}
         </Pressable>
       </View>
@@ -107,7 +107,7 @@ const ScheduleCard = ({ schedule, onDelete, index }) => {
             style={styles.deleteContainer}
           >
             {/*  <Text style={styles.deleteText}>Delete Schedule</Text> */}
-            <MaterialIcons name='delete' size={24} color={theme.colors.error} />
+            <MaterialIcons name='delete' size={24} color={'green'} />
           </Pressable>
         </>
       )}
@@ -115,7 +115,7 @@ const ScheduleCard = ({ schedule, onDelete, index }) => {
   )
 }
 
-const getStyles = theme => {
+const getStyles =()=> {
   return StyleSheet.create({
     cardContainer: {
       borderWidth: 1,
@@ -133,7 +133,7 @@ const getStyles = theme => {
       flex: 1,
       marginLeft: 10,
       fontSize: 16,
-      color: theme.colors.text,
+      color: '#6B6B6B',
       fontFamily: 'Inter-Bold',
     },
     timeRow: {
@@ -144,7 +144,7 @@ const getStyles = theme => {
     timeText: {
       fontSize: 16,
       fontFamily: 'Inter-Regular',
-      color: theme.colors.text,
+      color: '#6B6B6B',
       marginHorizontal: 5,
     },
     recurringInfo: {
@@ -152,14 +152,14 @@ const getStyles = theme => {
     },
     recurringText: {
       fontSize: 14,
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
     deleteContainer: {
       marginTop: 10,
       flexDirection: 'row',
     },
     deleteText: {
-      color: theme.colors.error,
+      color: 'green',
       fontFamily: 'Inter-Medium',
     },
   })

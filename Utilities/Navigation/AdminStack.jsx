@@ -24,130 +24,129 @@ import EventUsers from '../../Screens/EventUsers'
 const Stack = createStackNavigator()
 const Drawer = createDrawerNavigator()
 
+const DrawerMenu = () => {
+  return (
+    <DrawerNavigator
+      headerLeft={() => <HeaderLeft />}
+      headerRight={() => <HeaderRight />}
+    >
+      <Drawer.Screen
+        name="Home"
+        component={Home}
+        options={{
+          headerLeft: () => <HeaderLeft name="Home" />,
+          drawerIcon: ({ color }) => (
+            <Ionicons name="home-outline" size={22} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Users"
+        component={Users}
+        options={{
+          drawerIcon: ({ color }) => (
+            <Ionicons name="people-outline" size={22} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Admins"
+        component={Admins}
+        options={{
+          drawerIcon: ({ color }) => (
+            <Ionicons name="shield-checkmark-outline" size={22} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Activities"
+        component={Activities}
+        options={{
+          drawerIcon: ({ color }) => (
+            <Ionicons name="football-outline" size={22} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Events"
+        component={Events}
+        options={{
+          drawerIcon: ({ color }) => (
+            <Ionicons name="calendar-outline" size={22} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Settings"
+        component={Settings}
+        options={{
+          drawerIcon: ({ color }) => (
+            <Ionicons name="settings-outline" size={22} color={color} />
+          ),
+        }}
+      />
+    </DrawerNavigator>
+  )
+}
+
 const AdminStack = () => {
   return (
-    <StackNavigator headerLeft={() => HeaderLeft()}>
+    <StackNavigator headerLeft={() => <HeaderLeft />}>
       <Stack.Screen
-        name='HomeMenu'
+        name="HomeMenu"
         options={{
           headerShown: false,
         }}
         component={DrawerMenu}
       />
       <Stack.Screen
-        name='MemberDetails'
+        name="MemberDetails"
         options={{ headerTitle: 'Member Details' }}
         component={MemberDetails}
       />
       <Stack.Screen
-        name='AddEvent'
+        name="AddEvent"
         options={{ headerTitle: 'Create Event' }}
         component={AddEvent}
       />
       <Stack.Screen
-        name='AddActivity'
+        name="AddActivity"
         options={{ headerTitle: 'Edit Activity' }}
         component={CreateActivity}
       />
       <Stack.Screen
-        name='AddLeader'
+        name="AddLeader"
         options={{ headerTitle: 'Edit Leader' }}
         component={AddLeader}
       />
       <Stack.Screen
-        name='AddAdmin'
+        name="AddAdmin"
         options={{ headerTitle: 'Edit Admin' }}
         component={AddAdmin}
       />
       <Stack.Screen
-        name='EventDetails'
+        name="EventDetails"
         component={EventDetails}
         options={({ route }) => ({
           headerTitle: route.params?.event.title || 'Event Details',
         })}
       />
       <Stack.Screen
-        name='Activity'
+        name="Activity"
         component={Activity}
         options={({ route }) => ({
           headerTitle: route.params?.activity.title || 'Activity',
         })}
       />
-      <Stack.Screen name='EventUsers' component={EventUsers} />
-      {/* Duplicate screen names in users & admin "Events" */}
+      <Stack.Screen name="EventUsers" component={EventUsers} />
       <Stack.Screen
-        name='Events'
+        name="Events"
         component={Events}
         options={{
           headerTitle: 'Upcoming Events',
         }}
       />
     </StackNavigator>
-  )
-}
-
-const DrawerMenu = () => {
-  return (
-    <DrawerNavigator
-      headerLeft={() => HeaderLeft()}
-      headerRight={() => HeaderRight()}
-    >
-      <Drawer.Screen
-        name='Home'
-        component={Home}
-        options={{
-          headerLeft: () => HeaderLeft('Home'),
-          drawerIcon: ({ color }) => (
-            <Ionicons name='home-outline' size={22} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name='Users'
-        component={Users}
-        options={{
-          drawerIcon: ({ color }) => (
-            <Ionicons name='people-outline' size={22} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name='Admins'
-        component={Admins}
-        options={{
-          drawerIcon: ({ color }) => (
-            <Ionicons name='shield-checkmark-outline' size={22} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name='Activities'
-        component={Activities}
-        options={{
-          drawerIcon: ({ color }) => (
-            <Ionicons name='football-outline' size={22} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name='Events'
-        component={Events}
-        options={{
-          drawerIcon: ({ color }) => (
-            <Ionicons name='calendar-outline' size={22} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name='Settings'
-        component={Settings}
-        options={{
-          drawerIcon: ({ color }) => (
-            <Ionicons name='settings-outline' size={22} color={color} />
-          ),
-        }}
-      />
-    </DrawerNavigator>
   )
 }
 

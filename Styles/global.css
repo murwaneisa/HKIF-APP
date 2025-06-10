@@ -1,3 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom styles that will be available in both light and dark modes */
+@layer components {
+  .btn-primary {
+    @apply bg-primary text-white px-4 py-2 rounded-lg;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary text-white px-4 py-2 rounded-lg;
+  }
+
+  .text-body {
+    @apply text-text-primary dark:text-[#C4C4C4];
+  }
+
+  .bg-main {
+    @apply bg-background-primary dark:bg-[#282525];
+  }
+
+  .bg-secondary {
+    @apply bg-background-secondary dark:bg-[#282525];
+  }
+
+  .text-title {
+    @apply text-text-title dark:text-white;
+  }
+}

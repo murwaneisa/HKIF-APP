@@ -1,10 +1,10 @@
 import React from 'react'
 import { View, Text, StyleSheet, Image, Platform } from 'react-native'
-import { useTheme } from '../../Styles/theme'
+
 
 const SettingsSection = ({ title, children }) => {
-  const { theme } = useTheme()
-  const styles = getStyles(theme)
+ 
+   const styles = getStyles()
 
   return (
     <View style={styles.container}>
@@ -14,7 +14,7 @@ const SettingsSection = ({ title, children }) => {
   )
 }
 
-const getStyles = theme =>
+const getStyles =()=>
   StyleSheet.create({
     container: {
       marginBottom: 30,
@@ -23,7 +23,7 @@ const getStyles = theme =>
       fontSize: 12,
       fontFamily: 'Inter-Bold',
       marginBottom: 4,
-      color: theme.colors.title,
+      color: 'black',
     },
   })
 

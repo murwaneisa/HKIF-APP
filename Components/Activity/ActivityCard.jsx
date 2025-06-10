@@ -7,14 +7,13 @@ import {
   Pressable,
   Dimensions,
 } from 'react-native'
-import { useTheme } from '../../Styles/theme'
+
 import { Ionicons } from '@expo/vector-icons'
 import { MaterialIcons } from '@expo/vector-icons'
 
 const ActivityCard = props => {
   const screenWidth = Dimensions.get('window').width
-  const { theme } = useTheme()
-  const styles = getStyles(theme, screenWidth)
+  const styles = getStyles(screenWidth)
 
   return (
     <View style={styles.item}>
@@ -46,7 +45,7 @@ const ActivityCard = props => {
   )
 }
 
-const getStyles = (theme, screenWidth) =>
+const getStyles = (screenWidth) =>
   StyleSheet.create({
     item: {
       width: Platform.select({
@@ -79,7 +78,7 @@ const getStyles = (theme, screenWidth) =>
       width: '100%',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: theme.colors.primary,
+      backgroundColor: '#A9CAA1',
       borderRadius: 15,
       shadowColor: 'black',
       shadowOpacity: 0.1,
@@ -105,7 +104,7 @@ const getStyles = (theme, screenWidth) =>
         android: 14,
         web: 18,
       }),
-      color: theme.colors.text,
+      color: '#6B6B6B',
       textAlign: 'center',
     },
     buttonContainer: {

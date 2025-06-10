@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react'
 import { View, StyleSheet, FlatList, Platform } from 'react-native'
-import { useTheme } from '../Styles/theme'
+
 import UserCard from '../Components/UserCard'
 import { useRoute } from '@react-navigation/native'
 
 function EventUsers({ navigation }) {
-  const { theme } = useTheme()
-  const styles = getStyles(theme)
+ 
+   const styles = getStyles()
 
   const route = useRoute()
   const attendees = route.params.attendees
@@ -22,10 +22,10 @@ function EventUsers({ navigation }) {
   )
 }
 
-const getStyles = theme =>
+const getStyles =()=>
   StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.backgroundPrimary,
+      backgroundColor: 'green',
       flex: 1,
       paddingTop: 10,
       paddingHorizontal: Platform.select({

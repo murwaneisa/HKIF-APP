@@ -8,14 +8,14 @@ import {
 } from 'react-native'
 import React from 'react'
 import RequestCard from './RequetCard'
-import { useTheme } from '../../../Styles/theme'
+
 import { useSelector } from 'react-redux'
 
 const RenderRequests = () => {
   const userList = useSelector(state => state.user.data)
   const windowWidth = Dimensions.get('window').width
-  const { theme } = useTheme()
-  const styles = getStyles(theme, windowWidth)
+ 
+  const styles = getStyles( windowWidth)
   const filteredUsers = userList.filter(
     user =>
       user.membershipType == 'AWAITING_VERIFICATION_BASIC_MEMBERSHIP' ||
@@ -56,7 +56,7 @@ const getStyles = (theme, windowWidth) => {
   return StyleSheet.create({
     container: {
       width: '100%',
-      backgroundColor: theme.colors.backgroundSecondary,
+      backgroundColor: 'green',
       alignItems: Platform.select({
         android: 'center',
         ios: 'center',
@@ -71,7 +71,7 @@ const getStyles = (theme, windowWidth) => {
         web: webWidth,
       }), // This ensures the titleContainer takes full width
       paddingHorizontal: tabletPadding, // This adds padding on the sides based on device width
-      backgroundColor: theme.colors.backgroundSecondary,
+      backgroundColor: 'green',
       alignItems: 'flex-start', // This aligns children to the start along the cross axis
     },
     header: {
@@ -82,7 +82,7 @@ const getStyles = (theme, windowWidth) => {
         web: 25,
       }),
       paddingBottom: 2,
-      color: theme.colors.title,
+      color: 'black',
     },
     subHeader: {
       fontFamily: 'Inter-Regular',
@@ -91,7 +91,7 @@ const getStyles = (theme, windowWidth) => {
         android: 14,
         web: 18,
       }),
-      color: theme.colors.text,
+      color: '#6B6B6B',
       marginBottom: 8,
     },
   })

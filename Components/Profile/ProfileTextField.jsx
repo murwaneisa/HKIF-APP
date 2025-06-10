@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, Platform } from 'react-native'
-import { useTheme } from '../../Styles/theme'
+
 import { Feather } from '@expo/vector-icons'
 import { TextInput } from 'react-native-gesture-handler'
 
@@ -11,8 +11,8 @@ const ProfileTextField = ({
   onChangeText,
   keyboardType,
 }) => {
-  const { theme } = useTheme()
-  const styles = getStyles(theme)
+ 
+   const styles = getStyles()
 
   return (
     <View style={styles.container}>
@@ -21,7 +21,7 @@ const ProfileTextField = ({
         <TextInput
           style={styles.input}
           placeholder={placeholder}
-          placeholderTextColor={theme.colors.text}
+          placeholderTextColor={'#6B6B6B'}
           value={value}
           onChangeText={onChangeText}
           keyboardType={keyboardType}
@@ -31,10 +31,10 @@ const ProfileTextField = ({
   )
 }
 
-const getStyles = theme =>
+const getStyles =()=>
   StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.accent,
+      backgroundColor: 'gray',
       flexDirection: 'row',
       borderRadius: 15,
       marginBottom: 20,
@@ -45,14 +45,14 @@ const getStyles = theme =>
       flex: 1,
     },
     icon: {
-      color: theme.colors.primary,
+      color: 'green',
       fontSize: 16,
       marginRight: 8,
       marginLeft: 20,
     },
     input: {
       flex: 1,
-      color: theme.colors.title,
+      color: 'black',
       fontFamily: 'Inter-SemiBold',
       fontSize: 15,
       paddingVertical: 20,

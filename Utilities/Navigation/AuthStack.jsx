@@ -5,12 +5,16 @@ import Welcome from '../../Screens/Welcome'
 import Login from '../../Screens/Login'
 import Register from '../../Screens/Register'
 import HeaderLeft from '../../Components/Navigation/HeaderLeft'
-import StackNavigator from '../../Components/Navigation/StackNavigator'
+
+const Stack = createStackNavigator()
 
 const AuthStack = () => {
-  const Stack = createStackNavigator()
   return (
-    <StackNavigator headerLeft={() => HeaderLeft()}>
+    <Stack.Navigator
+      screenOptions={{
+        headerLeft: () => <HeaderLeft />,
+      }}
+    >
       <Stack.Screen
         name='Splash'
         component={Splash}
@@ -23,7 +27,7 @@ const AuthStack = () => {
       />
       <Stack.Screen name='Login' component={Login} />
       <Stack.Screen name='Register' component={Register} />
-    </StackNavigator>
+    </Stack.Navigator>
   )
 }
 

@@ -9,14 +9,13 @@ import {
   Platform,
 } from 'react-native'
 import React from 'react'
-import { useTheme } from '../Styles/theme'
 import SettingsOptionCard from '../Components/Settings/SettingsOptionCard'
 import SettingsSection from '../Components/Settings/SettingsSection'
 
 const Settings = () => {
-  const { theme } = useTheme()
+ 
   const windowWidth = Dimensions.get('window').width
-  const styles = getStyles(theme, windowWidth)
+  const styles = getStyles( windowWidth)
 
   const handleContactUsPress = () => {
     const email = 'eisa.murwan@gmail.com'
@@ -86,14 +85,14 @@ const Settings = () => {
   )
 }
 
-const getStyles = (theme, windowWidth) => {
+const getStyles = ( windowWidth) => {
   const tabletHeight = windowWidth >= 720 ? '5%' : '8%'
   const tabletPadding = windowWidth >= 720 ? '10%' : '5%'
   const webWidth = windowWidth >= 900 ? '60%' : '85%'
 
   return StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.backgroundPrimary,
+      backgroundColor: 'green',
       flex: 1,
       paddingTop: 20,
       paddingHorizontal: Platform.select({
@@ -103,7 +102,7 @@ const getStyles = (theme, windowWidth) => {
       }),
     },
     button: {
-      backgroundColor: theme.colors.primary200,
+      backgroundColor: 'green',
       padding: 15,
       borderRadius: 10,
     },

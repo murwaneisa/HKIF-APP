@@ -1,62 +1,36 @@
-import { View, Text, Pressable, StyleSheet } from 'react-native'
-import { useTheme } from '../../Styles/theme'
+import { View, Text, Pressable } from 'react-native'
+import { StyledComponent } from 'nativewind'
 
 function PrimaryButton({
   children,
   onPress,
-  paddingVertical,
-  paddingHorizontal,
+  paddingVertical = 'py-2',
+  paddingHorizontal = 'px-4',
   onLongPress,
   disabled = false,
 }) {
-  const { theme } = useTheme()
-  const styles = getStyles(theme, paddingVertical, paddingHorizontal)
+  const buttonClasses = `
+    ${paddingVertical} ${paddingHorizontal}
+    ${disabled ? 'bg-accent opacity-50' : 'bg-primary'}
+    rounded-3xl
+  `.trim()
+
   return (
-    <View style={styles.buttonOuterContainer}>
-      <Pressable
-        style={({ pressed }) =>
-          pressed
-            ? [styles.buttonInnerContainer, styles.pressed]
-            : [styles.buttonInnerContainer, disabled && styles.disabled]
-        }
+    <StyledComponent component={View} className="rounded-3xl overflow-hidden">
+      <StyledComponent
+        component={Pressable}
+        className={buttonClasses}
         onPress={onPress}
         onLongPress={onLongPress}
-        android_ripple={{ color: theme.colors.primary }}
+        android_ripple={{ color: '#466C3D' }} // primary-900 color
         disabled={disabled}
       >
-        <Text style={styles.buttonText}>{children}</Text>
-      </Pressable>
-    </View>
+        <StyledComponent component={Text} className="font-['Inter-SemiBold'] text-white text-center">
+          {children}
+        </StyledComponent>
+      </StyledComponent>
+    </StyledComponent>
   )
-}
-
-const getStyles = (theme, paddingHorizontal, paddingVertical) => {
-  return StyleSheet.create({
-    buttonOuterContainer: {
-      borderRadius: 28,
-      overflow: 'hidden',
-    },
-    buttonInnerContainer: {
-      backgroundColor: theme.colors.primary,
-      paddingVertical: paddingVertical,
-      paddingHorizontal: paddingHorizontal,
-      width: 'auto',
-      elevation: 2,
-    },
-    buttonText: {
-      fontFamily: 'Inter-SemiBold',
-      color: theme.colors.accentWhite,
-      textAlign: 'center',
-    },
-    pressed: {
-      opacity: 0.75,
-    },
-    disabled: {
-      color: theme.colors.text,
-      backgroundColor: theme.colors.accent, // Add a disabled color to your theme or use a hardcoded color
-      opacity: 0.5, // Optional: reduce opacity for disabled state
-    },
-  })
 }
 
 export default PrimaryButton

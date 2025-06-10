@@ -8,16 +8,16 @@ import {
   Platform,
 } from 'react-native'
 import React, { useState } from 'react'
-import { useTheme } from '../Styles/theme'
+
 import { Feather } from '@expo/vector-icons'
 import UserInfoCard from '../Components/Profile/UserInfoCard'
 import HKIFImagePicker from '../Utilities/Helper/HKIFImagePicker'
 import { useSelector } from 'react-redux'
 
 const Profile = ({ navigation }) => {
-  const { theme } = useTheme()
+ 
   const windowWidth = Dimensions.get('window').width
-  const styles = getStyles(theme, windowWidth)
+  const styles = getStyles( windowWidth)
   const [image, setImage] = useState(null)
   const currentUser = useSelector(state => state.user.currentUser)
 
@@ -94,7 +94,7 @@ const getStyles = (theme, windowWidth) => {
 
   return StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.backgroundPrimary,
+      backgroundColor: 'green',
       flex: 1,
       paddingHorizontal: Platform.select({
         ios: 0,
@@ -108,7 +108,7 @@ const getStyles = (theme, windowWidth) => {
       paddingTop: 25,
       paddingBottom: 25,
       borderBottomWidth: 1,
-      borderBottomColor: theme.colors.border,
+      borderBottomColor: 'green',
     },
     imageContainer: {
       backgroundColor: 'rgba(0,0,0,0.2)',
@@ -127,18 +127,18 @@ const getStyles = (theme, windowWidth) => {
       position: 'absolute',
       right: 1,
       bottom: 1,
-      backgroundColor: theme.colors.accent,
+      backgroundColor: 'gray',
       padding: 8,
       borderRadius: 40,
       borderWidth: 4,
-      borderColor: theme.colors.backgroundPrimary,
+      borderColor: 'green',
     },
     editIcon: {
       fontSize: 16,
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
     title: {
-      color: theme.colors.text,
+      color: '#6B6B6B',
       fontSize: 20,
       fontFamily: 'Inter-Bold',
     },

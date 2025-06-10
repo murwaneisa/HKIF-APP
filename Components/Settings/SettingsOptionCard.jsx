@@ -1,10 +1,10 @@
 import React from 'react'
 import { Text, StyleSheet, Pressable } from 'react-native'
-import { useTheme } from '../../Styles/theme'
+
 
 const SettingsOptionCard = ({ title, onPress }) => {
-  const { theme } = useTheme()
-  const styles = getStyles(theme)
+ 
+   const styles = getStyles()
 
   return (
     <Pressable style={styles.container} onPress={onPress}>
@@ -13,16 +13,16 @@ const SettingsOptionCard = ({ title, onPress }) => {
   )
 }
 
-const getStyles = theme =>
+const getStyles =()=>
   StyleSheet.create({
     container: {
       paddingVertical: 15,
       borderBottomWidth: 1,
-      borderBottomColor: theme.colors.border,
+      borderBottomColor: 'green',
     },
     title: {
       fontSize: 15,
-      color: theme.colors.text,
+      color: '#6B6B6B',
       fontFamily: 'Inter-SemiBold',
     },
   })

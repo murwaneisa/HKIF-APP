@@ -1,12 +1,12 @@
 import React from 'react'
 import { View, Text, StyleSheet, Platform } from 'react-native'
-import { useTheme } from '../../Styles/theme'
+
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { MaterialIcons } from '@expo/vector-icons'
 
 const BenefitCard = ({ title }) => {
-  const { theme } = useTheme()
-  const styles = getStyles(theme)
+ 
+   const styles = getStyles()
   let icon
 
   switch (title) {
@@ -29,7 +29,7 @@ const BenefitCard = ({ title }) => {
   )
 }
 
-const getStyles = theme =>
+const getStyles =()=>
   StyleSheet.create({
     container: {
       paddingVertical: Platform.select({
@@ -52,11 +52,11 @@ const getStyles = theme =>
         android: 14,
         web: 18,
       }),
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
     icon: {
       fontSize: 18,
-      color: theme.colors.primary,
+      color: 'green',
       marginRight: Platform.select({
         ios: 4,
         android: 4,

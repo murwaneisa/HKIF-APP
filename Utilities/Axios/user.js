@@ -61,7 +61,7 @@ export const getPublicUsersByID = async userIds => {
   }
 }
 
-export const geUsersInfo = async () => {
+export const getUsersInfo = async () => {
   try {
     return await baseInstance.get(`${userSuffix}`)
   } catch (error) {

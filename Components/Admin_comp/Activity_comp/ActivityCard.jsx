@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import React from 'react'
-import { useTheme } from '../../../Styles/theme'
+
 import { useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
@@ -17,8 +17,8 @@ import { findActivityLeaders } from '../../../Utilities/Helper/findactivityLeade
 const ActivityCard = ({ activity }) => {
   const navigation = useNavigation()
   const windowWidth = Dimensions.get('window').width
-  const { theme } = useTheme()
-  const styles = getStyles(theme, windowWidth)
+ 
+  const styles = getStyles( windowWidth)
   const [user, setUser] = useState({ role: 'superAdmin' })
   const activityLeaders = findActivityLeaders(activity.leadersIds)
   console.log('the leaders found', activityLeaders)
@@ -42,7 +42,7 @@ const ActivityCard = ({ activity }) => {
           <Ionicons
             name='location-outline'
             size={24}
-            color={theme.colors.text}
+            color={'#6B6B6B'}
           />
           <Text style={styles.location}>{activity.address}</Text>
         </View>
@@ -72,7 +72,7 @@ const ActivityCard = ({ activity }) => {
           onPress={() =>
             navigation.navigate('AddActivity', { activityId: 'activity.id' })
           }
-          style={[styles.button, { backgroundColor: theme.colors.primary }]}
+          style={[styles.button, { backgroundColor: 'green' }]}
         >
           <Text style={styles.buttonText}>View</Text>
         </TouchableOpacity>
@@ -91,7 +91,7 @@ const getStyles = (theme, windowWidth) => {
       shadowOpacity: 0.1,
       shadowRadius: 8,
       elevation: 5,
-      backgroundColor: theme.colors.accent2,
+      backgroundColor: 'gray',
       marginTop: 15,
     },
     image: {
@@ -106,7 +106,7 @@ const getStyles = (theme, windowWidth) => {
       fontWeight: 'bold',
       fontSize: 15,
       marginBottom: 8,
-      color: theme.colors.title,
+      color: 'black',
     },
     dateContainer: {
       flexDirection: 'row',
@@ -115,17 +115,17 @@ const getStyles = (theme, windowWidth) => {
     dateItem: {
       borderRadius: 8,
       padding: 12,
-      backgroundColor: theme.colors.accent,
+      backgroundColor: 'gray',
     },
     dateText: {
       fontSize: 14,
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
     location: {
       fontSize: 14,
       textAlign: 'center',
       marginLeft: 5,
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
     buttonContainer: {
       flexDirection: 'row',
@@ -160,11 +160,11 @@ const getStyles = (theme, windowWidth) => {
     },
     coachName: {
       marginLeft: 5,
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
     additionalCoaches: {
       fontSize: 14,
-      color: theme.colors.text,
+      color: '#6B6B6B',
       marginLeft: 5,
     },
   })

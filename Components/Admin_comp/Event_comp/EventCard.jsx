@@ -9,7 +9,7 @@ import {
   Alert,
 } from 'react-native'
 import React from 'react'
-import { useTheme } from '../../../Styles/theme'
+
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
@@ -19,7 +19,7 @@ import DateFormatter from '../../../Utilities/Helper/DateFormatter'
 const EventCard = ({ event, previous = false }) => {
   const navigation = useNavigation()
   const windowWidth = Dimensions.get('window').width
-  const { theme } = useTheme()
+ 
   const styles = getStyles(theme, windowWidth, previous)
   const dispatch = useDispatch()
 
@@ -73,7 +73,7 @@ const EventCard = ({ event, previous = false }) => {
           <Ionicons
             name='location-outline'
             size={24}
-            color={theme.colors.text}
+            color={'#6B6B6B'}
           />
           <Text style={styles.location}>{event.address}</Text>
         </View>
@@ -83,7 +83,7 @@ const EventCard = ({ event, previous = false }) => {
           onPress={() =>
             navigation.navigate('AddEvent', { eventId: event._id })
           }
-          style={[styles.button, { backgroundColor: theme.colors.primary }]}
+          style={[styles.button, { backgroundColor: 'green' }]}
         >
           <Text style={styles.buttonText}>{previous ? 'Publish' : 'View'}</Text>
         </TouchableOpacity>
@@ -110,7 +110,7 @@ const getStyles = (theme, windowWidth, previous) => {
       shadowOpacity: 0.1,
       shadowRadius: 8,
       elevation: 5,
-      backgroundColor: theme.colors.accent2,
+      backgroundColor: 'gray',
       marginTop: 15,
     },
     image: {
@@ -125,7 +125,7 @@ const getStyles = (theme, windowWidth, previous) => {
       fontWeight: 'bold',
       fontSize: 15,
       marginBottom: 8,
-      color: theme.colors.title,
+      color: 'black',
     },
     dateContainer: {
       flexDirection: 'row',
@@ -134,17 +134,17 @@ const getStyles = (theme, windowWidth, previous) => {
     dateItem: {
       borderRadius: 8,
       padding: 12,
-      backgroundColor: theme.colors.accent,
+      backgroundColor: 'gray',
     },
     dateText: {
       fontSize: 14,
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
     location: {
       fontSize: 14,
       textAlign: 'center',
       marginLeft: 5,
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
     buttonContainer: {
       flexDirection: 'row',

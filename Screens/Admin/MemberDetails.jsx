@@ -11,7 +11,7 @@ import {
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
-import { useTheme } from '../../Styles/theme'
+
 import { deleteUser, getFullUserInfoByID } from '../../Utilities/Axios/user'
 import { FontAwesome } from '@expo/vector-icons'
 import LoadingIndicator from '../../Components/LoadingIndicator'
@@ -29,8 +29,8 @@ const MemberDetails = ({ route }) => {
   const [imageError, setImageError] = useState(false)
   const navigation = useNavigation()
   const windowWidth = Dimensions.get('window').width
-  const { theme } = useTheme()
-  const styles = getStyles(theme, windowWidth)
+ 
+  const styles = getStyles( windowWidth)
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -103,7 +103,7 @@ const MemberDetails = ({ route }) => {
                 <FontAwesome
                   name='user-circle'
                   size={iconSize}
-                  color={theme.colors.text}
+                  color={'#6B6B6B'}
                 />
               </View>
             )}
@@ -208,17 +208,17 @@ const getStyles = (theme, windowWidth) => {
   const webWidth = windowWidth >= 900 ? '60%' : '85%'
   return StyleSheet.create({
     scrollContainer: {
-      backgroundColor: theme.colors.backgroundSecondary,
+      backgroundColor: 'green',
     },
     container: {
       flex: 1,
       alignItems: 'center',
-      backgroundColor: theme.colors.backgroundSecondary,
+      backgroundColor: 'green',
     },
     headerContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: theme.colors.accent2,
+      backgroundColor: 'gray',
       borderRadius: 8,
       padding: 10,
       marginTop: 10,
@@ -230,7 +230,7 @@ const getStyles = (theme, windowWidth) => {
     },
     infoContainer: {
       marginTop: 10,
-      backgroundColor: theme.colors.accent2,
+      backgroundColor: 'gray',
       borderRadius: 8,
       width: Platform.select({
         ios: '90%',
@@ -247,7 +247,7 @@ const getStyles = (theme, windowWidth) => {
       marginHorizontal: 10, // Set the color of the border
     },
     infoItemText: {
-      color: theme.colors.text,
+      color: '#6B6B6B',
       fontFamily: 'Inter-SemiBold',
       fontWeight: 'bold',
       marginLeft: 10,
@@ -283,7 +283,7 @@ const getStyles = (theme, windowWidth) => {
     name: {
       fontFamily: 'Inter-SemiBold',
       fontWeight: 'bold',
-      color: theme.colors.title,
+      color: 'black',
       textAlign: 'center',
       fontSize: Platform.select({
         ios: 16,
@@ -294,7 +294,7 @@ const getStyles = (theme, windowWidth) => {
     labelName: {
       fontFamily: 'Inter-SemiBold',
       fontWeight: 'bold',
-      color: theme.colors.title,
+      color: 'black',
       textAlign: 'left',
       fontSize: Platform.select({
         ios: 16,
@@ -303,7 +303,7 @@ const getStyles = (theme, windowWidth) => {
       }),
     },
     text: {
-      color: theme.colors.text,
+      color: '#6B6B6B',
       fontFamily: 'Inter-SemiBold',
       textAlign: 'center',
       fontSize: Platform.select({

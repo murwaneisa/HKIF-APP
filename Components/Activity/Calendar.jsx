@@ -1,11 +1,11 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import { useTheme } from '../../Styles/theme'
+
 import DateFormatter from '../../Utilities/Helper/DateFormatter'
 
 const Calendar = ({ startDate, schedules }) => {
-  const { theme } = useTheme()
-  const styles = getStyles(theme)
+ 
+   const styles = getStyles()
 
   return (
     <View style={styles.picker}>
@@ -47,7 +47,7 @@ const Calendar = ({ startDate, schedules }) => {
   )
 }
 
-const getStyles = theme =>
+const getStyles =()=>
   StyleSheet.create({
     picker: {
       flexDirection: 'row',
@@ -65,10 +65,10 @@ const getStyles = theme =>
       borderRadius: 8,
       flexDirection: 'column',
       alignItems: 'center',
-      backgroundColor: theme.colors.secondary,
+      backgroundColor: 'gray',
     },
     activeItem: {
-      backgroundColor: theme.colors.primary,
+      backgroundColor: 'green',
     },
     itemWeekday: {
       fontSize: 12,
@@ -82,7 +82,7 @@ const getStyles = theme =>
       color: 'white',
     },
     todayItem: {
-      color: theme.colors.primary200,
+      color: 'green',
     },
   })
 

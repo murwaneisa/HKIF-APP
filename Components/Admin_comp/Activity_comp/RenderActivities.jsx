@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import React from 'react'
-import { useTheme } from '../../../Styles/theme'
+
 import { AntDesign } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import ActivityCard from '../Activity_comp/ActivityCard'
@@ -21,8 +21,8 @@ const RenderActivities = () => {
   const activities = useSelector(state => state.activity.data)
   console.log('the activities', activities)
   const windowWidth = Dimensions.get('window').width
-  const { theme } = useTheme()
-  const styles = getStyles(theme, windowWidth)
+ 
+  const styles = getStyles( windowWidth)
 
   const activeList = [
     {
@@ -79,7 +79,7 @@ const RenderActivities = () => {
         style={styles.subtitleContainer}
         onPress={() => navigation.navigate('AddActivity')}
       >
-        <AntDesign name='pluscircleo' size={22} color={theme.colors.primary} />
+        <AntDesign name='pluscircleo' size={22} color={'green'} />
         <Text style={styles.subHeader}>Add activity</Text>
       </TouchableOpacity>
     </View>
@@ -114,13 +114,13 @@ const getStyles = (theme, windowWidth) => {
   const webWidth = windowWidth >= 900 ? '60%' : '85%'
   return StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.backgroundSecondary,
+      backgroundColor: 'green',
       paddingBottom: 15,
     },
     titleContainer: {
       flexDirection: 'row',
       paddingHorizontal: tabletPadding, // This adds padding on the sides based on device width
-      backgroundColor: theme.colors.backgroundSecondary,
+      backgroundColor: 'green',
       alignItems: 'flex-start', // This aligns children to the start along the cross axis
       justifyContent: 'space-between',
     },
@@ -132,7 +132,7 @@ const getStyles = (theme, windowWidth) => {
         web: 25,
       }),
       paddingBottom: 2,
-      color: theme.colors.title,
+      color: 'black',
     },
     subHeader: {
       fontFamily: 'Inter-SemiBold',
@@ -141,7 +141,7 @@ const getStyles = (theme, windowWidth) => {
         android: 14,
         web: 18,
       }),
-      color: theme.colors.primary,
+      color: 'green',
       marginLeft: 5,
     },
     subtitleContainer: {

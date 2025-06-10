@@ -9,7 +9,7 @@ import {
   Dimensions,
   Platform,
 } from 'react-native'
-import { useTheme } from '../Styles/theme'
+
 import { Ionicons } from '@expo/vector-icons'
 import BenefitCard from '../Components/Event/BenefitCard'
 import JoinEventCard from '../Components/Event/JoinEventCard'
@@ -20,10 +20,10 @@ import LoadingIndicator from '../Components/LoadingIndicator'
 import DateFormatter from '../Utilities/Helper/DateFormatter'
 
 function EventDetails({ navigation }) {
-  const { theme } = useTheme()
+ 
   const windowWidth = Dimensions.get('window').width
   const windowHeight = Dimensions.get('window').height
-  const styles = getStyles(theme, windowWidth, windowHeight)
+  const styles = getStyles(windowWidth, windowHeight)
 
   const route = useRoute()
   const event = route.params.event
@@ -138,14 +138,14 @@ function EventDetails({ navigation }) {
   )
 }
 
-const getStyles = (theme, windowWidth, windowHeight) => {
+const getStyles = (windowWidth, windowHeight) => {
   const tabletHeight = windowWidth >= 720 ? '5%' : '8%'
   const tabletPadding = windowWidth >= 720 ? '10%' : '5%'
   const webWidth = windowWidth >= 900 ? '60%' : '85%'
 
   return StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.backgroundPrimary,
+      backgroundColor: 'green',
       flex: 1,
       paddingHorizontal: Platform.select({
         ios: 0,
@@ -187,7 +187,7 @@ const getStyles = (theme, windowWidth, windowHeight) => {
       flexDirection: 'row',
     },
     icon: {
-      color: theme.colors.primary,
+      color: 'green',
       fontSize: 17,
       marginRight: 4,
     },
@@ -195,24 +195,24 @@ const getStyles = (theme, windowWidth, windowHeight) => {
       fontFamily: 'Inter-Bold',
       fontSize: 24,
       marginBottom: 7,
-      color: theme.colors.title,
+      color: 'black',
     },
     addressText: {
       fontFamily: 'Inter-Regular',
       fontSize: 15,
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
     dateText: {
       fontFamily: 'Inter-Regular',
       fontSize: 15,
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
     benefitsList: {
       flexDirection: 'row',
       paddingVertical: 10,
       borderBottomWidth: 1,
       borderTopWidth: 1,
-      borderColor: theme.colors.border,
+      borderColor: 'green',
       marginTop: 4,
     },
     descriptionSection: {
@@ -222,7 +222,7 @@ const getStyles = (theme, windowWidth, windowHeight) => {
       fontFamily: 'Inter-Regular',
       fontSize: 17,
       lineHeight: 22,
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
     usersSectionHeader: {
       flexDirection: 'row',
@@ -232,10 +232,10 @@ const getStyles = (theme, windowWidth, windowHeight) => {
     sectionTitle: {
       fontFamily: 'Inter-Bold',
       fontSize: 20,
-      color: theme.colors.title,
+      color: 'black',
     },
     viewAll: {
-      color: theme.colors.primary,
+      color: 'green',
       fontFamily: 'Inter-SemiBold',
       fontSize: 14,
     },

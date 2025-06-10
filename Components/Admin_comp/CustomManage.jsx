@@ -7,28 +7,28 @@ import {
   Platform,
   Dimensions,
 } from 'react-native'
-import { useTheme } from '../../Styles/theme'
+
 import RenderMembers from './Users_comp/RenderMembers'
 import RenderRequests from './Users_comp/RenderRequests'
 
 const CustomManage = ({}) => {
   const windowWidth = Dimensions.get('window').width
-  const { theme } = useTheme()
-  const styles = getStyles(theme, windowWidth)
+ 
+  const styles = getStyles( windowWidth)
   const [activeList, setActiveList] = useState('members')
   const [user, setUser] = useState({ role: 'superAdmin' })
 
   const getButtonStyle = listName => ({
     flex: 1,
     backgroundColor:
-      activeList === listName ? theme.colors.primary : theme.colors.accent2,
+      activeList === listName ? 'green' : 'gray',
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
   })
 
   const getButtonTextStyle = listName => ({
-    color: activeList === listName ? 'white' : theme.colors.text,
+    color: activeList === listName ? 'white' : '#6B6B6B',
   })
 
   const handlePress = listName => {
@@ -104,12 +104,12 @@ const getStyles = (theme, windowWidth) => {
   return StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.colors.backgroundSecondary,
+      backgroundColor: 'green',
       alignItems: 'center',
     },
     buttonContainer: {
       flexDirection: 'row',
-      backgroundColor: theme.colors.accent2,
+      backgroundColor: 'gray',
       borderRadius: 8,
       width: Platform.select({
         ios: '90%',
@@ -124,7 +124,7 @@ const getStyles = (theme, windowWidth) => {
       marginVertical: 20,
     },
     buttonText: {
-      color: theme.colors.text,
+      color: '#6B6B6B',
       fontFamily: 'Inter-SemiBold',
     },
     pressed: {

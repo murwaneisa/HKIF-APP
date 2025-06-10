@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native'
 
-import { useTheme } from '../Styles/theme'
+
 
 import StepOne from '../Components/Register/StepOne'
 import StepTwo from '../Components/Register/StepTwo'
@@ -21,8 +21,8 @@ import { registerAndLoginUser } from '../Utilities/Redux/Actions/userActions'
 
 function Register() {
   const screenWidth = Dimensions.get('window').width
-  const { theme } = useTheme()
-  const styles = getStyles(theme, screenWidth)
+ 
+  const styles = getStyles( screenWidth)
 
   const [currentStep, setCurrentStep] = useState(1)
 
@@ -96,7 +96,7 @@ function Register() {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
     >
       <ScrollView
-        style={{ flex: 1, backgroundColor: theme.colors.backgroundPrimary }}
+        style={{ flex: 1, backgroundColor: 'green' }}
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps='handled' // This ensures taps are not dismissed when the keyboard is open
       >
@@ -112,7 +112,7 @@ function Register() {
   )
 }
 
-const getStyles = theme =>
+const getStyles =()=>
   StyleSheet.create({
     scrollViewContainer: {
       flex: 1,
@@ -127,7 +127,7 @@ const getStyles = theme =>
         web: 'center',
       }),
       paddingHorizontal: '6%',
-      backgroundColor: theme.colors.backgroundPrimary,
+      backgroundColor: 'green',
     },
     inputContainer: {
       flex: 1,
@@ -136,7 +136,7 @@ const getStyles = theme =>
     },
     headerText: {
       textAlign: 'center',
-      color: theme.colors.text,
+      color: '#6B6B6B',
       fontFamily: 'Inter-Bold',
       fontSize: Platform.select({
         ios: 30,
@@ -150,7 +150,7 @@ const getStyles = theme =>
       }),
     },
     hkifText: {
-      color: theme.colors.primary,
+      color: 'green',
     },
     headerSubText: {
       alignItems: 'center',
@@ -189,7 +189,7 @@ const getStyles = theme =>
     textStyle: {
       fontFamily: 'Inter-SemiBold',
       paddingVertical: '1%',
-      color: theme.colors.text,
+      color: '#6B6B6B',
       textAlign: 'center',
       fontSize: Platform.select({
         ios: 15,

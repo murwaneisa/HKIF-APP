@@ -1,29 +1,37 @@
 import React from 'react'
 import { createDrawerNavigator } from '@react-navigation/drawer'
-import CustomDrawer from '../../Components/Navigation/CustomDrawer'
-import { useTheme } from '../../Styles/theme'
+import CustomDrawer from './CustomDrawer'
 import { Platform, StyleSheet } from 'react-native'
 
 const Drawer = createDrawerNavigator()
 
 const DrawerNavigator = ({ headerLeft, headerRight, children }) => {
-  const { theme } = useTheme()
-  const styles = getStyles(theme)
-
   return (
     <Drawer.Navigator
+      useLegacyImplementation={false}
       drawerContent={props => <CustomDrawer {...props} />}
       screenOptions={{
         headerLeft: headerLeft,
         headerRight: headerRight,
-        headerStyle: styles.headerStyle,
-        headerTitleStyle: styles.headerTitleStyle,
+        headerStyle: {
+          backgroundColor: '#FFFFFF',
+        },
+        headerTitleStyle: {
+          color: '#6B6B6B',
+          fontFamily: 'Inter-Medium',
+        },
         headerTitleAlign: 'center',
-        drawerActiveBackgroundColor: theme.colors.primary200,
-        drawerActiveTintColor: theme.colors.primary900,
-        drawerInactiveTintColor: theme.colors.text,
-        drawerLabelStyle: styles.drawerLabelStyle,
-        drawerStyle: styles.drawerStyle,
+        drawerActiveBackgroundColor: '#669D58',
+        drawerActiveTintColor: '#FFFFFF',
+        drawerInactiveTintColor: '#6B6B6B',
+        drawerLabelStyle: {
+          marginLeft: -25,
+          fontFamily: 'Inter-Medium',
+          fontSize: Platform.OS === 'web' ? 20 : Platform.OS === 'ios' ? 16 : 14,
+        },
+        drawerStyle: {
+          backgroundColor: '#FFFFFF',
+        },
       }}
     >
       {children}
@@ -31,13 +39,13 @@ const DrawerNavigator = ({ headerLeft, headerRight, children }) => {
   )
 }
 
-const getStyles = theme =>
+const getStyles = () =>
   StyleSheet.create({
     headerStyle: {
-      backgroundColor: theme.colors.accent,
+      backgroundColor: 'gray',
     },
     headerTitleStyle: {
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
     drawerLabelStyle: {
       marginLeft: -25,
@@ -45,11 +53,11 @@ const getStyles = theme =>
       fontSize: Platform.select({
         ios: 16,
         android: 14,
-        wed: 20,
+        web: 20,
       }),
     },
     drawerStyle: {
-      backgroundColor: theme.colors.backgroundPrimary,
+      backgroundColor: 'green',
     },
   })
 

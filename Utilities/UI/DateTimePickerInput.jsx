@@ -11,7 +11,7 @@ import {
 import RNDateTimePicker, {
   DateTimePickerAndroid,
 } from '@react-native-community/datetimepicker'
-import { useTheme } from '../../Styles/theme'
+
 import DateFormatter from '../Helper/DateFormatter'
 
 const DateTimePickerInput = ({
@@ -21,8 +21,8 @@ const DateTimePickerInput = ({
   fieldName,
   dateMode = true,
 }) => {
-  const { theme } = useTheme()
-  const styles = getStyles(theme)
+ 
+   const styles = getStyles()
   const [show, setShow] = useState(false)
 
   const onChange = (event, selectedDate) => {
@@ -81,7 +81,7 @@ const DateTimePickerInput = ({
   )
 }
 
-const getStyles = theme =>
+const getStyles =()=>
   StyleSheet.create({
     inputContainer: {
       marginHorizontal: 4,
@@ -94,13 +94,13 @@ const getStyles = theme =>
         android: 12,
         web: 18,
       }),
-      color: theme.colors.text,
+      color: '#6B6B6B',
       marginBottom: 5,
     },
     inputBtn: {
       flex: 1,
-      backgroundColor: theme.colors.accent,
-      color: theme.colors.text,
+      backgroundColor: 'gray',
+      color: '#6B6B6B',
       paddingHorizontal: Platform.select({
         ios: 10,
         android: 8,
@@ -116,7 +116,7 @@ const getStyles = theme =>
     },
     valueStyle: {
       fontSize: 16,
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
     doneButton: {
       backgroundColor: 'black',

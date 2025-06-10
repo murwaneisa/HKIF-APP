@@ -1,13 +1,13 @@
 import React from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { useTheme } from '../../Styles/theme'
+
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 const HeaderLeft = routeName => {
   const navigation = useNavigation()
-  const { theme } = useTheme()
-  const styles = getStyles(theme)
+ 
+   const styles = getStyles()
 
   if (routeName === 'Home') {
     return (
@@ -28,7 +28,7 @@ const HeaderLeft = routeName => {
   }
 }
 
-const getStyles = theme =>
+const getStyles =()=>
   StyleSheet.create({
     wrapper: {
       marginLeft: 15,
@@ -38,7 +38,7 @@ const getStyles = theme =>
     },
     icon: {
       fontSize: 34,
-      color: theme.colors.text,
+      color: '#6B6B6B',
     },
   })
 

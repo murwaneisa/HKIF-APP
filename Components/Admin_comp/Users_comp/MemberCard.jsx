@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import React, { useState } from 'react'
-import { useTheme } from '../../../Styles/theme'
+
 import { AntDesign } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { FontAwesome } from '@expo/vector-icons'
@@ -16,8 +16,8 @@ import { Alert } from 'react-native'
 
 const MemberCard = ({ user, adminType }) => {
   const windowWidth = Dimensions.get('window').width
-  const { theme } = useTheme()
-  const styles = getStyles(theme, windowWidth)
+ 
+  const styles = getStyles( windowWidth)
   const navigation = useNavigation()
 
   const [imageError, setImageError] = useState(false)
@@ -53,7 +53,7 @@ const MemberCard = ({ user, adminType }) => {
               <FontAwesome
                 name='user-circle'
                 size={iconSize}
-                color={theme.colors.text}
+                color={'#6B6B6B'}
               />
             </View>
           )}
@@ -85,14 +85,14 @@ const getStyles = (theme, windowWidth) => {
   return StyleSheet.create({
     container: {
       width: '100%',
-      backgroundColor: theme.colors.backgroundSecondary,
+      backgroundColor: 'green',
       alignItems: 'center',
       marginTop: 10,
     },
     cardContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: theme.colors.accent2,
+      backgroundColor: 'gray',
       borderRadius: 8,
       padding: 10,
       width: Platform.select({
@@ -118,7 +118,7 @@ const getStyles = (theme, windowWidth) => {
     name: {
       fontFamily: 'Inter-SemiBold',
       fontWeight: 'bold',
-      color: theme.colors.title,
+      color: 'black',
       fontSize: Platform.select({
         ios: 16,
         android: 14,
@@ -126,7 +126,7 @@ const getStyles = (theme, windowWidth) => {
       }),
     },
     text: {
-      color: theme.colors.text,
+      color: '#6B6B6B',
       fontFamily: 'Inter-SemiBold',
       paddingTop: Platform.select({
         ios: 2,
@@ -140,7 +140,7 @@ const getStyles = (theme, windowWidth) => {
       }),
     },
     viewText: {
-      color: theme.colors.primary,
+      color: 'green',
       fontFamily: 'Inter-SemiBold',
       fontWeight: 'bold',
       fontSize: Platform.select({

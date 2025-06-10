@@ -1,14 +1,14 @@
 import React, { useEffect, useMemo } from 'react'
 import { View, StyleSheet, FlatList, Platform } from 'react-native'
-import { useTheme } from '../Styles/theme'
+
 import EventCard from '../Components/Event/EventCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchEvents } from '../Utilities/Redux/Actions/eventActions'
 import LoadingIndicator from '../Components/LoadingIndicator'
 
 function Events({ navigation }) {
-  const { theme } = useTheme()
-  const styles = getStyles(theme)
+ 
+   const styles = getStyles()
 
   const events = useSelector(state => state.event.data || [])
   const loadingEvents = useSelector(state => state.event.loading)
@@ -55,10 +55,10 @@ function Events({ navigation }) {
   )
 }
 
-const getStyles = theme =>
+const getStyles =()=>
   StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.backgroundSecondary,
+      backgroundColor: 'green',
       flex: 1,
       paddingHorizontal: Platform.select({
         ios: 20,
