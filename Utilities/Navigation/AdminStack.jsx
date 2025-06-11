@@ -34,7 +34,7 @@ const DrawerMenu = () => {
         name="Home"
         component={Home}
         options={{
-          headerLeft: () => <HeaderLeft name="Home" />,
+          headerLeft: () => <HeaderLeft/>,
           drawerIcon: ({ color }) => (
             <Ionicons name="home-outline" size={22} color={color} />
           ),

@@ -16,24 +16,25 @@ import Events from '../../Screens/Events'
 import EventDetails from '../../Screens/EventDetails'
 import HeaderLeft from '../../Components/Navigation/HeaderLeft'
 import HeaderRight from '../../Components/Navigation/HeaderRight'
-import DrawerNavigator from '../../Components/Navigation/DrawerNavigator'
+import CustomDrawer from '../../Components/Navigation/CustomDrawer'
 
 const Stack = createStackNavigator()
 const Drawer = createDrawerNavigator()
 
-const UserStack = () => {
+const MainStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
         headerLeft: () => <HeaderLeft />,
+        headerRight: () => <HeaderRight />,
       }}
     >
       <Stack.Screen
-        name='HomeMenu'
+        name='Home'
+        component={Home}
         options={{
-          headerShown: false,
+          headerTitle: 'Home',
         }}
-        component={DrawerMenu}
       />
       <Stack.Screen
         name='EventDetails'
@@ -68,15 +69,25 @@ const UserStack = () => {
   )
 }
 
-const DrawerMenu = () => {
+const UserStack = () => {
   return (
-    <DrawerNavigator
-      headerLeft={() => HeaderLeft('Home')}
-      headerRight={() => HeaderRight()}
+    <Drawer.Navigator
+      drawerContent={props => <CustomDrawer {...props} />}
+      screenOptions={{
+        headerShown: false,
+        drawerActiveBackgroundColor: '#669D58',
+        drawerActiveTintColor: '#FFFFFF',
+        drawerInactiveTintColor: '#6B6B6B',
+        drawerLabelStyle: {
+          marginLeft: -25,
+          fontFamily: 'Inter-Medium',
+          fontSize: 15,
+        },
+      }}
     >
       <Drawer.Screen
         name='Home'
-        component={Home}
+        component={MainStack}
         options={{
           drawerIcon: ({ color }) => (
             <Ionicons name='home-outline' size={22} color={color} />
@@ -128,7 +139,7 @@ const DrawerMenu = () => {
           ),
         }}
       />
-    </DrawerNavigator>
+    </Drawer.Navigator>
   )
 }
 
