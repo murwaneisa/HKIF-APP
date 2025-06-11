@@ -28,6 +28,7 @@
     "expo": "^53.0.9",
     "expo-checkbox": "~4.1.4",
     "expo-image-picker": "~16.1.4",
+    "expo-linear-gradient": "^14.1.5",
     "expo-status-bar": "~2.2.3",
     "firebase": "^10.7.1",
     "formik": "^2.4.5",

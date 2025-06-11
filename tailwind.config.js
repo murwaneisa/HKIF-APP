@@ -10,25 +10,31 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Light mode colors (default)
-        primary: '#669D58',
-        'primary-900': '#466C3D',
-        'primary-500': '#466C3D',
-        'primary-200': '#A9CAA1',
-        secondary: '#3B3D3B',
-        accent: '#F5F5F5',
-        'accent-2': '#FFFFFF',
-        'background-primary': '#FFFFFF',
-        'background-secondary': '#e5e5e5',
-        'text-primary': '#6B6B6B',
-        'text-title': '#282525',
-        border: 'rgba(0,0,0,0.1)',
-        success: '#27ae60',
-        warning: '#f39c12',
-        error: '#e74c3c',
-      },
+        brand: {
+          DEFAULT: '#2082E4', // Main brand blue
+          deep: '#2365E2',     // Deep primary (titles, headers)
+          main : '#1C8FE7',     // Primary button or link
+          light: '#0FB4EC',     // Hover state, border light
+        },
+        surface: {
+          primary: '#FFFFFF',   // Cards, modals
+          secondary: '#E5E5E5', // Inputs, secondary backgrounds
+        },
+        text: {
+          primary: '#1C8FE7',   // Primary blue text (if needed)
+          title: '#0F172A',     // Almost black for readability
+        },
+        feedback: {
+          success: '#14DDAC',   // Lime teal - success messages
+          warning: '#f39c12',   // Standard warning
+          error: '#e74c3c',     // Standard error
+        },
+        border: 'rgba(0,0,0,0.1)',   // Default light border
+        accent: '#06DCD5',           // Secondary highlight
+        'accent-2': '#00DAF0',       // Tertiary or tag color
+      }
     },
   },
-  darkMode: 'media', // uses system theme by default
+  darkMode: 'class', // uses system theme by default
   plugins: [],
 } 
