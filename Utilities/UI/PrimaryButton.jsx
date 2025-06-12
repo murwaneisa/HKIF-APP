@@ -1,35 +1,34 @@
-import { View, Text, Pressable } from 'react-native'
-import { StyledComponent } from 'nativewind'
+import { Text, Pressable, View } from 'react-native'
 
 function PrimaryButton({
   children,
   onPress,
-  paddingVertical = 'py-2',
-  paddingHorizontal = 'px-4',
   onLongPress,
   disabled = false,
+  paddingVertical = 'py-2',
+  paddingHorizontal = 'px-4',
+  rippleColor = 'rgba(70,108,61,0.2)',
 }) {
   const buttonClasses = `
     ${paddingVertical} ${paddingHorizontal}
-    ${disabled ? 'bg-accent opacity-50' : 'bg-primary'}
+    ${disabled ? 'bg-surface-secondary opacity-50' : 'bg-brand-main'}
     rounded-3xl
   `.trim()
 
   return (
-    <StyledComponent component={View} className="rounded-3xl overflow-hidden">
-      <StyledComponent
-        component={Pressable}
+    <View className="rounded-3xl overflow-hidden">
+      <Pressable
         className={buttonClasses}
         onPress={onPress}
         onLongPress={onLongPress}
-        android_ripple={{ color: '#466C3D' }} // primary-900 color
+        android_ripple={{ color: rippleColor }}
         disabled={disabled}
       >
-        <StyledComponent component={Text} className="font-['Inter-SemiBold'] text-white text-center">
+        <Text className="text-white text-center font-semibold">
           {children}
-        </StyledComponent>
-      </StyledComponent>
-    </StyledComponent>
+        </Text>
+      </Pressable>
+    </View>
   )
 }
 

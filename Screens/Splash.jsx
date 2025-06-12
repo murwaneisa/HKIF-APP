@@ -17,8 +17,8 @@ const Splash = ({ navigation }) => {
     useEffect(() => {
         if (fontsLoaded) {
             const timer = setTimeout(() => {
-                navigation.navigate('Welcome');
-            }, 500000); // 5 seconds
+                navigation.navigate('Organizations');
+            }, 5000); // 5 seconds
 
             return () => clearTimeout(timer);
         }
@@ -55,6 +55,8 @@ const Splash = ({ navigation }) => {
     return (
         <LinearGradient
             colors={['#1C8FE7', '#0FB4EC']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
             style={styles.container}
         >
             <View style={styles.circle1} />

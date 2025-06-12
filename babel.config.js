@@ -2,7 +2,7 @@ module.exports = function (api) {
   api.cache(true)
   return {
     presets: [
-      ["babel-preset-expo", { jsxImportSource: "nativewind" }],
+      ["babel-preset-expo", { jsxImportSource: "react" }],
       "nativewind/babel",
     ],
     plugins: [
@@ -12,6 +12,19 @@ module.exports = function (api) {
         {
           moduleName: '@env',
           path: '.env',
+        },
+      ],
+      [
+        'module-resolver',
+        {
+          root: ['./'],
+          alias: {
+            '@': '.',
+            '@screens': './Screens',
+            '@components': './Components',
+            '@utils': './Utilities',
+            '@assets': './Assets',
+          },
         },
       ],
     ],

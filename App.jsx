@@ -7,20 +7,23 @@ import { FontLoader } from './Styles/theme'
 import { Provider } from 'react-redux'
 import store from './Utilities/Redux/store'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 
 
 const App = () => {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <Provider store={store}>
-        <NavigationContainer>
-          <FontLoader>
-            <StackNav />
-          </FontLoader>
-        </NavigationContainer>
-      </Provider>
-    </GestureHandlerRootView>
+    
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Provider store={store}>
+          <NavigationContainer>
+            <FontLoader>
+              <StackNav />
+            </FontLoader>
+          </NavigationContainer>
+        </Provider>
+      </GestureHandlerRootView>
+    
   ) 
 }
 

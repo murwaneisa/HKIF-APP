@@ -127,7 +127,7 @@ const getStyles =()=>
         web: 'center',
       }),
       paddingHorizontal: '6%',
-      backgroundColor: 'green',
+      backgroundColor: 'white',
     },
     inputContainer: {
       flex: 1,

@@ -14,24 +14,31 @@ module.exports = {
           DEFAULT: '#2082E4', // Main brand blue
           deep: '#2365E2',     // Deep primary (titles, headers)
           main : '#1C8FE7',     // Primary button or link
-          light: '#0FB4EC',     // Hover state, border light
+          light: '#BBDEFB',     // Hover state, border light
+        },
+        accent: {
+          DEFAULT: '#06DCD5', // Secondary highlight
+          light: '#BBDEFB', // Tertiary or tag color
         },
         surface: {
           primary: '#FFFFFF',   // Cards, modals
           secondary: '#E5E5E5', // Inputs, secondary backgrounds
         },
         text: {
-          primary: '#1C8FE7',   // Primary blue text (if needed)
-          title: '#0F172A',     // Almost black for readability
+          primary: '#1C8FE7',       // Optional custom blue for links or highlights
+          title: '#1F2937',         // gray-800 → Strong headings
+          subtitle: '#374151',      // gray-700 → Section headers
+          body: '#4B5563',          // gray-600 → Normal paragraph text
+          secondary: '#6B7280',     // gray-500 → Notes, less important
+          disabled: '#9CA3AF',      // gray-400 → Disabled text or placeholders
+          inverse: '#FFFFFF',       // White for dark backgrounds
         },
         feedback: {
           success: '#14DDAC',   // Lime teal - success messages
           warning: '#f39c12',   // Standard warning
           error: '#e74c3c',     // Standard error
         },
-        border: 'rgba(0,0,0,0.1)',   // Default light border
-        accent: '#06DCD5',           // Secondary highlight
-        'accent-2': '#00DAF0',       // Tertiary or tag color
+        border: '#000000',   // Default light border
       }
     },
   },

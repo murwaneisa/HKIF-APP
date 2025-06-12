@@ -23,7 +23,7 @@ function Login({ navigation }) {
   const screenWidth = Dimensions.get('window').width
  
 
-  const styles = getStyles(theme, screenWidth)
+  const styles = getStyles(screenWidth)
 
   const [email, setEmail] = useState('')
   const [isEmailValid, setIsEmailValid] = useState(true)
@@ -119,7 +119,7 @@ function Login({ navigation }) {
                 Login
               </PrimaryButton>
             </View>
-            {showAdminButton && (
+          {showAdminButton && (
               <View style={styles.buttonWrapper}>
                 <PrimaryButton
                   style={{ marginBottom: 10, width: '100%' }}
@@ -153,7 +153,7 @@ function Login({ navigation }) {
   )
 }
 
-const getStyles = (theme, screenWidth) =>
+const getStyles = (screenWidth) =>
   StyleSheet.create({
     keyboardAvoiding: {
       padding: '1%',
@@ -164,7 +164,7 @@ const getStyles = (theme, screenWidth) =>
       flex: 1,
       alignItems: 'center', // This will horizontally center the child elements
       justifyContent: 'center',
-      backgroundColor: 'green',
+      backgroundColor: 'white',
     },
     imageContainer: {
       height: '48%', // This sets the height to 60% of the parent container

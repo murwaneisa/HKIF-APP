@@ -9,7 +9,7 @@ function GoogleButton({
   paddingHorizontal,
 }) {
  
-  const styles = getStyles(theme, paddingVertical, paddingHorizontal)
+  const styles = getStyles( paddingVertical, paddingHorizontal)
   return (
     <View style={styles.buttonOuterContainer}>
       <Pressable
@@ -45,7 +45,7 @@ function GoogleButton({
   )
 }
 
-const getStyles = (theme, paddingHorizontal, paddingVertical) => {
+const getStyles = ( paddingHorizontal, paddingVertical) => {
   return StyleSheet.create({
     buttonOuterContainer: {
       borderColor: 'green',

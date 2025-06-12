@@ -1,10 +1,10 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import Splash from '../../Screens/Splash'
-import Welcome from '../../Screens/Welcome'
-import Login from '../../Screens/Login'
-import Register from '../../Screens/Register'
-import HeaderLeft from '../../Components/Navigation/HeaderLeft'
+import Splash from '@screens/Splash'
+import Login from '@screens/Login'
+import Register from '@screens/Register'
+import HeaderLeft from '@components/Navigation/HeaderLeft'
+import OrganizationSelection from '@screens/OrganizationSelection'
 
 const Stack = createStackNavigator()
 
@@ -21,8 +21,8 @@ const AuthStack = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name='Welcome'
-        component={Welcome}
+        name='Organizations'
+        component={OrganizationSelection}
         options={{ headerLeft: () => null, headerShown: false }}
       />
       <Stack.Screen name='Login' component={Login} />
