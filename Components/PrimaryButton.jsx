@@ -16,10 +16,11 @@ const PrimaryButton = ({
       onPress={onPress}
       disabled={disabled || isLoading}
       activeOpacity={0.8}
+      style={{ opacity: disabled ? 0.5 : 1 }}
       className={`w-full ${className}`}
     >
       <LinearGradient
-        colors={disabled ? ['#9CA3AF', '#9CA3AF'] : ['#2365E2', '#1C8FE7']}
+        colors={disabled ? ['##f9f871', '#6fe6c3'] : ['#2365E2', '#1C8FE7']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         className={`
