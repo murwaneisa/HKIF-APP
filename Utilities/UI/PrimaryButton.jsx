@@ -1,5 +1,5 @@
 import React from 'react'
-import { Pressable, Text, ActivityIndicator, View } from 'react-native'
+import { Pressable, Text, ActivityIndicator, View, TouchableOpacity, StyleSheet, Platform } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 
 function PrimaryButton({
@@ -38,7 +38,7 @@ function PrimaryButton({
   const currentGradient = gradientColors[variant] || gradientColors.primary
 
   return (
-    <Pressable
+    <TouchableOpacity
       onPress={onPress}
       onLongPress={onLongPress}
       disabled={disabled || isLoading}
@@ -46,13 +46,13 @@ function PrimaryButton({
         relative
         overflow-hidden
         rounded-xl
-        shadow-lg
         transition-all duration-300
         ${widthClasses[width] || width}
         ${sizeClasses[size]}
-        ${variant === 'outline' ? 'border-2 border-brand-main' : ''}
+        ${variant === 'outline' ? 'border-2 border-brand-light' : ''}
       `}
       style={({ pressed }) => [
+        styles.shadow,
         style,
         {
           opacity: disabled ? 0.5 : pressed ? 0.8 : 1,
@@ -98,8 +98,22 @@ function PrimaryButton({
           </Text>
         )}
       </View>
-    </Pressable>
+    </TouchableOpacity>
   )
 }
+
+const styles = StyleSheet.create({
+  shadow: Platform.select({
+    ios: {
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 3 },
+      shadowOpacity: 0.15,
+      shadowRadius: 4,
+    },
+    android: {
+      elevation: 5,
+    },
+  }),
+});
 
 export default PrimaryButton

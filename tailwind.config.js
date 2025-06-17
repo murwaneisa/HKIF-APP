@@ -18,6 +18,7 @@ module.exports = {
         },
         accent: {
           DEFAULT: '#06DCD5', // Secondary highlight
+          deep: '#14DDAC', // Secondary highlight
           light: '#BBDEFB', // Tertiary or tag color
         },
         surface: {
