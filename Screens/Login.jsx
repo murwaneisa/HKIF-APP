@@ -8,6 +8,8 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   TouchableOpacity,
+  SafeAreaView,
+  ScrollView,
 } from 'react-native'
 import PrimaryButton from '../Utilities/UI/PrimaryButton'
 import { validateEmail, dismissKeyboard } from '../Utilities/UI/Form'
@@ -16,7 +18,6 @@ import { loginAndSetUser } from '../Utilities/Redux/Actions/userActions'
 import { loginAndSetAdmin } from '../Utilities/Redux/Actions/adminActions'
 import { Ionicons } from '@expo/vector-icons'
 
-
 const organization = {
   id: '1',
   name: 'Manchester City FC',
@@ -24,6 +25,7 @@ const organization = {
   members: 1250,
   category: 'Football'
 }
+
 function Login({ navigation }) {
   const [showAdminButton, setShowAdminButton] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -76,128 +78,179 @@ function Login({ navigation }) {
   }
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      className="flex-1 bg-white"
-    >
-      <TouchableWithoutFeedback onPress={dismissKeyboard}>
-        <View className="flex-1 px-6 items-center pt-2">
-          <View className="h-28 w-28 mb-6 items-center justify-center rounded-full border-4 border-accent-deep overflow-hidden">
-            <Image
-              source={{ uri: organization.logo }}
-              resizeMode="contain"
-              className="h-full w-full rounded-full"
-            />
-          </View>
+    <SafeAreaView className="flex-1 bg-white">
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        className="flex-1"
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+      >
+        <TouchableWithoutFeedback onPress={dismissKeyboard}>
+          <ScrollView
+            contentContainerStyle={{ flexGrow: 1 }}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+          >
+            <View className="flex-1 px-6 items-center pt-2">
+              <View className="h-28 w-28 mb-6 items-center justify-center rounded-full border-4 border-accent-deep overflow-hidden">
+                <Image
+                  source={{ uri: organization.logo }}
+                  resizeMode="contain"
+                  className="h-full w-full rounded-full"
+                />
+              </View>
 
-          <Text className="text-2xl md:text-3xl font-bold text-text-title mb-1">
-            Welcome Back
-          </Text>
-          <Text className="text-base text-gray-500 mb-6">
-            Sign in to {organization.name}
-          </Text>
+              <Text className="text-2xl md:text-3xl font-bold text-text-title mb-1">
+                Welcome Back
+              </Text>
+              <Text className="text-base text-gray-500 mb-6">
+                Sign in to {organization.name}
+              </Text>
 
-          <View className="w-full max-w-md mb-4 space-y-2">
-            <Text className="text-sm font-medium text-gray-700">Email</Text>
-            <View
-              className={`relative flex-row items-center rounded-xl border h-12 px-4 ${!isEmailValid && touched.email ? 'border-red-500' : 'border-gray-200'}`}
-            >
-              <Ionicons name="mail-outline" size={20} color="#6B7280" className="absolute left-3 top-1/2 -translate-y-1/2" />
-              <TextInput
-                placeholder="Enter your email"
-                placeholderTextColor="#9CA3AF"
-                value={email}
-                onChangeText={handleEmailChange}
-                keyboardType="email-address"
-                className="flex-1 text-base text-text-body pl-10 h-full rounded-xl"
-              />
-            </View>
-            {!isEmailValid && touched.email && (
-              <Text className="text-xs text-red-500 mt-1 ml-3">Invalid email format</Text>
-            )}
-          </View>
+              <View className="w-full max-w-md mb-4">
+                <Text className="text-sm font-medium text-gray-700 mb-2">Email</Text>
+                <View
+                  className={`relative flex-row items-center rounded-xl border h-14 px-4 ${!isEmailValid && touched.email ? 'border-red-500' : 'border-gray-200'}`}
+                >
+                  <Ionicons 
+                    name="mail-outline" 
+                    size={20} 
+                    color="#6B7280" 
+                    style={{ marginRight: 10 }}
+                  />
+                  <TextInput
+                    placeholder="Enter your email"
+                    placeholderTextColor="#9CA3AF"
+                    value={email}
+                    onChangeText={handleEmailChange}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    className="flex-1 text-base text-text-body"
+                    style={{
+                      height: '100%',
+                      paddingVertical: Platform.OS === 'ios' ? 0 : 8,
+                      textAlignVertical: Platform.OS === 'android' ? 'center' : 'auto',
+                      lineHeight: Platform.OS === 'ios' ? 20 : undefined,
+                    }}
+                  />
+                </View>
+                {!isEmailValid && touched.email && (
+                  <Text className="text-xs text-red-500 mt-1 ml-3">Invalid email format</Text>
+                )}
+              </View>
 
-          <View className="w-full max-w-md mb-6 space-y-2">
-            <Text className="text-sm font-medium text-gray-700">Password</Text>
-            <View className="relative flex-row items-center border border-gray-200 rounded-xl h-12 px-4">
-              <Ionicons name="lock-closed-outline" size={20} color="#6B7280" className="absolute left-3 top-1/2 -translate-y-1/2" />
-              <TextInput
-                placeholder="Enter your password"
-                placeholderTextColor="#9CA3AF"
-                secureTextEntry={!showPassword}
-                value={password}
-                onChangeText={handlePasswordChange}
-                className="flex-1 text-base text-text-body pl-10 pr-10 h-full rounded-xl"
-              />
-              <TouchableOpacity
-                onPress={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2"
-              >
-                <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={20} color="#9CA3AF" />
+              <View className="w-full max-w-md mb-6">
+                <Text className="text-sm font-medium text-gray-700 mb-2">Password</Text>
+                <View className="relative flex-row items-center border border-gray-200 rounded-xl h-14 px-4">
+                  <Ionicons 
+                    name="lock-closed-outline" 
+                    size={20} 
+                    color="#6B7280" 
+                    style={{ marginRight: 10 }}
+                  />
+                  <TextInput
+                    placeholder="Enter your password"
+                    placeholderTextColor="#9CA3AF"
+                    secureTextEntry={!showPassword}
+                    value={password}
+                    onChangeText={handlePasswordChange}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    className="flex-1 text-base text-text-body"
+                    style={{
+                      height: '100%',
+                      paddingVertical: Platform.OS === 'ios' ? 0 : 8,
+                      textAlignVertical: Platform.OS === 'android' ? 'center' : 'auto',
+                      lineHeight: Platform.OS === 'ios' ? 20 : undefined,
+                      paddingRight: 40,
+                    }}
+                  />
+                  <TouchableOpacity
+                    onPress={() => setShowPassword(!showPassword)}
+                    style={{
+                      position: 'absolute',
+                      right: 12,
+                      height: '100%',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      width: 30,
+                    }}
+                  >
+                    <Ionicons 
+                      name={showPassword ? "eye-off-outline" : "eye-outline"} 
+                      size={20} 
+                      color="#9CA3AF" 
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              <View className="w-full max-w-md mb-6">
+                <PrimaryButton
+                  size="large"
+                  variant="primary"
+                  gradient={true}
+                  width="full"
+                  onPress={handleUserLogin}
+                  onLongPress={() => setShowAdminButton(true)}
+                  isLoading={isLoading}
+                  loadingText="Logging in..."
+                  disabled={!isFormValid()}
+                >
+                  Log Iny
+                </PrimaryButton>
+
+                {/* {showAdminButton && (
+                  <View style={{ marginTop: 16 }}>
+                    <PrimaryButton
+                      size="large"
+                      variant="secondary"
+                      gradient={true}
+                      width="full"
+                      onPress={handleAdminLogin}
+                      isLoading={isAdminLoading}
+                      loadingText="Logging in as admin..."
+                      disabled={!isFormValid()}
+                    >
+                      Log In as Admin
+                    </PrimaryButton>
+                  </View>
+                )}
+ */}
+                <TouchableOpacity className="items-center mt-4">
+                  <Text className="text-blue-500 font-semibold">Forgot Password?</Text>
+                </TouchableOpacity>
+              </View>
+
+              <View className="flex-row items-center my-6 w-full max-w-md">
+                <View className="flex-1 h-px bg-gray-300" />
+                <Text className="mx-4 text-gray-500">or</Text>
+                <View className="flex-1 h-px bg-gray-300" />
+              </View>
+
+              <View className="w-full max-w-md mb-4">
+                <PrimaryButton
+                  size="large"
+                  variant="outline"
+                  width="full"
+                  onPress={() => navigation.navigate('Register')}
+                >
+                  <View className="flex-row items-center justify-center">
+                    <Ionicons name="person-add-outline" size={22} color="#1C8FE7" />
+                    <Text className="text-brand-main font-semibold ml-2">Bli medlem</Text>
+                  </View>
+                </PrimaryButton>
+              </View>
+
+              <TouchableOpacity className="flex-row items-center mt-4 mb-8">
+                <Ionicons name="person-outline" size={20} color="black" />
+                <Text className="text-black text-base ml-2">Continue as Guest</Text>
               </TouchableOpacity>
             </View>
-          </View>
-
-          <View className="w-full max-w-md space-y-4">
-            <PrimaryButton
-              size="large"
-              variant="primary"
-              gradient={true}
-              width="full"
-              onPress={handleUserLogin}
-              onLongPress={() => setShowAdminButton(true)}
-              isLoading={isLoading}
-              loadingText="Logging in..."
-              disabled={!isFormValid()}
-            >
-              Log In
-            </PrimaryButton>
-
-            {showAdminButton && (
-              <PrimaryButton
-                size="large"
-                variant="secondary"
-                gradient={true}
-                width="full"
-                onPress={handleAdminLogin}
-                isLoading={isAdminLoading}
-                loadingText="Logging in as admin..."
-                disabled={!isFormValid()}
-              >
-                Log In as Admin
-              </PrimaryButton>
-            )}
-
-            <TouchableOpacity className="items-center mt-2">
-              <Text className="text-blue-500 font-semibold">Forgot Password?</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View className="flex-row items-center my-6 w-full max-w-md">
-            <View className="flex-1 h-px bg-gray-300" />
-            <Text className="mx-4 text-gray-500">or</Text>
-            <View className="flex-1 h-px bg-gray-300" />
-          </View>
-
-          <PrimaryButton
-            size="large"
-            variant="outline"
-            width="full"
-            onPress={() => navigation.navigate('Register')}
-          >
-            <View className="flex-row items-center justify-center">
-              <Ionicons name="person-add-outline" size={22} color="#1C8FE7" />
-              <Text className="text-brand-main font-semibold ml-2">Sign Up</Text>
-            </View>
-          </PrimaryButton>
-
-          <TouchableOpacity className="flex-row items-center mt-8">
-            <Ionicons name="person-outline" size={20} color="black" />
-            <Text className="text-black text-base ml-2">Continue as Guest</Text>
-          </TouchableOpacity>
-        </View>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   )
 }
 
