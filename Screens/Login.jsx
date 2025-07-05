@@ -186,8 +186,8 @@ function Login({ navigation }) {
             onPress={() => navigation.navigate('Register')}
           >
             <View className="flex-row items-center justify-center">
-              <Ionicons name="person-add-outline" size={20} color="black" />
-              <Text className="text-black font-semibold ml-2">Sign Up</Text>
+              <Ionicons name="person-add-outline" size={22} color="#1C8FE7" />
+              <Text className="text-brand-main font-semibold ml-2">Sign Up</Text>
             </View>
           </PrimaryButton>
 

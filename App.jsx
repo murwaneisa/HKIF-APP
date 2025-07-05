@@ -13,7 +13,6 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 const App = () => {
   return (
-    
       <GestureHandlerRootView style={{ flex: 1 }}>
         <Provider store={store}>
           <NavigationContainer>
@@ -23,7 +22,6 @@ const App = () => {
           </NavigationContainer>
         </Provider>
       </GestureHandlerRootView>
-    
   ) 
 }
 

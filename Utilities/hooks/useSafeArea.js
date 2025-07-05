@@ -19,7 +19,6 @@ export const useSafeArea = ({
   const styles = useMemo(() => ({
     container: {
       flex: 1,
-        
       paddingTop: top ? insets.top : 0,
       paddingBottom: bottom ? insets.bottom : 0,
     },

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import { View, Text, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, Platform } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useSafeArea } from '../Utilities/hooks/useSafeArea'
@@ -115,7 +115,7 @@ const OrganizationSelection = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const navigation = useNavigation();
   
-  const { styles: safeAreaStyles } = useSafeArea({
+  const { styles: safeAreaStyles, topInset } = useSafeArea({
     top: false,
     bottom: true,
     backgroundColor: 'white',
@@ -153,14 +153,19 @@ const OrganizationSelection = () => {
 
   return (
     <View style={safeAreaStyles.container} className="bg-surface-primary">
-      <ScrollView className="flex-1">
+      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Header with gradient background */}
         <LinearGradient
           colors={['#2365E2', '#1C8FE7']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
-          className="p-6 md:p-8"
-          style={safeAreaStyles.topInset}
+          style={[
+            safeAreaStyles.topInset,
+            {
+              paddingHorizontal: 24,
+              paddingVertical: 24,
+            }
+          ]}
         >
           <Text className="text-2xl md:text-3xl font-bold text-text-inverse my-2 md:my-3">
             Välj din organisation
@@ -180,15 +185,18 @@ const OrganizationSelection = () => {
               onChangeText={setSearchTerm}
               autoCapitalize="none"
               autoCorrect={false}
+              style={{ minHeight: 40 }}
             />
-            {searchTerm.length > 0 && (
-              <TouchableOpacity 
-                onPress={() => setSearchTerm('')}
-                className="p-2"
-              >
-                <Ionicons name="close-circle" size={25} color="#9CA3AF" />
-              </TouchableOpacity>
-            )}
+            <View style={{ width: 40, alignItems: 'center', justifyContent: 'center' }}>
+              {searchTerm.length > 0 && (
+                <TouchableOpacity 
+                  onPress={() => setSearchTerm('')}
+                  className="p-2"
+                >
+                  <Ionicons name="close-circle" size={25} color="#9CA3AF" />
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
         </LinearGradient>
 
