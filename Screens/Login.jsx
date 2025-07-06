@@ -201,7 +201,7 @@ function Login({ navigation }) {
                   loadingText="Logging in..."
                   disabled={!isFormValid()}
                 >
-                  Log Iny
+                  Log In
                 </PrimaryButton>
 
                 {/* {showAdminButton && (
