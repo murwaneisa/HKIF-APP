@@ -26,6 +26,10 @@ const organization = {
   category: 'Football'
 }
 
+// TODO: make the text input for the password and email appear in the center fo the IOS devices
+
+
+
 function Login({ navigation }) {
   const [showAdminButton, setShowAdminButton] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
