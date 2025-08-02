@@ -1,150 +1,246 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import Input from '../../Utilities/UI/Input'
-import PrimaryButton from '../../Utilities/UI/PrimaryButton'
-import { useDispatch, useSelector } from 'react-redux'
-import { updateStepTwoData } from '../../Utilities/Redux/Slices/registrationSlice'
-import { Feather } from '@expo/vector-icons'
+import React, { useState } from 'react'
+import { View, Text, TextInput, TouchableOpacity, Platform, Pressable } from 'react-native'
 import { Formik } from 'formik'
 import * as yup from 'yup'
-import YupPassword from 'yup-password'
-YupPassword(yup)
+import { Feather } from '@expo/vector-icons'
+import PrimaryButton from '../../Utilities/UI/PrimaryButton'
+import RNDateTimePicker from '@react-native-community/datetimepicker'
 
 const validationSchema = yup.object().shape({
-  email: yup
-    .string()
-    .email('Please enter a valid email')
-    .required('Email is required'),
-  password: yup.string().password().required('Password is required'),
-  confirmPassword: yup
-    .string()
-    .required('Please re-type your password')
-    .oneOf([yup.ref('password')], 'Passwords does not match'),
+  phoneNumber: yup.string().matches(/^\+?[\d\s-()]+$/, 'Invalid phone number format'),
+  birthDate: yup.date().max(new Date(), 'Birth date cannot be in the future'),
+  gender: yup.string().oneOf(['male', 'female', 'other'], 'Please select a gender'),
+  nationality: yup.string(),
+  address: yup.string(),
+  city: yup.string(),
+  zipCode: yup.string(),
 })
 
-const StepTwo = ({ styles, goToNextStep, goToPreviousStep }) => {
-  const [passwordVisible, setPasswordVisible] = useState(false)
-  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false)
+const StepTwo = ({ goToPreviousStep, stepOneData }) => {
+  const [showDatePicker, setShowDatePicker] = useState(false)
 
-  const dispatch = useDispatch()
-  const { email, password } = useSelector(state => state.registration)
-  const [userInfo, setUserInfo] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-  })
-
-  useEffect(() => {
-    setUserInfo({ email: email || '', password: password || '' })
-  }, [email, password])
-
-  const handleFormSubmit = async values => {
+  const handleFormSubmit = async (values) => {
     try {
-      dispatch(updateStepTwoData({ ...values }))
-      goToNextStep()
+      // Combine step one and step two data
+      const completeData = { ...stepOneData, ...values }
+      console.log('Complete registration data:', completeData)
+      // Handle final submission here
     } catch (err) {
       console.log(err)
     }
   }
 
-  const RightIcon = ({ visible, onPress }) => {
-    return (
-      <TouchableOpacity onPress={onPress}>
-        <Feather name={!visible ? 'eye' : 'eye-off'} size={18} color='black' />
-      </TouchableOpacity>
-    )
+  const formatDate = (date) => {
+    if (!date) return 'Pick a date'
+    return date.toLocaleDateString()
   }
 
   return (
-    <Formik
-      initialValues={userInfo}
-      enableReinitialize
-      validationSchema={validationSchema}
-      onSubmit={handleFormSubmit}
-    >
-      {({
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        values,
-        errors,
-        touched,
-      }) => (
-        <>
-          <Input
-            label='Email Address'
-            value={values.email}
-            onBlur={handleBlur('email')}
-            onChangeText={handleChange('email')}
-            autoCorrect={false}
-            keyboardType='email-address'
-          />
-          {errors.email && touched.email && (
-            <Text style={styles.errorText}>{errors.email}</Text>
-          )}
-          <Input
-            label='Password'
-            value={values.password}
-            onBlur={handleBlur('password')}
-            onChangeText={handleChange('password')}
-            secureTextEntry={!passwordVisible}
-            autoCapitalize={'none'}
-            autoCorrect={false}
-            returnKeyType={'done'}
-            rightIcon={
-              <RightIcon
-                visible={passwordVisible}
-                onPress={() => setPasswordVisible(prev => !prev)}
-              />
-            }
-          />
-          {errors.password && touched.password && (
-            <Text style={styles.errorText}>{errors.password}</Text>
-          )}
-          <Input
-            label='Confirm Password'
-            value={values.confirmPassword}
-            onBlur={handleBlur('confirmPassword')}
-            onChangeText={handleChange('confirmPassword')}
-            secureTextEntry={!confirmPasswordVisible}
-            autoCapitalize={'none'}
-            autoCorrect={false}
-            returnKeyType={'done'}
-            rightIcon={
-              <RightIcon
-                visible={confirmPasswordVisible}
-                onPress={() => setConfirmPasswordVisible(prev => !prev)}
-              />
-            }
-          />
-          {errors.confirmPassword && touched.confirmPassword && (
-            <Text style={styles.errorText}>{errors.confirmPassword}</Text>
-          )}
-          <View style={[styles.buttonsContainer]}>
-            <View style={styles.buttonWrapper}>
-              <PrimaryButton
-                style={{ marginBottom: 10, width: '100%' }}
-                paddingVertical={40}
-                paddingHorizontal={12}
-                onPress={handleSubmit}
+    <View className="w-full">
+      <Formik
+        initialValues={{
+          phoneNumber: '',
+          birthDate: null,
+          gender: '',
+          nationality: '',
+          address: '',
+          city: '',
+          zipCode: '',
+        }}
+        validationSchema={validationSchema}
+        onSubmit={handleFormSubmit}
+      >
+        {({ handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue }) => (
+          <View className="w-full">
+            {/* Phone Number */}
+            <View className="mb-5">
+              <Text className="text-sm text-text-subtitle font-medium mb-2">Phone Number</Text>
+              <View className="relative">
+                <View className="absolute left-3 top-4 z-10">
+                  <Feather name="phone" size={18} color="#6B7280" />
+                </View>
+                <TextInput
+                  placeholder="Enter your phone number"
+                  placeholderTextColor="#9CA3AF"
+                  onChangeText={handleChange('phoneNumber')}
+                  onBlur={handleBlur('phoneNumber')}
+                  value={values.phoneNumber}
+                  keyboardType="phone-pad"
+                  className="border border-surface-secondary rounded-lg pl-12 pr-4 py-4 text-text-title bg-surface-primary"
+                />
+              </View>
+              {errors.phoneNumber && touched.phoneNumber && (
+                <Text className="text-feedback-error text-sm mt-1">{errors.phoneNumber}</Text>
+              )}
+            </View>
+
+            {/* Birth Date */}
+            <View className="mb-5">
+              <Text className="text-sm text-text-subtitle font-medium mb-2">Birth Date</Text>
+              <TouchableOpacity
+                onPress={() => setShowDatePicker(true)}
+                className="border border-surface-secondary rounded-lg px-4 py-4 bg-surface-primary flex-row items-center"
               >
-                Continue
+                <View className="mr-3">
+                  <Feather name="calendar" size={18} color="#6B7280" />
+                </View>
+                <Text className={`flex-1 ${values.birthDate ? 'text-text-title' : 'text-text-disabled'}`}>
+                  {formatDate(values.birthDate)}
+                </Text>
+              </TouchableOpacity>
+              {showDatePicker && (
+                <View>
+                  <RNDateTimePicker
+                    value={values.birthDate || new Date()}
+                    mode="date"
+                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                    onChange={(event, selectedDate) => {
+                      if (Platform.OS === 'android') {
+                        setShowDatePicker(false)
+                      }
+                      if (selectedDate) {
+                        setFieldValue('birthDate', selectedDate)
+                      }
+                    }}
+                    maximumDate={new Date()}
+                  />
+                  {Platform.OS === 'ios' && (
+                    <TouchableOpacity
+                      onPress={() => setShowDatePicker(false)}
+                      className="bg-brand rounded-lg py-3 mt-4"
+                    >
+                      <Text className="text-white text-center font-semibold">Done</Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+              )}
+              {errors.birthDate && touched.birthDate && (
+                <Text className="text-feedback-error text-sm mt-1">{errors.birthDate}</Text>
+              )}
+            </View>
+
+            {/* Gender */}
+            <View className="mb-5">
+              <Text className="text-sm text-text-subtitle font-medium mb-2">Gender</Text>
+              <View className="flex-row space-x-4">
+                {['male', 'female', 'other'].map((option) => (
+                  <TouchableOpacity
+                    key={option}
+                    onPress={() => setFieldValue('gender', option)}
+                    className="flex-row items-center"
+                  >
+                    <View className={`w-5 h-5 rounded-full border-2 mr-2 items-center justify-center ${
+                      values.gender === option ? 'border-brand bg-brand' : 'border-surface-secondary'
+                    }`}>
+                      {values.gender === option && (
+                        <View className="w-2 h-2 bg-white rounded-full" />
+                      )}
+                    </View>
+                    <Text className="text-text-title capitalize">{option}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+              {errors.gender && touched.gender && (
+                <Text className="text-feedback-error text-sm mt-1">{errors.gender}</Text>
+              )}
+            </View>
+
+            {/* Nationality */}
+            <View className="mb-6">
+              <Text className="text-sm text-text-subtitle font-medium mb-2">Nationality</Text>
+              <TextInput
+                placeholder="Enter your nationality"
+                placeholderTextColor="#9CA3AF"
+                onChangeText={handleChange('nationality')}
+                onBlur={handleBlur('nationality')}
+                value={values.nationality}
+                className="border border-surface-secondary rounded-lg px-4 py-4 text-text-title bg-surface-primary"
+              />
+              {errors.nationality && touched.nationality && (
+                <Text className="text-feedback-error text-sm mt-1">{errors.nationality}</Text>
+              )}
+            </View>
+
+            {/* Address Information Section */}
+            <View className="pt-2">
+              <Text className="text-text-title text-lg font-semibold mb-5">Address Information</Text>
+              
+              {/* Address */}
+              <View className="mb-5">
+                <Text className="text-sm text-text-subtitle font-medium mb-2">Address</Text>
+                <View className="relative">
+                  <View className="absolute left-3 top-4 z-10">
+                    <Feather name="map-pin" size={18} color="#6B7280" />
+                  </View>
+                  <TextInput
+                    placeholder="Enter your address"
+                    placeholderTextColor="#9CA3AF"
+                    onChangeText={handleChange('address')}
+                    onBlur={handleBlur('address')}
+                    value={values.address}
+                    className="border border-surface-secondary rounded-lg pl-12 pr-4 py-4 text-text-title bg-surface-primary"
+                  />
+                </View>
+                {errors.address && touched.address && (
+                  <Text className="text-feedback-error text-sm mt-1">{errors.address}</Text>
+                )}
+              </View>
+
+              {/* City */}
+              <View className="mb-5">
+                <Text className="text-sm text-text-subtitle font-medium mb-2">City</Text>
+                <TextInput
+                  placeholder="Enter your city"
+                  placeholderTextColor="#9CA3AF"
+                  onChangeText={handleChange('city')}
+                  onBlur={handleBlur('city')}
+                  value={values.city}
+                  className="border border-surface-secondary rounded-lg px-4 py-4 text-text-title bg-surface-primary"
+                />
+                {errors.city && touched.city && (
+                  <Text className="text-feedback-error text-sm mt-1">{errors.city}</Text>
+                )}
+              </View>
+
+              {/* Zip Code */}
+              <View>
+                <Text className="text-sm text-text-subtitle font-medium mb-2">Zip Code</Text>
+                <TextInput
+                  placeholder="Enter zip code"
+                  placeholderTextColor="#9CA3AF"
+                  onChangeText={handleChange('zipCode')}
+                  onBlur={handleBlur('zipCode')}
+                  value={values.zipCode}
+                  className="border border-surface-secondary rounded-lg px-4 py-4 text-text-title bg-surface-primary"
+                />
+                {errors.zipCode && touched.zipCode && (
+                  <Text className="text-feedback-error text-sm mt-1">{errors.zipCode}</Text>
+                )}
+              </View>
+            </View>
+
+            {/* Action Buttons */}
+            <View className="mt-8">
+              <PrimaryButton 
+                onPress={handleSubmit}
+                size="large"
+              >
+                Submit Membership Application
               </PrimaryButton>
             </View>
-            <View style={styles.buttonWrapper}>
-              <PrimaryButton
-                style={{ marginBottom: 10, width: '100%' }}
-                paddingVertical={40}
-                paddingHorizontal={12}
-                onPress={goToPreviousStep}
-              >
-                Previous
-              </PrimaryButton>
+
+            {/* Terms and Privacy Policy */}
+            <View className="mt-6">
+              <Text className="text-text-secondary text-sm text-center">
+                By submitting this application, you agree to our{' '}
+                <Text className="text-brand underline">Terms of Service</Text> and{' '}
+                <Text className="text-brand underline">Privacy Policy</Text>
+              </Text>
             </View>
           </View>
-        </>
-      )}
-    </Formik>
+        )}
+      </Formik>
+    </View>
   )
 }
 

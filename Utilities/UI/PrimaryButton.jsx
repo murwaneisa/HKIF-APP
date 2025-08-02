@@ -26,8 +26,8 @@ function PrimaryButton({
     auto: 'w-auto',
   }
   const gradientColors = {
-    primary: ['#2563eb', '#14b8a6'],
-    secondary: ['#6fe6c3', '#f9f871'],
+    primary: ['#2082E4', '#06DCD5'], // brand to accent from theme
+    secondary: ['#06DCD5', '#14DDAC'], // accent to accent-deep
     outline: ['transparent', 'transparent'],
   }
   const textSizes = {

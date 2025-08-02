@@ -1,247 +1,122 @@
-import React, { useState } from 'react'
-import {
-  Dimensions,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native'
-
-
-
+// Screens/Register.js
+import React, { useState, useEffect } from 'react'
+import { View, Text, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity, Image, SafeAreaView, Dimensions, BackHandler } from 'react-native'
+import { Feather } from '@expo/vector-icons'
+import { useFocusEffect } from '@react-navigation/native'
 import StepOne from '../Components/Register/StepOne'
 import StepTwo from '../Components/Register/StepTwo'
-import StepThree from '../Components/Register/StepThree'
-import StepFour from '../Components/Register/StepFour'
-import StepFive from '../Components/Register/StepFive'
-import { useDispatch, useSelector } from 'react-redux'
-import { registerAndLoginUser } from '../Utilities/Redux/Actions/userActions'
 
-function Register() {
-  const screenWidth = Dimensions.get('window').width
- 
-  const styles = getStyles( screenWidth)
+export default function Register({ navigation }) {
+  const [step, setStep] = useState(1)
+  const [stepOneData, setStepOneData] = useState(null)
 
-  const [currentStep, setCurrentStep] = useState(1)
-
-  const data = useSelector(state => state.registration)
-  const dispatch = useDispatch()
-
-  const goToNextStep = () => {
-    if (currentStep < totalSteps) {
-      setCurrentStep(currentStep + 1)
-    } else {
-      // Handle the final submission
-      console.log('Final Form Data:')
-      console.log(data)
-      dispatch(registerAndLoginUser(data))
-      // navigate to another screen or perform the submission action
+  const goToNextStep = (data) => {
+    if (step === 1) {
+      setStepOneData(data)
     }
+    setStep(prev => prev + 1)
   }
 
-  const goToPreviousStep = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1)
-    }
-  }
-  const totalSteps = 5
+  const goToPreviousStep = () => setStep(prev => prev - 1)
 
-  const renderStep = () => {
-    switch (currentStep) {
-      case 1:
-        return <StepOne styles={styles} goToNextStep={goToNextStep} />
-      case 2:
-        return (
-          <StepTwo
-            styles={styles}
-            goToNextStep={goToNextStep}
-            goToPreviousStep={goToPreviousStep}
-          />
-        )
-      case 3:
-        return (
-          <StepThree
-            styles={styles}
-            goToNextStep={goToNextStep}
-            goToPreviousStep={goToPreviousStep}
-          />
-        )
-      case 4:
-        return (
-          <StepFour
-            styles={styles}
-            goToNextStep={goToNextStep}
-            goToPreviousStep={goToPreviousStep}
-          />
-        )
-      case 5:
-        return (
-          <StepFive
-            styles={styles}
-            goToNextStep={goToNextStep}
-            goToPreviousStep={goToPreviousStep}
-          />
-        )
-      default:
-        return null
-    }
+  // Handle hardware back button
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        if (step === 2) {
+          // If on step 2, go back to step 1
+          goToPreviousStep()
+          return true // Prevent default back behavior
+        }
+        // If on step 1, allow default back behavior (exit screen)
+        return false
+      }
+
+      // Add event listener
+      const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress)
+
+      // Cleanup function
+      return () => subscription.remove()
+    }, [step])
+  )
+
+  const organization = {
+    id: '1',
+    name: 'Manchester City FC',
+    logo: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=80&h=80&fit=crop&crop=center',
+    members: 1250,
+    category: 'Football'
   }
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
-    >
-      <ScrollView
-        style={{ flex: 1, backgroundColor: 'green' }}
-        contentContainerStyle={{ flexGrow: 1 }}
-        keyboardShouldPersistTaps='handled' // This ensures taps are not dismissed when the keyboard is open
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
       >
-        <View style={styles.container}>
-          <Text style={styles.headerText}>
-            <Text> Welcome to </Text>
-            <Text style={styles.hkifText}>HKIF</Text>
-          </Text>
-          <View style={styles.inputContainer}>{renderStep()}</View>
+        <ScrollView 
+          className="flex-1 bg-white" 
+          contentContainerStyle={{ 
+            flexGrow: 1,
+            paddingBottom: Platform.OS === 'android' ? 40 : 20
+          }} 
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+                <View className="flex-1 px-6 pt-4">
+          {/* Header */}
+          <View className="items-center mb-2">
+            {/* Organization Logo */}
+            <View className="h-28 w-28 mb-4 items-center justify-center rounded-full border-4 border-accent-deep overflow-hidden">
+                 <Image
+                   source={{ uri: organization.logo }}
+                   resizeMode="contain"
+                   className="h-full w-full rounded-full"
+                 />
+               </View>
+            
+            {/* Title and Description */}
+            <Text className="text-text-title font-bold text-2xl mb-2">Join Our Organization</Text>
+            <Text className="text-text-secondary text-base text-center mb-1">
+              {step === 1 ? 'Step 1 of 2 - Personal Information' : 'Step 2 of 2 - Additional Information'}
+            </Text>
+          </View>
+
+          {/* Step indicators */}
+          <View className="flex-row items-center justify-center mb-10">
+            <View className={`h-8 w-8 rounded-full justify-center items-center ${
+              step >= 1 ? 'bg-brand' : 'bg-surface-secondary'
+            }`}>
+              {step > 1 ? (
+                <Feather name="check" size={16} color="white" />
+              ) : (
+                <Text className="text-white font-bold">1</Text>
+              )}
+            </View>
+            <View className={`w-12 h-1 mx-2 ${step > 1 ? 'bg-brand' : 'bg-surface-secondary'}`} />
+            <View className={`h-8 w-8 rounded-full justify-center items-center ${
+              step === 2 ? 'bg-brand' : 'bg-surface-secondary'
+            }`}>
+              <Text className={`${step === 2 ? 'text-white' : 'text-text-secondary'} font-bold`}>2</Text>
+            </View>
+          </View>
+
+          {step === 1 ? (
+            <StepOne goToNextStep={goToNextStep} initialData={stepOneData} />
+          ) : (
+            <StepTwo goToPreviousStep={goToPreviousStep} stepOneData={stepOneData} />
+          )}
+
+          <View className="mt-8">
+            <Text className="text-sm text-text-secondary text-center">
+              Already have an account?{' '}
+              <Text className="text-brand underline">Sign in here</Text>
+            </Text>
+          </View>
         </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </View>
   )
 }
-
-const getStyles =()=>
-  StyleSheet.create({
-    scrollViewContainer: {
-      flex: 1,
-    },
-    container: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      alignItems: Platform.select({
-        ios: 'center',
-        android: 'center',
-        web: 'center',
-      }),
-      paddingHorizontal: '6%',
-      backgroundColor: 'white',
-    },
-    inputContainer: {
-      flex: 1,
-      width: '100%',
-      // Add any additional styling you need for the container of your inputs
-    },
-    headerText: {
-      textAlign: 'center',
-      color: '#6B6B6B',
-      fontFamily: 'Inter-Bold',
-      fontSize: Platform.select({
-        ios: 30,
-        android: 25,
-        web: 35,
-      }),
-      margin: Platform.select({
-        ios: '5%',
-        android: '5%',
-        web: '3%',
-      }),
-    },
-    hkifText: {
-      color: 'green',
-    },
-    headerSubText: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontSize: Platform.select({
-        ios: 12,
-        android: 12,
-        web: 30,
-      }),
-      margin: Platform.select({
-        ios: '10%',
-        android: '10%',
-        web: '3%',
-      }),
-    },
-    buttonsContainer: {
-      width: '100%',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginBottom: '6%',
-      marginTop: Platform.select({
-        ios: '6%',
-        android: '6%',
-        web: '3%',
-      }),
-    },
-    buttonWrapper: {
-      marginBottom: 10,
-      width: Platform.select({
-        ios: '70%',
-        android: '70%',
-        web: '40%',
-      }),
-      alignSelf: 'center', // This will center the button wrapper within its parent
-    },
-    textStyle: {
-      fontFamily: 'Inter-SemiBold',
-      paddingVertical: '1%',
-      color: '#6B6B6B',
-      textAlign: 'center',
-      fontSize: Platform.select({
-        ios: 15,
-        android: 15,
-      }),
-    },
-    datePicker: {
-      height: 120,
-      marginVertical: 20,
-    },
-    DatePickerButton: {
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      marginBottom: 20,
-    },
-
-    centeredView: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    modalView: {
-      margin: 5,
-      backgroundColor: '#080516',
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderRadius: 20,
-      padding: '3%',
-      width: Platform.select({
-        ios: '90%',
-        android: '90%',
-        web: '40%',
-      }),
-      shadowColor: '#000',
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 5,
-    },
-    errorText: {
-      fontSize: Platform.select({
-        ios: 13,
-        android: 12,
-        web: 16,
-      }),
-      color: 'red',
-      paddingHorizontal: 4,
-      paddingTop: 4,
-    },
-  })
-
-export default Register
