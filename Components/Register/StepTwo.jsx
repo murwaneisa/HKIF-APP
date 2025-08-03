@@ -4,6 +4,7 @@ import { Formik } from 'formik'
 import * as yup from 'yup'
 import { Feather } from '@expo/vector-icons'
 import PrimaryButton from '../../Utilities/UI/PrimaryButton'
+import SecondaryButton from '../../Utilities/UI/SecondaryButton'
 import RNDateTimePicker from '@react-native-community/datetimepicker'
 
 const validationSchema = yup.object().shape({
@@ -16,15 +17,20 @@ const validationSchema = yup.object().shape({
   zipCode: yup.string(),
 })
 
-const StepTwo = ({ goToPreviousStep, stepOneData }) => {
+const StepTwo = ({ goToNextStep, goToPreviousStep, stepOneData, initialData }) => {
   const [showDatePicker, setShowDatePicker] = useState(false)
 
   const handleFormSubmit = async (values) => {
     try {
-      // Combine step one and step two data
-      const completeData = { ...stepOneData, ...values }
-      console.log('Complete registration data:', completeData)
-      // Handle final submission here
+      if (goToNextStep) {
+        // If there's a next step, save the data and continue
+        goToNextStep(values)
+      } else {
+        // Final submission - combine all data
+        const completeData = { ...stepOneData, ...values }
+        console.log('Complete registration data:', completeData)
+        // Handle final submission here
+      }
     } catch (err) {
       console.log(err)
     }
@@ -39,13 +45,13 @@ const StepTwo = ({ goToPreviousStep, stepOneData }) => {
     <View className="w-full">
       <Formik
         initialValues={{
-          phoneNumber: '',
-          birthDate: null,
-          gender: '',
-          nationality: '',
-          address: '',
-          city: '',
-          zipCode: '',
+          phoneNumber: initialData?.phoneNumber || '',
+          birthDate: initialData?.birthDate || null,
+          gender: initialData?.gender || '',
+          nationality: initialData?.nationality || '',
+          address: initialData?.address || '',
+          city: initialData?.city || '',
+          zipCode: initialData?.zipCode || '',
         }}
         validationSchema={validationSchema}
         onSubmit={handleFormSubmit}
@@ -127,7 +133,7 @@ const StepTwo = ({ goToPreviousStep, stepOneData }) => {
                   <TouchableOpacity
                     key={option}
                     onPress={() => setFieldValue('gender', option)}
-                    className="flex-row items-center"
+                    className="flex-row items-center px-2"
                   >
                     <View className={`w-5 h-5 rounded-full border-2 mr-2 items-center justify-center ${
                       values.gender === option ? 'border-brand bg-brand' : 'border-surface-secondary'
@@ -221,12 +227,22 @@ const StepTwo = ({ goToPreviousStep, stepOneData }) => {
 
             {/* Action Buttons */}
             <View className="mt-8">
+              {/* Submit Button */}
               <PrimaryButton 
                 onPress={handleSubmit}
                 size="large"
               >
-                Submit Membership Application
+                {goToNextStep ? 'Continue' : 'Submit Membership Application'}
               </PrimaryButton>
+                               {/* Back Button */}
+                <SecondaryButton 
+                  onPress={goToPreviousStep}
+                  size="large"
+                  icon={<Feather name="arrow-left" size={18} color="#2082E4" />}
+                  className="mt-4"
+                >
+                  Back to Step 1
+                </SecondaryButton>
             </View>
 
             {/* Terms and Privacy Policy */}

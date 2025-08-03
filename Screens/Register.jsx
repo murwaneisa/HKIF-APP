@@ -1,5 +1,5 @@
 // Screens/Register.js
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { View, Text, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity, Image, SafeAreaView, Dimensions, BackHandler } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import { useFocusEffect } from '@react-navigation/native'
@@ -9,15 +9,38 @@ import StepTwo from '../Components/Register/StepTwo'
 export default function Register({ navigation }) {
   const [step, setStep] = useState(1)
   const [stepOneData, setStepOneData] = useState(null)
+  const [stepTwoData, setStepTwoData] = useState(null)
 
   const goToNextStep = (data) => {
     if (step === 1) {
       setStepOneData(data)
+    } else if (step === 2) {
+      setStepTwoData(data)
     }
     setStep(prev => prev + 1)
   }
 
   const goToPreviousStep = () => setStep(prev => prev - 1)
+
+  // Customize header based on current step
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity
+          onPress={() => {
+            if (step === 2) {
+              goToPreviousStep()
+            } else {
+              navigation.goBack()
+            }
+          }}
+          style={{ marginLeft: 15, justifyContent: 'center', alignItems: 'center', height: '100%' }}
+        >
+          <Feather name="arrow-left" size={24} color="#6B6B6B" />
+        </TouchableOpacity>
+      ),
+    })
+  }, [navigation, step])
 
   // Handle hardware back button
   useFocusEffect(
@@ -105,7 +128,12 @@ export default function Register({ navigation }) {
           {step === 1 ? (
             <StepOne goToNextStep={goToNextStep} initialData={stepOneData} />
           ) : (
-            <StepTwo goToPreviousStep={goToPreviousStep} stepOneData={stepOneData} />
+            <StepTwo 
+              goToNextStep={goToNextStep}
+              goToPreviousStep={goToPreviousStep} 
+              stepOneData={stepOneData}
+              initialData={stepTwoData}
+            />
           )}
 
           <View className="mt-8">
