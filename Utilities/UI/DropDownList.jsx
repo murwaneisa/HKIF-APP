@@ -16,13 +16,15 @@ cssInterop(Dropdown, {
 // - placeholder: string
 // - value: any
 // - handleChange: (value) => void
-// - data: Array<{ label: string, value: any } & Record<string, any>>
+// - data: Array<Record<string, any>>
 // - containerStyle?: object
 // - dropdownStyle?: object (deprecated, use dropdownClassName)
 // - containerClassName?: string
 // - dropdownClassName?: string
 // - labelClassName?: string
 // - showSelectedOnRight?: boolean // hides built-in selected text so you can render on right
+// - labelField?: string // defaults to 'label'
+// - valueField?: string // defaults to 'value'
 // - leftIcon?: () => React.ReactNode
 // - renderRightIconFromItem?: (selectedItem: any | undefined) => React.ReactNode
 // - renderItem?: (item: any) => React.ReactNode
@@ -38,6 +40,8 @@ const DropdownList = ({
   dropdownClassName,
   labelClassName,
   showSelectedOnRight = false,
+  labelField = 'label',
+  valueField = 'value',
   leftIcon,
   renderRightIconFromItem,
   renderItem,
@@ -50,7 +54,7 @@ const DropdownList = ({
     isSearch = true
   }
 
-  const selectedItem = useMemo(() => data.find(d => d.value === value), [data, value])
+  const selectedItem = useMemo(() => data.find(d => d?.[valueField] === value), [data, value, valueField])
 
   const computedDropdownClassName = `${dropdownClassName ?? 'border border-surface-secondary rounded-lg px-4 py-4 bg-surface-primary'} ${
     isFocus ? 'border-brand' : ''
@@ -83,15 +87,15 @@ const DropdownList = ({
             data={data}
             search
             maxHeight={300}
-            labelField='label'
-            valueField='value'
+            labelField={labelField}
+            valueField={valueField}
             placeholder={!isFocus ? placeholder : '...'}
             searchPlaceholder='Search...'
             value={value}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             onChange={item => {
-              handleChange(item.value)
+               handleChange(item?.[valueField])
               setIsFocus(false)
             }}
             renderLeftIcon={leftIcon ? () => leftIcon(selectedItem) : undefined}
@@ -108,15 +112,15 @@ const DropdownList = ({
             iconStyle={styles.iconStyle}
             data={data}
             maxHeight={300}
-            labelField='label'
-            valueField='value'
+            labelField={labelField}
+            valueField={valueField}
             placeholder={!isFocus ? placeholder : '...'}
             searchPlaceholder='Search...'
             value={value}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             onChange={item => {
-              handleChange(item.value)
+               handleChange(item?.[valueField])
               setIsFocus(false)
             }}
             renderLeftIcon={leftIcon ? () => leftIcon(selectedItem) : undefined}

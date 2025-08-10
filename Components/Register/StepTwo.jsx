@@ -50,6 +50,7 @@ const StepTwo = ({ goToNextStep, goToPreviousStep, stepOneData, initialData }) =
       <Formik
         initialValues={{
           phoneNumber: initialData?.phoneNumber || '',
+          dialCode: initialData?.dialCode || '+46',
           birthDate: initialData?.birthDate || null,
           gender: initialData?.gender || '',
           nationality: initialData?.nationality || '',
@@ -62,22 +63,44 @@ const StepTwo = ({ goToNextStep, goToPreviousStep, stepOneData, initialData }) =
       >
         {({ handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue }) => (
           <View className="w-full">
-            {/* Phone Number */}
+            {/* Phone Number with Dial Code */}
             <View className="mb-5">
-              <Text className="text-sm text-text-subtitle font-medium mb-2">Phone Number</Text>
-              <View className="relative">
-                <View className="absolute left-3 top-4 z-10">
-                  <Feather name="phone" size={18} color="#6B7280" />
+              <Text className="text-sm text-text-subtitle font-medium mb-2">Phone</Text>
+              <View className="flex-row items-center">
+                <View className="flex-1 mr-3">
+                  <DropdownList
+                    placeholder="Code"
+                    value={values.dialCode}
+                    handleChange={(val) => setFieldValue('dialCode', val)}
+                    data={countries}
+                    containerClassName=""
+                    dropdownClassName="border border-surface-secondary rounded-lg px-3 py-3 bg-surface-primary"
+                    labelField="dialCode"
+                    valueField="dialCode"
+                    renderItem={(item) => (
+                      <View className="flex-row items-center p-2">
+                        <Text style={{ fontSize: 18, marginRight: 8 }}>{item.flag}</Text>
+                        <Text style={{ fontSize: 14, color: '#6B7280' }}>{item.dialCode}</Text>
+                      </View>
+                    )}
+                  />
                 </View>
-                <TextInput
-                  placeholder="Enter your phone number"
-                  placeholderTextColor="#9CA3AF"
-                  onChangeText={handleChange('phoneNumber')}
-                  onBlur={handleBlur('phoneNumber')}
-                  value={values.phoneNumber}
-                  keyboardType="phone-pad"
-                  className="border border-surface-secondary rounded-lg pl-12 pr-4 py-4 text-text-title bg-surface-primary"
-                />
+                <View className="flex-[2]">
+                  <View className="relative">
+                    <View className="absolute left-3 top-4 z-10">
+                      <Feather name="phone" size={18} color="#6B7280" />
+                    </View>
+                    <TextInput
+                      placeholder="Enter your phone number"
+                      placeholderTextColor="#9CA3AF"
+                      onChangeText={handleChange('phoneNumber')}
+                      onBlur={handleBlur('phoneNumber')}
+                      value={values.phoneNumber}
+                      keyboardType="phone-pad"
+                      className="border border-surface-secondary rounded-lg pl-12 pr-4 py-4 text-text-title bg-surface-primary"
+                    />
+                  </View>
+                </View>
               </View>
               {errors.phoneNumber && touched.phoneNumber && (
                 <Text className="text-feedback-error text-sm mt-1">{errors.phoneNumber}</Text>
@@ -168,7 +191,11 @@ const StepTwo = ({ goToNextStep, goToPreviousStep, stepOneData, initialData }) =
                 showSelectedOnRight
                 leftIcon={(item) => (
                   <View className="flex-row items-center">
-                    <Text style={{ fontSize: 18, marginRight: 8 }}>{item?.flag ?? ''}</Text>
+                    {item?.flag ? (
+                      <Text style={{ fontSize: 18, marginRight: 8 }}>{item.flag}</Text>
+                    ) : (
+                      <Feather name="globe" size={18} color="#6B7280" style={{ marginRight: 8 }} />
+                    )}
                     <Text style={{ fontSize: 16, color: '#111827' }}>{item?.label ?? ''}</Text>
                   </View>
                 )}
@@ -177,7 +204,11 @@ const StepTwo = ({ goToNextStep, goToPreviousStep, stepOneData, initialData }) =
                 )}
                 renderItem={(item) => (
                   <View className="flex-row items-center p-2">
-                    <Text style={{ fontSize: 18, marginRight: 8 }}>{item.flag}</Text>
+                    {item.flag ? (
+                      <Text style={{ fontSize: 18, marginRight: 8 }}>{item.flag}</Text>
+                    ) : (
+                      <Feather name="globe" size={18} color="#6B7280" style={{ marginRight: 8 }} />
+                    )}
                     <Text style={{ fontSize: 16, color: '#111827' }}>{item.label}</Text>
                   </View>
                 )}
@@ -273,15 +304,6 @@ const StepTwo = ({ goToNextStep, goToPreviousStep, stepOneData, initialData }) =
                 <Text className="text-brand underline">Privacy Policy</Text>
               </Text>
             </View>
-
-            {/* Already have an account */}
-{/*             <View className="mt-4 items-center">
-              <Pressable onPress={() => navigation.navigate('Login')}>
-                <Text className="text-text-secondary text-sm">
-                  Already have an account? <Text className="text-brand underline">Log in</Text>
-                </Text>
-              </Pressable>
-            </View> */}
           </View>
         )}
       </Formik>

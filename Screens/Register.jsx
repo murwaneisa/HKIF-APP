@@ -1,12 +1,16 @@
 // Screens/Register.js
 import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { View, Text, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity, Image, SafeAreaView, Dimensions, BackHandler } from 'react-native'
+import { useHeaderHeight } from '@react-navigation/elements'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Feather } from '@expo/vector-icons'
 import { useFocusEffect } from '@react-navigation/native'
 import StepOne from '../Components/Register/StepOne'
 import StepTwo from '../Components/Register/StepTwo'
 
 export default function Register({ navigation }) {
+  const headerHeight = useHeaderHeight()
+  const insets = useSafeAreaInsets()
   const [step, setStep] = useState(1)
   const [stepOneData, setStepOneData] = useState(null)
   const [stepTwoData, setStepTwoData] = useState(null)
@@ -76,15 +80,17 @@ export default function Register({ navigation }) {
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+        keyboardVerticalOffset={headerHeight}
       >
         <ScrollView 
           className="flex-1 bg-white" 
           contentContainerStyle={{ 
             flexGrow: 1,
-            paddingBottom: Platform.OS === 'android' ? 40 : 20
+            paddingBottom: (Platform.OS === 'android' ? 40 : 20) + insets.bottom
           }} 
           keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+          contentInsetAdjustmentBehavior="always"
           showsVerticalScrollIndicator={false}
         >
           <View className="flex-1 px-6 pt-4">
@@ -136,7 +142,7 @@ export default function Register({ navigation }) {
             />
           )}
 
-          <View className="mt-8 mb-4 items-center">
+          <View className="mt-8  items-center">
             <TouchableOpacity onPress={() => navigation.navigate('Login')}>
               <Text className="text-sm text-text-secondary text-center">
                 Already have an account?{' '}

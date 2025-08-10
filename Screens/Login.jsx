@@ -94,7 +94,7 @@ function Login({ navigation }) {
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
           >
-            <View className="flex-1 px-6 items-center pt-2">
+            <View className="flex-1 px-6 items-center pt-4">
               <View className="h-28 w-28 mb-6 items-center justify-center rounded-full border-4 border-accent-deep overflow-hidden">
                 <Image
                   source={{ uri: organization.logo }}
@@ -241,7 +241,7 @@ function Login({ navigation }) {
                 >
                   <View className="flex-row items-center justify-center">
                     <Ionicons name="person-add-outline" size={22} color="#1C8FE7" />
-                    <Text className="text-brand-main font-semibold ml-2">Bli medlem</Text>
+                    <Text className="text-brand-main font-semibold ml-2">Sign up for membership</Text>
                   </View>
                 </PrimaryButton>
               </View>
