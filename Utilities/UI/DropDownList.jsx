@@ -1,9 +1,47 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Platform, StyleSheet, Text, View } from 'react-native'
+import { cssInterop } from 'nativewind'
 
 import { Dropdown } from 'react-native-element-dropdown'
+cssInterop(Dropdown, {
+  className: { target: 'style' },
+  placeholderClassName: { target: 'placeholderStyle' },
+  selectedTextClassName: { target: 'selectedTextStyle' },
+  inputSearchClassName: { target: 'inputSearchStyle' },
+  iconClassName: { target: 'iconStyle' },
+})
 
-const DropdownList = ({ label, placeholder, value, handleChange, data }) => {
+// Props:
+// - label: string
+// - placeholder: string
+// - value: any
+// - handleChange: (value) => void
+// - data: Array<{ label: string, value: any } & Record<string, any>>
+// - containerStyle?: object
+// - dropdownStyle?: object (deprecated, use dropdownClassName)
+// - containerClassName?: string
+// - dropdownClassName?: string
+// - labelClassName?: string
+// - showSelectedOnRight?: boolean // hides built-in selected text so you can render on right
+// - leftIcon?: () => React.ReactNode
+// - renderRightIconFromItem?: (selectedItem: any | undefined) => React.ReactNode
+// - renderItem?: (item: any) => React.ReactNode
+const DropdownList = ({
+  label,
+  placeholder,
+  value,
+  handleChange,
+  data,
+  containerStyle,
+  dropdownStyle,
+  containerClassName,
+  dropdownClassName,
+  labelClassName,
+  showSelectedOnRight = false,
+  leftIcon,
+  renderRightIconFromItem,
+  renderItem,
+}) => {
   const [isFocus, setIsFocus] = useState(false)
  
    const styles = getStyles()
@@ -12,15 +50,34 @@ const DropdownList = ({ label, placeholder, value, handleChange, data }) => {
     isSearch = true
   }
 
+  const selectedItem = useMemo(() => data.find(d => d.value === value), [data, value])
+
+  const computedDropdownClassName = `${dropdownClassName ?? 'border border-surface-secondary rounded-lg px-4 py-4 bg-surface-primary'} ${
+    isFocus ? 'border-brand' : ''
+  }`
+
+  const selectedTextStyle = [
+    styles.selectedTextStyle,
+    showSelectedOnRight ? styles.hideSelectedText : null,
+  ]
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
+    <View style={containerStyle} className={containerClassName}>
+      {!!label && (
+        <Text
+          style={styles.label}
+          className={labelClassName ?? 'text-sm text-text-subtitle font-medium mb-2'}
+        >
+          {label}
+        </Text>
+      )}
       <View>
         {isSearch ? (
           <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+            className={computedDropdownClassName}
+            style={dropdownStyle}
             placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
+            selectedTextStyle={selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
             iconStyle={styles.iconStyle}
             data={data}
@@ -37,12 +94,16 @@ const DropdownList = ({ label, placeholder, value, handleChange, data }) => {
               handleChange(item.value)
               setIsFocus(false)
             }}
+            renderLeftIcon={leftIcon ? () => leftIcon(selectedItem) : undefined}
+            renderRightIcon={renderRightIconFromItem ? () => renderRightIconFromItem(selectedItem) : undefined}
+            renderItem={renderItem}
           />
         ) : (
           <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+            className={computedDropdownClassName}
+            style={dropdownStyle}
             placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
+            selectedTextStyle={selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
             iconStyle={styles.iconStyle}
             data={data}
@@ -58,6 +119,9 @@ const DropdownList = ({ label, placeholder, value, handleChange, data }) => {
               handleChange(item.value)
               setIsFocus(false)
             }}
+            renderLeftIcon={leftIcon ? () => leftIcon(selectedItem) : undefined}
+            renderRightIcon={renderRightIconFromItem ? () => renderRightIconFromItem(selectedItem) : undefined}
+            renderItem={renderItem}
           />
         )}
       </View>
@@ -68,24 +132,9 @@ const DropdownList = ({ label, placeholder, value, handleChange, data }) => {
 export default DropdownList
 const getStyles =()=>
   StyleSheet.create({
-    container: {
-      marginHorizontal: 4,
-      marginVertical: 8,
-      borderRadius: 6,
-    },
-    dropdown: {
-      backgroundColor: 'gray',
-      color: '#6B6B6B',
-      padding: Platform.select({
-        ios: 10,
-        android: 6,
-        web: 16,
-      }),
-      borderRadius: 6,
-      fontSize: 18,
-    },
+    container: {},
     icon: {
-      marginRight: 5,
+      marginLeft: 5,
     },
     label: {
       fontFamily: 'Inter-SemiBold',
@@ -99,11 +148,14 @@ const getStyles =()=>
     },
     placeholderStyle: {
       fontSize: 16,
-      color: '#6B6B6B',
+      color: '#9CA3AF',
     },
     selectedTextStyle: {
       fontSize: 16,
-      color: '#6B6B6B',
+      color: '#111827',
+    },
+    hideSelectedText: {
+      display: 'none',
     },
     iconStyle: {
       width: 20,

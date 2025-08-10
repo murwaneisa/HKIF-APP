@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import { View, Text, TextInput, TouchableOpacity, Platform, Pressable } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import { Feather } from '@expo/vector-icons'
 import PrimaryButton from '../../Utilities/UI/PrimaryButton'
 import SecondaryButton from '../../Utilities/UI/SecondaryButton'
+import DropdownList from '../../Utilities/UI/DropDownList'
+import countries from '../../Assets/Countries'
 import RNDateTimePicker from '@react-native-community/datetimepicker'
 
 const validationSchema = yup.object().shape({
@@ -18,6 +21,7 @@ const validationSchema = yup.object().shape({
 })
 
 const StepTwo = ({ goToNextStep, goToPreviousStep, stepOneData, initialData }) => {
+  const navigation = useNavigation()
   const [showDatePicker, setShowDatePicker] = useState(false)
 
   const handleFormSubmit = async (values) => {
@@ -152,15 +156,31 @@ const StepTwo = ({ goToNextStep, goToPreviousStep, stepOneData, initialData }) =
             </View>
 
             {/* Nationality */}
-            <View className="mb-6">
+            <View className="mb-2">
               <Text className="text-sm text-text-subtitle font-medium mb-2">Nationality</Text>
-              <TextInput
-                placeholder="Enter your nationality"
-                placeholderTextColor="#9CA3AF"
-                onChangeText={handleChange('nationality')}
-                onBlur={handleBlur('nationality')}
+              <DropdownList
+                placeholder="Select your country"
                 value={values.nationality}
-                className="border border-surface-secondary rounded-lg px-4 py-4 text-text-title bg-surface-primary"
+                handleChange={(val) => setFieldValue('nationality', val)}
+                data={countries}
+                containerClassName="mb-6"
+                dropdownClassName="border border-surface-secondary rounded-lg px-4 py-4 bg-surface-primary"
+                showSelectedOnRight
+                leftIcon={(item) => (
+                  <View className="flex-row items-center">
+                    <Text style={{ fontSize: 18, marginRight: 8 }}>{item?.flag ?? ''}</Text>
+                    <Text style={{ fontSize: 16, color: '#111827' }}>{item?.label ?? ''}</Text>
+                  </View>
+                )}
+                renderRightIconFromItem={() => (
+                  <Feather name="chevron-down" size={18} color="#6B7280" />
+                )}
+                renderItem={(item) => (
+                  <View className="flex-row items-center p-2">
+                    <Text style={{ fontSize: 18, marginRight: 8 }}>{item.flag}</Text>
+                    <Text style={{ fontSize: 16, color: '#111827' }}>{item.label}</Text>
+                  </View>
+                )}
               />
               {errors.nationality && touched.nationality && (
                 <Text className="text-feedback-error text-sm mt-1">{errors.nationality}</Text>
@@ -168,7 +188,7 @@ const StepTwo = ({ goToNextStep, goToPreviousStep, stepOneData, initialData }) =
             </View>
 
             {/* Address Information Section */}
-            <View className="pt-2">
+            <View>
               <Text className="text-text-title text-lg font-semibold mb-5">Address Information</Text>
               
               {/* Address */}
@@ -232,7 +252,7 @@ const StepTwo = ({ goToNextStep, goToPreviousStep, stepOneData, initialData }) =
                 onPress={handleSubmit}
                 size="large"
               >
-                {goToNextStep ? 'Continue' : 'Submit Membership Application'}
+                Submit your application
               </PrimaryButton>
                                {/* Back Button */}
                 <SecondaryButton 
@@ -241,7 +261,7 @@ const StepTwo = ({ goToNextStep, goToPreviousStep, stepOneData, initialData }) =
                   icon={<Feather name="arrow-left" size={18} color="#2082E4" />}
                   className="mt-4"
                 >
-                  Back to Step 1
+                 Go back
                 </SecondaryButton>
             </View>
 
@@ -253,6 +273,15 @@ const StepTwo = ({ goToNextStep, goToPreviousStep, stepOneData, initialData }) =
                 <Text className="text-brand underline">Privacy Policy</Text>
               </Text>
             </View>
+
+            {/* Already have an account */}
+{/*             <View className="mt-4 items-center">
+              <Pressable onPress={() => navigation.navigate('Login')}>
+                <Text className="text-text-secondary text-sm">
+                  Already have an account? <Text className="text-brand underline">Log in</Text>
+                </Text>
+              </Pressable>
+            </View> */}
           </View>
         )}
       </Formik>

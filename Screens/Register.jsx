@@ -87,7 +87,7 @@ export default function Register({ navigation }) {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-                <View className="flex-1 px-6 pt-4">
+          <View className="flex-1 px-6 pt-4">
           {/* Header */}
           <View className="items-center mb-2">
             {/* Organization Logo */}
@@ -136,11 +136,13 @@ export default function Register({ navigation }) {
             />
           )}
 
-          <View className="mt-8">
-            <Text className="text-sm text-text-secondary text-center">
-              Already have an account?{' '}
-              <Text className="text-brand underline">Sign in here</Text>
-            </Text>
+          <View className="mt-8 mb-4 items-center">
+            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+              <Text className="text-sm text-text-secondary text-center">
+                Already have an account?{' '}
+                <Text className="text-brand underline">Sign in here</Text>
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
         </ScrollView>
