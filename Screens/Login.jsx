@@ -98,7 +98,7 @@ function Login({ navigation }) {
               <View className="h-28 w-28 mb-6 items-center justify-center rounded-full border-4 border-accent-deep overflow-hidden">
                 <Image
                   source={{ uri: organization.logo }}
-                  resizeMode="contain"
+                  resizeMode="contain" 
                   className="h-full w-full rounded-full"
                 />
               </View>
