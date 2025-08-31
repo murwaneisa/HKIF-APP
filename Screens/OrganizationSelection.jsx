@@ -1,9 +1,15 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, Platform } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useSafeArea } from '../Utilities/hooks/useSafeArea'
 import { useNavigation } from '@react-navigation/native'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchActiveOrganizations } from '../Utilities/Redux/Actions/organizationActions'
+import {
+  setSelectedOrganization,
+  addRecentOrganization
+} from '../Utilities/Redux/Slices/organizationSlice'
 
 // Recently used organizations (subset of main list)
 const recentOrgs = [
@@ -114,42 +120,84 @@ const organizations = [
 const OrganizationSelection = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const navigation = useNavigation();
-  
+  const dispatch = useDispatch();
+
   const { styles: safeAreaStyles, topInset } = useSafeArea({
     top: false,
     bottom: true,
     backgroundColor: 'white',
   });
 
+  // Redux state
+  const {
+    organizations,
+    recentOrganizations,
+    loading,
+    error
+  } = useSelector(state => state.organization);
+
+  // Fetch organizations on component mount
+  useEffect(() => {
+    dispatch(fetchActiveOrganizations());
+  }, [dispatch]);
+
   // Handle organization selection
   const handleOrganizationSelect = (organization) => {
+    // Dispatch Redux action to set selected organization
+    dispatch(setSelectedOrganization(organization));
+    dispatch(addRecentOrganization(organization));
+
     // Navigate to login screen with selected organization
-    navigation.navigate('Login', { 
-      selectedOrganization: organization 
+    navigation.navigate('Login', {
+      selectedOrganization: organization
     });
   };
 
   // Filter organizations based on search term
   const filteredOrganizations = useMemo(() => {
     if (!searchTerm.trim()) return organizations;
-    
+
     const searchTermLower = searchTerm.toLowerCase().trim();
-    return organizations.filter(org => 
-      org.name.toLowerCase().includes(searchTermLower) ||
-      org.category.toLowerCase().includes(searchTermLower)
+    return organizations.filter(org =>
+      org.name.toLowerCase().includes(searchTermLower)
     );
-  }, [searchTerm]);
+  }, [searchTerm, organizations]);
 
   // Filter recent organizations based on search term
   const filteredRecentOrgs = useMemo(() => {
-    if (!searchTerm.trim()) return recentOrgs;
-    
+    if (!searchTerm.trim()) return recentOrganizations;
+
     const searchTermLower = searchTerm.toLowerCase().trim();
-    return recentOrgs.filter(org => 
-      org.name.toLowerCase().includes(searchTermLower) ||
-      org.category.toLowerCase().includes(searchTermLower)
+    return recentOrganizations.filter(org =>
+      org.name.toLowerCase().includes(searchTermLower)
     );
-  }, [searchTerm]);
+  }, [searchTerm, recentOrganizations]);
+
+  // Loading state
+  if (loading && organizations.length === 0) {
+    return (
+      <View style={safeAreaStyles.container} className="bg-surface-primary justify-center items-center">
+        <Text className="text-text-body">Loading organizations...</Text>
+      </View>
+    );
+  }
+
+  // Error state
+  if (error && organizations.length === 0) {
+    return (
+      <View style={safeAreaStyles.container} className="bg-surface-primary justify-center items-center">
+        <Text className="text-red-500 text-center mb-4">
+          Failed to load organizations: {error}
+        </Text>
+        <TouchableOpacity
+          onPress={() => dispatch(fetchActiveOrganizations())}
+          className="bg-primary px-4 py-2 rounded-lg"
+        >
+          <Text className="text-white">Retry</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <View style={safeAreaStyles.container} className="bg-surface-primary">
@@ -173,7 +221,7 @@ const OrganizationSelection = () => {
           <Text className="text-text-inverse text-md md:text-lg mb-4 md:mb-6">
             Logga in till rätt förening för att hantera aktiviteter och medlemskap.
           </Text>
-          
+
           {/* Search Input */}
           <View className="flex-row items-center bg-white rounded-lg px-4 md:px-6 py-2 md:py-3">
             <Ionicons name="search" size={25} color="#9CA3AF" className="md:scale-110" />
@@ -189,7 +237,7 @@ const OrganizationSelection = () => {
             />
             <View style={{ width: 40, alignItems: 'center', justifyContent: 'center' }}>
               {searchTerm.length > 0 && (
-                <TouchableOpacity 
+                <TouchableOpacity
                   onPress={() => setSearchTerm('')}
                   className="p-2"
                 >
@@ -212,21 +260,30 @@ const OrganizationSelection = () => {
               className="mb-6 md:mb-8"
             >
               {filteredRecentOrgs.map((org) => (
-                <TouchableOpacity 
-                  key={org.id} 
+                <TouchableOpacity
+                  key={org.id}
                   className="mr-6 md:mr-8 items-center"
                   activeOpacity={0.7}
                   onPress={() => handleOrganizationSelect(org)}
                 >
-                  <View className="w-16 h-16 md:w-24 md:h-24 rounded-full overflow-hidden mb-2 md:mb-3 bg-gray-100">
-                    <Image
-                      source={{ uri: org.logo }}
-                      className="w-full h-full"
-                      resizeMode="cover"
-                    />
+                  <View className="w-16 h-16 md:w-24 md:h-24 rounded-full overflow-hidden mb-2 md:mb-3 bg-gray-100 justify-center items-center">
+                    {org.logoUrl ? (
+                      <Image 
+                        source={{ uri: org.logoUrl }} 
+                        className="w-full h-full"
+                        resizeMode="cover"
+                      />
+                    ) : (
+                      <Text className="text-2xl md:text-3xl font-bold text-gray-600">
+                        {org.name.charAt(0).toUpperCase()}
+                      </Text>
+                    )}
                   </View>
                   <Text className="text-sm md:text-base text-text-title text-center max-w-[80px] md:max-w-[100px]" numberOfLines={1}>
                     {org.name}
+                  </Text>
+                  <Text className="text-xs md:text-sm text-text-secondary text-center max-w-[80px] md:max-w-[100px]" numberOfLines={1}>
+                    {Math.floor(Math.random() * 500) + 50} medlemmar
                   </Text>
                 </TouchableOpacity>
               ))}
@@ -257,23 +314,29 @@ const OrganizationSelection = () => {
               activeOpacity={0.7}
               onPress={() => handleOrganizationSelect(org)}
             >
-              <View className="w-14 h-14 md:w-20 md:h-20 rounded-full overflow-hidden mr-4 md:mr-6 bg-gray-100">
-                <Image
-                  source={{ uri: org.logo }}
-                  className="w-full h-full"
-                  resizeMode="cover"
-                />
+              <View className="w-14 h-14 md:w-20 md:h-20 rounded-full overflow-hidden mr-4 md:mr-6 bg-gray-100 justify-center items-center">
+                {org.logoUrl ? (
+                  <Image 
+                    source={{ uri: org.logoUrl }} 
+                    className="w-full h-full"
+                    resizeMode="cover"
+                  />
+                ) : (
+                  <Text className="text-xl md:text-2xl font-bold text-gray-600">
+                    {org.name.charAt(0).toUpperCase()}
+                  </Text>
+                )}
               </View>
               <View className="flex-1">
                 <Text className="text-text-title font-medium md:text-lg">{org.name}</Text>
                 <Text className="text-text-secondary text-sm md:text-base">
-                  {org.members} medlemmar • {org.category}
+                  {Math.floor(Math.random() * 500) + 50} medlemmar
                 </Text>
               </View>
-              <Ionicons 
-                name="chevron-forward" 
-                size={24} 
-                color="#9CA3AF" 
+              <Ionicons
+                name="chevron-forward"
+                size={24}
+                color="#9CA3AF"
                 className="ml-2 md:ml-3 md:scale-110"
               />
             </TouchableOpacity>

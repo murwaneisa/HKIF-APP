@@ -13,18 +13,13 @@ import {
 } from 'react-native'
 import PrimaryButton from '../Utilities/UI/PrimaryButton'
 import { validateEmail, dismissKeyboard } from '../Utilities/UI/Form'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { useRoute } from '@react-navigation/native'
 import { loginAndSetUser } from '../Utilities/Redux/Actions/userActions'
 import { loginAndSetAdmin } from '../Utilities/Redux/Actions/adminActions'
 import { Ionicons } from '@expo/vector-icons'
 
-const organization = {
-  id: '1',
-  name: 'Manchester City FC',
-  logo: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=80&h=80&fit=crop&crop=center',
-  members: 1250,
-  category: 'Football'
-}
+
 
 // TODO: make the text input for the password and email appear in the center fo the IOS devices
 
@@ -42,6 +37,12 @@ function Login({ navigation }) {
   const [touched, setTouched] = useState({ email: false, password: false })
 
   const dispatch = useDispatch()
+  const route = useRoute()
+  
+  // Get selected organization from route params or Redux state
+  const routeOrganization = route.params?.selectedOrganization
+  const selectedOrganization = useSelector(state => state.organization.selectedOrganization)
+  const organization = routeOrganization || selectedOrganization
 
   const handleEmailChange = text => {
     setEmail(text)
@@ -95,19 +96,25 @@ function Login({ navigation }) {
             keyboardShouldPersistTaps="handled"
           >
             <View className="flex-1 px-6 items-center pt-4">
-              <View className="h-28 w-28 mb-6 items-center justify-center rounded-full border-4 border-accent-deep overflow-hidden">
-                <Image
-                  source={{ uri: organization.logo }}
-                  resizeMode="contain" 
-                  className="h-full w-full rounded-full"
-                />
+              <View className="h-28 w-28 mb-6 items-center justify-center rounded-full border-4 border-accent-deep overflow-hidden bg-gray-100">
+                {organization?.logoUrl ? (
+                  <Image
+                    source={{ uri: organization.logoUrl }}
+                    resizeMode="contain" 
+                    className="h-full w-full rounded-full"
+                  />
+                ) : (
+                  <Text className="text-4xl font-bold text-gray-600">
+                    {organization?.name?.charAt(0)?.toUpperCase() || 'O'}
+                  </Text>
+                )}
               </View>
 
               <Text className="text-2xl md:text-3xl font-bold text-text-title mb-1">
                 Welcome Back
               </Text>
               <Text className="text-base text-gray-500 mb-6">
-                Sign in to {organization.name}
+                Sign in to {organization?.name || 'your organization'}
               </Text>
 
               <View className="w-full max-w-md mb-4">

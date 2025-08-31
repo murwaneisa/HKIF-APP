@@ -5,6 +5,7 @@ import activityReducer from '../Slices/activitySlice'
 import eventReducer from '../Slices/eventSlice'
 import registrationReducer from '../Slices/registrationSlice'
 import leaderReducer from '../Slices/leaderSlice'
+import organizationReducer from '../Slices/organizationSlice'
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   event: eventReducer,
   registration: registrationReducer,
   leader: leaderReducer,
+  organization: organizationReducer,
 })
 
 export default rootReducer
