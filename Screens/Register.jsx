@@ -135,7 +135,6 @@ export default function Register({ navigation }) {
             <StepOne goToNextStep={goToNextStep} initialData={stepOneData} />
           ) : (
             <StepTwo 
-              goToNextStep={goToNextStep}
               goToPreviousStep={goToPreviousStep} 
               stepOneData={stepOneData}
               initialData={stepTwoData}

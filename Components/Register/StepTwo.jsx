@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, TouchableOpacity, Platform, Pressable } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, Platform, Pressable, Alert } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import { useDispatch, useSelector } from 'react-redux'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import { Feather } from '@expo/vector-icons'
@@ -9,20 +10,37 @@ import SecondaryButton from '../../Utilities/UI/SecondaryButton'
 import DropdownList from '../../Utilities/UI/DropDownList'
 import countries from '../../Assets/Countries'
 import RNDateTimePicker from '@react-native-community/datetimepicker'
+import { registerUserThunk, resetRegistrationState } from '../../Utilities/Redux/Actions/registrationActions'
 
 const validationSchema = yup.object().shape({
-  phoneNumber: yup.string().matches(/^\+?[\d\s-()]+$/, 'Invalid phone number format'),
-  birthDate: yup.date().max(new Date(), 'Birth date cannot be in the future'),
+  phoneNumber: yup.string()
+    .test('phone-validation', 'Phone number must be 7-15 digits only', function(value) {
+      // If empty, it's valid (optional field)
+      if (!value || value.trim() === '') {
+        return true
+      }
+      // If provided, must match the pattern
+      return /^\d{7,15}$/.test(value)
+    }),
+  birthDate: yup.date()
+    .required('Birth date is required')
+    .max(new Date(), 'Birth date cannot be in the future'),
   gender: yup.string().oneOf(['male', 'female', 'other'], 'Please select a gender'),
   nationality: yup.string(),
-  address: yup.string(),
-  city: yup.string(),
-  zipCode: yup.string(),
+  address: yup.string().required('Address is required'),
+  city: yup.string().required('City is required'),
+  zipCode: yup.string()
+    .required('Zip code is required')
+    .matches(/^\d{4,10}$/, 'Zip code must be between 4 and 10 digits'),
 })
 
 const StepTwo = ({ goToNextStep, goToPreviousStep, stepOneData, initialData }) => {
   const navigation = useNavigation()
+  const dispatch = useDispatch()
   const [showDatePicker, setShowDatePicker] = useState(false)
+  
+  // Get registration state from Redux store
+  const { isLoading, isSuccess, error } = useSelector(state => state.registration)
 
   const handleFormSubmit = async (values) => {
     try {
@@ -32,11 +50,40 @@ const StepTwo = ({ goToNextStep, goToPreviousStep, stepOneData, initialData }) =
       } else {
         // Final submission - combine all data
         const completeData = { ...stepOneData, ...values }
-        console.log('Complete registration data:', completeData)
-        // Handle final submission here
+        
+        // Dispatch registration action
+        const result = await dispatch(registerUserThunk(completeData))
+        
+        if (result.success) {
+          // Registration successful
+          Alert.alert(
+            'Registration Successful!',
+            'Your account has been created successfully. You can now log in.',
+            [
+              {
+                text: 'Go to Login',
+                onPress: () => {
+                  dispatch(resetRegistrationState())
+                  navigation.navigate('Login')
+                }
+              }
+            ]
+          )
+        } else {
+          // Registration failed
+          Alert.alert(
+            'Registration Failed',
+            result.message || 'An error occurred during registration. Please try again.',
+            [{ text: 'OK' }]
+          )
+        }
       }
     } catch (err) {
-      console.log(err)
+      Alert.alert(
+        'Error',
+        'An unexpected error occurred. Please try again.',
+        [{ text: 'OK' }]
+      )
     }
   }
 
@@ -65,7 +112,9 @@ const StepTwo = ({ goToNextStep, goToPreviousStep, stepOneData, initialData }) =
           <View className="w-full">
             {/* Phone Number with Dial Code */}
             <View className="mb-5">
-              <Text className="text-sm text-text-subtitle font-medium mb-2">Phone</Text>
+              <Text className="text-sm text-text-subtitle font-medium mb-2">
+                Phone
+              </Text>
               <View className="flex-row items-center">
                 <View className="flex-1 mr-3">
                   <DropdownList
@@ -91,12 +140,18 @@ const StepTwo = ({ goToNextStep, goToPreviousStep, stepOneData, initialData }) =
                       <Feather name="phone" size={18} color="#6B7280" />
                     </View>
                     <TextInput
-                      placeholder="Enter your phone number"
+                      placeholder="Enter phone number"
                       placeholderTextColor="#9CA3AF"
-                      onChangeText={handleChange('phoneNumber')}
+                      onChangeText={(text) => {
+                        // Only allow digits
+                        const digitsOnly = text.replace(/\D/g, '')
+                        handleChange('phoneNumber')(digitsOnly)
+                      }}
                       onBlur={handleBlur('phoneNumber')}
                       value={values.phoneNumber}
-                      keyboardType="phone-pad"
+                      keyboardType="numeric"
+                      maxLength={15}
+                      minLength={7}
                       className="border border-surface-secondary rounded-lg pl-12 pr-4 py-4 text-text-title bg-surface-primary"
                     />
                   </View>
@@ -109,7 +164,9 @@ const StepTwo = ({ goToNextStep, goToPreviousStep, stepOneData, initialData }) =
 
             {/* Birth Date */}
             <View className="mb-5">
-              <Text className="text-sm text-text-subtitle font-medium mb-2">Birth Date</Text>
+              <Text className="text-sm text-text-subtitle font-medium mb-2">
+                Birth Date <Text className="text-feedback-error">*</Text>
+              </Text>
               <TouchableOpacity
                 onPress={() => setShowDatePicker(true)}
                 className="border border-surface-secondary rounded-lg px-4 py-4 bg-surface-primary flex-row items-center"
@@ -224,7 +281,9 @@ const StepTwo = ({ goToNextStep, goToPreviousStep, stepOneData, initialData }) =
               
               {/* Address */}
               <View className="mb-5">
-                <Text className="text-sm text-text-subtitle font-medium mb-2">Address</Text>
+                <Text className="text-sm text-text-subtitle font-medium mb-2">
+                  Address <Text className="text-feedback-error">*</Text>
+                </Text>
                 <View className="relative">
                   <View className="absolute left-3 top-4 z-10">
                     <Feather name="map-pin" size={18} color="#6B7280" />
@@ -245,7 +304,9 @@ const StepTwo = ({ goToNextStep, goToPreviousStep, stepOneData, initialData }) =
 
               {/* City */}
               <View className="mb-5">
-                <Text className="text-sm text-text-subtitle font-medium mb-2">City</Text>
+                <Text className="text-sm text-text-subtitle font-medium mb-2">
+                  City <Text className="text-feedback-error">*</Text>
+                </Text>
                 <TextInput
                   placeholder="Enter your city"
                   placeholderTextColor="#9CA3AF"
@@ -261,13 +322,17 @@ const StepTwo = ({ goToNextStep, goToPreviousStep, stepOneData, initialData }) =
 
               {/* Zip Code */}
               <View>
-                <Text className="text-sm text-text-subtitle font-medium mb-2">Zip Code</Text>
+                <Text className="text-sm text-text-subtitle font-medium mb-2">
+                  Zip Code <Text className="text-feedback-error">*</Text>
+                </Text>
                 <TextInput
-                  placeholder="Enter zip code"
+                  placeholder="Enter zip code (4-10 digits)"
                   placeholderTextColor="#9CA3AF"
                   onChangeText={handleChange('zipCode')}
                   onBlur={handleBlur('zipCode')}
                   value={values.zipCode}
+                  keyboardType="numeric"
+                  maxLength={10}
                   className="border border-surface-secondary rounded-lg px-4 py-4 text-text-title bg-surface-primary"
                 />
                 {errors.zipCode && touched.zipCode && (
@@ -282,8 +347,9 @@ const StepTwo = ({ goToNextStep, goToPreviousStep, stepOneData, initialData }) =
               <PrimaryButton 
                 onPress={handleSubmit}
                 size="large"
+                disabled={isLoading}
               >
-                Submit your application
+                {isLoading ? 'Submitting...' : 'Submit your application'}
               </PrimaryButton>
                                {/* Back Button */}
                 <SecondaryButton 

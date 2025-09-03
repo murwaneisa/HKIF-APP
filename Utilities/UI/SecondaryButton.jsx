@@ -1,5 +1,6 @@
 import React from 'react'
 import { Pressable, Text, ActivityIndicator, View, Platform } from 'react-native'
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated'
 
 function SecondaryButton({
   children,
@@ -13,6 +14,9 @@ function SecondaryButton({
   className = "",
   icon = null, // Optional icon component
 }) {
+  // Reanimated shared values for proper animations
+  const scale = useSharedValue(1)
+  const opacity = useSharedValue(1)
   // Size variants using NativeWind v4 classes (matching PrimaryButton)
   const sizeClasses = {
     small: 'h-9 px-4 py-2',
@@ -56,30 +60,65 @@ function SecondaryButton({
     'font-semibold ml-2 text-brand-main'
   ].join(' ')
 
+  // Animated styles using proper Reanimated patterns
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+      opacity: opacity.value,
+    }
+  })
+
+  // Handle press animations
+  const handlePressIn = () => {
+    if (!disabled && !isLoading) {
+      scale.value = withSpring(0.98, { damping: 15, stiffness: 300 })
+      opacity.value = withTiming(0.8, { duration: 150 })
+    }
+  }
+
+  const handlePressOut = () => {
+    if (!disabled && !isLoading) {
+      scale.value = withSpring(1, { damping: 15, stiffness: 300 })
+      opacity.value = withTiming(1, { duration: 150 })
+    }
+  }
+
+  const handlePress = () => {
+    if (onPress && !disabled && !isLoading) {
+      onPress()
+    }
+  }
+
   return (
     <Pressable
-      onPress={onPress}
+      onPress={handlePress}
       onLongPress={onLongPress}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
       disabled={disabled || isLoading}
-      className={buttonClasses}
-      style={({ pressed }) => ({
-        // Platform-specific shadows via style prop to avoid shadowOffset errors
-        ...Platform.select({
-          ios: {
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.1,
-            shadowRadius: 3,
-          },
-          android: {
-            elevation: 3,
-          },
-        }),
-        // Interactive states
-        opacity: disabled ? 0.5 : pressed ? 0.8 : 1,
-        transform: pressed ? [{ scale: 0.98 }] : [{ scale: 1 }],
-      })}
     >
+      <Animated.View
+        className={buttonClasses}
+        style={[
+          // Platform-specific shadows via style prop to avoid shadowOffset errors
+          Platform.select({
+            ios: {
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.1,
+              shadowRadius: 3,
+            },
+            android: {
+              elevation: 3,
+            },
+          }),
+          animatedStyle,
+          {
+            opacity: disabled ? 0.5 : 1,
+          },
+        ]}
+        pointerEvents="box-none"
+      >
       {/* Button Content */}
       <View className="flex-row items-center justify-center w-full h-full">
         {isLoading ? (
@@ -119,6 +158,7 @@ function SecondaryButton({
           </View>
         )}
       </View>
+      </Animated.View>
     </Pressable>
   )
 }

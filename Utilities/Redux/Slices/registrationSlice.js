@@ -1,4 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { 
+  REGISTER_USER_REQUEST, 
+  REGISTER_USER_SUCCESS, 
+  REGISTER_USER_FAILURE,
+  RESET_REGISTRATION_STATE 
+} from '../Actions/registrationActions'
 
 const initialState = {
   firstName: '',
@@ -13,6 +19,11 @@ const initialState = {
   zipCode: '',
   phoneNumber: '',
   role: '',
+  // API states
+  isLoading: false,
+  isSuccess: false,
+  error: null,
+  userData: null,
 }
 
 const registrationSlice = createSlice({
@@ -41,6 +52,29 @@ const registrationSlice = createSlice({
     updateStepFiveData: (state, action) => {
       state.role = action.payload.role
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(REGISTER_USER_REQUEST, (state) => {
+        state.isLoading = true
+        state.isSuccess = false
+        state.error = null
+      })
+      .addCase(REGISTER_USER_SUCCESS, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.userData = action.payload
+        state.error = null
+      })
+      .addCase(REGISTER_USER_FAILURE, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = false
+        state.error = action.payload
+        state.userData = null
+      })
+      .addCase(RESET_REGISTRATION_STATE, (state) => {
+        return initialState
+      })
   },
 })
 

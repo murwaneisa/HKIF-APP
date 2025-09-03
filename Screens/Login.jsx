@@ -19,11 +19,7 @@ import { loginAndSetUser } from '../Utilities/Redux/Actions/userActions'
 import { loginAndSetAdmin } from '../Utilities/Redux/Actions/adminActions'
 import { Ionicons } from '@expo/vector-icons'
 
-
-
 // TODO: make the text input for the password and email appear in the center fo the IOS devices
-
-
 
 function Login({ navigation }) {
   const [showAdminButton, setShowAdminButton] = useState(false)
