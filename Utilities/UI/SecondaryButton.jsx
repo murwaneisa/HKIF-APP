@@ -1,5 +1,5 @@
 import React from 'react'
-import { Pressable, Text, ActivityIndicator, View, Platform } from 'react-native'
+import { Pressable, Text, ActivityIndicator, View, Platform, StyleSheet } from 'react-native'
 import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated'
 
 function SecondaryButton({
@@ -10,6 +10,7 @@ function SecondaryButton({
   isLoading = false,
   size = 'default', // 'small', 'default', 'large'
   width = 'full',   // 'full', 'auto'
+  variant = 'default', // 'default', 'ghost', 'outline'
   loadingText = "Loading...",
   className = "",
   icon = null, // Optional icon component
@@ -17,7 +18,7 @@ function SecondaryButton({
   // Reanimated shared values for proper animations
   const scale = useSharedValue(1)
   const opacity = useSharedValue(1)
-  // Size variants using NativeWind v4 classes (matching PrimaryButton)
+  // Size variants
   const sizeClasses = {
     small: 'h-9 px-4 py-2',
     default: 'h-12 px-6 py-3', 
@@ -37,27 +38,47 @@ function SecondaryButton({
     large: 'text-lg',
   }
 
-  // Combine all classes using NativeWind v4 best practices
+  // Variant styles
+  const variantStyles = {
+    default: {
+      container: 'bg-gray-50 border border-gray-200',
+      text: 'text-gray-700',
+      activeText: 'text-gray-800'
+    },
+    ghost: {
+      container: 'bg-transparent border-0',
+      text: 'text-brand-main',
+      activeText: 'text-brand-dark'
+    },
+    outline: {
+      container: 'bg-transparent border border-brand-light',
+      text: 'text-brand-main',
+      activeText: 'text-brand-dark'
+    }
+  }
+
+  const currentVariant = variantStyles[variant] || variantStyles.default
+
+  // Combine all classes
   const buttonClasses = [
-    // Base styles
-    'relative overflow-hidden rounded-xl border-2 border-brand-light',
+    'relative overflow-hidden rounded-xl',
     'flex-row items-center justify-center',
-    // Size and width
     sizeClasses[size],
     widthClasses[width],
-    // Disabled state handled in style prop for consistency
-    // Custom classes (highest priority)
+    currentVariant.container,
     className
   ].filter(Boolean).join(' ')
 
   const textClasses = [
     textSizes[size],
-    'font-semibold text-center text-brand-main'
+    'font-semibold text-center',
+    disabled ? 'text-gray-400' : currentVariant.text
   ].join(' ')
 
   const loadingTextClasses = [
     textSizes[size], 
-    'font-semibold ml-2 text-brand-main'
+    'font-semibold ml-2',
+    disabled ? 'text-gray-400' : currentVariant.text
   ].join(' ')
 
   // Animated styles using proper Reanimated patterns
@@ -71,8 +92,8 @@ function SecondaryButton({
   // Handle press animations
   const handlePressIn = () => {
     if (!disabled && !isLoading) {
-      scale.value = withSpring(0.98, { damping: 15, stiffness: 300 })
-      opacity.value = withTiming(0.8, { duration: 150 })
+      scale.value = withSpring(0.96, { damping: 15, stiffness: 300 })
+      opacity.value = withTiming(0.7, { duration: 100 })
     }
   }
 
@@ -100,21 +121,11 @@ function SecondaryButton({
       <Animated.View
         className={buttonClasses}
         style={[
-          // Platform-specific shadows via style prop to avoid shadowOffset errors
-          Platform.select({
-            ios: {
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.1,
-              shadowRadius: 3,
-            },
-            android: {
-              elevation: 3,
-            },
-          }),
+          // Subtle shadow only for default variant
+          variant === 'default' ? styles.subtleShadow : {},
           animatedStyle,
           {
-            opacity: disabled ? 0.5 : 1,
+            opacity: disabled ? 0.6 : 1,
           },
         ]}
         pointerEvents="box-none"
@@ -125,7 +136,7 @@ function SecondaryButton({
           <View className="flex-row items-center justify-center">
             <ActivityIndicator 
               size={size === 'small' ? 'small' : 'small'} 
-              color="#2082E4"
+              color={disabled ? '#9CA3AF' : (variant === 'default' ? '#6B7280' : '#2082E4')}
             />
             <Text 
               className={loadingTextClasses}
@@ -162,5 +173,19 @@ function SecondaryButton({
     </Pressable>
   )
 }
+
+const styles = StyleSheet.create({
+  subtleShadow: Platform.select({
+    ios: {
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.05,
+      shadowRadius: 2,
+    },
+    android: {
+      elevation: 1,
+    },
+  }),
+})
 
 export default SecondaryButton

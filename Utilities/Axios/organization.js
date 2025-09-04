@@ -7,7 +7,7 @@ console.log('ORGANIZATION_API_URL', ORGANIZATION_API_URL)
 
 const organizationInstance = axios.create({
   baseURL: ORGANIZATION_API_URL, // .../organizations
-  timeout: 10000,
+  timeout: 100000,
 })
 
 // GET /organizations/active

@@ -347,6 +347,8 @@ const StepTwo = ({ goToNextStep, goToPreviousStep, stepOneData, initialData }) =
               <PrimaryButton 
                 onPress={handleSubmit}
                 size="large"
+                variant="primary"
+                gradient={true}
                 disabled={isLoading}
               >
                 {isLoading ? 'Submitting...' : 'Submit your application'}
@@ -355,6 +357,7 @@ const StepTwo = ({ goToNextStep, goToPreviousStep, stepOneData, initialData }) =
                 <SecondaryButton 
                   onPress={goToPreviousStep}
                   size="large"
+                  variant="outline"
                   icon={<Feather name="arrow-left" size={18} color="#2082E4" />}
                   className="mt-4"
                 >
